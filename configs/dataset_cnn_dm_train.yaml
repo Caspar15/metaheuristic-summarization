@@ -1,0 +1,17 @@
+dataset:
+  name: cnn_dailymail
+  split: train
+  format: csv
+  source_path: data/raw/cnn_dailymail/train.csv
+  output_path: data/processed/cnn_dm_train.jsonl
+  id_column: id
+  article_column: article
+  reference_column: highlights
+preprocess:
+  lang: en
+  sent_tokenizer: nltk
+  word_tokenizer: nltk
+  lowercase: true
+  remove_stopwords: true
+  chunksize: 5000
+  max_docs: 200   # quick subset; set 0 or remove for full run

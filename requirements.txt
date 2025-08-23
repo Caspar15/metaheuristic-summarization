@@ -1,0 +1,9 @@
+numpy
+pandas
+scikit-learn
+rouge-score
+nltk
+spacy
+pyyaml
+tqdm
+

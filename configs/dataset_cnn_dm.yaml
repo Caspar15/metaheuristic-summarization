@@ -1,0 +1,12 @@
+dataset:
+  name: cnn_dailymail
+  split: sample
+  source_path: data/samples/sample_en.jsonl
+  output_path: data/processed/cnn_dm_sample.jsonl
+  preprocess:
+    lang: en
+    sent_tokenizer: nltk
+    word_tokenizer: nltk
+    lowercase: true
+    remove_stopwords: true
+

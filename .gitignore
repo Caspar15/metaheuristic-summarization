@@ -1,0 +1,53 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.so
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+*.egg
+wheels/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDE/editor
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Project data artifacts (keep small samples tracked)
+data/raw/
+data/interim/
+data/processed/
+runs/
+
+# Allowlist: keep sample data tracked (override raw ignore if needed)
+!data/samples/
+!data/samples/*
+
