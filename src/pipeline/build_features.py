@@ -1,67 +1,64 @@
-from __future__ import annotations
-
 import argparse
-import logging
-from pathlib import Path
-from typing import Any, Dict
+import os
+from typing import Dict, List
 
-import yaml
+import numpy as np
 
-from src.utils.io import read_jsonl, write_jsonl, ensure_dir
-from src.utils.logging import setup_logging
-from src.features.feature_bank import build_features_for_doc
-
-
-def load_yaml(path: Path) -> Dict[str, Any]:
-    with path.open("r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from src.utils.io import load_yaml, ensure_dir, now_stamp, read_jsonl, write_jsonl
+from src.features.tf_isf import sentence_tf_isf_scores
+from src.features.length import length_scores
+from src.features.position import position_scores
+from src.features.compose import combine_scores
+from src.representations.sent_vectors import SentenceVectors
+from src.representations.similarity import cosine_similarity_matrix
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Build per-sentence features for processed data")
-    parser.add_argument("--config", type=str, required=True, help="Path to features config YAML")
-    parser.add_argument(
-        "--dataset-config",
-        type=str,
-        default="configs/dataset_cnn_dm.yaml",
-        help="Path to dataset config YAML (to locate processed split)",
-    )
-    args = parser.parse_args()
+def build_features_for_doc(doc: Dict, cfg: Dict) -> Dict:
+    sentences: List[str] = doc.get("sentences", [])
+    f_imp = sentence_tf_isf_scores(sentences)
+    f_len = length_scores(sentences)
+    f_pos = position_scores(sentences)
+    feats = {"importance": f_imp, "length": f_len, "position": f_pos}
+    weights = {
+        "importance": float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
+        "length": 0.3,
+        "position": 0.3,
+    }
+    base = combine_scores(feats, weights)
+    rep_cfg = cfg.get("representations", {})
+    method = rep_cfg.get("method", "tfidf")
+    vec = SentenceVectors(method=method)
+    X = vec.fit_transform(sentences)
+    sim = cosine_similarity_matrix(X)
+    return {
+        "id": doc.get("id"),
+        "base_scores": base,
+        "n_sentences": len(sentences),
+        # 不直接序列化 sim 矩陣避免檔案過大
+    }
 
-    setup_logging()
-    log = logging.getLogger("build_features")
 
-    root = Path(__file__).resolve().parents[2]
-    fcfg = load_yaml(root / args.config)
-    dcfg = load_yaml(root / args.dataset_config)
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config", required=True)
+    ap.add_argument("--split", required=True)
+    ap.add_argument("--input", required=True, help="processed jsonl path")
+    ap.add_argument("--out_dir", default="runs", help="output root")
+    args = ap.parse_args()
 
-    processed_path = root / dcfg["dataset"]["output_path"]
-    split = dcfg["dataset"].get("split", "sample")
-    out_path = root / f"data/interim/{split}_with_feats.jsonl"
-    ensure_dir(out_path.parent)
+    cfg = load_yaml(args.config)
+    stamp = now_stamp()
+    out_dir = os.path.join(args.out_dir, f"features-{stamp}")
+    ensure_dir(out_dir)
+    out_path = os.path.join(out_dir, f"{args.split}.jsonl")
 
-    records = list(read_jsonl(processed_path))
-    log.info("Computing features for %d docs", len(records))
-    out_items = []
-    for r in records:
-        sents = r.get("sentences", [])
-        feats, scores = build_features_for_doc(sents, fcfg)
-        out_items.append({
-            "id": r["id"],
-            "sentences": [
-                {
-                    "text": sents[i]["text"],
-                    "tokens": sents[i]["tokens"],
-                    "features": feats[i]["features"],
-                    "score": feats[i]["score"],
-                }
-                for i in range(len(sents))
-            ],
-            "reference": r.get("reference", ""),
-        })
-    write_jsonl(out_path, out_items)
-    log.info("Wrote features to %s", out_path)
+    rows = []
+    for doc in read_jsonl(args.input):
+        rows.append(build_features_for_doc(doc, cfg))
+    write_jsonl(out_path, rows)
+    print(f"Wrote features summary to {out_path}")
 
 
 if __name__ == "__main__":
     main()
+

@@ -1,13 +1,10 @@
-from __future__ import annotations
-
 from typing import List
 
 
-def position_scores(n_sentences: int, lead_bonus: float = 0.2) -> List[float]:
-    """Return a list of position scores; first sentence gets lead_bonus, others 0."""
-    if n_sentences <= 0:
+def position_scores(sentences: List[str]) -> List[float]:
+    n = len(sentences)
+    if n == 0:
         return []
-    scores = [0.0] * n_sentences
-    scores[0] = float(lead_bonus)
-    return scores
+    # Higher score for earlier sentences (descending linear)
+    return [1.0 - (i / max(1, n - 1)) if n > 1 else 1.0 for i in range(n)]
 

@@ -1,37 +1,31 @@
-from __future__ import annotations
-
+from typing import List
+from collections import Counter
 import math
-from collections import Counter, defaultdict
-from typing import Dict, List
-
-from .tf import tf_score
 
 
-def _sentence_frequency(sentences: List[List[str]]) -> Dict[str, int]:
-    sf: Dict[str, int] = defaultdict(int)
-    for toks in sentences:
+def sentence_tf_isf_scores(sentences: List[str]) -> List[float]:
+    """Compute TF-ISF per sentence (sum over tokens):
+    ISF(t) = log( N / (1 + n_t) ), where n_t is #sentences containing token t.
+    Tokenization: simple whitespace lowercased split.
+    """
+    toks_per_sent = [s.lower().split() for s in sentences]
+    N = max(1, len(toks_per_sent))
+    # sentence frequency per token
+    sf = Counter()
+    for toks in toks_per_sent:
         for t in set(toks):
             sf[t] += 1
-    return dict(sf)
-
-
-def compute_isf(sentences: List[List[str]], smooth: float = 1.0) -> Dict[str, float]:
-    """Compute ISF for tokens with N = number of sentences in a document."""
-    N = max(1, len(sentences))
-    sf = _sentence_frequency(sentences)
-    isf: Dict[str, float] = {}
-    for t, s in sf.items():
-        isf[t] = math.log((N + smooth) / (s + smooth))
-    return isf
-
-
-def tf_isf_score(tokens: List[str], isf: Dict[str, float], norm: str = "none") -> float:
-    """Compute sentence TF-ISF score compatible with tf normalization."""
-    # Build per-sentence TF counts
-    counts = Counter(tokens)
-    score = 0.0
-    for t, c in counts.items():
-        tf_val = math.log(1 + c) if norm == "log" else float(c)
-        score += tf_val * isf.get(t, 0.0)
-    return float(score)
+    scores: List[float] = []
+    for toks in toks_per_sent:
+        tf = Counter(toks)
+        val = 0.0
+        for t, c in tf.items():
+            isf = math.log(N / (1.0 + sf[t]))
+            val += c * isf
+        scores.append(val)
+    # length-normalize to avoid bias
+    if scores:
+        m = max(scores) or 1.0
+        scores = [s / m for s in scores]
+    return scores
 

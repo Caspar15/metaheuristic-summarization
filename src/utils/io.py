@@ -1,43 +1,53 @@
-from __future__ import annotations
-
+import os
 import json
-from pathlib import Path
-from typing import Iterable, Iterator, List, Dict, Any
-from datetime import datetime
+import yaml
+import datetime as _dt
+from typing import Any, Dict, Iterable, Optional
 
 
-def ensure_dir(path: str | Path) -> Path:
-    """Ensure a directory exists and return it as Path."""
-    p = Path(path)
-    p.mkdir(parents=True, exist_ok=True)
-    return p
+def load_yaml(path: str) -> Dict[str, Any]:
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 
-def timestamp() -> str:
-    """Return a compact timestamp string: YYYYMMDD_HHMMSS."""
-    return datetime.now().strftime("%Y%m%d_%H%M%S")
+def ensure_dir(path: str) -> None:
+    os.makedirs(path, exist_ok=True)
 
 
-def read_jsonl(path: str | Path, as_list: bool = False) -> Iterator[Dict[str, Any]] | List[Dict[str, Any]]:
-    """Read a JSONL file. Return iterator by default, or list if as_list=True."""
-    fpath = Path(path)
-    if not fpath.exists():
-        raise FileNotFoundError(f"JSONL not found: {fpath}")
-    def _iter() -> Iterator[Dict[str, Any]]:
-        with fpath.open("r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
+def now_stamp() -> str:
+    return _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+
+def write_jsonl(path: str, rows: Iterable[Dict[str, Any]]) -> None:
+    ensure_dir(os.path.dirname(path) or ".")
+    with open(path, "w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def read_jsonl(path: str) -> Iterable[Dict[str, Any]]:
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
                 yield json.loads(line)
-    return list(_iter()) if as_list else _iter()
 
 
-def write_jsonl(path: str | Path, data: Iterable[Dict[str, Any]]) -> None:
-    """Write iterable of dicts to JSONL file. Creates parent dirs."""
-    fpath = Path(path)
-    ensure_dir(fpath.parent)
-    with fpath.open("w", encoding="utf-8") as f:
-        for item in data:
-            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+def set_global_seed(seed: Optional[int]) -> None:
+    if seed is None:
+        return
+    try:
+        import random, numpy as np
+
+        random.seed(seed)
+        np.random.seed(seed)
+        try:
+            import torch
+
+            torch.manual_seed(seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(seed)
+        except Exception:
+            pass
+    except Exception:
+        pass
 

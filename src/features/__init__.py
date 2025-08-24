@@ -1,2 +1,1 @@
-"""Feature computation modules."""
 

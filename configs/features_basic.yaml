@@ -1,15 +1,23 @@
-features:
-  tf: { use: true, norm: "log" }
-  tf_isf: { use: true, ngram: 1, smooth: 1.0 }
-  length: { use: true, type: "unique_tokens" }
-  position: { use: true, lead_bonus: 0.2 }
-  weights:
-    tf: 0.4
-    tf_isf: 0.4
-    length: 0.1
-    position: 0.1
-  selection:
-    max_tokens: 100
-    redundancy_ngram: 3
-    redundancy_threshold: 0.6
-
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+  length_penalty: 2.0
+representations:
+  use: true
+  method: "tfidf"  # or "sbert"
+  cache: true
+candidates:
+  use: true
+  k: 15
+  by: "score"      # or "title_sim"
+redundancy:
+  method: "mmr"    # or "jaccard"
+  lambda: 0.7
+  sim_metric: "cosine"
+length_control:
+  unit: "tokens"   # tokens | sentences
+  max_tokens: 100
+optimizer:
+  method: "greedy" # greedy | grasp | nsga2 | supervised | bart | pegasus
+seed: 2024
