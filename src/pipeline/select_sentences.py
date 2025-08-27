@@ -34,7 +34,12 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
 def summarize_one(doc: Dict, cfg: Dict, model_path: Optional[str] = None) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
-    base_scores = build_base_scores(sentences, cfg)
+    # base scores: use supervised model if provided, otherwise feature-based
+    if model_path:
+        scorer = SupervisedScorer(model_path)
+        base_scores = scorer.predict_scores(sentences, cfg)
+    else:
+        base_scores = build_base_scores(sentences, cfg)
 
     rep_cfg = cfg.get("representations", {})
     method = rep_cfg.get("method", "tfidf")
@@ -68,10 +73,9 @@ def summarize_one(doc: Dict, cfg: Dict, model_path: Optional[str] = None) -> Dic
             lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
         )
     elif method_opt == "supervised":
+        # supervised is an alias for greedy using supervised scores; require model
         if not model_path:
             raise RuntimeError("supervised 模式需要提供 model_path")
-        scorer = SupervisedScorer(model_path)
-        base_scores = scorer.predict_scores(sentences, cfg)
         selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
     else:
         selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
