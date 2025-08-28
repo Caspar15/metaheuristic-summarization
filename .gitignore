@@ -7,9 +7,14 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
+# Python tools
+.python-version
+.envrc
+
 # Virtual environments
 .venv/
 venv/
+env/
 
 # Build and packaging
 build/
@@ -33,6 +38,7 @@ htmlcov/
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Env files
 .env
@@ -40,6 +46,10 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Model artifacts
+*.joblib
+*.pkl
 
 # Project data artifacts (keep small samples tracked)
 data/raw/
@@ -51,3 +61,5 @@ runs/
 !data/samples/
 !data/samples/*
 
+# NLP local data (optional if downloaded locally)
+nltk_data/
