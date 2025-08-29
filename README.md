@@ -153,6 +153,7 @@ python scripts/benchmark_small.py \
 
 ## 變更記錄（重點）
 - 2025‑08：清理舊流程與重複檔案（舊 `cli`、`evaluate_run`、部分 `utils`/`eval`/`features` 與示例腳本），統一至三段式命令。
+- 2025-0829：新增 Project_status 提供後續協作處理。
 
 ## 授權
 - 本專案未附帶明確授權條款。如需發布或再利用，請先於內部確認。
