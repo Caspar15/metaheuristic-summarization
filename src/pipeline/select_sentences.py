@@ -34,6 +34,7 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
 def summarize_one(doc: Dict, cfg: Dict, model_path: Optional[str] = None) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
+    
     # base scores: use supervised model if provided, otherwise feature-based
     if model_path:
         scorer = SupervisedScorer(model_path)
@@ -63,15 +64,22 @@ def summarize_one(doc: Dict, cfg: Dict, model_path: Optional[str] = None) -> Dic
     elif method_opt == "grasp":
         selected = grasp_select(sentences, base_scores, sim, max_tokens, alpha=alpha, iters=10, seed=cfg.get("seed"))
     elif method_opt == "nsga2":
-        selected = nsga2_select(
-            sentences,
-            base_scores,
-            sim,
-            max_tokens,
-            lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-            lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
-            lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
-        )
+        try:
+            selected = nsga2_select(
+                sentences,
+                base_scores,
+                sim,
+                max_tokens,
+                lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
+                lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
+                lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+            )
+        except ImportError as e:
+            print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
+            selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
+        except Exception as e:
+            print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
+            selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
     elif method_opt == "supervised":
         # supervised is an alias for greedy using supervised scores; require model
         if not model_path:
@@ -116,6 +124,7 @@ def main():
     for doc in read_jsonl(args.input):
         rows.append(summarize_one(doc, cfg, model_path=args.model))
     write_jsonl(preds_path, rows)
+    
     # also dump the config used
     import json
     with open(os.path.join(out_dir, "config_used.json"), "w", encoding="utf-8") as f:

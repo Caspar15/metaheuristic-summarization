@@ -35,7 +35,7 @@ src/
 ```
 
 ## 安裝與環境
-- Python 3.9+（建議 3.10）
+- Python 3.9+（建議 3.10）# 3.9過低
 - 建立虛擬環境：
   - Windows: `python -m venv .venv && .\.venv\Scripts\activate`
   - Unix: `python -m venv .venv && source .venv/bin/activate`
