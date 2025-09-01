@@ -36,8 +36,7 @@ def main():
     ap.add_argument("--valid_n", type=int, default=50)
     ap.add_argument("--test_n", type=int, default=50)
     ap.add_argument("--max_sentences", type=int, default=25)
-    ap.add_argument("--optimizers", default="greedy,grasp,nsga2,supervised")
-    ap.add_argument("--no_supervised", action="store_true", help="skip training supervised model and passing --model")
+    ap.add_argument("--optimizers", default="greedy,grasp,nsga2")
     args = ap.parse_args()
 
     py = sys.executable
@@ -94,18 +93,7 @@ def main():
         ]
         run(cmd)
 
-    # Train supervised model unless explicitly skipped
-    model_path = None
-    if not args.no_supervised:
-        train_jsonl = os.path.join(args.processed_dir, "train.jsonl")
-        model_path = os.path.join(args.run_dir, f"{stamp}-supervised", "model.joblib")
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        run([
-            py, "-m", "src.pipeline.train_supervised",
-            "--input", train_jsonl,
-            "--out_model", model_path,
-            "--max_tokens", "100",
-        ])
+    # Supervised training removed
 
     # 2) For each optimizer, run summarize + evaluate for each split
     summary_rows = []
@@ -122,8 +110,7 @@ def main():
                 "--stamp", out_stamp,
                 "--optimizer", opt,
             ]
-            if model_path:
-                cmd += ["--model", model_path]
+            # no supervised model
             run(cmd)
             pred = os.path.join(args.run_dir, out_stamp, "predictions.jsonl")
             metrics = os.path.join(args.run_dir, out_stamp, "metrics.csv")

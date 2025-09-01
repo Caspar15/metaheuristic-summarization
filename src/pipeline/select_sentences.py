@@ -1,10 +1,17 @@
 import argparse
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import numpy as np
 
-from src.utils.io import load_yaml, ensure_dir, now_stamp, read_jsonl, write_jsonl, set_global_seed
+from src.utils.io import (
+    load_yaml,
+    ensure_dir,
+    now_stamp,
+    read_jsonl,
+    write_jsonl,
+    set_global_seed,
+)
 from src.features.tf_isf import sentence_tf_isf_scores
 from src.features.length import length_scores
 from src.features.position import position_scores
@@ -15,7 +22,6 @@ from src.selection.candidate_pool import topk_by_score
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
 from src.models.extractive.nsga2 import nsga2_select
-from src.models.extractive.supervised import SupervisedScorer
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
@@ -31,62 +37,76 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     return combine_scores(feats, weights)
 
 
-def summarize_one(doc: Dict, cfg: Dict, model_path: Optional[str] = None) -> Dict:
+def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
-    
-    # base scores: use supervised model if provided, otherwise feature-based
-    if model_path:
-        scorer = SupervisedScorer(model_path)
-        base_scores = scorer.predict_scores(sentences, cfg)
-    else:
-        base_scores = build_base_scores(sentences, cfg)
+
+    # base scores: feature-based (supervised scoring removed)
+    base_scores = build_base_scores(sentences, cfg)
 
     rep_cfg = cfg.get("representations", {})
-    method = rep_cfg.get("method", "tfidf")
-    vec = SentenceVectors(method=method)
-    X = vec.fit_transform(sentences)
-    sim = cosine_similarity_matrix(X)
+    sim = None
+    if bool(rep_cfg.get("use", True)) and len(sentences) > 0:
+        method = rep_cfg.get("method", "tfidf")
+        vec = SentenceVectors(method=method)
+        X = vec.fit_transform(sentences)
+        sim = cosine_similarity_matrix(X)
 
     max_tokens = int(cfg.get("length_control", {}).get("max_tokens", 100))
     alpha = float(cfg.get("redundancy", {}).get("lambda", 0.7))
 
-    # candidate pool
+    # candidate pool: restrict selection to top-k if enabled
     k = int(cfg.get("candidates", {}).get("k", min(15, len(sentences))))
-    cand_idx = topk_by_score(base_scores, k)
-    # mask outside candidates (if enabled)
     use_cand = bool(cfg.get("candidates", {}).get("use", True))
-    _ = [not use_cand or (i in cand_idx) for i in range(len(sentences))]
+    cand_idx = topk_by_score(base_scores, k)
+    if use_cand and cand_idx:
+        sub_sentences = [sentences[i] for i in cand_idx]
+        sub_scores = [base_scores[i] for i in cand_idx]
+        sub_sim = None
+        if sim is not None:
+            import numpy as _np
+            sub_sim = sim[_np.ix_(cand_idx, cand_idx)]
+    else:
+        sub_sentences = sentences
+        sub_scores = base_scores
+        sub_sim = sim
 
     method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
     if method_opt == "greedy":
-        selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
+        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
     elif method_opt == "grasp":
-        selected = grasp_select(sentences, base_scores, sim, max_tokens, alpha=alpha, iters=10, seed=cfg.get("seed"))
+        picked_sub = grasp_select(
+            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, iters=10, seed=cfg.get("seed")
+        )
     elif method_opt == "nsga2":
-        try:
-            selected = nsga2_select(
-                sentences,
-                base_scores,
-                sim,
-                max_tokens,
-                lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-                lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
-                lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
-            )
-        except ImportError as e:
-            print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
-            selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
-        except Exception as e:
-            print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
-            selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
-    elif method_opt == "supervised":
-        # supervised is an alias for greedy using supervised scores; require model
-        if not model_path:
-            raise RuntimeError("supervised 模式需要提供 model_path")
-        selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
+        if sub_sim is None:
+            print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
+            picked_sub = greedy_select(sub_sentences, sub_scores, None, max_tokens, alpha=alpha)
+        else:
+            try:
+                picked_sub = nsga2_select(
+                    sub_sentences,
+                    sub_scores,
+                    sub_sim,
+                    max_tokens,
+                    lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
+                    lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
+                    lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+                )
+            except ImportError as e:
+                print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
+                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+            except Exception as e:
+                print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
+                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
     else:
-        selected = greedy_select(sentences, base_scores, sim, max_tokens, alpha=alpha)
+        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+
+    # map back to original indices if we used a candidate subset
+    if use_cand and cand_idx:
+        selected = sorted(cand_idx[i] for i in picked_sub)
+    else:
+        selected = sorted(picked_sub)
 
     # keep original order
     selected.sort()
@@ -107,7 +127,6 @@ def main():
     ap.add_argument("--run_dir", default="runs", help="runs output root")
     ap.add_argument("--stamp", default=None, help="optional fixed stamp for output dir")
     ap.add_argument("--optimizer", default=None, help="override optimizer.method in config")
-    ap.add_argument("--model", default=None, help="path to supervised model (joblib)")
     args = ap.parse_args()
 
     cfg = load_yaml(args.config)
@@ -122,9 +141,9 @@ def main():
     preds_path = os.path.join(out_dir, "predictions.jsonl")
     rows = []
     for doc in read_jsonl(args.input):
-        rows.append(summarize_one(doc, cfg, model_path=args.model))
+        rows.append(summarize_one(doc, cfg))
     write_jsonl(preds_path, rows)
-    
+
     # also dump the config used
     import json
     with open(os.path.join(out_dir, "config_used.json"), "w", encoding="utf-8") as f:

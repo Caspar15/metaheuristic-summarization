@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import numpy as np
 import random
 
@@ -9,23 +9,24 @@ def _count_tokens(s: str) -> int:
     return len(s.split())
 
 
-def _objective(selected: List[int], base_scores: List[float], sim_mat: np.ndarray, alpha: float) -> float:
+def _objective(selected: List[int], base_scores: List[float], sim_mat: Optional[np.ndarray], alpha: float) -> float:
     if not selected:
         return -1e9
     importance = sum(base_scores[i] for i in selected)
     redundancy = 0.0
-    for a in range(len(selected)):
-        ia = selected[a]
-        for b in range(a + 1, len(selected)):
-            ib = selected[b]
-            redundancy += float(sim_mat[ia, ib])
+    if sim_mat is not None:
+        for a in range(len(selected)):
+            ia = selected[a]
+            for b in range(a + 1, len(selected)):
+                ib = selected[b]
+                redundancy += float(sim_mat[ia, ib])
     return importance - (1 - alpha) * redundancy
 
 
 def _construct_greedy_randomized(
     sentences: List[str],
     base_scores: List[float],
-    sim_mat: np.ndarray,
+    sim_mat: Optional[np.ndarray],
     max_tokens: int,
     alpha: float,
     rcl_ratio: float,
@@ -40,7 +41,7 @@ def _construct_greedy_randomized(
         for i in list(remaining):
             if not will_fit(current_texts, sentences[i], max_tokens):
                 continue
-            max_sim = float(np.max(sim_mat[i, selected])) if selected else 0.0
+            max_sim = float(np.max(sim_mat[i, selected])) if (selected and sim_mat is not None) else 0.0
             score = alpha * base_scores[i] - (1 - alpha) * max_sim
             cand.append(i)
             util.append(score)
@@ -67,7 +68,7 @@ def _local_search(
     solution: List[int],
     sentences: List[str],
     base_scores: List[float],
-    sim_mat: np.ndarray,
+    sim_mat: Optional[np.ndarray],
     max_tokens: int,
     alpha: float,
     max_iter: int = 100,
@@ -136,7 +137,7 @@ def _local_search(
 def grasp_select(
     sentences: List[str],
     base_scores: List[float],
-    sim_mat: np.ndarray,
+    sim_mat: Optional[np.ndarray],
     max_tokens: int,
     alpha: float = 0.7,
     iters: int = 20,

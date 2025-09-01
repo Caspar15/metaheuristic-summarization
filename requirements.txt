@@ -2,7 +2,6 @@ numpy>=1.23
 scipy==1.10.1
 pymoo==0.6.1.1
 pandas>=1.5
-scikit-learn>=1.1
 pyyaml>=6.0
 tqdm>=4.64
 ujson>=5.7; platform_system != 'Windows'

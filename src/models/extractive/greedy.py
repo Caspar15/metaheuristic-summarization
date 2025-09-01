@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Optional
 import numpy as np
 
 from src.selection.length_controller import will_fit, trim_to_max_tokens
@@ -7,7 +7,7 @@ from src.selection.length_controller import will_fit, trim_to_max_tokens
 def greedy_select(
     sentences: List[str],
     base_scores: List[float],
-    sim_mat: np.ndarray,
+    sim_mat: Optional[np.ndarray],
     max_tokens: int,
     alpha: float = 0.7,
 ) -> List[int]:
@@ -23,7 +23,7 @@ def greedy_select(
                 continue
             if not will_fit(current, sentences[i], max_tokens):
                 continue
-            if selected:
+            if selected and sim_mat is not None:
                 max_sim = float(np.max(sim_mat[i, selected]))
             else:
                 max_sim = 0.0

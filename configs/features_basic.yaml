@@ -19,5 +19,5 @@ length_control:
   unit: "tokens"   # tokens | sentences
   max_tokens: 100
 optimizer:
-  method: "greedy" # greedy | grasp | nsga2 | supervised | bart | pegasus
+  method: "greedy" # greedy | grasp | nsga2 | bart | pegasus
 seed: 2024
