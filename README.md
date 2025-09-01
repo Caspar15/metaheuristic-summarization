@@ -94,7 +94,10 @@ representations:
 candidates:
   use: true
   k: 15                     # 候選池大小（依基線分數）
-  by: "score"
+  mode: "hard"              # hard | soft（soft 僅加權偏好，不封鎖）
+  sources: ["score"]        # 聯合集合：score | position | centrality
+  soft_boost: 1.05          # mode=soft 時對候選的分數乘法增益
+  recall_target: null       # 例 0.95；可選，需有 reference 才能估算 oracle 召回
 redundancy:
   method: "mmr"
   lambda: 0.7               # MMR 調和係數（alpha）
@@ -136,6 +139,27 @@ python scripts/run_7_2_1.py \
   --max_sentences 25
 ```
 
+## 二階段 Rerank（預留）
+- 目的：對多個候選摘要（由第一層演算法產生）使用 Hugging Face cross-encoder 進行摘要級打分，並與第一層分數做校準後融合。
+- 位置：
+  - 模型介面：`src/models/rerank/cross_encoder.py`
+  - Pipeline：`src/pipeline/rerank.py`（讀入候選、計分、融合、輸出最佳）
+- 設定（configs/features_basic.yaml）：
+```
+rerank:
+  enabled: false
+  model_name: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  top_n: 20
+  normalize: "minmax"   # minmax | zscore
+  weights:
+    ce: 1.0
+    base: 0.0
+```
+- 待辦：
+  - 依你選定的開源模型實作 cross-encoder 打分（batch 推理）。
+  - 在 validation 上尋找融合權重（或用小的 meta-learner）。
+  - 若配合 LLM rerank，建議 `candidates.mode: soft` 與較大 k，以確保候選召回。
+
 ## 設計概覽（Pipeline Overview）
 - Prepare（A）
   - P0: 選擇資料與範圍（`scripts/split_dataset.py` 或直接放置 CSV）
@@ -155,7 +179,7 @@ python scripts/run_7_2_1.py \
   - D4: 評估（`src/pipeline/evaluate.py`：ROUGE；時間/ablation 待補）
 
 備註與優化方向：
-- 可將 R4（top‑k）提前在向量化之前先做，以僅對候選計算向量/相似度，節省計算。
+- 可將 R4（top‑k）提前在向量化之前先做，以僅對候選計算向量/相似度，節省計算；若考慮 LLM rerank 的上限，建議使用 `mode: soft` 與較大的 k，或以多來源（sources）提高召回。
 - `representations.use=false` 時：Greedy/GRASP 正常、NSGA‑II 退回 Greedy（已落地）。
 - 後續將新增 D1（二階段 rerank）與（可選）RL 前置搜尋，提升最終摘要品質。
 
@@ -191,4 +215,3 @@ python scripts/run_7_2_1.py \
 
 ## 授權
 - 本專案未附帶明確授權條款。如需發布或再利用，請先於內部確認。
-

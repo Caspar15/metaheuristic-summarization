@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import Dict, List
+from typing import Dict, List, Set
 
 import numpy as np
 
@@ -37,6 +37,91 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     return combine_scores(feats, weights)
 
 
+def _topk_by_position(sentences: List[str], k: int) -> List[int]:
+    # earlier sentences get higher position score
+    pos = position_scores(sentences)
+    idx = sorted(range(len(pos)), key=lambda i: pos[i], reverse=True)
+    return idx[:k]
+
+
+def _topk_by_centrality_tfidf(sentences: List[str], k: int) -> List[int]:
+    # lightweight centrality via TF-IDF similarity (independent from representations.use)
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(sentences) == 0:
+        return []
+    X = TfidfVectorizer(lowercase=True).fit_transform(sentences)
+    sim = cosine_similarity(X)
+    cent = sim.mean(axis=1)
+    idx = sorted(range(len(sentences)), key=lambda i: float(cent[i]), reverse=True)
+    return idx[:k]
+
+
+def _build_candidate_union(
+    sentences: List[str], base_scores: List[float], k: int, sources: List[str]
+) -> List[int]:
+    n = len(sentences)
+    if n == 0:
+        return []
+    k = min(max(1, k), n)
+    cand: Set[int] = set()
+    for src in sources:
+        name = (src or "").strip().lower()
+        if name == "score":
+            cand.update(topk_by_score(base_scores, k))
+        elif name == "position":
+            cand.update(_topk_by_position(sentences, k))
+        elif name == "centrality":
+            try:
+                cand.update(_topk_by_centrality_tfidf(sentences, k))
+            except Exception:
+                # fallback ignore centrality if sklearn not available
+                pass
+    if not cand:
+        cand.update(topk_by_score(base_scores, k))
+    # keep original order stability by sorting by index
+    return sorted(cand)
+
+
+def _greedy_oracle_indices(sentences: List[str], reference: str, max_tokens: int) -> List[int]:
+    """Greedy oracle by ROUGE-1 F gain (used for recall_target of candidates)."""
+    try:
+        from rouge_score import rouge_scorer
+    except Exception:
+        return []
+    scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
+    selected: List[int] = []
+    cur_summary = ""
+    cur_tokens = 0
+    best_f = 0.0
+    n = len(sentences)
+    def _count_tokens(s: str) -> int:
+        return len((s or "").split())
+    for _ in range(n):
+        best_i = None
+        best_gain = 0.0
+        for i in range(n):
+            if i in selected:
+                continue
+            t = _count_tokens(sentences[i])
+            if cur_tokens + t > max_tokens:
+                continue
+            cand = (cur_summary + " " + sentences[i]).strip()
+            f = scorer.score(reference or "", cand)["rouge1"].fmeasure
+            gain = f - best_f
+            if gain > best_gain + 1e-12:
+                best_gain = gain
+                best_i = i
+        if best_i is None:
+            break
+        selected.append(best_i)
+        cur_summary = (cur_summary + " " + sentences[best_i]).strip()
+        cur_tokens += _count_tokens(sentences[best_i])
+        best_f = scorer.score(reference or "", cur_summary)["rouge1"].fmeasure
+    return sorted(selected)
+
+
 def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
@@ -55,17 +140,46 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     max_tokens = int(cfg.get("length_control", {}).get("max_tokens", 100))
     alpha = float(cfg.get("redundancy", {}).get("lambda", 0.7))
 
-    # candidate pool: restrict selection to top-k if enabled
-    k = int(cfg.get("candidates", {}).get("k", min(15, len(sentences))))
-    use_cand = bool(cfg.get("candidates", {}).get("use", True))
-    cand_idx = topk_by_score(base_scores, k)
+    # candidate pool: soft/hard modes with multi-source union and optional recall target
+    cand_cfg = cfg.get("candidates", {})
+    k = int(cand_cfg.get("k", min(15, len(sentences))))
+    use_cand = bool(cand_cfg.get("use", True))
+    mode = (cand_cfg.get("mode", "hard") or "hard").lower()
+    sources = cand_cfg.get("sources", ["score"]) or ["score"]
+    soft_boost = float(cand_cfg.get("soft_boost", 1.05))
+
+    cand_idx = _build_candidate_union(sentences, base_scores, k, sources)
+
+    # optional dynamic k to reach recall target (if reference available)
+    recall_target = cand_cfg.get("recall_target", None)
+    if recall_target is not None and isinstance(recall_target, (int, float)) and 0 < recall_target <= 1:
+        oracle = _greedy_oracle_indices(sentences, doc.get("highlights", ""), int(cfg.get("length_control", {}).get("max_tokens", 100)))
+        if oracle:
+            import math as _m
+            used_k = max(1, len(cand_idx))
+            while used_k < len(sentences):
+                inter = len(set(cand_idx) & set(oracle))
+                rec = inter / max(1, len(oracle))
+                if rec >= float(recall_target) - 1e-12:
+                    break
+                used_k = min(len(sentences), max(used_k + 1, int(_m.ceil(used_k * 1.5))))
+                cand_idx = _build_candidate_union(sentences, base_scores, used_k, sources)
+
+    # apply mode
     if use_cand and cand_idx:
-        sub_sentences = [sentences[i] for i in cand_idx]
-        sub_scores = [base_scores[i] for i in cand_idx]
-        sub_sim = None
-        if sim is not None:
-            import numpy as _np
-            sub_sim = sim[_np.ix_(cand_idx, cand_idx)]
+        if mode == "hard":
+            sub_sentences = [sentences[i] for i in cand_idx]
+            sub_scores = [base_scores[i] for i in cand_idx]
+            sub_sim = None
+            if sim is not None:
+                import numpy as _np
+                sub_sim = sim[_np.ix_(cand_idx, cand_idx)]
+        else:  # soft mode: do not restrict, only boost candidate scores
+            sub_sentences = sentences
+            sub_scores = base_scores[:]
+            for i in cand_idx:
+                sub_scores[i] = float(sub_scores[i]) * soft_boost
+            sub_sim = sim
     else:
         sub_sentences = sentences
         sub_scores = base_scores
@@ -102,8 +216,8 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     else:
         picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
 
-    # map back to original indices if we used a candidate subset
-    if use_cand and cand_idx:
+    # map back to original indices if we used a hard candidate subset
+    if use_cand and cand_idx and mode == "hard":
         selected = sorted(cand_idx[i] for i in picked_sub)
     else:
         selected = sorted(picked_sub)

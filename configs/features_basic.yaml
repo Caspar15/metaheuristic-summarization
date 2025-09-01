@@ -10,7 +10,10 @@ representations:
 candidates:
   use: true
   k: 15
-  by: "score"      # or "title_sim"
+  mode: "hard"        # hard | soft
+  sources: ["score"]  # union of: score | position | centrality
+  soft_boost: 1.05     # only used when mode=soft (multiplicative boost for candidates)
+  recall_target: null  # e.g., 0.95 (optional; requires reference to measure oracle recall)
 redundancy:
   method: "mmr"    # or "jaccard"
   lambda: 0.7
@@ -21,3 +24,12 @@ length_control:
 optimizer:
   method: "greedy" # greedy | grasp | nsga2 | bart | pegasus
 seed: 2024
+
+rerank:
+  enabled: false
+  model_name: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  top_n: 20
+  normalize: "minmax"   # minmax | zscore
+  weights:               # fusion weights (per-document normalized)
+    ce: 1.0
+    base: 0.0
