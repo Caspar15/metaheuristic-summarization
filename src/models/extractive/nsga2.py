@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import numpy as np
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.operators.sampling.rnd import BinaryRandomSampling
@@ -8,11 +8,21 @@ from pymoo.optimize import minimize
 from pymoo.core.problem import ElementwiseProblem
 
 class SummarizationProblem(ElementwiseProblem):
-    def __init__(self, sentences: List[str], importance: List[float], sim_mat: np.ndarray, max_tokens: int):
+    def __init__(
+        self,
+        sentences: List[str],
+        importance: List[float],
+        sim_mat: np.ndarray,
+        max_tokens: int,
+        unit: str = "tokens",
+        max_sentences: Optional[int] = None,
+    ):
         self.sentences = sentences
         self.importance = np.array(importance)
         self.sim_mat = sim_mat
         self.max_tokens = max_tokens
+        self.unit = (unit or "tokens").lower()
+        self.max_sentences = max_sentences if (max_sentences is not None) else 10**9
         n = len(sentences)
         super().__init__(n_var=n, n_obj=3, n_constr=1, xl=0, xu=1, type_var=int)
 
@@ -36,8 +46,12 @@ class SummarizationProblem(ElementwiseProblem):
             red = 0.0
 
         out["F"] = [-imp, -cov, red]
-        total_tokens = sum(self._count_tokens(self.sentences[i]) for i in idx)
-        out["G"] = [total_tokens - self.max_tokens]
+        if self.unit == "sentences":
+            total_sents = len(idx)
+            out["G"] = [total_sents - int(self.max_sentences)]
+        else:
+            total_tokens = sum(self._count_tokens(self.sentences[i]) for i in idx)
+            out["G"] = [total_tokens - self.max_tokens]
 
 def nsga2_select(
     sentences: List[str],
@@ -47,12 +61,16 @@ def nsga2_select(
     lambda_importance: float = 1.0,
     lambda_coverage: float = 0.8,
     lambda_redundancy: float = 0.7,
+    unit: str = "tokens",
+    max_sentences: int | None = None,
 ) -> List[int]:
     n = len(sentences)
     if n == 0:
         return []
 
-    problem = SummarizationProblem(sentences, importance, sim_mat, max_tokens)
+    problem = SummarizationProblem(
+        sentences, importance, sim_mat, max_tokens, unit=unit, max_sentences=max_sentences
+    )
 
     algorithm = NSGA2(
         pop_size=max(20, min(2 * n, 60)),

@@ -21,7 +21,11 @@ from src.representations.similarity import cosine_similarity_matrix
 from src.selection.candidate_pool import topk_by_score
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
-from src.models.extractive.nsga2 import nsga2_select
+try:
+    from src.models.extractive.nsga2 import nsga2_select  # type: ignore
+except Exception:
+    def nsga2_select(*args, **kwargs):  # type: ignore
+        raise ImportError("nsga2 requires 'pymoo' to be installed.")
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
@@ -137,7 +141,11 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         X = vec.fit_transform(sentences)
         sim = cosine_similarity_matrix(X)
 
-    max_tokens = int(cfg.get("length_control", {}).get("max_tokens", 100))
+    lc = cfg.get("length_control", {})
+    unit = (lc.get("unit", "tokens") or "tokens").lower()
+    max_tokens = int(lc.get("max_tokens", 100))
+    max_sents_limit = lc.get("max_sentences", None)
+    max_sents = int(max_sents_limit) if (max_sents_limit is not None) else None
     alpha = float(cfg.get("redundancy", {}).get("lambda", 0.7))
 
     # candidate pool: soft/hard modes with multi-source union and optional recall target
@@ -187,15 +195,27 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
 
     method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
     if method_opt == "greedy":
-        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+        picked_sub = greedy_select(
+            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+        )
     elif method_opt == "grasp":
         picked_sub = grasp_select(
-            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, iters=10, seed=cfg.get("seed")
+            sub_sentences,
+            sub_scores,
+            sub_sim,
+            max_tokens,
+            alpha=alpha,
+            iters=10,
+            seed=cfg.get("seed"),
+            unit=unit,
+            max_sentences=max_sents,
         )
     elif method_opt == "nsga2":
         if sub_sim is None:
             print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
-            picked_sub = greedy_select(sub_sentences, sub_scores, None, max_tokens, alpha=alpha)
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
         else:
             try:
                 picked_sub = nsga2_select(
@@ -206,15 +226,23 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                     lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
                     lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
                     lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+                    unit=unit,
+                    max_sentences=max_sents,
                 )
             except ImportError as e:
                 print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
-                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+                picked_sub = greedy_select(
+                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                )
             except Exception as e:
                 print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
-                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+                picked_sub = greedy_select(
+                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                )
     else:
-        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+        picked_sub = greedy_select(
+            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+        )
 
     # map back to original indices if we used a hard candidate subset
     if use_cand and cand_idx and mode == "hard":

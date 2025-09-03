@@ -1,7 +1,7 @@
 from typing import List, Optional
 import numpy as np
 
-from src.selection.length_controller import will_fit, trim_to_max_tokens
+from src.selection.length_controller import will_fit_unit, trim_to_max_tokens, trim_to_max_sentences
 
 
 def greedy_select(
@@ -10,6 +10,8 @@ def greedy_select(
     sim_mat: Optional[np.ndarray],
     max_tokens: int,
     alpha: float = 0.7,
+    unit: str = "tokens",
+    max_sentences: int | None = None,
 ) -> List[int]:
     selected: List[int] = []
     current: List[str] = []
@@ -21,7 +23,7 @@ def greedy_select(
         for i in candidates:
             if i in selected:
                 continue
-            if not will_fit(current, sentences[i], max_tokens):
+            if not will_fit_unit(current, sentences[i], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences):
                 continue
             if selected and sim_mat is not None:
                 max_sim = float(np.max(sim_mat[i, selected]))
@@ -37,7 +39,8 @@ def greedy_select(
         current.append(sentences[best_i])
         # stop if no more can fit
         any_fit = any(
-            (j not in selected) and will_fit(current, sentences[j], max_tokens)
+            (j not in selected)
+            and will_fit_unit(current, sentences[j], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences)
             for j in candidates
         )
         if not any_fit:

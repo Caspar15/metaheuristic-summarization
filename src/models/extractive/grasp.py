@@ -2,7 +2,7 @@ from typing import List, Tuple, Optional
 import numpy as np
 import random
 
-from src.selection.length_controller import will_fit
+from src.selection.length_controller import will_fit_unit
 
 
 def _count_tokens(s: str) -> int:
@@ -31,6 +31,8 @@ def _construct_greedy_randomized(
     alpha: float,
     rcl_ratio: float,
     rng: random.Random,
+    unit: str = "tokens",
+    max_sentences: int | None = None,
 ) -> List[int]:
     selected: List[int] = []
     current_texts: List[str] = []
@@ -39,7 +41,7 @@ def _construct_greedy_randomized(
         cand = []
         util = []
         for i in list(remaining):
-            if not will_fit(current_texts, sentences[i], max_tokens):
+            if not will_fit_unit(current_texts, sentences[i], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences):
                 continue
             max_sim = float(np.max(sim_mat[i, selected])) if (selected and sim_mat is not None) else 0.0
             score = alpha * base_scores[i] - (1 - alpha) * max_sim
@@ -56,7 +58,9 @@ def _construct_greedy_randomized(
         remaining.remove(choice)
         # 是否還能再裝？若不行提前停止
         any_fit = any(
-            (j in remaining) and will_fit(current_texts, sentences[j], max_tokens) for j in remaining
+            (j in remaining)
+            and will_fit_unit(current_texts, sentences[j], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences)
+            for j in remaining
         )
         if not any_fit:
             break
@@ -72,6 +76,8 @@ def _local_search(
     max_tokens: int,
     alpha: float,
     max_iter: int = 100,
+    unit: str = "tokens",
+    max_sentences: int | None = None,
 ) -> List[int]:
     if not solution:
         return solution
@@ -90,7 +96,7 @@ def _local_search(
                 # 檢查長度可行：先移除 i，再嘗試加入 j
                 temp_sel = [k for k in selected if k != i]
                 cur_texts = [sentences[k] for k in temp_sel]
-                if not will_fit(cur_texts, sentences[j], max_tokens):
+                if not will_fit_unit(cur_texts, sentences[j], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences):
                     continue
                 cand = sorted(temp_sel + [j])
                 val = _objective(cand, base_scores, sim_mat, alpha)
@@ -108,7 +114,7 @@ def _local_search(
         for j in range(n):
             if j in selected:
                 continue
-            if not will_fit(cur_texts, sentences[j], max_tokens):
+            if not will_fit_unit(cur_texts, sentences[j], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences):
                 continue
             cand = sorted(selected + [j])
             val = _objective(cand, base_scores, sim_mat, alpha)
@@ -143,6 +149,8 @@ def grasp_select(
     iters: int = 20,
     rcl_ratio: float = 0.3,
     seed: int | None = None,
+    unit: str = "tokens",
+    max_sentences: int | None = None,
 ) -> List[int]:
     """GRASP: 多輪建構 + 局部搜尋，回傳全程最佳解。
 
@@ -153,8 +161,12 @@ def grasp_select(
     best: List[int] = []
     best_val = -1e9
     for _ in range(max(1, iters)):
-        sol = _construct_greedy_randomized(sentences, base_scores, sim_mat, max_tokens, alpha, rcl_ratio, rng)
-        sol = _local_search(sol, sentences, base_scores, sim_mat, max_tokens, alpha, max_iter=200)
+        sol = _construct_greedy_randomized(
+            sentences, base_scores, sim_mat, max_tokens, alpha, rcl_ratio, rng, unit=unit, max_sentences=max_sentences
+        )
+        sol = _local_search(
+            sol, sentences, base_scores, sim_mat, max_tokens, alpha, max_iter=200, unit=unit, max_sentences=max_sentences
+        )
         val = _objective(sol, base_scores, sim_mat, alpha)
         if val > best_val:
             best = sol
