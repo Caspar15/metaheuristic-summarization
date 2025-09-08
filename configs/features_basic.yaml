@@ -3,26 +3,43 @@ objectives:
   lambda_coverage: 0.8
   lambda_redundancy: 0.7
   length_penalty: 2.0
+
 representations:
   use: true
-  method: "tfidf"  # or "sbert"
+  method: "tfidf"  # tfidf | sbert
   cache: true
+
 candidates:
   use: true
   k: 15
   mode: "hard"        # hard | soft
   sources: ["score"]  # union of: score | position | centrality
-  soft_boost: 1.05     # only used when mode=soft (multiplicative boost for candidates)
-  recall_target: null  # e.g., 0.95 (optional; requires reference to measure oracle recall)
+  soft_boost: 1.05
+  recall_target: null
+
 redundancy:
-  method: "mmr"    # or "jaccard"
+  method: "mmr"
   lambda: 0.7
   sim_metric: "cosine"
+
 length_control:
-  unit: "tokens"   # tokens | sentences
-  max_tokens: 100
+  unit: "sentences"   # sentences | tokens | chars
+  max_tokens: 100     # 當 unit="tokens" 時使用
+  max_sentences: 15    # 改為 3，與我們的測試保持一致
+
+# GRASP 演算法特定配置
+grasp:
+  iterations: 10      # GRASP 迭代次數
+  rcl_alpha: 0.3      # RCL (Restricted Candidate List) 參數
+
+# NSGA-II 演算法特定配置  
+nsga2:
+  pop_size: 50        # 族群大小
+  n_gen: 100          # 演化世代數
+
 optimizer:
-  method: "greedy" # greedy | grasp | nsga2 | bart | pegasus
+  method: "greedy"    # greedy | grasp | nsga2 (CLI 會覆蓋此設定)
+
 seed: 2024
 
 rerank:
@@ -30,6 +47,6 @@ rerank:
   model_name: "cross-encoder/ms-marco-MiniLM-L-6-v2"
   top_n: 20
   normalize: "minmax"   # minmax | zscore
-  weights:               # fusion weights (per-document normalized)
+  weights:
     ce: 1.0
     base: 0.0

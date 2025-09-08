@@ -1,8 +1,10 @@
 import argparse
 import os
+import json
 from typing import Dict, List, Set
 
 import numpy as np
+from tqdm import tqdm
 
 from src.utils.io import (
     load_yaml,
@@ -19,9 +21,8 @@ from src.features.compose import combine_scores
 from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.selection.candidate_pool import topk_by_score
-from src.models.extractive.greedy import greedy_select
-from src.models.extractive.grasp import grasp_select
-from src.models.extractive.nsga2 import nsga2_select
+from src.models.extractive.greedy import GreedySelector
+from src.selection.length_controller import LengthController
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
@@ -36,27 +37,21 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     feats = {"importance": f_importance, "length": f_len, "position": f_pos}
     return combine_scores(feats, weights)
 
-
 def _topk_by_position(sentences: List[str], k: int) -> List[int]:
-    # earlier sentences get higher position score
     pos = position_scores(sentences)
     idx = sorted(range(len(pos)), key=lambda i: pos[i], reverse=True)
     return idx[:k]
 
-
 def _topk_by_centrality_tfidf(sentences: List[str], k: int) -> List[int]:
-    # lightweight centrality via TF-IDF similarity (independent from representations.use)
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-
     if len(sentences) == 0:
         return []
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
     X = TfidfVectorizer(lowercase=True).fit_transform(sentences)
     sim = cosine_similarity(X)
     cent = sim.mean(axis=1)
     idx = sorted(range(len(sentences)), key=lambda i: float(cent[i]), reverse=True)
     return idx[:k]
-
 
 def _build_candidate_union(
     sentences: List[str], base_scores: List[float], k: int, sources: List[str]
@@ -76,16 +71,12 @@ def _build_candidate_union(
             try:
                 cand.update(_topk_by_centrality_tfidf(sentences, k))
             except Exception:
-                # fallback ignore centrality if sklearn not available
                 pass
     if not cand:
         cand.update(topk_by_score(base_scores, k))
-    # keep original order stability by sorting by index
     return sorted(cand)
 
-
 def _greedy_oracle_indices(sentences: List[str], reference: str, max_tokens: int) -> List[int]:
-    """Greedy oracle by ROUGE-1 F gain (used for recall_target of candidates)."""
     try:
         from rouge_score import rouge_scorer
     except Exception:
@@ -121,36 +112,26 @@ def _greedy_oracle_indices(sentences: List[str], reference: str, max_tokens: int
         best_f = scorer.score(reference or "", cur_summary)["rouge1"].fmeasure
     return sorted(selected)
 
-
-def summarize_one(doc: Dict, cfg: Dict) -> Dict:
+def summarize_one(doc: Dict, cfg: Dict, selector) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
 
-    # base scores: feature-based (supervised scoring removed)
     base_scores = build_base_scores(sentences, cfg)
-
     rep_cfg = cfg.get("representations", {})
     sim = None
     if bool(rep_cfg.get("use", True)) and len(sentences) > 0:
-        method = rep_cfg.get("method", "tfidf")
-        vec = SentenceVectors(method=method)
+        vec = SentenceVectors(method=rep_cfg.get("method", "tfidf"))
         X = vec.fit_transform(sentences)
         sim = cosine_similarity_matrix(X)
 
-    max_tokens = int(cfg.get("length_control", {}).get("max_tokens", 100))
-    alpha = float(cfg.get("redundancy", {}).get("lambda", 0.7))
-
-    # candidate pool: soft/hard modes with multi-source union and optional recall target
     cand_cfg = cfg.get("candidates", {})
     k = int(cand_cfg.get("k", min(15, len(sentences))))
     use_cand = bool(cand_cfg.get("use", True))
     mode = (cand_cfg.get("mode", "hard") or "hard").lower()
     sources = cand_cfg.get("sources", ["score"]) or ["score"]
     soft_boost = float(cand_cfg.get("soft_boost", 1.05))
-
     cand_idx = _build_candidate_union(sentences, base_scores, k, sources)
 
-    # optional dynamic k to reach recall target (if reference available)
     recall_target = cand_cfg.get("recall_target", None)
     if recall_target is not None and isinstance(recall_target, (int, float)) and 0 < recall_target <= 1:
         oracle = _greedy_oracle_indices(sentences, doc.get("highlights", ""), int(cfg.get("length_control", {}).get("max_tokens", 100)))
@@ -165,65 +146,30 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 used_k = min(len(sentences), max(used_k + 1, int(_m.ceil(used_k * 1.5))))
                 cand_idx = _build_candidate_union(sentences, base_scores, used_k, sources)
 
-    # apply mode
     if use_cand and cand_idx:
         if mode == "hard":
             sub_sentences = [sentences[i] for i in cand_idx]
             sub_scores = [base_scores[i] for i in cand_idx]
-            sub_sim = None
-            if sim is not None:
-                import numpy as _np
-                sub_sim = sim[_np.ix_(cand_idx, cand_idx)]
-        else:  # soft mode: do not restrict, only boost candidate scores
+            sub_sim = sim[np.ix_(cand_idx, cand_idx)] if sim is not None else None
+        else:  # soft mode
             sub_sentences = sentences
             sub_scores = base_scores[:]
             for i in cand_idx:
-                sub_scores[i] = float(sub_scores[i]) * soft_boost
+                sub_scores[i] *= soft_boost
             sub_sim = sim
     else:
-        sub_sentences = sentences
-        sub_scores = base_scores
-        sub_sim = sim
+        sub_sentences, sub_scores, sub_sim = sentences, base_scores, sim
 
-    method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
-    if method_opt == "greedy":
-        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
-    elif method_opt == "grasp":
-        picked_sub = grasp_select(
-            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, iters=10, seed=cfg.get("seed")
-        )
-    elif method_opt == "nsga2":
-        if sub_sim is None:
-            print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
-            picked_sub = greedy_select(sub_sentences, sub_scores, None, max_tokens, alpha=alpha)
-        else:
-            try:
-                picked_sub = nsga2_select(
-                    sub_sentences,
-                    sub_scores,
-                    sub_sim,
-                    max_tokens,
-                    lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-                    lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
-                    lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
-                )
-            except ImportError as e:
-                print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
-                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
-            except Exception as e:
-                print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
-                picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
-    else:
-        picked_sub = greedy_select(sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha)
+    length_ctrl_config = cfg.get('length_control', {})
+    length_controller = LengthController(length_ctrl_config, sub_sentences)
 
-    # map back to original indices if we used a hard candidate subset
+    picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
+
     if use_cand and cand_idx and mode == "hard":
-        selected = sorted(cand_idx[i] for i in picked_sub)
+        selected = sorted([cand_idx[i] for i in picked_sub])
     else:
         selected = sorted(picked_sub)
 
-    # keep original order
-    selected.sort()
     summary = " ".join([sentences[i] for i in selected])
     return {
         "id": doc.get("id"),
@@ -245,21 +191,48 @@ def main():
 
     cfg = load_yaml(args.config)
     if args.optimizer:
-        cfg.setdefault("optimizer", {})
-        cfg["optimizer"]["method"] = args.optimizer
+        cfg.setdefault("optimizer", {})["method"] = args.optimizer
     set_global_seed(cfg.get("seed"))
     stamp = args.stamp or now_stamp()
     out_dir = os.path.join(args.run_dir, stamp)
     ensure_dir(out_dir)
 
+    optimizer_name = cfg.get("optimizer", {}).get("method", "greedy").lower()
+    
+    if optimizer_name == "greedy":
+        selector = GreedySelector(cfg)
+        print(f"Using GreedySelector")
+        
+    elif optimizer_name == "grasp":
+        try:
+            from src.models.extractive.grasp import GraspSelector
+            selector = GraspSelector(cfg)
+            print(f"Using GraspSelector")
+        except ImportError as e:
+            print(f"Warning: Could not import GraspSelector: {e}. Falling back to GreedySelector.")
+            selector = GreedySelector(cfg)
+            
+    elif optimizer_name == "nsga2":
+        try:
+            from src.models.extractive.nsga2 import Nsga2Selector
+            selector = Nsga2Selector(cfg)
+            print(f"Using Nsga2Selector")
+        except ImportError as e:
+            print(f"Warning: Could not import Nsga2Selector: {e}. Falling back to GreedySelector.")
+            selector = GreedySelector(cfg)
+            
+    else:
+        print(f"Warning: Unknown optimizer '{optimizer_name}'. Using GreedySelector.")
+        selector = GreedySelector(cfg)
+    
     preds_path = os.path.join(out_dir, "predictions.jsonl")
     rows = []
-    for doc in read_jsonl(args.input):
-        rows.append(summarize_one(doc, cfg))
+    
+    for doc in tqdm(read_jsonl(args.input), desc=f"Selecting with {optimizer_name}"):
+        rows.append(summarize_one(doc, cfg, selector))
+    
     write_jsonl(preds_path, rows)
 
-    # also dump the config used
-    import json
     with open(os.path.join(out_dir, "config_used.json"), "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
     print(f"Wrote predictions to {preds_path}")
