@@ -22,6 +22,11 @@ from src.selection.candidate_pool import topk_by_score
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
 try:
+    from src.models.extractive.bert_rank import bert_select  # type: ignore
+except Exception:
+    def bert_select(*args, **kwargs):  # type: ignore
+        raise ImportError("BERT ranking requires 'transformers' and 'torch'.")
+try:
     from src.models.extractive.nsga2 import nsga2_select  # type: ignore
 except Exception:
     def nsga2_select(*args, **kwargs):  # type: ignore
@@ -239,6 +244,22 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 picked_sub = greedy_select(
                     sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
                 )
+    elif method_opt == "bert":
+        # direct ranking by BERT sentence embeddings vs document centroid
+        bert_cfg = cfg.get("bert", {})
+        model_name = bert_cfg.get("model_name", "google-bert/bert-base-uncased")
+        try:
+            picked_sub = bert_select(
+                sub_sentences,
+                max_tokens,
+                unit=unit,
+                max_sentences=max_sents,
+                model_name=model_name,
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"BERT 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用 greedy/grasp/nsga2。"
+            ) from e
     else:
         picked_sub = greedy_select(
             sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
