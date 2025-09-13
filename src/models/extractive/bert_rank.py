@@ -15,13 +15,14 @@ def _sentence_embeddings(
     sentences: List[str],
     model_name: str = "bert-base-uncased",
     device: Optional[str] = None,
-    use_auth_token: Optional[str] = None,
+    token: Optional[str] = None,
 ):
     import torch
     from transformers import AutoTokenizer, AutoModel
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=use_auth_token)
-    model = AutoModel.from_pretrained(model_name, use_auth_token=use_auth_token)
+    # transformers >= 4.41 uses `token` instead of deprecated `use_auth_token`
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
+    model = AutoModel.from_pretrained(model_name, token=token)
     model.eval()
 
     if device is None:
@@ -92,7 +93,7 @@ def bert_select(
     hf_token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN")
     with torch.inference_mode():
         embs = _sentence_embeddings(
-            sentences, model_name=model_name, device=device, use_auth_token=hf_token
+            sentences, model_name=model_name, device=device, token=hf_token
         )  # [N, H]
     scores = _cosine_scores_to_centroid(embs)
     order = sorted(range(len(sentences)), key=lambda i: scores[i], reverse=True)

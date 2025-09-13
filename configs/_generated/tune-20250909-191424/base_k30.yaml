@@ -5,27 +5,29 @@ objectives:
   length_penalty: 2.0
 representations:
   use: true
-  method: "tfidf"
+  method: tfidf
   cache: true
 candidates:
   use: true
   k: 15
-  mode: "hard"
-  sources: ["score"]
+  mode: hard
+  sources:
+  - score
   soft_boost: 1.05
   recall_target: null
 redundancy:
-  method: "mmr"
+  method: mmr
   lambda: 0.7
-  sim_metric: "cosine"
+  sim_metric: cosine
 length_control:
-  unit: "sentences"
+  unit: sentences
   max_tokens: 100
-  max_sentences: 3
+  max_sentences: 30
 optimizer:
-  method: "bert"
+  method: greedy
 seed: 2024
-
-# BERT 模型設定
-bert:
-  model_name: "bert-base-uncased"
+features:
+  weights:
+    importance: 1.0
+    length: 0.3
+    position: 0.3

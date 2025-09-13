@@ -1,6 +1,0 @@
-eval:
-  rouge_types: ["rouge1", "rouge2", "rougeL"]
-  use_stemmer: true
-  output:
-    dir: runs
-

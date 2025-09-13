@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 from typing import Dict, List, Set
 
 import numpy as np
@@ -31,16 +32,38 @@ try:
 except Exception:
     def nsga2_select(*args, **kwargs):  # type: ignore
         raise ImportError("nsga2 requires 'pymoo' to be installed.")
+try:
+    from src.models.extractive.fused import fused_mmr_select  # type: ignore
+except Exception:
+    def fused_mmr_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fused optimizer requires 'transformers' and 'torch'.")
+
+try:
+    from src.models.extractive.fast_fused import (
+        fast_fused_select,  # type: ignore
+        fast_grasp_select,  # type: ignore
+        fast_nsga2_select,  # type: ignore
+    )
+except Exception:
+    def fast_fused_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_fused requires scikit-learn to be installed.")
+    def fast_grasp_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_grasp requires scikit-learn to be installed.")
+    def fast_nsga2_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     f_importance = sentence_tf_isf_scores(sentences)
     f_len = length_scores(sentences)
     f_pos = position_scores(sentences)
+    # 外部化特徵權重（若未提供，使用既有預設）
+    feat_cfg = cfg.get("features", {}) or {}
+    weights_cfg = feat_cfg.get("weights", {}) or {}
     weights = {
-        "importance": float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-        "length": 0.3,
-        "position": 0.3,
+        "importance": float(weights_cfg.get("importance", cfg.get("objectives", {}).get("lambda_importance", 1.0))),
+        "length": float(weights_cfg.get("length", 0.3)),
+        "position": float(weights_cfg.get("position", 0.3)),
     }
     feats = {"importance": f_importance, "length": f_len, "position": f_pos}
     return combine_scores(feats, weights)
@@ -247,7 +270,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     elif method_opt == "bert":
         # direct ranking by BERT sentence embeddings vs document centroid
         bert_cfg = cfg.get("bert", {})
-        model_name = bert_cfg.get("model_name", "google-bert/bert-base-uncased")
+        model_name = bert_cfg.get("model_name", "bert-base-uncased")
         try:
             picked_sub = bert_select(
                 sub_sentences,
@@ -260,6 +283,87 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             raise RuntimeError(
                 f"BERT 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用 greedy/grasp/nsga2。"
             ) from e
+    elif method_opt == "fused":
+        # Fusion of base feature score and BERT score, then MMR via greedy with similarity from BERT embeddings.
+        bert_cfg = cfg.get("bert", {})
+        model_name = bert_cfg.get("model_name", "bert-base-uncased")
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_bert = float(fcfg.get("w_bert", 0.5))
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        try:
+            picked_sub = fused_mmr_select(
+                sub_sentences,
+                sub_scores,
+                max_tokens,
+                w_base=w_base,
+                w_bert=w_bert,
+                alpha=alpha_f,
+                unit=unit,
+                max_sentences=max_sents,
+                model_name=model_name,
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"Fused+MMR 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用其他 optimizer。"
+            ) from e
+    elif method_opt in ("fast", "fast_fused", "tfidf_fused"):
+        # Fast fusion using TF-IDF centroid score + base, with TF-IDF cosine MMR
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))  # reuse weight field
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        try:
+            picked_sub = fast_fused_select(
+                sub_sentences,
+                sub_scores,
+                max_tokens,
+                w_base=w_base,
+                w_sem=w_sem,
+                alpha=alpha_f,
+                unit=unit,
+                max_sentences=max_sents,
+            )
+        except Exception as e:
+            print(f"Warning: fast_fused failed ({e}); falling back to greedy")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+    elif method_opt in ("fast_grasp",):
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        picked_sub = fast_grasp_select(
+            sub_sentences,
+            sub_scores,
+            max_tokens,
+            w_base=w_base,
+            w_sem=w_sem,
+            alpha=alpha_f,
+            unit=unit,
+            max_sentences=max_sents,
+            iters=int(cfg.get("grasp", {}).get("iters", 15)),
+            rcl_ratio=float(cfg.get("grasp", {}).get("rcl_ratio", 0.3)),
+            seed=cfg.get("seed"),
+        )
+    elif method_opt in ("fast_nsga2",):
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))
+        obj = cfg.get("objectives", {})
+        picked_sub = fast_nsga2_select(
+            sub_sentences,
+            sub_scores,
+            max_tokens,
+            w_base=w_base,
+            w_sem=w_sem,
+            unit=unit,
+            max_sentences=max_sents,
+            lambda_importance=float(obj.get("lambda_importance", 1.0)),
+            lambda_coverage=float(obj.get("lambda_coverage", 0.8)),
+            lambda_redundancy=float(obj.get("lambda_redundancy", 0.7)),
+        )
     else:
         picked_sub = greedy_select(
             sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
@@ -302,15 +406,23 @@ def main():
     ensure_dir(out_dir)
 
     preds_path = os.path.join(out_dir, "predictions.jsonl")
+    t0 = time.perf_counter()
     rows = []
     for doc in read_jsonl(args.input):
         rows.append(summarize_one(doc, cfg))
     write_jsonl(preds_path, rows)
+    t1 = time.perf_counter()
 
     # also dump the config used
     import json
     with open(os.path.join(out_dir, "config_used.json"), "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
+    # write selection time for later aggregation
+    try:
+        with open(os.path.join(out_dir, "time_select_seconds.txt"), "w", encoding="utf-8") as f:
+            f.write(f"{t1 - t0:.6f}")
+    except Exception:
+        pass
     print(f"Wrote predictions to {preds_path}")
 
 

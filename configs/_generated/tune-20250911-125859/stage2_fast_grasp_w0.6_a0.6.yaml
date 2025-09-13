@@ -1,0 +1,10 @@
+length_control:
+  unit: sentences
+  max_sentences: 3
+optimizer:
+  method: fast_grasp
+fusion:
+  w_base: 0.4
+  w_bert: 0.6
+redundancy:
+  lambda: 0.6
