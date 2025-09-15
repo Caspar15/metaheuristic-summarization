@@ -1,5 +1,6 @@
 from typing import List, Tuple, Optional
 
+
 def count_tokens(text: str) -> int:
     return len(text.split())
 
@@ -27,6 +28,28 @@ def will_fit_unit(
     mt = max_tokens if (max_tokens is not None) else 10**9
     return will_fit(current_texts, candidate, int(mt))
 
+def will_fit_unit(
+    current_texts: List[str],
+    candidate: str,
+    unit: str = "tokens",
+    max_tokens: Optional[int] = None,
+    max_sentences: Optional[int] = None,
+) -> bool:
+    """Check if candidate can be added under the given unit constraint.
+
+    - unit == "tokens": respect max_tokens (fallback if unset).
+    - unit == "sentences": cap by number of sentences (count of selected + 1).
+    """
+    u = (unit or "tokens").lower()
+    if u == "sentences":
+        if max_sentences is None or max_sentences <= 0:
+            return True
+        return (len(current_texts) + 1) <= int(max_sentences)
+    # default: tokens
+    mt = max_tokens if (max_tokens is not None) else 10**9
+    return will_fit(current_texts, candidate, int(mt))
+
+
 def trim_to_max_tokens(texts: List[str], max_tokens: int) -> List[str]:
     out: List[str] = []
     total = 0
@@ -39,10 +62,12 @@ def trim_to_max_tokens(texts: List[str], max_tokens: int) -> List[str]:
             break
     return out
 
+
 def trim_to_max_sentences(texts: List[str], max_sentences: int) -> List[str]:
     if max_sentences is None or max_sentences <= 0:
         return texts
     return texts[: max_sentences]
+
 
 # 新增的 LengthController 類
 class LengthController:
@@ -117,3 +142,5 @@ if __name__ == "__main__":
     print(f"Sentence mode - can fit 4th sentence with 3 existing: {lc_sent.will_fit_unit(sentences[:3], sentences[4])}")
     
     print("LengthController 測試完成")
+
+

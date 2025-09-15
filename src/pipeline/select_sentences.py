@@ -51,6 +51,7 @@ except Exception:
         raise ImportError("fast_grasp requires scikit-learn to be installed.")
     def fast_nsga2_select(*args, **kwargs):  # type: ignore
         raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
+
     
 try:
     from src.models.extractive.three_stage_xlnet import ThreeStageXLNetSelector  # type: ignore
@@ -62,6 +63,7 @@ try:
 except Exception:
     def ThreeStageRobertaSelector(*args, **kwargs):  # type: ignore
         raise ImportError("three_stage_roberta requires 'transformers', 'torch' and 'pymoo'.")
+
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
@@ -375,60 +377,6 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             lambda_coverage=float(obj.get("lambda_coverage", 0.8)),
             lambda_redundancy=float(obj.get("lambda_redundancy", 0.7)),
         )
-    elif method_opt == "three_stage_xlnet":
-    # 三階段選句器：NSGA-II → XLNet → MMR
-        try:
-            from src.selection.length_controller import LengthController
-            
-            # 準備長度控制器
-            length_config = {
-                "unit": unit,
-                "max_tokens": max_tokens,
-                "max_sentences": max_sents
-            }
-            length_controller = LengthController(length_config, sub_sentences)
-            
-            # 初始化三階段選句器
-            selector = ThreeStageXLNetSelector(cfg)
-            
-            # 執行選句
-            picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
-            
-        except ImportError as e:
-            print(f"Warning: three_stage_xlnet not available, falling back to greedy: {e}")
-            picked_sub = greedy_select(
-                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-            )
-        except Exception as e:
-            print(f"Warning: three_stage_xlnet failed, falling back to greedy: {e}")
-            picked_sub = greedy_select(
-                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-            )
-    elif method_opt == "three_stage_roberta":
-    # 三階段選句器：NSGA-II → RoBERTa → MMR
-        try:
-            from src.selection.length_controller import LengthController
-            
-            length_config = {
-                "unit": unit,
-                "max_tokens": max_tokens,
-                "max_sentences": max_sents
-            }
-            length_controller = LengthController(length_config, sub_sentences)
-            
-            selector = ThreeStageRobertaSelector(cfg)
-            picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
-            
-        except ImportError as e:
-            print(f"Warning: three_stage_roberta not available, falling back to greedy: {e}")
-            picked_sub = greedy_select(
-                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-            )
-        except Exception as e:
-            print(f"Warning: three_stage_roberta failed, falling back to greedy: {e}")
-            picked_sub = greedy_select(
-                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-            )
     else:
         picked_sub = greedy_select(
             sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
