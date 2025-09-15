@@ -1,0 +1,63 @@
+# 多目標優化參數
+objectives:
+  lambda_importance: 1.0    # 重要性權重
+  lambda_coverage: 0.8      # 覆蓋度權重（NSGA-II 標量化）
+  lambda_redundancy: 0.7    # 冗餘懲罰權重（NSGA-II 標量化）
+  length_penalty: 2.0       # 保留欄位（目前未直接使用）
+
+# 句向量與相似度表示
+representations:
+  use: true                 # 必須為 true，NSGA-II 需要相似度矩陣
+  method: "tfidf"           # tfidf | sbert
+  cache: true               # 快取功能（預留）
+
+# 候選池設置
+candidates:
+  use: true                 # 啟用候選池
+  k: 15                     # 候選池大小（依基線分數）
+  mode: "hard"              # hard | soft（soft 僅加權偏好，不封鎖）
+  sources: ["score"]        # 聯合集合：score | position | centrality
+  soft_boost: 1.05          # mode=soft 時對候選的分數乘法增益
+  recall_target: null       # 例 0.95；可選，需有 reference 才能估算 oracle 召回
+
+# 冗餘控制
+redundancy:
+  method: "mmr"             # MMR 方法
+  lambda: 0.7               # MMR 調和係數（alpha）
+  sim_metric: "cosine"      # 相似度度量
+
+# 長度控制
+length_control:
+  unit: "sentences"         # tokens | sentences
+  max_tokens: 100           # token 上限
+  max_sentences: 3          # 最終選出的句子數
+
+# NSGA-II 多目標優化參數
+nsga2:
+  pop_size: 50              # 種群大小
+  n_gen: 100                # 迭代代數
+
+# 三階段系統特定配置
+three_stage:
+  stage1_candidates: 10     # NSGA-II 階段選出的候選數
+  stage2_candidates: 10     # RoBERTa 階段選出的候選數
+  roberta:
+    model_name: "roberta-base"  # RoBERTa 模型名稱
+    # 可選模型：
+    # - "roberta-base"        # 標準模型
+    # - "roberta-large"       # 大型模型（更準確但更慢）
+    # - "distilroberta-base"  # 輕量級模型（更快但略低準確度）
+
+# 特徵權重配置（可選）
+features:
+  weights:
+    importance: 1.0         # TF-ISF 重要性權重
+    length: 0.3             # 長度特徵權重
+    position: 0.3           # 位置特徵權重
+
+# 優化器設置
+optimizer:
+  method: "three_stage_roberta"  # 指定使用三階段 RoBERTa 選句器
+
+# 隨機種子
+seed: 2024

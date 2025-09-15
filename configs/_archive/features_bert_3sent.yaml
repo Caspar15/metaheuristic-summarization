@@ -1,0 +1,17 @@
+# BERT 排序（不訓練），最終三句（可單獨使用或作 Stage2 比對）
+
+length_control:
+  unit: sentences
+  max_sentences: 3
+
+optimizer:
+  method: bert
+
+bert:
+  model_name: bert-base-uncased
+
+representations:
+  use: false
+
+seed: 2024
+

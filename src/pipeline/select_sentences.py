@@ -1,10 +1,9 @@
 import argparse
 import os
-import json
+import time
 from typing import Dict, List, Set
 
 import numpy as np
-from tqdm import tqdm
 
 from src.utils.io import (
     load_yaml,
@@ -21,37 +20,86 @@ from src.features.compose import combine_scores
 from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.selection.candidate_pool import topk_by_score
-from src.models.extractive.greedy import GreedySelector
-from src.selection.length_controller import LengthController
+from src.models.extractive.greedy import greedy_select
+from src.models.extractive.grasp import grasp_select
+try:
+    from src.models.extractive.bert_rank import bert_select  # type: ignore
+except Exception:
+    def bert_select(*args, **kwargs):  # type: ignore
+        raise ImportError("BERT ranking requires 'transformers' and 'torch'.")
+try:
+    from src.models.extractive.nsga2 import nsga2_select  # type: ignore
+except Exception:
+    def nsga2_select(*args, **kwargs):  # type: ignore
+        raise ImportError("nsga2 requires 'pymoo' to be installed.")
+try:
+    from src.models.extractive.fused import fused_mmr_select  # type: ignore
+except Exception:
+    def fused_mmr_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fused optimizer requires 'transformers' and 'torch'.")
+
+try:
+    from src.models.extractive.fast_fused import (
+        fast_fused_select,  # type: ignore
+        fast_grasp_select,  # type: ignore
+        fast_nsga2_select,  # type: ignore
+    )
+except Exception:
+    def fast_fused_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_fused requires scikit-learn to be installed.")
+    def fast_grasp_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_grasp requires scikit-learn to be installed.")
+    def fast_nsga2_select(*args, **kwargs):  # type: ignore
+        raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
+    
+try:
+    from src.models.extractive.three_stage_xlnet import ThreeStageXLNetSelector  # type: ignore
+except Exception:
+    def ThreeStageXLNetSelector(*args, **kwargs):  # type: ignore
+        raise ImportError("three_stage_xlnet requires 'transformers', 'torch', 'sentencepiece' and 'pymoo'.")
+try:
+    from src.models.extractive.three_stage_roberta import ThreeStageRobertaSelector  # type: ignore
+except Exception:
+    def ThreeStageRobertaSelector(*args, **kwargs):  # type: ignore
+        raise ImportError("three_stage_roberta requires 'transformers', 'torch' and 'pymoo'.")
 
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     f_importance = sentence_tf_isf_scores(sentences)
     f_len = length_scores(sentences)
     f_pos = position_scores(sentences)
+    # 外部化特徵權重（若未提供，使用既有預設）
+    feat_cfg = cfg.get("features", {}) or {}
+    weights_cfg = feat_cfg.get("weights", {}) or {}
     weights = {
-        "importance": float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-        "length": 0.3,
-        "position": 0.3,
+        "importance": float(weights_cfg.get("importance", cfg.get("objectives", {}).get("lambda_importance", 1.0))),
+        "length": float(weights_cfg.get("length", 0.3)),
+        "position": float(weights_cfg.get("position", 0.3)),
     }
     feats = {"importance": f_importance, "length": f_len, "position": f_pos}
     return combine_scores(feats, weights)
 
+
 def _topk_by_position(sentences: List[str], k: int) -> List[int]:
+    # earlier sentences get higher position score
     pos = position_scores(sentences)
     idx = sorted(range(len(pos)), key=lambda i: pos[i], reverse=True)
     return idx[:k]
 
+
 def _topk_by_centrality_tfidf(sentences: List[str], k: int) -> List[int]:
-    if len(sentences) == 0:
-        return []
+    # lightweight centrality via TF-IDF similarity (independent from representations.use)
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import cosine_similarity
+
+    if len(sentences) == 0:
+        return []
     X = TfidfVectorizer(lowercase=True).fit_transform(sentences)
     sim = cosine_similarity(X)
     cent = sim.mean(axis=1)
     idx = sorted(range(len(sentences)), key=lambda i: float(cent[i]), reverse=True)
     return idx[:k]
+
 
 def _build_candidate_union(
     sentences: List[str], base_scores: List[float], k: int, sources: List[str]
@@ -71,12 +119,16 @@ def _build_candidate_union(
             try:
                 cand.update(_topk_by_centrality_tfidf(sentences, k))
             except Exception:
+                # fallback ignore centrality if sklearn not available
                 pass
     if not cand:
         cand.update(topk_by_score(base_scores, k))
+    # keep original order stability by sorting by index
     return sorted(cand)
 
+
 def _greedy_oracle_indices(sentences: List[str], reference: str, max_tokens: int) -> List[int]:
+    """Greedy oracle by ROUGE-1 F gain (used for recall_target of candidates)."""
     try:
         from rouge_score import rouge_scorer
     except Exception:
@@ -112,26 +164,40 @@ def _greedy_oracle_indices(sentences: List[str], reference: str, max_tokens: int
         best_f = scorer.score(reference or "", cur_summary)["rouge1"].fmeasure
     return sorted(selected)
 
-def summarize_one(doc: Dict, cfg: Dict, selector) -> Dict:
+
+def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     sentences: List[str] = doc.get("sentences", [])
     highlights: str = doc.get("highlights", "")
 
+    # base scores: feature-based (supervised scoring removed)
     base_scores = build_base_scores(sentences, cfg)
+
     rep_cfg = cfg.get("representations", {})
     sim = None
     if bool(rep_cfg.get("use", True)) and len(sentences) > 0:
-        vec = SentenceVectors(method=rep_cfg.get("method", "tfidf"))
+        method = rep_cfg.get("method", "tfidf")
+        vec = SentenceVectors(method=method)
         X = vec.fit_transform(sentences)
         sim = cosine_similarity_matrix(X)
 
+    lc = cfg.get("length_control", {})
+    unit = (lc.get("unit", "tokens") or "tokens").lower()
+    max_tokens = int(lc.get("max_tokens", 100))
+    max_sents_limit = lc.get("max_sentences", None)
+    max_sents = int(max_sents_limit) if (max_sents_limit is not None) else None
+    alpha = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+
+    # candidate pool: soft/hard modes with multi-source union and optional recall target
     cand_cfg = cfg.get("candidates", {})
     k = int(cand_cfg.get("k", min(15, len(sentences))))
     use_cand = bool(cand_cfg.get("use", True))
     mode = (cand_cfg.get("mode", "hard") or "hard").lower()
     sources = cand_cfg.get("sources", ["score"]) or ["score"]
     soft_boost = float(cand_cfg.get("soft_boost", 1.05))
+
     cand_idx = _build_candidate_union(sentences, base_scores, k, sources)
 
+    # optional dynamic k to reach recall target (if reference available)
     recall_target = cand_cfg.get("recall_target", None)
     if recall_target is not None and isinstance(recall_target, (int, float)) and 0 < recall_target <= 1:
         oracle = _greedy_oracle_indices(sentences, doc.get("highlights", ""), int(cfg.get("length_control", {}).get("max_tokens", 100)))
@@ -146,30 +212,236 @@ def summarize_one(doc: Dict, cfg: Dict, selector) -> Dict:
                 used_k = min(len(sentences), max(used_k + 1, int(_m.ceil(used_k * 1.5))))
                 cand_idx = _build_candidate_union(sentences, base_scores, used_k, sources)
 
+    # apply mode
     if use_cand and cand_idx:
         if mode == "hard":
             sub_sentences = [sentences[i] for i in cand_idx]
             sub_scores = [base_scores[i] for i in cand_idx]
-            sub_sim = sim[np.ix_(cand_idx, cand_idx)] if sim is not None else None
-        else:  # soft mode
+            sub_sim = None
+            if sim is not None:
+                import numpy as _np
+                sub_sim = sim[_np.ix_(cand_idx, cand_idx)]
+        else:  # soft mode: do not restrict, only boost candidate scores
             sub_sentences = sentences
             sub_scores = base_scores[:]
             for i in cand_idx:
-                sub_scores[i] *= soft_boost
+                sub_scores[i] = float(sub_scores[i]) * soft_boost
             sub_sim = sim
     else:
-        sub_sentences, sub_scores, sub_sim = sentences, base_scores, sim
+        sub_sentences = sentences
+        sub_scores = base_scores
+        sub_sim = sim
 
-    length_ctrl_config = cfg.get('length_control', {})
-    length_controller = LengthController(length_ctrl_config, sub_sentences)
+    method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
+    if method_opt == "greedy":
+        picked_sub = greedy_select(
+            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+        )
+    elif method_opt == "grasp":
+        picked_sub = grasp_select(
+            sub_sentences,
+            sub_scores,
+            sub_sim,
+            max_tokens,
+            alpha=alpha,
+            iters=10,
+            seed=cfg.get("seed"),
+            unit=unit,
+            max_sentences=max_sents,
+        )
+    elif method_opt == "nsga2":
+        if sub_sim is None:
+            print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+        else:
+            try:
+                picked_sub = nsga2_select(
+                    sub_sentences,
+                    sub_scores,
+                    sub_sim,
+                    max_tokens,
+                    lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
+                    lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
+                    lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+                    unit=unit,
+                    max_sentences=max_sents,
+                )
+            except ImportError as e:
+                print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
+                picked_sub = greedy_select(
+                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                )
+            except Exception as e:
+                print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
+                picked_sub = greedy_select(
+                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                )
+    elif method_opt == "bert":
+        # direct ranking by BERT sentence embeddings vs document centroid
+        bert_cfg = cfg.get("bert", {})
+        model_name = bert_cfg.get("model_name", "bert-base-uncased")
+        try:
+            picked_sub = bert_select(
+                sub_sentences,
+                max_tokens,
+                unit=unit,
+                max_sentences=max_sents,
+                model_name=model_name,
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"BERT 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用 greedy/grasp/nsga2。"
+            ) from e
+    elif method_opt == "fused":
+        # Fusion of base feature score and BERT score, then MMR via greedy with similarity from BERT embeddings.
+        bert_cfg = cfg.get("bert", {})
+        model_name = bert_cfg.get("model_name", "bert-base-uncased")
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_bert = float(fcfg.get("w_bert", 0.5))
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        try:
+            picked_sub = fused_mmr_select(
+                sub_sentences,
+                sub_scores,
+                max_tokens,
+                w_base=w_base,
+                w_bert=w_bert,
+                alpha=alpha_f,
+                unit=unit,
+                max_sentences=max_sents,
+                model_name=model_name,
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"Fused+MMR 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用其他 optimizer。"
+            ) from e
+    elif method_opt in ("fast", "fast_fused", "tfidf_fused"):
+        # Fast fusion using TF-IDF centroid score + base, with TF-IDF cosine MMR
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))  # reuse weight field
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        try:
+            picked_sub = fast_fused_select(
+                sub_sentences,
+                sub_scores,
+                max_tokens,
+                w_base=w_base,
+                w_sem=w_sem,
+                alpha=alpha_f,
+                unit=unit,
+                max_sentences=max_sents,
+            )
+        except Exception as e:
+            print(f"Warning: fast_fused failed ({e}); falling back to greedy")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+    elif method_opt in ("fast_grasp",):
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))
+        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+        picked_sub = fast_grasp_select(
+            sub_sentences,
+            sub_scores,
+            max_tokens,
+            w_base=w_base,
+            w_sem=w_sem,
+            alpha=alpha_f,
+            unit=unit,
+            max_sentences=max_sents,
+            iters=int(cfg.get("grasp", {}).get("iters", 15)),
+            rcl_ratio=float(cfg.get("grasp", {}).get("rcl_ratio", 0.3)),
+            seed=cfg.get("seed"),
+        )
+    elif method_opt in ("fast_nsga2",):
+        fcfg = cfg.get("fusion", {})
+        w_base = float(fcfg.get("w_base", 0.5))
+        w_sem = float(fcfg.get("w_bert", 0.5))
+        obj = cfg.get("objectives", {})
+        picked_sub = fast_nsga2_select(
+            sub_sentences,
+            sub_scores,
+            max_tokens,
+            w_base=w_base,
+            w_sem=w_sem,
+            unit=unit,
+            max_sentences=max_sents,
+            lambda_importance=float(obj.get("lambda_importance", 1.0)),
+            lambda_coverage=float(obj.get("lambda_coverage", 0.8)),
+            lambda_redundancy=float(obj.get("lambda_redundancy", 0.7)),
+        )
+    elif method_opt == "three_stage_xlnet":
+    # 三階段選句器：NSGA-II → XLNet → MMR
+        try:
+            from src.selection.length_controller import LengthController
+            
+            # 準備長度控制器
+            length_config = {
+                "unit": unit,
+                "max_tokens": max_tokens,
+                "max_sentences": max_sents
+            }
+            length_controller = LengthController(length_config, sub_sentences)
+            
+            # 初始化三階段選句器
+            selector = ThreeStageXLNetSelector(cfg)
+            
+            # 執行選句
+            picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
+            
+        except ImportError as e:
+            print(f"Warning: three_stage_xlnet not available, falling back to greedy: {e}")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+        except Exception as e:
+            print(f"Warning: three_stage_xlnet failed, falling back to greedy: {e}")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+    elif method_opt == "three_stage_roberta":
+    # 三階段選句器：NSGA-II → RoBERTa → MMR
+        try:
+            from src.selection.length_controller import LengthController
+            
+            length_config = {
+                "unit": unit,
+                "max_tokens": max_tokens,
+                "max_sentences": max_sents
+            }
+            length_controller = LengthController(length_config, sub_sentences)
+            
+            selector = ThreeStageRobertaSelector(cfg)
+            picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
+            
+        except ImportError as e:
+            print(f"Warning: three_stage_roberta not available, falling back to greedy: {e}")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+        except Exception as e:
+            print(f"Warning: three_stage_roberta failed, falling back to greedy: {e}")
+            picked_sub = greedy_select(
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+            )
+    else:
+        picked_sub = greedy_select(
+            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+        )
 
-    picked_sub = selector.select(sub_sentences, sub_scores, sub_sim, length_controller)
-
+    # map back to original indices if we used a hard candidate subset
     if use_cand and cand_idx and mode == "hard":
-        selected = sorted([cand_idx[i] for i in picked_sub])
+        selected = sorted(cand_idx[i] for i in picked_sub)
     else:
         selected = sorted(picked_sub)
 
+    # keep original order
+    selected.sort()
     summary = " ".join([sentences[i] for i in selected])
     return {
         "id": doc.get("id"),
@@ -191,50 +463,31 @@ def main():
 
     cfg = load_yaml(args.config)
     if args.optimizer:
-        cfg.setdefault("optimizer", {})["method"] = args.optimizer
+        cfg.setdefault("optimizer", {})
+        cfg["optimizer"]["method"] = args.optimizer
     set_global_seed(cfg.get("seed"))
     stamp = args.stamp or now_stamp()
     out_dir = os.path.join(args.run_dir, stamp)
     ensure_dir(out_dir)
 
-    optimizer_name = cfg.get("optimizer", {}).get("method", "greedy").lower()
-    
-    if optimizer_name == "greedy":
-        selector = GreedySelector(cfg)
-        print(f"Using GreedySelector")
-        
-    elif optimizer_name == "grasp":
-        try:
-            from src.models.extractive.grasp import GraspSelector
-            selector = GraspSelector(cfg)
-            print(f"Using GraspSelector")
-        except ImportError as e:
-            print(f"Warning: Could not import GraspSelector: {e}. Falling back to GreedySelector.")
-            selector = GreedySelector(cfg)
-            
-    elif optimizer_name == "nsga2":
-        try:
-            from src.models.extractive.nsga2 import Nsga2Selector
-            selector = Nsga2Selector(cfg)
-            print(f"Using Nsga2Selector")
-        except ImportError as e:
-            print(f"Warning: Could not import Nsga2Selector: {e}. Falling back to GreedySelector.")
-            selector = GreedySelector(cfg)
-            
-    else:
-        print(f"Warning: Unknown optimizer '{optimizer_name}'. Using GreedySelector.")
-        selector = GreedySelector(cfg)
-    
     preds_path = os.path.join(out_dir, "predictions.jsonl")
+    t0 = time.perf_counter()
     rows = []
-    
-    for doc in tqdm(read_jsonl(args.input), desc=f"Selecting with {optimizer_name}"):
-        rows.append(summarize_one(doc, cfg, selector))
-    
+    for doc in read_jsonl(args.input):
+        rows.append(summarize_one(doc, cfg))
     write_jsonl(preds_path, rows)
+    t1 = time.perf_counter()
 
+    # also dump the config used
+    import json
     with open(os.path.join(out_dir, "config_used.json"), "w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
+    # write selection time for later aggregation
+    try:
+        with open(os.path.join(out_dir, "time_select_seconds.txt"), "w", encoding="utf-8") as f:
+            f.write(f"{t1 - t0:.6f}")
+    except Exception:
+        pass
     print(f"Wrote predictions to {preds_path}")
 
 

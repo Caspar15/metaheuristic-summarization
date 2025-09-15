@@ -1,0 +1,22 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+  length_penalty: 2.0
+representations:
+  use: false
+candidates:
+  use: false
+redundancy:
+  method: mmr
+  lambda: 0.7
+  sim_metric: cosine
+length_control:
+  unit: sentences
+  max_tokens: 100
+  max_sentences: 15
+optimizer:
+  method: bert
+seed: 2024
+bert:
+  model_name: google-bert/bert-base-uncased

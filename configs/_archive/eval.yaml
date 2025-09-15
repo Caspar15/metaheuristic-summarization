@@ -1,0 +1,10 @@
+# 評估設定（保留佔位）：管線目前直接由 CLI 參數指定 pred/out。
+
+metrics:
+  - rouge1
+  - rouge2
+  - rougeL
+
+output:
+  format: csv
+

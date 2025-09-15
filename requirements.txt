@@ -1,5 +1,6 @@
 numpy>=1.23
-scipy==1.10.1
+# scipy 1.10.1 不支援 Python 3.12，放寬版本以相容 3.12
+scipy>=1.11,<1.13
 pymoo==0.6.1.1
 pandas>=1.5
 pyyaml>=6.0
@@ -9,7 +10,9 @@ orjson>=3.9; platform_system == 'Windows'
 rouge-score>=0.1.2
 regex>=2023.6.3
 click>=8.1
-# 可選：若需 SBERT/BART/Pegasus
-# torch>=2.0
-# transformers>=4.38
+scikit-learn>=1.2
+# Transformers/BERT（本次需要）
+torch>=2.0
+transformers>=4.38
+# 可選：SBERT/生成式
 # sentence-transformers>=2.2

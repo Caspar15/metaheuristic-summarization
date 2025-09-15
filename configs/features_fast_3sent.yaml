@@ -1,0 +1,14 @@
+length_control:
+  unit: "sentences"
+  max_sentences: 3
+
+optimizer:
+  method: "fast"  # TF-IDF semantic + MMR, no BERT
+
+fusion:
+  w_base: 0.3
+  w_bert: 0.7  # here w_bert stands for TF-IDF semantic weight
+
+redundancy:
+  lambda: 0.6
+

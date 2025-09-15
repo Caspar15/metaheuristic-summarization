@@ -1,0 +1,31 @@
+# 分數融合 + MMR（BERT 分數 + 基線分數，並以 BERT 向量相似度做 MMR）
+
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+length_control:
+  unit: sentences
+  max_sentences: 3
+
+optimizer:
+  method: fused
+
+fusion:
+  w_base: 0.3     # 融合權重（可掃 0.2~0.5）
+  w_bert: 0.7
+
+redundancy:
+  method: mmr
+  lambda: 0.7
+
+bert:
+  model_name: bert-base-uncased
+
+# 不需要預先的 TF‑IDF 相似度；fused 內部會用 BERT 向量
+representations:
+  use: false
+
+seed: 2024
+
