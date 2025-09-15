@@ -8,7 +8,9 @@ import pandas as pd
 from src.utils.io import ensure_dir, write_jsonl
 
 
-_SPLIT_REGEX = re.compile(r"(?<=[.!?。！？])\s+")
+# 在中英文標點（. ! ? 。 ！ ？）後切分，允許零或多個空白。
+# 例如中文常見無空白的句界，也能正確切分。
+_SPLIT_REGEX = re.compile(r"(?<=[.!?。！？])\s*")
 
 
 def simple_sentence_split(text: str) -> List[str]:
@@ -17,14 +19,8 @@ def simple_sentence_split(text: str) -> List[str]:
         return []
     # Normalize whitespace
     text = re.sub(r"\s+", " ", text)
-    # Split by punctuation boundaries
-    parts = _SPLIT_REGEX.split(text)
-    # Fallback if not split
-    if len(parts) == 1:
-        # try newline
-        parts = [p.strip() for p in re.split(r"[\r\n]+", text) if p.strip()]
-    else:
-        parts = [p.strip() for p in parts if p.strip()]
+    # 依標點切分（允許無空白），並去除空片段
+    parts = [p.strip() for p in _SPLIT_REGEX.split(text) if p.strip()]
     return parts
 
 
