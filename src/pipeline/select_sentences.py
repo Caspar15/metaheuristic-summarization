@@ -52,6 +52,19 @@ except Exception:
     def fast_nsga2_select(*args, **kwargs):  # type: ignore
         raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
 
+    
+try:
+    from src.models.extractive.three_stage_xlnet import ThreeStageXLNetSelector  # type: ignore
+except Exception:
+    def ThreeStageXLNetSelector(*args, **kwargs):  # type: ignore
+        raise ImportError("three_stage_xlnet requires 'transformers', 'torch', 'sentencepiece' and 'pymoo'.")
+try:
+    from src.models.extractive.three_stage_roberta import ThreeStageRobertaSelector  # type: ignore
+except Exception:
+    def ThreeStageRobertaSelector(*args, **kwargs):  # type: ignore
+        raise ImportError("three_stage_roberta requires 'transformers', 'torch' and 'pymoo'.")
+
+
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     f_importance = sentence_tf_isf_scores(sentences)
