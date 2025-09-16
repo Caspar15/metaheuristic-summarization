@@ -1,0 +1,41 @@
+# Stage 2 Optimization Configuration
+
+# Basic parameters
+max_summary_length: 100 # Maximum summary length in words
+min_sentence_length: 5 # Minimum sentence length in words
+max_sentence_length: 50 # Maximum sentence length in words
+
+# Optimization settings
+use_metaheuristic: true
+optimization_method: "differential_evolution" # Options: "greedy", "differential_evolution", "grasp"
+
+# Feature weights (will be auto-optimized)
+feature_weights:
+  position: 0.25
+  length: 0.15
+  tf_idf: 0.25
+  semantic_similarity: 0.20
+  diversity: 0.10
+  readability: 0.05
+  named_entities: 0.08
+  discourse_markers: 0.07
+
+# Diversity and similarity thresholds
+diversity_threshold: 0.8
+semantic_threshold: 0.3
+position_boost_factor: 2.0
+
+# Metaheuristic parameters
+differential_evolution:
+  maxiter: 100
+  popsize: 15
+  seed: 42
+
+grasp:
+  alpha: 0.3
+  max_iterations: 50
+
+# Model paths
+models:
+  sentence_transformer: "all-MiniLM-L6-v2"
+  spacy_model: "en_core_web_sm"
