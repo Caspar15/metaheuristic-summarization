@@ -23,20 +23,15 @@ from src.selection.candidate_pool import topk_by_score
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
 try:
-    from src.models.extractive.bert_rank import bert_select  # type: ignore
+    from src.models.extractive.encoder_rank import encoder_select  # type: ignore
 except Exception:
-    def bert_select(*args, **kwargs):  # type: ignore
-        raise ImportError("BERT ranking requires 'transformers' and 'torch'.")
+    def encoder_select(*args, **kwargs):  # type: ignore
+        raise ImportError("Encoder ranking requires 'transformers' and 'torch'.")
 try:
     from src.models.extractive.nsga2 import nsga2_select  # type: ignore
 except Exception:
     def nsga2_select(*args, **kwargs):  # type: ignore
         raise ImportError("nsga2 requires 'pymoo' to be installed.")
-try:
-    from src.models.extractive.fused import fused_mmr_select  # type: ignore
-except Exception:
-    def fused_mmr_select(*args, **kwargs):  # type: ignore
-        raise ImportError("fused optimizer requires 'transformers' and 'torch'.")
 
 try:
     from src.models.extractive.fast_fused import (
@@ -52,25 +47,12 @@ except Exception:
     def fast_nsga2_select(*args, **kwargs):  # type: ignore
         raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
 
-    
-try:
-    from src.models.extractive.three_stage_xlnet import ThreeStageXLNetSelector  # type: ignore
-except Exception:
-    def ThreeStageXLNetSelector(*args, **kwargs):  # type: ignore
-        raise ImportError("three_stage_xlnet requires 'transformers', 'torch', 'sentencepiece' and 'pymoo'.")
-try:
-    from src.models.extractive.three_stage_roberta import ThreeStageRobertaSelector  # type: ignore
-except Exception:
-    def ThreeStageRobertaSelector(*args, **kwargs):  # type: ignore
-        raise ImportError("three_stage_roberta requires 'transformers', 'torch' and 'pymoo'.")
-
-
 
 def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
     f_importance = sentence_tf_isf_scores(sentences)
     f_len = length_scores(sentences)
     f_pos = position_scores(sentences)
-    # 外部化特徵權重（若未提供，使用既有預設）
+    # External feature weights: fall back to defaults when not provided
     feat_cfg = cfg.get("features", {}) or {}
     weights_cfg = feat_cfg.get("weights", {}) or {}
     weights = {
@@ -280,12 +262,12 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 picked_sub = greedy_select(
                     sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
                 )
-    elif method_opt == "bert":
-        # direct ranking by BERT sentence embeddings vs document centroid
+    elif method_opt in ("bert", "roberta", "xlnet"):
+        # direct ranking by encoder sentence embeddings vs document centroid
         bert_cfg = cfg.get("bert", {})
-        model_name = bert_cfg.get("model_name", "bert-base-uncased")
+        model_name = bert_cfg.get("model_name") or ("roberta-base" if method_opt == "roberta" else ("xlnet-base-cased" if method_opt == "xlnet" else "bert-base-uncased"))
         try:
-            picked_sub = bert_select(
+            picked_sub = encoder_select(
                 sub_sentences,
                 max_tokens,
                 unit=unit,
@@ -294,31 +276,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             )
         except Exception as e:
             raise RuntimeError(
-                f"BERT 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用 greedy/grasp/nsga2。"
-            ) from e
-    elif method_opt == "fused":
-        # Fusion of base feature score and BERT score, then MMR via greedy with similarity from BERT embeddings.
-        bert_cfg = cfg.get("bert", {})
-        model_name = bert_cfg.get("model_name", "bert-base-uncased")
-        fcfg = cfg.get("fusion", {})
-        w_base = float(fcfg.get("w_base", 0.5))
-        w_bert = float(fcfg.get("w_bert", 0.5))
-        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
-        try:
-            picked_sub = fused_mmr_select(
-                sub_sentences,
-                sub_scores,
-                max_tokens,
-                w_base=w_base,
-                w_bert=w_bert,
-                alpha=alpha_f,
-                unit=unit,
-                max_sentences=max_sents,
-                model_name=model_name,
-            )
-        except Exception as e:
-            raise RuntimeError(
-                f"Fused+MMR 排序執行失敗：{e}. 請確認 transformers/torch 是否已安裝，或改用其他 optimizer。"
+                f"Encoder ranking failed: {e}. Please ensure transformers and torch are installed, or switch to greedy/grasp/nsga2"
             ) from e
     elif method_opt in ("fast", "fast_fused", "tfidf_fused"):
         # Fast fusion using TF-IDF centroid score + base, with TF-IDF cosine MMR
@@ -413,6 +371,15 @@ def main():
     if args.optimizer:
         cfg.setdefault("optimizer", {})
         cfg["optimizer"]["method"] = args.optimizer
+    # Guard: Stage2 union input should use fast (non-BERT) optimizers only
+    method_opt = (cfg.get("optimizer", {}).get("method") or "").lower()
+    in_path = str(args.input)
+    is_stage2_union = ("stage2" in in_path and "union" in in_path)
+    if is_stage2_union and method_opt in ("bert", "roberta", "xlnet", "fused"):
+        raise RuntimeError(
+            f"Stage2 union input detected ({in_path}). Please use non-BERT optimizers: fast | fast_grasp | fast_nsga2. "
+            f"Current optimizer '{method_opt}' is not allowed for Stage2."
+        )
     set_global_seed(cfg.get("seed"))
     stamp = args.stamp or now_stamp()
     out_dir = os.path.join(args.run_dir, stamp)

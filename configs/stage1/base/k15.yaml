@@ -1,0 +1,38 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+features:
+  weights:
+    importance: 1.0
+    length: 0.3
+    position: 0.4
+
+representations:
+  use: true
+  method: tfidf
+  cache: false
+
+candidates:
+  use: true
+  k: 25
+  mode: hard
+  sources: [score, centrality]
+  soft_boost: 1.05
+  recall_target: null
+
+redundancy:
+  method: mmr
+  lambda: 0.7
+  sim_metric: cosine
+
+length_control:
+  unit: sentences
+  max_sentences: 15
+
+optimizer:
+  method: greedy  # 建議以 CLI --optimizer 覆蓋為 greedy|grasp|nsga2
+
+seed: 2024
+

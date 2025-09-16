@@ -1,4 +1,4 @@
-import argparse
+﻿import argparse
 import os
 import sys
 import subprocess as sp
@@ -12,7 +12,7 @@ def run(cmd):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", required=True, help="configs/features_basic.yaml")
+    ap.add_argument("--config", required=True, help="configs/stage1/base/k20.yaml")
     ap.add_argument("--input_csv", default=None, help="single CSV to split (optional)")
     ap.add_argument("--raw_dir", default="data/raw", help="directory containing train/validation/test.csv or a subfolder cnn_dailymail/")
     ap.add_argument("--processed_dir", default="data/processed")
@@ -84,3 +84,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

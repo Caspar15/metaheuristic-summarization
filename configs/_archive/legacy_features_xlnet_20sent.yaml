@@ -1,0 +1,31 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+  length_penalty: 2.0
+
+# Stage1 LLM 選句（通用編碼器排序）：以 sentences 為單位取前 K2
+# 使用 XLNet 作為 backbone，實作走 encoder_rank 流程
+representations:
+  use: false          # 直接對全句列表以編碼器排序，不依賴候選/相似度
+
+candidates:
+  use: false          # Stage1 K2 對全句排序取前 K2
+
+redundancy:
+  method: "mmr"
+  lambda: 0.7
+  sim_metric: "cosine"
+
+length_control:
+  unit: "sentences"
+  max_tokens: 100
+  max_sentences: 20    # K2
+
+optimizer:
+  method: "xlnet"      # 通用編碼器排序器（與 bert 同路徑，backbone 不同）
+
+seed: 2024
+
+bert:
+  model_name: "xlnet-base-cased"

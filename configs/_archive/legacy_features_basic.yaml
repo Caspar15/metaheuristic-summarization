@@ -1,0 +1,38 @@
+﻿objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+  length_penalty: 2.0
+
+features:
+  weights:
+    importance: 1.0
+    length: 0.3
+    position: 0.3
+
+representations:
+  use: true
+  method: tfidf   # tfidf | sbert
+  cache: false
+
+candidates:
+  use: true
+  k: 15
+  mode: hard      # hard | soft
+  sources: [score]  # score | position | centrality
+  soft_boost: 1.05
+  recall_target: null
+
+redundancy:
+  method: mmr
+  lambda: 0.7
+  sim_metric: cosine
+
+length_control:
+  unit: tokens    # tokens | sentences
+  max_tokens: 100
+
+optimizer:
+  method: greedy  # greedy | grasp | nsga2 | fast
+
+seed: 2024

@@ -93,7 +93,7 @@ def main():
 
     # Run stage2 grid
     rows = []
-    template = "configs/features_fast_3sent.yaml"
+    template = "configs/stage2/fast/3sent.yaml"
     for method in args.methods:
         for cap, union_path in unions.items():
             for w in args.w_sem:
@@ -164,4 +164,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -78,7 +78,7 @@ def main():
         "--methods",
         nargs="*",
         default=["fast", "fast_grasp", "fast_nsga2"],
-        help="final methods to try (fast|fast_grasp|fast_nsga2|bert|fused)",
+        help="final methods to try (fast|fast_grasp|fast_nsga2)",
     )
     ap.add_argument("--w_bert", nargs="*", type=float, default=[0.5])
     ap.add_argument("--alpha", nargs="*", type=float, default=[0.7])
@@ -92,11 +92,11 @@ def main():
     os.makedirs(cfg_dir, exist_ok=True)
 
     # Prepare template paths
-    base_cfg_template = "configs/features_20sent.yaml"
-    bert_cfg_template = "configs/features_bert_20sent.yaml"
-    bert3_cfg_template = "configs/features_bert_3sent.yaml"
-    fused3_cfg_template = "configs/features_fused_3sent.yaml"
-    fast3_cfg_template = "configs/features_fast_3sent.yaml"
+    base_cfg_template = "configs/stage1/base/k20.yaml"
+    bert_cfg_template = "configs/stage1/llm/bert/k20.yaml"
+    bert3_cfg_template = None
+    fused3_cfg_template = None
+    fast3_cfg_template = "configs/stage2/fast/3sent.yaml"
 
     def ensure_stage2_fast_cfg(fast3_cfg_path: str, out_cfg_path: str, w_sem: float, alpha: float) -> str:
         cfg = load_yaml(fast3_cfg_path)
@@ -163,51 +163,9 @@ def main():
                     ])
 
                 for method in args.methods:
-                    if method == "bert":
-                        cfg3 = ensure_stage2_bert_cfg(
-                            bert3_cfg_template, os.path.join(cfg_dir, f"stage2_bert.yaml")
-                        )
-                        stamp3 = f"tune2-bert-k1{k1}-k2{k2}-cap{cap}-{stamp}"
-                        out3_dir = os.path.join(args.run_dir, stamp3)
-                        run([py, "-m", "src.pipeline.select_sentences", "--config", cfg3, "--split", "validation", "--input", union_out, "--run_dir", args.run_dir, "--optimizer", "bert", "--stamp", stamp3])
-                        # evaluate
-                        metrics_path = os.path.join(out3_dir, "metrics.csv")
-                        run([py, "-m", "src.pipeline.evaluate", "--pred", os.path.join(out3_dir, "predictions.jsonl"), "--out", metrics_path])
-                        m = read_metrics_csv(metrics_path)
-                        summary_rows.append({
-                            "base_optimizer": args.optimizer1,
-                            "k1": k1,
-                            "k2": k2,
-                            "cap": cap,
-                            "method": method,
-                            "w_bert": "",
-                            "alpha": "",
-                            **m,
-                            "pred": os.path.join(out3_dir, "predictions.jsonl"),
-                        })
-                    elif method == "fused":
-                        for wb in args.w_bert:
-                            for alpha in args.alpha:
-                                cfg3 = ensure_stage2_fused_cfg(
-                                    fused3_cfg_template, os.path.join(cfg_dir, f"stage2_fused_w{wb}_a{alpha}.yaml"), wb, alpha
-                                )
-                                stamp3 = f"tune2-fused-k1{k1}-k2{k2}-cap{cap}-wb{wb}-a{alpha}-{stamp}"
-                                out3_dir = os.path.join(args.run_dir, stamp3)
-                                run([py, "-m", "src.pipeline.select_sentences", "--config", cfg3, "--split", "validation", "--input", union_out, "--run_dir", args.run_dir, "--optimizer", "fused", "--stamp", stamp3])
-                                metrics_path = os.path.join(out3_dir, "metrics.csv")
-                                run([py, "-m", "src.pipeline.evaluate", "--pred", os.path.join(out3_dir, "predictions.jsonl"), "--out", metrics_path])
-                                m = read_metrics_csv(metrics_path)
-                                summary_rows.append({
-                                    "base_optimizer": args.optimizer1,
-                                    "k1": k1,
-                                    "k2": k2,
-                                    "cap": cap,
-                                    "method": method,
-                                    "w_bert": wb,
-                                    "alpha": alpha,
-                                    **m,
-                                    "pred": os.path.join(out3_dir, "predictions.jsonl"),
-                                })
+                    if method not in ("fast", "fast_grasp", "fast_nsga2"):
+                        print(f"Skipping unsupported Stage2 method: {method}")
+                        continue
                     elif method in ("fast", "fast_grasp", "fast_nsga2"):
                         for wb in args.w_bert:
                             for alpha in args.alpha:

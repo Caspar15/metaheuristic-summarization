@@ -1,0 +1,23 @@
+representations:
+  use: false
+
+candidates:
+  use: false
+
+redundancy:
+  method: mmr
+  lambda: 0.7
+  sim_metric: cosine
+
+length_control:
+  unit: sentences
+  max_sentences: 7
+
+optimizer:
+  method: bert
+
+seed: 2024
+
+bert:
+  model_name: bert-base-uncased
+
