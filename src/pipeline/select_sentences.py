@@ -2,6 +2,7 @@ import argparse
 import os
 import time
 from typing import Dict, List, Set
+from tqdm import tqdm
 
 import numpy as np
 
@@ -387,8 +388,9 @@ def main():
 
     preds_path = os.path.join(out_dir, "predictions.jsonl")
     t0 = time.perf_counter()
+    docs = list(read_jsonl(args.input))
     rows = []
-    for doc in read_jsonl(args.input):
+    for doc in tqdm(docs, desc="Summarizing", total=len(docs)):
         rows.append(summarize_one(doc, cfg))
     write_jsonl(preds_path, rows)
     t1 = time.perf_counter()
