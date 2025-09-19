@@ -4,7 +4,7 @@ from typing import List, Optional
 def _ensure_imports():
     try:
         import torch  # noqa: F401
-        from transformers import AutoTokenizer, AutoModel  # noqa: F401
+        from transformers import AutoTokenizer, AutoModel, AutoConfig  # noqa: F401
     except Exception as e:
         raise RuntimeError(
             "需要安裝 transformers 與 torch 才能使用編碼器排序"
@@ -18,10 +18,26 @@ def _sentence_embeddings(
     token: Optional[str] = None,
 ):
     import torch
-    from transformers import AutoTokenizer, AutoModel
+    from transformers import AutoTokenizer, AutoModel, AutoConfig
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
-    model = AutoModel.from_pretrained(model_name, token=token)
+    use_fast = True
+    if isinstance(model_name, str) and ("xlnet" in model_name.lower()):
+        use_fast = False
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=token, use_fast=use_fast)
+
+    if isinstance(model_name, str) and ("roberta" in model_name.lower()):
+        try:
+            cfg = AutoConfig.from_pretrained(model_name)
+            try:
+                cfg.add_pooling_layer = False  # type: ignore[attr-defined]
+            except Exception:
+                pass
+            model = AutoModel.from_pretrained(model_name, token=token, config=cfg)
+        except Exception:
+            model = AutoModel.from_pretrained(model_name, token=token)
+    else:
+        model = AutoModel.from_pretrained(model_name, token=token)
     model.eval()
 
     if device is None:
@@ -113,4 +129,3 @@ def encoder_select(
 
 # Backward-compatible alias
 bert_select = encoder_select
-

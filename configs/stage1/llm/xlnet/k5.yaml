@@ -19,5 +19,6 @@ optimizer:
 seed: 2024
 
 bert:
-  model_name: xlnet-base-cased
+  # Use local cache snapshot to avoid online downloads
+  model_name: 'C:\\Users\\caspa\\.cache\\huggingface\\hub\\models--xlnet-base-cased\\snapshots\\364e6ee6c9d8bd3b6f63a852cfd4fdc1d22d3674'
 

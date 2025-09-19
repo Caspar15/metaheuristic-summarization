@@ -3,6 +3,7 @@ import csv
 import os
 import subprocess as sp
 from datetime import datetime
+import time
 
 
 def run(cmd):
@@ -70,9 +71,12 @@ def main():
     run([py, "-m", "src.pipeline.select_sentences", "--config", args.llm_cfg, "--split", "validation", "--input", args.input, "--run_dir", args.run_dir, "--optimizer", args.opt2, "--stamp", stamp2])
     t2 = read_time(os.path.join(out2_dir, "time_select_seconds.txt"))
 
-    # Union
+    # Union (time the union building step)
     union_out = os.path.join(os.path.dirname(args.input), f"{os.path.basename(args.input).replace('.jsonl','')}.stage2.union.jsonl")
+    tU0 = time.perf_counter()
     run([py, "scripts/build_union_stage2.py", "--input", args.input, "--base_pred", os.path.join(out1_dir, "predictions.jsonl"), "--bert_pred", os.path.join(out2_dir, "predictions.jsonl"), "--out", union_out, "--cap", str(int(args.cap))])
+    tU1 = time.perf_counter()
+    tU = tU1 - tU0
 
     # Stage2
     stamp3 = f"{prefix}-stage2-{args.opt3}"
@@ -90,7 +94,7 @@ def main():
     summary = os.path.join(args.run_dir, f"timed_summary_{ts}.csv")
     fields = [
         "stage1_base", "stage1_llm", "stage2_method",
-        "time_stage1_base", "time_stage1_llm", "time_stage2",
+        "time_stage1_base", "time_stage1_llm", "time_union", "time_stage2", "time_eval",
         "rouge1", "rouge2", "rougeL",
         "stage1_base_run", "stage1_llm_run", "stage2_run", "union_out"
     ]
@@ -103,7 +107,9 @@ def main():
             "stage2_method": args.opt3,
             "time_stage1_base": f"{t1 if t1 is not None else ''}",
             "time_stage1_llm": f"{t2 if t2 is not None else ''}",
+            "time_union": f"{tU:.6f}",
             "time_stage2": f"{t3 if t3 is not None else ''}",
+            "time_eval": m.get("time_eval_seconds", ""),
             "rouge1": m.get("rouge1", ""),
             "rouge2": m.get("rouge2", ""),
             "rougeL": m.get("rougeL", ""),

@@ -1,5 +1,6 @@
 import argparse
 import json
+import time
 from typing import Dict, List, Set
 
 
@@ -37,6 +38,7 @@ def main():
     ap.add_argument("--dedup_threshold", type=float, default=None, help="optional TF-IDF cosine threshold for pre-dedup (e.g., 0.95)")
     args = ap.parse_args()
 
+    t0 = time.perf_counter()
     docs = load_jsonl(args.input)
     base = index_by_id(load_jsonl(args.base_pred))
     bert = index_by_id(load_jsonl(args.bert_pred))
@@ -107,7 +109,15 @@ def main():
         })
 
     write_jsonl(args.out, out_rows)
-    print(f"Wrote union stage2 input to {args.out}")
+    t1 = time.perf_counter()
+    elapsed = t1 - t0
+    # also emit a sidecar time file next to output for downstream aggregation if needed
+    try:
+        with open(str(args.out) + ".time_union_seconds.txt", "w", encoding="utf-8") as f:
+            f.write(f"{elapsed:.6f}")
+    except Exception:
+        pass
+    print(f"Wrote union stage2 input to {args.out} (time: {elapsed:.6f}s)")
 
 
 if __name__ == "__main__":

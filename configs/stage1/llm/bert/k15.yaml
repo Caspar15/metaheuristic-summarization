@@ -19,5 +19,7 @@ optimizer:
 seed: 2024
 
 bert:
-  model_name: bert-base-uncased
+  # Use local Hugging Face cache snapshot to avoid online downloads (HF 429)
+  # You can switch back to 'bert-base-uncased' anytime if online is fine.
+  model_name: 'C:\\Users\\caspa\\.cache\\huggingface\\hub\\models--bert-base-uncased\\snapshots\\86b5e0934494bd15c9632b12f734a8a67f723594'
 
