@@ -54,15 +54,15 @@ class SummarizationProblem(ElementwiseProblem):
             out["G"] = [total_tokens - self.max_tokens]
 
 def nsga2_select(
-    sentences: List[str],
-    importance: List[float],
-    sim_mat: np.ndarray,
-    max_tokens: int,
-    lambda_importance: float = 1.0,
-    lambda_coverage: float = 0.8,
-    lambda_redundancy: float = 0.7,
-    unit: str = "tokens",
-    max_sentences: int | None = None,
+    sentences: List[str], # 句子列表
+    importance: List[float], # 句子重要性分數
+    sim_mat: np.ndarray, # 句子相似度矩陣   
+    max_tokens: int, # 摘要的最大長度限制（ Token or sentence ）
+    lambda_importance: float = 1.0, # 重要性權重
+    lambda_coverage: float = 0.8, # 覆蓋率權重
+    lambda_redundancy: float = 0.7, # 冗餘度權重
+    unit: str = "tokens", # 長度單位 ("tokens" or "sentences")
+    max_sentences: int | None = None, # 最大句子數限制 (僅在 unit="sentences" 時使用)
 ) -> List[int]:
     n = len(sentences)
     if n == 0:
