@@ -217,76 +217,117 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         sub_scores = base_scores
         sub_sim = sim
 
-    method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
-    if method_opt == "greedy":
-        picked_sub = greedy_select(
-            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-        )
-    elif method_opt == "grasp":
-        picked_sub = grasp_select(
-            sub_sentences,
-            sub_scores,
-            sub_sim,
-            max_tokens,
-            alpha=alpha,
-            iters=10,
-            seed=cfg.get("seed"),
-            unit=unit,
-            max_sentences=max_sents,
-        )
-    elif method_opt == "nsga2":
-        if sub_sim is None:
-            print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
+    # --- MODIFICATION START ---
+    # 新增的邏輯：如果長度單位是 'words'，則使用專門的貪婪演算法
+    if unit == "words":
+        max_words = int(lc.get("max_words", 400))
+        picked_sub = []
+        current_words = 0
+        
+        # 根據 sub_scores 對句子索引進行排序 (分數越高越好)
+        sorted_indices = np.argsort(sub_scores)[::-1]
+        
+        for idx in sorted_indices:
+            sentence_text = sub_sentences[idx]
+            word_count = len(sentence_text.split())
+            
+            # 如果加入這句話不會超過字數上限
+            if current_words + word_count <= max_words:
+                picked_sub.append(idx)
+                current_words += word_count
+    
+    # 如果長度單位不是 'words'，則沿用舊的、基於優化器的選擇邏輯
+    else:
+        method_opt = cfg.get("optimizer", {}).get("method", "greedy").lower()
+        if method_opt == "greedy":
             picked_sub = greedy_select(
-                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
             )
-        else:
+        elif method_opt == "grasp":
+            picked_sub = grasp_select(
+                sub_sentences,
+                sub_scores,
+                sub_sim,
+                max_tokens,
+                alpha=alpha,
+                iters=10,
+                seed=cfg.get("seed"),
+                unit=unit,
+                max_sentences=max_sents,
+            )
+        elif method_opt == "nsga2":
+            if sub_sim is None:
+                print("Warning: representations.use=false; NSGA-II requires similarity. Falling back to greedy.")
+                picked_sub = greedy_select(
+                    sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                )
+            else:
+                try:
+                    picked_sub = nsga2_select(
+                        sub_sentences,
+                        sub_scores,
+                        sub_sim,
+                        max_tokens,
+                        lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
+                        lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
+                        lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+                        unit=unit,
+                        max_sentences=max_sents,
+                    )
+                except ImportError as e:
+                    print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
+                    picked_sub = greedy_select(
+                        sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                    )
+                except Exception as e:
+                    print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
+                    picked_sub = greedy_select(
+                        sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                    )
+        elif method_opt in ("bert", "roberta", "xlnet"):
+            # direct ranking by encoder sentence embeddings vs document centroid
+            bert_cfg = cfg.get("bert", {})
+            model_name = bert_cfg.get("model_name") or ("roberta-base" if method_opt == "roberta" else ("xlnet-base-cased" if method_opt == "xlnet" else "bert-base-uncased"))
             try:
-                picked_sub = nsga2_select(
+                picked_sub = encoder_select(
+                    sub_sentences,
+                    max_tokens,
+                    unit=unit,
+                    max_sentences=max_sents,
+                    model_name=model_name,
+                )
+            except Exception as e:
+                raise RuntimeError(
+                    f"Encoder ranking failed: {e}. Please ensure transformers and torch are installed, or switch to greedy/grasp/nsga2"
+                ) from e
+        elif method_opt in ("fast", "fast_fused", "tfidf_fused"):
+            # Fast fusion using TF-IDF centroid score + base, with TF-IDF cosine MMR
+            fcfg = cfg.get("fusion", {})
+            w_base = float(fcfg.get("w_base", 0.5))
+            w_sem = float(fcfg.get("w_bert", 0.5))  # reuse weight field
+            alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+            try:
+                picked_sub = fast_fused_select(
                     sub_sentences,
                     sub_scores,
-                    sub_sim,
                     max_tokens,
-                    lambda_importance=float(cfg.get("objectives", {}).get("lambda_importance", 1.0)),
-                    lambda_coverage=float(cfg.get("objectives", {}).get("lambda_coverage", 0.8)),
-                    lambda_redundancy=float(cfg.get("objectives", {}).get("lambda_redundancy", 0.7)),
+                    w_base=w_base,
+                    w_sem=w_sem,
+                    alpha=alpha_f,
                     unit=unit,
                     max_sentences=max_sents,
                 )
-            except ImportError as e:
-                print(f"Warning: pymoo not available for NSGA-II, falling back to greedy: {e}")
-                picked_sub = greedy_select(
-                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-                )
             except Exception as e:
-                print(f"Warning: NSGA-II optimization failed, falling back to greedy: {e}")
+                print(f"Warning: fast_fused failed ({e}); falling back to greedy")
                 picked_sub = greedy_select(
-                    sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                    sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
                 )
-    elif method_opt in ("bert", "roberta", "xlnet"):
-        # direct ranking by encoder sentence embeddings vs document centroid
-        bert_cfg = cfg.get("bert", {})
-        model_name = bert_cfg.get("model_name") or ("roberta-base" if method_opt == "roberta" else ("xlnet-base-cased" if method_opt == "xlnet" else "bert-base-uncased"))
-        try:
-            picked_sub = encoder_select(
-                sub_sentences,
-                max_tokens,
-                unit=unit,
-                max_sentences=max_sents,
-                model_name=model_name,
-            )
-        except Exception as e:
-            raise RuntimeError(
-                f"Encoder ranking failed: {e}. Please ensure transformers and torch are installed, or switch to greedy/grasp/nsga2"
-            ) from e
-    elif method_opt in ("fast", "fast_fused", "tfidf_fused"):
-        # Fast fusion using TF-IDF centroid score + base, with TF-IDF cosine MMR
-        fcfg = cfg.get("fusion", {})
-        w_base = float(fcfg.get("w_base", 0.5))
-        w_sem = float(fcfg.get("w_bert", 0.5))  # reuse weight field
-        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
-        try:
-            picked_sub = fast_fused_select(
+        elif method_opt in ("fast_grasp",):
+            fcfg = cfg.get("fusion", {})
+            w_base = float(fcfg.get("w_base", 0.5))
+            w_sem = float(fcfg.get("w_bert", 0.5))
+            alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
+            picked_sub = fast_grasp_select(
                 sub_sentences,
                 sub_scores,
                 max_tokens,
@@ -295,52 +336,33 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 alpha=alpha_f,
                 unit=unit,
                 max_sentences=max_sents,
+                iters=int(cfg.get("grasp", {}).get("iters", 15)),
+                rcl_ratio=float(cfg.get("grasp", {}).get("rcl_ratio", 0.3)),
+                seed=cfg.get("seed"),
             )
-        except Exception as e:
-            print(f"Warning: fast_fused failed ({e}); falling back to greedy")
+        elif method_opt in ("fast_nsga2",):
+            fcfg = cfg.get("fusion", {})
+            w_base = float(fcfg.get("w_base", 0.5))
+            w_sem = float(fcfg.get("w_bert", 0.5))
+            obj = cfg.get("objectives", {})
+            picked_sub = fast_nsga2_select(
+                sub_sentences,
+                sub_scores,
+                max_tokens,
+                w_base=w_base,
+                w_sem=w_sem,
+                unit=unit,
+                max_sentences=max_sents,
+                lambda_importance=float(obj.get("lambda_importance", 1.0)),
+                lambda_coverage=float(obj.get("lambda_coverage", 0.8)),
+                lambda_redundancy=float(obj.get("lambda_redundancy", 0.7)),
+            )
+        else:
             picked_sub = greedy_select(
-                sub_sentences, sub_scores, None, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
+                sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
             )
-    elif method_opt in ("fast_grasp",):
-        fcfg = cfg.get("fusion", {})
-        w_base = float(fcfg.get("w_base", 0.5))
-        w_sem = float(fcfg.get("w_bert", 0.5))
-        alpha_f = float(cfg.get("redundancy", {}).get("lambda", 0.7))
-        picked_sub = fast_grasp_select(
-            sub_sentences,
-            sub_scores,
-            max_tokens,
-            w_base=w_base,
-            w_sem=w_sem,
-            alpha=alpha_f,
-            unit=unit,
-            max_sentences=max_sents,
-            iters=int(cfg.get("grasp", {}).get("iters", 15)),
-            rcl_ratio=float(cfg.get("grasp", {}).get("rcl_ratio", 0.3)),
-            seed=cfg.get("seed"),
-        )
-    elif method_opt in ("fast_nsga2",):
-        fcfg = cfg.get("fusion", {})
-        w_base = float(fcfg.get("w_base", 0.5))
-        w_sem = float(fcfg.get("w_bert", 0.5))
-        obj = cfg.get("objectives", {})
-        picked_sub = fast_nsga2_select(
-            sub_sentences,
-            sub_scores,
-            max_tokens,
-            w_base=w_base,
-            w_sem=w_sem,
-            unit=unit,
-            max_sentences=max_sents,
-            lambda_importance=float(obj.get("lambda_importance", 1.0)),
-            lambda_coverage=float(obj.get("lambda_coverage", 0.8)),
-            lambda_redundancy=float(obj.get("lambda_redundancy", 0.7)),
-        )
-    else:
-        picked_sub = greedy_select(
-            sub_sentences, sub_scores, sub_sim, max_tokens, alpha=alpha, unit=unit, max_sentences=max_sents
-        )
-
+    # --- MODIFICATION END ---
+    
     # map back to original indices if we used a hard candidate subset
     if use_cand and cand_idx and mode == "hard":
         selected = sorted(cand_idx[i] for i in picked_sub)
