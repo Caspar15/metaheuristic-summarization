@@ -64,3 +64,8 @@ data/DUC2002
 
 # NLP local data (optional if downloaded locally)
 nltk_data/
+
+# fronted
+node_modules/
+fronted/node_modules/
+fronted

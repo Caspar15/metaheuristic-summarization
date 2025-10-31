@@ -11,6 +11,11 @@ rouge-score>=0.1.2
 regex>=2023.6.3
 click>=8.1
 scikit-learn>=1.2
+# FastAPI backend
+fastapi>=0.110
+uvicorn[standard]>=0.24
+flask>=3.0
+flask-cors>=4.0
 # Transformers/BERT（本次需要）
 torch>=2.0
 transformers>=4.38

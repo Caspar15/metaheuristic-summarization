@@ -1,0 +1,20 @@
+:root {
+  font-family: "Segoe UI", "Noto Sans TC", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 60%, #ffffff 100%);
+  color: #0f172a;
+}
+
+code {
+  font-family: "Fira Code", "Cascadia Code", monospace;
+}
