@@ -1,55 +1,54 @@
 #root {
-  max-width: 1240px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 40px 20px 72px;
+  padding: 56px 24px 88px;
 }
 
 .app-shell {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
   padding-bottom: 56px;
 }
 
 .app-shell__header {
   margin-top: 8px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 28px;
+  padding: 32px 36px;
+  box-shadow: 0 32px 64px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(18px);
 }
 
 .app-shell__header h1 {
-  margin: 0 0 10px;
-  font-size: 2.1rem;
+  margin: 0 0 12px;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: #0f172a;
 }
 
 .app-shell__header p {
   margin: 0;
+  max-width: 720px;
   color: rgba(71, 85, 105, 0.92);
-  font-size: 1rem;
-  max-width: 760px;
+  font-size: 1.02rem;
 }
 
 .app-shell__content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 28px;
+  gap: 32px;
   align-items: flex-start;
 }
 
 .app-shell__form {
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 28px;
 }
 
 .app-shell__sidebar {
   position: sticky;
-  top: 28px;
+  top: 32px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -61,7 +60,7 @@
   border-radius: 8px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .app-shell__content {
     grid-template-columns: 1fr;
   }
@@ -72,12 +71,12 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   #root {
-    padding: 28px 14px 64px;
+    padding: 36px 18px 72px;
   }
 
   .app-shell__header {
-    padding: 20px;
+    padding: 24px;
   }
 }
