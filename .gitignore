@@ -52,7 +52,9 @@ desktop.ini
 *.pkl
 
 # Project data artifacts (keep small samples tracked)
+data
 data/raw/
+data/cnn_dailymail
 data/interim/
 data/processed/
 runs/
