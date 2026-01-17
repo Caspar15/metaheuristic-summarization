@@ -1,0 +1,38 @@
+# Final Best Configuration: Stage 1 Graph
+# Features: Pure Graph Centrality (PageRank/TextRank)
+# Based on Multi-News Run 4
+
+objectives:
+  # Graph stage only cares about centrality
+  lambda_importance: 0.0 
+  lambda_coverage: 0.0
+  lambda_redundancy: 0.0
+
+features:
+  weights:
+    importance: 0.0
+    length: 0.0
+    position: 0.0
+    graph: 1.0 # Pure Graph
+
+graph_params:
+  threshold: 0.2
+
+representations:
+  use: true
+  method: tfidf
+
+candidates:
+  use: true
+  k: 40
+  mode: hard
+  sources: [graph]
+  
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+optimizer:
+  method: greedy # TextRank is deterministic ranking
+
+seed: 2024

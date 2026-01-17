@@ -18,6 +18,7 @@ from src.features.tf_isf import sentence_tf_isf_scores
 from src.features.length import length_scores
 from src.features.position import position_scores
 from src.features.compose import combine_scores
+from src.features.graph import compute_textrank_scores
 from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.selection.candidate_pool import topk_by_score
@@ -49,7 +50,7 @@ except Exception:
         raise ImportError("fast_nsga2 requires scikit-learn and pymoo to be installed.")
 
 
-def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
+def build_base_scores(sentences: List[str], cfg: Dict, similarity_matrix=None) -> List[float]:
     f_importance = sentence_tf_isf_scores(sentences)
     f_len = length_scores(sentences)
     f_pos = position_scores(sentences)
@@ -60,8 +61,25 @@ def build_base_scores(sentences: List[str], cfg: Dict) -> List[float]:
         "importance": float(weights_cfg.get("importance", cfg.get("objectives", {}).get("lambda_importance", 1.0))),
         "length": float(weights_cfg.get("length", 0.3)),
         "position": float(weights_cfg.get("position", 0.3)),
+        "graph": float(weights_cfg.get("graph", 0.0)),  # default 0 if not specified
     }
-    feats = {"importance": f_importance, "length": f_len, "position": f_pos}
+    
+    f_graph = []
+    if weights["graph"] > 1e-9 and similarity_matrix is not None:
+        try:
+            f_graph = compute_textrank_scores(similarity_matrix)
+        except Exception as e:
+            print(f"Warning: Graph score computation failed: {e}")
+            f_graph = [0.0] * len(sentences)
+    else:
+        f_graph = [0.0] * len(sentences)
+
+    feats = {
+        "importance": f_importance,
+        "length": f_len,
+        "position": f_pos,
+        "graph": f_graph
+    }
     return combine_scores(feats, weights)
 
 
@@ -83,11 +101,32 @@ def _topk_by_centrality_tfidf(sentences: List[str], k: int) -> List[int]:
     sim = cosine_similarity(X)
     cent = sim.mean(axis=1)
     idx = sorted(range(len(sentences)), key=lambda i: float(cent[i]), reverse=True)
+    idx = sorted(range(len(sentences)), key=lambda i: float(cent[i]), reverse=True)
+    return idx[:k]
+
+
+def _topk_by_graph_score(sentences: List[str], k: int, sim_matrix=None) -> List[int]:
+    # PageRank / TextRank centrality
+    if not sentences:
+        return []
+    
+    scores = []
+    if sim_matrix is not None:
+         scores = compute_textrank_scores(sim_matrix)
+    else:
+        # Fallback to TF-IDF similarity if matrix not provided
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        X = TfidfVectorizer(lowercase=True).fit_transform(sentences)
+        sim = cosine_similarity(X)
+        scores = compute_textrank_scores(sim)
+
+    idx = sorted(range(len(sentences)), key=lambda i: scores[i], reverse=True)
     return idx[:k]
 
 
 def _build_candidate_union(
-    sentences: List[str], base_scores: List[float], k: int, sources: List[str]
+    sentences: List[str], base_scores: List[float], k: int, sources: List[str], sim_matrix=None, threshold: float = 0.0
 ) -> List[int]:
     n = len(sentences)
     if n == 0:
@@ -105,6 +144,11 @@ def _build_candidate_union(
                 cand.update(_topk_by_centrality_tfidf(sentences, k))
             except Exception:
                 # fallback ignore centrality if sklearn not available
+                pass
+        elif name in ("graph", "textrank"):
+            try:
+                cand.update(_topk_by_graph_score(sentences, k, sim_matrix, threshold=threshold))
+            except Exception:
                 pass
     if not cand:
         cand.update(topk_by_score(base_scores, k))
@@ -155,8 +199,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     highlights: str = doc.get("highlights", "")
 
     # base scores: feature-based (supervised scoring removed)
-    base_scores = build_base_scores(sentences, cfg)
-
+    # 1. Compute similarity first if needed for graph features
     rep_cfg = cfg.get("representations", {})
     sim = None
     if bool(rep_cfg.get("use", True)) and len(sentences) > 0:
@@ -164,6 +207,8 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         vec = SentenceVectors(method=method)
         X = vec.fit_transform(sentences)
         sim = cosine_similarity_matrix(X)
+
+    base_scores = build_base_scores(sentences, cfg, similarity_matrix=sim)
 
     lc = cfg.get("length_control", {})
     unit = (lc.get("unit", "tokens") or "tokens").lower()
@@ -180,7 +225,9 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     sources = cand_cfg.get("sources", ["score"]) or ["score"]
     soft_boost = float(cand_cfg.get("soft_boost", 1.05))
 
-    cand_idx = _build_candidate_union(sentences, base_scores, k, sources)
+    # get threshold for candidates too
+    g_thresh = float(cfg.get("graph_params", {}).get("threshold", 0.0))
+    cand_idx = _build_candidate_union(sentences, base_scores, k, sources, sim_matrix=sim, threshold=g_thresh)
 
     # optional dynamic k to reach recall target (if reference available)
     recall_target = cand_cfg.get("recall_target", None)
@@ -195,7 +242,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 if rec >= float(recall_target) - 1e-12:
                     break
                 used_k = min(len(sentences), max(used_k + 1, int(_m.ceil(used_k * 1.5))))
-                cand_idx = _build_candidate_union(sentences, base_scores, used_k, sources)
+                cand_idx = _build_candidate_union(sentences, base_scores, used_k, sources, sim_matrix=sim)
 
     # apply mode
     if use_cand and cand_idx:

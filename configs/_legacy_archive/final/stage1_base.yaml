@@ -1,0 +1,37 @@
+# Final Best Configuration: Stage 1 Base
+# Features: Statistical + Graph
+# Optimizer: NSGA-II
+# Based on Multi-News Run 4 (ROUGE-1 44.32)
+
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+features:
+  weights:
+    importance: 0.8
+    length: 0.2
+    position: 0.2
+    graph: 0.0 # Base focuses on stats, Graph comes from separate stage
+
+representations:
+  use: true
+  method: tfidf
+
+candidates:
+  use: true
+  k: 40 # Sweet spot
+  mode: hard
+  sources: [score]
+  
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+optimizer:
+  method: nsga2
+  pop_size: 40
+  n_gen: 50
+
+seed: 2024

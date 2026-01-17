@@ -1,0 +1,32 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+features:
+  weights:
+    importance: 0.8
+    length: 0.2
+    position: 0.2
+    graph: 0.5 # ENABLED! Fusing Graph Power into NSGA-II
+
+representations:
+  use: true
+  method: tfidf
+
+candidates:
+  use: true
+  k: 60
+  mode: hard
+  sources: [score]
+  
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+optimizer:
+  method: nsga2 # Requested by user
+  pop_size: 100 # Increased for better search
+  n_gen: 100 # Increased for convergence
+
+seed: 2024

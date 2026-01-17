@@ -14,18 +14,7 @@ class SentenceVectors:
             self._vectorizer = TfidfVectorizer(lowercase=True, stop_words=None)
             X = self._vectorizer.fit_transform(sentences)
             return X
-        elif self.method == "sbert":
-            try:
-                from sentence_transformers import SentenceTransformer
-                import numpy as np
-
-                self._model = SentenceTransformer("all-MiniLM-L6-v2")
-                embs = self._model.encode(sentences, convert_to_numpy=True, show_progress_bar=False)
-                return embs
-            except Exception as e:
-                raise RuntimeError(
-                    "SBERT 未安裝或初始化失敗，請安裝 sentence-transformers/torch 後重試"
-                ) from e
+            raise ValueError("SBERT support removed to keep project lightweight.")
         else:
             raise ValueError(f"Unknown representation method: {self.method}")
 

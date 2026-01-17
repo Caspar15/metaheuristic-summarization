@@ -1,0 +1,21 @@
+# Final Best Configuration: Stage 1 LLM
+# Model: BERT-base-uncased
+# Based on Multi-News Run 4
+
+optimizer:
+  method: bert 
+
+candidates:
+  use: true
+  k: 40
+  mode: hard
+  sources: [score]
+
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+bert:
+  model_name: "bert-base-uncased"
+
+seed: 2024

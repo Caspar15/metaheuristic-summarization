@@ -1,0 +1,17 @@
+optimizer:
+  method: bert # Requested by user (default is bert-base-uncased)
+
+candidates:
+  use: true
+  k: 60
+  mode: hard
+  sources: [score]
+
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+bert:
+  model_name: "bert-base-uncased"
+
+seed: 2024

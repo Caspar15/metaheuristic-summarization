@@ -63,6 +63,9 @@ def nsga2_select(
     lambda_redundancy: float = 0.7, # 冗餘度權重
     unit: str = "tokens", # 長度單位 ("tokens" or "sentences")
     max_sentences: int | None = None, # 最大句子數限制 (僅在 unit="sentences" 時使用)
+    pop_size: int = 100,
+    n_gen: int = 100,
+    seed: Optional[int] = None,
 ) -> List[int]:
     n = len(sentences)
     if n == 0:
@@ -73,14 +76,20 @@ def nsga2_select(
     )
 
     algorithm = NSGA2(
-        pop_size=max(20, min(2 * n, 60)),
+        pop_size=pop_size,
         sampling=BinaryRandomSampling(),
         crossover=TwoPointCrossover(),
         mutation=BitflipMutation(),
         eliminate_duplicates=True,
     )
 
-    res = minimize(problem, algorithm, ("n_gen", 30), verbose=False, seed=42)
+    res = minimize(
+        problem,
+        algorithm,
+        ("n_gen", n_gen),
+        seed=seed,
+        verbose=False,
+    )
     if res.X is None:
         return []
 

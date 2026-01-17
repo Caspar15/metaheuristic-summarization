@@ -1,0 +1,11 @@
+optimizer:
+  method: roberta
+
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+bert:
+  model_name: "roberta-base" # Fallback to standard if cache issue
+
+seed: 2024

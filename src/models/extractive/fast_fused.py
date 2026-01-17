@@ -115,6 +115,7 @@ def fast_nsga2_select(
     lambda_importance: float = 1.0,
     lambda_coverage: float = 0.8,
     lambda_redundancy: float = 0.7,
+    **kwargs,
 ) -> List[int]:
     try:
         from src.models.extractive.nsga2 import nsga2_select
@@ -137,5 +138,6 @@ def fast_nsga2_select(
         lambda_redundancy=float(lambda_redundancy),
         unit=unit,
         max_sentences=max_sentences,
+        **kwargs,
     )
     return picked

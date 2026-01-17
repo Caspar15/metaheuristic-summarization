@@ -1,0 +1,18 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 2.5  # Boost coverage
+  lambda_redundancy: 1.2 # Relax redundancy
+
+fusion:
+  w_base: 0.5
+  w_bert: 0.5
+
+length_control:
+  unit: tokens
+  max_tokens: 245
+  max_sentences: 30
+
+optimizer:
+  method: fast_nsga2
+
+seed: 2024

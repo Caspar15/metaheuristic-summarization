@@ -1,0 +1,30 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+features:
+  weights:
+    importance: 1.0
+    length: 0.2
+    position: 0.2
+    graph: 0.2 # Slight boost
+
+representations:
+  use: true
+  method: tfidf
+
+candidates:
+  use: true
+  k: 40 # Increased for Multi-News (long documents)
+  mode: hard
+  sources: [score, graph]
+  
+length_control:
+  unit: tokens
+  max_tokens: 300 # Aiming for ~260 words output
+
+optimizer:
+  method: greedy
+
+seed: 2024

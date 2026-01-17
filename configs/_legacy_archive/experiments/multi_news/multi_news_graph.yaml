@@ -1,0 +1,30 @@
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 0.0
+  lambda_redundancy: 0.0
+
+features:
+  weights:
+    importance: 0.0
+    length: 0.0
+    position: 0.0
+    graph: 1.0 # Pure Graph Centrality
+
+representations:
+  use: true
+  method: tfidf
+
+candidates:
+  use: true
+  k: 60
+  mode: hard
+  sources: [graph]
+  
+length_control:
+  unit: tokens
+  max_tokens: 300
+
+optimizer:
+  method: greedy
+
+seed: 2024
