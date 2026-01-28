@@ -1,0 +1,25 @@
+# Final Best Configuration: Stage 2 Fusion
+# Optimizer: Fast NSGA-II
+# Based on Multi-News Run 4
+
+objectives:
+  lambda_importance: 1.0
+  lambda_coverage: 2.5
+  lambda_redundancy: 1.2
+
+fusion:
+  w_base: 0.3
+  w_bert: 0.7
+
+length_control:
+  unit: tokens
+  # Tuned max_tokens for Multi-News
+  max_tokens: 245
+  max_sentences: 30
+
+optimizer:
+  method: fast_nsga2
+  pop_size: 100
+  n_gen: 100
+
+seed: 2024

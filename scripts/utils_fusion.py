@@ -36,6 +36,7 @@ def main():
     ap.add_argument("--graph_pred", default=None, help="optional stage1 graph predictions.jsonl")
     ap.add_argument("--out", required=True, help="output jsonl path for stage2 union")
     ap.add_argument("--cap", type=int, default=None, help="optional cap for union size (e.g., 25)")
+    ap.add_argument("--src_k", type=int, default=None, help="optional top-k to take from each source (e.g. 20)")
     ap.add_argument("--dedup_threshold", type=float, default=None, help="optional TF-IDF cosine threshold for pre-dedup (e.g., 0.95)")
     args = ap.parse_args()
 
@@ -62,11 +63,17 @@ def main():
         sentences: List[str] = d.get("sentences", [])
         u: Set[int] = set()
         if _id in base:
-            u.update(base[_id].get("selected_indices", []))
+            s = base[_id].get("selected_indices", [])
+            if args.src_k: s = s[: args.src_k]
+            u.update(s)
         if _id in bert:
-            u.update(bert[_id].get("selected_indices", []))
+            s = bert[_id].get("selected_indices", [])
+            if args.src_k: s = s[: args.src_k]
+            u.update(s)
         if _id in graph:
-            u.update(graph[_id].get("selected_indices", []))
+            s = graph[_id].get("selected_indices", [])
+            if args.src_k: s = s[: args.src_k]
+            u.update(s)
         idx = [i for i in sorted(u) if 0 <= int(i) < len(sentences)]
         # optional pre-dedup within union using TF-IDF cosine
         if args.dedup_threshold is not None and len(idx) > 1:
