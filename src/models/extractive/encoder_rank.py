@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from src.utils.tokenizer import count_tokens
+
 
 def _ensure_imports():
     try:
@@ -82,10 +84,6 @@ def _cosine_scores_to_centroid(embs) -> List[float]:
     return sims.tolist()
 
 
-def _count_tokens(s: str) -> int:
-    return len((s or "").split())
-
-
 def encoder_select(
     sentences: List[str],
     max_tokens: int,
@@ -119,7 +117,7 @@ def encoder_select(
         budget = int(max_tokens)
         total = 0
         for i in order:
-            t = _count_tokens(sentences[i])
+            t = count_tokens(sentences[i])
             if total + t <= budget:
                 picked.append(i)
                 total += t

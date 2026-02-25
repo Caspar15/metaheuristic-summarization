@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(wc:*)",
-      "Bash(python -m py_compile:*)"
+      "Bash(python -m py_compile:*)",
+      "Bash(python:*)",
+      "Bash(head:*)",
+      "Bash(pip install:*)",
+      "Bash(powershell -Command \"\\(Get-Content ''data/processed/multi_news_validation.jsonl'' -TotalCount 10\\).Count\")",
+      "Bash(powershell -Command \"New-Item -ItemType Directory -Force -Path ''runs''; Get-Content ''data/processed/multi_news_validation.jsonl'' -TotalCount 10 | Set-Content ''runs/sanity_check_10.jsonl'' -Encoding UTF8\")"
     ]
   }
 }

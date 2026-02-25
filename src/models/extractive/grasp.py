@@ -5,10 +5,6 @@ import random
 from src.selection.length_controller import will_fit_unit
 
 
-def _count_tokens(s: str) -> int:
-    return len(s.split())
-
-
 def _objective(selected: List[int], base_scores: List[float], sim_mat: Optional[np.ndarray], alpha: float) -> float:
     if not selected:
         return -1e9
@@ -78,6 +74,7 @@ def _local_search(
     max_iter: int = 100,
     unit: str = "tokens",
     max_sentences: int | None = None,
+    early_stop: int = 10,
 ) -> List[int]:
     if not solution:
         return solution
@@ -85,13 +82,15 @@ def _local_search(
     best_val = _objective(selected, base_scores, sim_mat, alpha)
     n = len(sentences)
     it = 0
+    no_improve_count = 0
     while it < max_iter:
         it += 1
         improved = False
+        selected_set = set(selected)
         # 1) 嘗試 swap: 選中 vs 未選中
         for i in selected[:]:
             for j in range(n):
-                if j in selected:
+                if j in selected_set:
                     continue
                 # 檢查長度可行：先移除 i，再嘗試加入 j
                 temp_sel = [k for k in selected if k != i]
@@ -111,8 +110,9 @@ def _local_search(
             continue
         # 2) 嘗試 add：加入一個未選中
         cur_texts = [sentences[k] for k in selected]
+        selected_set = set(selected)
         for j in range(n):
-            if j in selected:
+            if j in selected_set:
                 continue
             if not will_fit_unit(cur_texts, sentences[j], unit=unit, max_tokens=max_tokens, max_sentences=max_sentences):
                 continue
@@ -136,7 +136,11 @@ def _local_search(
                     improved = True
                     break
         if not improved:
-            break
+            no_improve_count += 1
+            if no_improve_count >= early_stop:
+                break
+        else:
+            no_improve_count = 0
     return selected
 
 
@@ -160,6 +164,7 @@ def grasp_select(
     rng = random.Random(seed)
     best: List[int] = []
     best_val = -1e9
+    stale_rounds = 0
     for _ in range(max(1, iters)):
         sol = _construct_greedy_randomized(
             sentences, base_scores, sim_mat, max_tokens, alpha, rcl_ratio, rng, unit=unit, max_sentences=max_sentences
@@ -168,7 +173,12 @@ def grasp_select(
             sol, sentences, base_scores, sim_mat, max_tokens, alpha, max_iter=200, unit=unit, max_sentences=max_sentences
         )
         val = _objective(sol, base_scores, sim_mat, alpha)
-        if val > best_val:
+        if val > best_val + 1e-12:
             best = sol
             best_val = val
+            stale_rounds = 0
+        else:
+            stale_rounds += 1
+            if stale_rounds >= max(3, iters // 3):
+                break
     return sorted(best)

@@ -1,8 +1,6 @@
 from typing import List, Optional
 
-
-def count_tokens(text: str) -> int:
-    return len(text.split())
+from src.utils.tokenizer import count_tokens
 
 
 def will_fit(current_texts: List[str], candidate: str, max_tokens: int) -> bool:

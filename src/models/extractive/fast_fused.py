@@ -2,6 +2,8 @@ from typing import List, Optional
 
 import numpy as np
 
+from src.representations.tfidf_helper import tfidf_scores_and_sim
+
 
 def _minmax_norm(xs: List[float]) -> List[float]:
     if not xs:
@@ -14,28 +16,12 @@ def _minmax_norm(xs: List[float]) -> List[float]:
 
 
 def _tfidf_scores_and_sim(sentences: List[str]) -> tuple[list[float], np.ndarray]:
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-
-    if not sentences:
-        return [], np.zeros((0, 0))
-    vec = TfidfVectorizer(lowercase=True, sublinear_tf=True, ngram_range=(1, 2))
-    X = vec.fit_transform(sentences)  # [N, V] sparse CSR
-    # semantic score: cosine to document centroid in TF-IDF space
-    import numpy as _np
-    doc = X.mean(axis=0)
-    doc = _np.asarray(doc)
-    if doc.ndim == 1:
-        doc = doc.reshape(1, -1)
-    sims_to_doc = cosine_similarity(X, doc).ravel().tolist()
-    # pairwise cosine for MMR
-    S = cosine_similarity(X)
-    return sims_to_doc, S
+    return tfidf_scores_and_sim(sentences)
 
 
 def fast_semantic_scores_and_sim(sentences: List[str]) -> tuple[list[float], np.ndarray]:
     """Public helper: TF-IDF semantic scores to doc centroid and pairwise cosine sim."""
-    return _tfidf_scores_and_sim(sentences)
+    return tfidf_scores_and_sim(sentences)
 
 
 def fast_fused_select(
