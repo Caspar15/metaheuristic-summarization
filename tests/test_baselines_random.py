@@ -6,8 +6,16 @@ randomness. Also includes a real-data sample (not just synthetic toy docs)
 -- this project has hit "tests cover the API but not the real data
 distribution" enough times that a real-distribution case is required here
 by design, not left to a follow-up.
+
+The real-data sample is a checked-in fixture, not a direct read of
+``data/processed/`` (which is ``.gitignore``d and absent in CI): see
+``tests/fixtures/README.md`` for where it came from, why it is a curated
+15-row sample rather than a blind "first N rows" slice (the first 20 rows
+turned out to all be the easy case), and the recorded SHA-256 this module
+checks on every load.
 """
 
+import hashlib
 import json
 import os
 
@@ -17,13 +25,24 @@ from src.baselines.contract import derive_row_seed, summarize_one_baseline
 from src.baselines.random_baseline import _select_random, summarize_one_random
 from src.data.schemas import build_document_example
 
-REAL_DATA_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "data",
-    "processed",
-    "multi_news_validation_canonical.jsonl",
+FIXTURE_PATH = os.path.join(
+    os.path.dirname(__file__), "fixtures", "multi_news_validation_diagnostic_sample.jsonl"
 )
+# Recorded in tests/fixtures/README.md. If this fixture is intentionally
+# changed, update both the file and this constant together -- that is the
+# whole point of the check below.
+FIXTURE_SHA256 = "33018d8e1b9b6f4ab3b843f51f9d138a3ab52efef8da18fa5818d6a05d00aa04"
+
+
+def _assert_fixture_integrity() -> None:
+    with open(FIXTURE_PATH, "rb") as f:
+        actual = hashlib.sha256(f.read()).hexdigest()
+    assert actual == FIXTURE_SHA256, (
+        f"tests/fixtures/multi_news_validation_diagnostic_sample.jsonl has changed "
+        f"(sha256 {actual}) but tests/test_baselines_random.py's FIXTURE_SHA256 and "
+        f"tests/fixtures/README.md were not updated to match -- see that README "
+        f"before editing this fixture"
+    )
 
 
 def _words(tag: str, count: int) -> str:
@@ -53,12 +72,11 @@ def _toy_cfg(max_words=60, min_words=0):
     }
 
 
-def _load_real_rows(n):
+def _load_fixture_rows():
+    _assert_fixture_integrity()
     rows = []
-    with open(REAL_DATA_PATH, encoding="utf-8") as f:
-        for i, line in enumerate(f):
-            if i >= n:
-                break
+    with open(FIXTURE_PATH, encoding="utf-8") as f:
+        for line in f:
             rows.append(json.loads(line))
     return rows
 
@@ -131,11 +149,18 @@ def test_per_row_independence_single_row_vs_full_file():
     """Running just row N in isolation must match running the whole file --
     a property a global random.seed() call cannot provide, since its state
     is cumulative across every prior row processed. Checked forward,
-    reversed, and alone, on real data (not a synthetic single-row case)."""
+    reversed, and alone, on real data (not a synthetic single-row case).
 
-    rows = _load_real_rows(5)
+    The target is validation_538, one of the fixture's min_words_relaxed
+    rows (source_capacity_words=51): its selection sits right at the edge
+    of what is reachable at all, which is exactly where an order-dependent
+    bug would be most likely to show up as a different result rather than
+    just a different-looking-but-still-feasible one.
+    """
+
+    rows = _load_fixture_rows()
     cfg = _gate2_cfg()
-    target = rows[2]
+    target = next(doc for doc in rows if doc["id"] == "validation_538")
 
     alone = summarize_one_random(target, cfg, seed=7)["selected_indices"]
 
@@ -168,18 +193,28 @@ def test_output_stays_in_original_document_order_despite_random_draw_order():
 
 
 def test_real_data_sample_is_feasible_with_min_words_applied():
-    """20 real Multi-News validation rows (not 5,621, not synthetic) under
-    the project's Gate 2 protocol (max_words=250, requested min_words=200).
-    apply_min_words=True here relies on the skip-tolerant sampling in
-    _select_random (see random_baseline.py's docstring for the measured
-    justification); every row must come out feasible."""
+    """The 15-row curated real-data fixture (not 5,621, not synthetic, and
+    not just the easy first-20-rows case -- see tests/fixtures/README.md)
+    under the project's Gate 2 protocol (max_words=250, requested
+    min_words=200). apply_min_words=True here relies on the skip-tolerant
+    sampling in _select_random (see random_baseline.py's docstring for the
+    measured justification); every row must come out feasible, including
+    the min_words_relaxed rows and the single-source-document rows."""
 
-    rows = _load_real_rows(20)
-    cfg = _gate2_cfg()
+    rows = _load_fixture_rows()
+    assert len(rows) == 15
     for doc in rows:
-        result = summarize_one_random(doc, cfg, seed=42)
+        result = summarize_one_random(doc, cfg=_gate2_cfg(), seed=42)
         assert result["selection_evaluation"]["feasible"] is True, doc["id"]
         assert result["output_budget"]["min_words_applied"] is True
         assert result["output_budget"]["selected_words"] >= (
             result["output_budget"]["effective_min_words"]
         )
+
+
+def test_fixture_sha256_matches_recorded_value():
+    """Dedicated, explicitly-named check so a silent fixture edit shows up
+    as its own failing test, not just as a side effect inside another
+    test's setup."""
+
+    _assert_fixture_integrity()
