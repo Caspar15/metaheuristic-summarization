@@ -12,10 +12,18 @@ as a system run, and can be scored by ``src.pipeline.evaluate`` unchanged.
 ``config_used.json``: the latter is a verbatim dump of the config YAML, and
 mixing CLI-only invocation flags into it would blur "the config that was
 used" with "how this particular run was invoked". ``--baseline``,
-``--ordering``, and ``--first_k`` are CLI arguments, not config fields --
-without a dedicated file, two ``document_order``/``round_robin`` Lead runs
-against the same config are indistinguishable from their run directories
-alone.
+``--ordering``, ``--first_k``, and ``--seed`` are CLI arguments, not config
+fields -- without a dedicated file, two ``document_order``/``round_robin``
+Lead runs against the same config, or two Random runs with different
+``--seed``, would be indistinguishable from their run directories alone.
+
+``--seed`` is unrelated to ``cfg.get("seed")`` (read via
+``set_global_seed`` below): the latter is this project's existing global
+determinism seed for whatever else consumes it (numpy/torch); ``--seed`` is
+Random's own per-row seed, deliberately *not* folded into that global,
+cumulative-state mechanism -- see
+``src.baselines.contract.derive_row_seed`` for why a global seed cannot
+give a single row independent reproducibility.
 """
 
 from __future__ import annotations
@@ -24,11 +32,12 @@ import argparse
 import json
 import os
 import time
-from typing import Dict, Mapping
+from typing import Dict, Mapping, Optional
 
 from tqdm import tqdm
 
 from src.baselines.lead import ORDERINGS, summarize_one_lead
+from src.baselines.random_baseline import summarize_one_random
 from src.data.policy import validate_dataset_policy_request
 from src.pipeline.select_sentences import (
     validate_experiment_request,
@@ -43,7 +52,37 @@ from src.utils.io import (
     write_jsonl_atomic,
 )
 
-BASELINE_METHODS = {"lead": summarize_one_lead}
+BASELINE_METHODS = {"lead": summarize_one_lead, "random": summarize_one_random}
+
+# Baselines whose select_fn needs an explicit --seed to be reproducible.
+SEEDED_BASELINES = {"random"}
+
+
+def _validate_baseline_seed_pairing(baseline: str, seed: Optional[int]) -> None:
+    """Fail loud in both directions rather than silently dropping a request.
+
+    A seeded baseline run without --seed would produce a result that looks
+    reproducible (it ran, it printed indices) but was never actually pinned
+    to anything anyone chose -- the same failure shape as
+    ``requires_seed`` in ``contract.py``. A deterministic baseline run
+    *with* --seed silently ignoring it is the same "requested value
+    disappears" problem this repo keeps hitting (``w_bert``,
+    ``requested_min_words``, ``requested_max_*``): the user asked for
+    something specific and the artifact would give no sign it was ignored.
+    """
+
+    if baseline in SEEDED_BASELINES and seed is None:
+        raise ValueError(
+            f"--baseline {baseline} requires --seed; a silently-defaulted "
+            "seed would produce a result that looks reproducible but was "
+            "never actually chosen by anyone"
+        )
+    if baseline not in SEEDED_BASELINES and seed is not None:
+        raise ValueError(
+            f"--baseline {baseline} is deterministic and does not accept "
+            "--seed; silently ignoring it would let a user believe "
+            f"{baseline} has randomness it does not have"
+        )
 
 
 def summarize_jsonl_baseline(
@@ -55,12 +94,14 @@ def summarize_jsonl_baseline(
     baseline: str,
     ordering: str,
     first_k: int,
+    seed: Optional[int] = None,
     dataset_preflight: Dict | None = None,
 ) -> int:
     """Stream one dataset into a baseline prediction artifact."""
 
     if baseline not in BASELINE_METHODS:
         raise ValueError(f"unknown baseline {baseline!r}; choose one of {sorted(BASELINE_METHODS)}")
+    _validate_baseline_seed_pairing(baseline, seed)
     summarize_one = BASELINE_METHODS[baseline]
 
     if dataset_preflight is None:
@@ -72,7 +113,10 @@ def summarize_jsonl_baseline(
         nonlocal processed
         for doc in tqdm(read_jsonl(input_path), desc=f"{baseline} baseline"):
             validate_requested_split(doc, requested_split)
-            result = summarize_one(doc, cfg, ordering=ordering, first_k=first_k)
+            if baseline in SEEDED_BASELINES:
+                result = summarize_one(doc, cfg, seed=seed)
+            else:
+                result = summarize_one(doc, cfg, ordering=ordering, first_k=first_k)
             processed += 1
             yield result
         if processed == 0:
@@ -102,7 +146,23 @@ def main():
         default=3,
         help="sentences per source document for ordering=fabbri_first_k (diagnostic only)",
     )
+    ap.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help=(
+            "required for --baseline random (per-row seed is derived from "
+            "this plus the document id, see src.baselines.contract."
+            "derive_row_seed); must be omitted for --baseline lead, which "
+            "is deterministic and does not accept a seed"
+        ),
+    )
     args = ap.parse_args()
+
+    # Fail before touching the filesystem: validate the baseline/seed
+    # pairing ahead of ensure_dir() so a rejected run never leaves behind an
+    # empty run directory.
+    _validate_baseline_seed_pairing(args.baseline, args.seed)
 
     cfg = load_yaml(args.config)
 
@@ -124,6 +184,7 @@ def main():
         baseline=args.baseline,
         ordering=args.ordering,
         first_k=args.first_k,
+        seed=args.seed,
         dataset_preflight=dataset_preflight,
     )
     t1 = time.perf_counter()
@@ -134,6 +195,7 @@ def main():
         "baseline": args.baseline,
         "ordering": args.ordering,
         "first_k": args.first_k,
+        "seed": args.seed,
         "split": args.split,
         "input": args.input,
     }

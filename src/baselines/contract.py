@@ -29,6 +29,8 @@ records.
 
 from __future__ import annotations
 
+import hashlib
+import random
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
@@ -53,6 +55,45 @@ from src.pipeline.select_sentences import validate_experiment_document
 # list, and must use ``evaluator.can_add`` to respect upper bounds rather than
 # re-deriving them.
 SelectFn = Callable[[List[Dict[str, Any]], SelectionObjective], List[int]]
+
+# Same contract as SelectFn, plus a third positional argument: a
+# random.Random instance already seeded by summarize_one_baseline (see its
+# ``seed``/``requires_seed`` parameters). Only baselines whose selection
+# genuinely needs randomness (e.g. Random) use this shape; Lead's orderings
+# use plain SelectFn and are never passed one.
+SeededSelectFn = Callable[
+    [List[Dict[str, Any]], SelectionObjective, random.Random], List[int]
+]
+
+
+def derive_row_seed(base_seed: int, document_id: Any) -> int:
+    """Derive a stable per-row seed from a run-level seed and a document id.
+
+    A single derivation lives here, in the shared contract, so that Random
+    today -- and any future seeded baseline (a seeded LexRank/MMR variant,
+    for instance) -- reuses the exact same scheme rather than each baseline
+    inventing its own. Per-row independence is the point: a row's randomness
+    must depend only on ``(base_seed, document_id)``, never on how many
+    other rows were processed before it or in what order, so that running
+    the full split and running a single row in isolation produce identical
+    results for that row (a global ``random.seed()`` call cannot make this
+    guarantee -- its state is cumulative across calls).
+
+    Deliberately goes through ``hashlib.sha256`` rather than seeding
+    ``random.Random`` directly with a formatted string
+    (``random.Random(f"{base_seed}:{document_id}")``). CPython's handling of
+    non-numeric seeds is not a cross-version stability contract -- it
+    changed once already, in Python 3.11, for hash-flooding security reasons
+    -- and this project runs the identical seed across at least two
+    environments (the author's macOS arm64 machine and the national
+    computing center's Linux x86_64 cluster) whose reproducibility is a
+    claim that goes into the paper. SHA-256 is a fixed, versioned standard
+    with no such risk, so the derivation is spelled out explicitly instead
+    of trusting an implementation detail of the standard library.
+    """
+
+    digest = hashlib.sha256(f"{int(base_seed)}:{document_id}".encode("utf-8")).digest()
+    return int.from_bytes(digest[:8], "big")
 
 
 @dataclass(frozen=True)
@@ -144,6 +185,8 @@ def summarize_one_baseline(
     length_gate: bool = True,
     apply_min_words: bool = True,
     min_words_not_applied_reason: Optional[str] = None,
+    seed: Optional[int] = None,
+    requires_seed: bool = False,
 ) -> Dict[str, Any]:
     """Baseline analogue of ``select_sentences.summarize_one``.
 
@@ -195,6 +238,27 @@ def summarize_one_baseline(
     has no answer when no cap applies. ``requested_min_words`` is still
     populated directly from ``length_control.min_words`` (that part never
     needed ``resolve_effective_min_words`` to begin with).
+
+    Randomness (only relevant to baselines whose ``select_fn`` needs it,
+    e.g. Random): ``seed`` is the run-level base seed. When it is not
+    ``None``, this function derives a per-row seed via ``derive_row_seed``
+    (SHA-256 based -- see that function's docstring for why this matters for
+    cross-platform reproducibility) and constructs a fresh
+    ``random.Random`` from it, then calls ``select_fn`` with that RNG as a
+    *third* positional argument (the ``SeededSelectFn`` shape). A
+    ``select_fn`` that does not need randomness -- every one of Lead's
+    orderings -- is called with the original two arguments; ``seed=None``
+    never changes that call shape, so this is purely additive and requires
+    no change to Lead. ``requires_seed`` is the fail-loud pairing for this,
+    the same pattern as ``apply_min_words``/``min_words_not_applied_reason``:
+    a seed-needing baseline's own entry point passes
+    ``requires_seed=True``, and this function raises immediately if ``seed``
+    is ``None`` rather than silently handing ``select_fn`` no randomness
+    source and producing an unreproducible result. Both ``seed`` (the base)
+    and ``row_seed`` (the derived, actually-used value) are recorded
+    verbatim in the returned row -- not just in a run-level file -- so any
+    single row can be independently re-derived and checked without rerunning
+    the whole split or memorising the derivation formula.
     """
 
     if length_gate and not apply_min_words and min_words_not_applied_reason is None:
@@ -203,10 +267,22 @@ def summarize_one_baseline(
             "so the artifact never silently drops why the requested floor was skipped"
         )
 
+    if requires_seed and seed is None:
+        raise ValueError(
+            "requires_seed=True but seed is None; running a seeded select_fn "
+            "without a seed would silently produce an unreproducible result"
+        )
+
     validate_experiment_document(cfg, doc)
     sentence_records = flatten_sentence_records(doc)
     sentences = [record["text"] for record in sentence_records]
     budget = resolve_length_budget(cfg)
+
+    row_seed: Optional[int] = None
+    rng: Optional[random.Random] = None
+    if seed is not None:
+        row_seed = derive_row_seed(seed, doc.get("id"))
+        rng = random.Random(row_seed)
 
     # What length_control actually asked for, independent of length_gate --
     # computed once so both branches below read the same values rather than
@@ -323,7 +399,12 @@ def summarize_one_baseline(
         ),
     )
 
-    picked_relative = select_fn(eligible_records, evaluator) if eligible_records else []
+    if not eligible_records:
+        picked_relative = []
+    elif rng is not None:
+        picked_relative = select_fn(eligible_records, evaluator, rng)
+    else:
+        picked_relative = select_fn(eligible_records, evaluator)
     selected = sorted(eligible_indices[index] for index in picked_relative)
 
     selection_evaluation = None
@@ -364,5 +445,7 @@ def summarize_one_baseline(
             ),
             **output_budget_length_fields,
         },
+        "seed": seed,
+        "row_seed": row_seed,
         "task_profile": doc.get("task_profile"),
     }
