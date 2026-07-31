@@ -30,8 +30,12 @@ from src.pipeline.feature_builder import build_base_scores
 from src.pipeline.candidate_builder import build_candidate_pool
 from src.pipeline.optimizer_dispatch import dispatch_optimizer
 from src.objectives.factory import build_objective_spec, validate_selector_for_task
-from src.objectives.evaluator import maximum_feasible_words, objective_from_spec
-from src.utils.tokenizer import count_tokens
+from src.objectives.evaluator import (
+    maximum_feasible_words,
+    objective_from_spec,
+    resolve_effective_min_words,
+    resolve_selection_eligibility,
+)
 
 
 # ------------------------------------------------------------------ #
@@ -199,43 +203,28 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             )
         max_sents = int(required_max_sentences)
 
-    source_capacity_words = maximum_feasible_words(
+    min_words_resolution = resolve_effective_min_words(
         sentences,
+        requested_min_words=requested_min_words,
         max_length=selector_budget,
         length_unit=unit,
         max_sentences=max_sents,
     )
-    effective_min_words = min(requested_min_words, source_capacity_words)
-    min_words_relaxed = effective_min_words < requested_min_words
-    relaxation_reason = "source_intrinsic_capacity" if min_words_relaxed else None
+    source_capacity_words = min_words_resolution.source_capacity_words
+    effective_min_words = min_words_resolution.effective_min_words
+    min_words_relaxed = min_words_resolution.min_words_relaxed
+    relaxation_reason = min_words_resolution.relaxation_reason
 
-    # Sentences longer than the active word/token budget can never occur in a
-    # feasible extractive summary.  Do not let them consume route proposals or
-    # candidate reservations; retain auditable exclusion records instead.
-    if unit in {"words", "tokens"}:
-        selection_eligible_indices = [
-            index
-            for index, sentence in enumerate(sentences)
-            if count_tokens(sentence) <= selector_budget
-        ]
-    else:
-        selection_eligible_indices = list(range(len(sentences)))
-    selection_eligible_set = set(selection_eligible_indices)
-    ineligible_sentences = [
-        {
-            "sentence_id": sentence_records[index]["sentence_id"],
-            "original_index": index,
-            "word_count": count_tokens(sentences[index]),
-            "reason": "exceeds_active_output_budget",
-        }
-        for index in range(len(sentences))
-        if index not in selection_eligible_set
-    ]
-    if sentences and require_nonempty and not selection_eligible_indices:
-        raise ValueError(
-            f"source document {doc.get('id')!r} has no sentence eligible under "
-            f"the active {unit} budget {selector_budget}"
-        )
+    eligibility = resolve_selection_eligibility(
+        sentences,
+        sentence_records,
+        max_length=selector_budget,
+        length_unit=unit,
+        require_nonempty=require_nonempty,
+        document_id=doc.get("id"),
+    )
+    selection_eligible_indices = eligibility.eligible_indices
+    ineligible_sentences = eligibility.ineligible_sentences
 
     # 4. Candidate pool. Per-route quota and final selector budget are
     # deliberately separate from the output-length budget above.

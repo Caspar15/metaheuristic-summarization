@@ -6,7 +6,7 @@ must not silently change with the optimizer.
 """
 
 from dataclasses import asdict, dataclass
-from typing import Iterable, Optional, Sequence
+from typing import Any, Iterable, Mapping, Optional, Sequence
 
 import numpy as np
 
@@ -80,6 +80,121 @@ def maximum_feasible_words(
     for values in reachable_by_count:
         reachable |= values
     return reachable.bit_length() - 1
+
+
+@dataclass(frozen=True)
+class EffectiveMinWords:
+    """The result of clamping a requested lower bound to what a source can give.
+
+    ``requested_min_words`` is the config's declared floor. ``effective_min_words``
+    is the value actually enforced as ``SelectionConstraints.min_words``; it is
+    only ever relaxed downward, and only because the source itself cannot
+    reach the requested floor under the same upper bounds used for selection
+    -- never because a candidate pool or search procedure fell short.
+    """
+
+    requested_min_words: int
+    source_capacity_words: int
+    effective_min_words: int
+    min_words_relaxed: bool
+    relaxation_reason: Optional[str]
+
+
+def resolve_effective_min_words(
+    sentences: Sequence[str],
+    *,
+    requested_min_words: int,
+    max_length: Optional[int],
+    length_unit: str,
+    max_sentences: Optional[int] = None,
+) -> EffectiveMinWords:
+    """Clamp a requested minimum to the exact source-attainable capacity.
+
+    This is the one place a per-document lower bound is relaxed. Any caller
+    that needs a length-matched minimum (a system run or a baseline) must
+    call this rather than re-deriving the relaxation itself, so the same
+    document always yields the same effective minimum regardless of which
+    method is selecting sentences.
+    """
+
+    source_capacity_words = maximum_feasible_words(
+        sentences,
+        max_length=max_length,
+        length_unit=length_unit,
+        max_sentences=max_sentences,
+    )
+    effective_min_words = min(int(requested_min_words), source_capacity_words)
+    min_words_relaxed = effective_min_words < requested_min_words
+    return EffectiveMinWords(
+        requested_min_words=int(requested_min_words),
+        source_capacity_words=source_capacity_words,
+        effective_min_words=effective_min_words,
+        min_words_relaxed=min_words_relaxed,
+        relaxation_reason=(
+            "source_intrinsic_capacity" if min_words_relaxed else None
+        ),
+    )
+
+
+@dataclass(frozen=True)
+class SelectionEligibility:
+    """Which sentences may ever appear in a feasible extractive summary.
+
+    ``ineligible_sentences`` retains an auditable record of every sentence
+    excluded for being individually longer than the active budget, rather
+    than letting it silently disappear or consume route/candidate quota.
+    """
+
+    eligible_indices: list[int]
+    ineligible_sentences: list[dict]
+
+
+def resolve_selection_eligibility(
+    sentences: Sequence[str],
+    sentence_records: Sequence[Mapping[str, Any]],
+    *,
+    max_length: Optional[int],
+    length_unit: str,
+    require_nonempty: bool,
+    document_id: Any = None,
+) -> SelectionEligibility:
+    """Exclude sentences that can never occur in a feasible extractive summary.
+
+    A sentence longer than the active word/token budget can never be selected
+    on its own. This is the one place that exclusion is decided; a system run
+    and a baseline must both call this rather than reimplementing the filter,
+    so the same document yields the same eligible set regardless of method.
+    """
+
+    unit = str(length_unit).lower()
+    if unit in {"words", "tokens"}:
+        eligible_indices = [
+            index
+            for index, sentence in enumerate(sentences)
+            if count_tokens(sentence) <= max_length
+        ]
+    else:
+        eligible_indices = list(range(len(sentences)))
+    eligible_set = set(eligible_indices)
+    ineligible_sentences = [
+        {
+            "sentence_id": sentence_records[index]["sentence_id"],
+            "original_index": index,
+            "word_count": count_tokens(sentences[index]),
+            "reason": "exceeds_active_output_budget",
+        }
+        for index in range(len(sentences))
+        if index not in eligible_set
+    ]
+    if sentences and require_nonempty and not eligible_indices:
+        raise ValueError(
+            f"source document {document_id!r} has no sentence eligible under "
+            f"the active {unit} budget {max_length}"
+        )
+    return SelectionEligibility(
+        eligible_indices=eligible_indices,
+        ineligible_sentences=ineligible_sentences,
+    )
 
 
 @dataclass(frozen=True)

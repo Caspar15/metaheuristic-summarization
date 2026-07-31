@@ -598,6 +598,26 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 
 ---
 
+### 🟡 F-16. Lead baseline 的 `min_words` 全量分布，及與 F-1e 72 列的交叉驗證
+
+**發現日期**：2026-07-31（PR #10 review，`src/baselines/lead.py` / `src/baselines/contract.py`）。
+
+**背景**：`src/baselines/lead.py` 的 `document_order` Lead 現在一律以 `apply_min_words=False` 呼叫 `summarize_one_baseline`（`SelectionConstraints.min_words` 恆為 0），理由見該檔案 `LEAD_MIN_WORDS_NOT_APPLIED_REASON`：(1) 技術理由 —— `resolve_effective_min_words` 的容量由 `maximum_feasible_words` 以**任意子集**的 bitset subset-sum 計算，Lead 只能取前綴，落點是離散且遠比任意子集稀疏的集合，`[min_words, max_words]` 窗口對前綴型方法可能結構性無解；(2) 方法理由 —— `ACTION_PLAN.md` 1e 記載 `min_words=200` 是為了防止 mean-salience 目標退化成單句，Lead 沒有選句目標函數，不存在該退化，這個 guard 對它不適用。
+
+**實測**（`min_words=0`，5,621 篇 Multi-News validation，`document_order` Lead，`max_words=250`）：
+
+- 零失敗：5,621/5,621 篇皆產生 feasible 摘要。
+- 選取字數分布：mean 233.6、median 238、max 250、min 22。
+- `<200` words 共 **212 筆（3.77%）**，可再拆解為兩個不重疊的子群：
+  - **72 筆**是來源本身容量不足（`source_capacity_words < 200`，即使不受 Lead 前綴限制、改用任意子集也拿不到 200 字）—— 這與 `paper_revision_plan_IEEE_Access.md`（588 行）記載的、`1e` 的 length-feasibility audit 找到的 **72/5,621 列全文不足 requested `min_words=200`** 完全吻合。兩邊是**獨立算出**的同一組列（那邊用 `maximum_feasible_words` 做 exact attainable-capacity 計算；這邊是 Lead 前綴路徑 + `source_capacity_words` 診斷欄位），構成交叉驗證，而不是同一次計算的重複引用。
+  - **140 筆（2.49%）**是前綴落點無解：來源本身可以任意子集湊到 ≥200 字（`source_capacity_words >= 200`），但 `document_order` 的嚴格前綴走法在某一句放不下後就停止，實際選到的字數落在 200 之下。這是**所有前綴型方法共有的性質**（先到先得、不回頭補洞），不是這次實作的缺陷——`fabbri_first_k`、任何「取前 N 句/前 N 字」的 baseline 都會有同一種落差。
+
+⚠️ **範圍聲明——不要宣稱這影響任何既有結果**：本條目只描述 `min_words` 對 Lead 的（不）適用性與其字數分布，**不涉及、也不改變**任何 ROUGE 數字。CLAUDE.md 第 2 節已記載的舊 Lead 分數（例如 `0.4331 / 0.1453 / 0.3901`）與其 R-Lsum 分量，其陳舊狀態由 `c23d1a9`（分句器換成共用 Punkt tokenizer 後，全域標記所有既有 ROUGE-Lsum 數字過期）決定，與本條目無關；本條目不構成、也不應被引用為那些數字的重新驗證。
+
+**目前狀態**：✅ 已驗證，非缺陷。`min_words_applied: false` 與 `min_words_not_applied_reason` 已進 `output_budget` artifact（見 `tests/test_baselines_lead.py`），使這個例外可被逐篇稽核。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

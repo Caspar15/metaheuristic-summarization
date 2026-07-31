@@ -10,6 +10,8 @@ from src.objectives.evaluator import (
     SelectionConstraints,
     SelectionObjective,
     maximum_feasible_words,
+    resolve_effective_min_words,
+    resolve_selection_eligibility,
 )
 
 
@@ -28,6 +30,68 @@ def test_maximum_feasible_words_respects_sentence_cap():
         length_unit="words",
         max_sentences=2,
     ) == 190
+
+
+def test_resolve_effective_min_words_no_relaxation_when_capacity_suffices():
+    result = resolve_effective_min_words(
+        ["x " * 10, "y " * 10, "z " * 10, "w " * 10],
+        requested_min_words=15,
+        max_length=25,
+        length_unit="words",
+    )
+    assert result.requested_min_words == 15
+    assert result.source_capacity_words == 20
+    assert result.effective_min_words == 15
+    assert result.min_words_relaxed is False
+    assert result.relaxation_reason is None
+
+
+def test_resolve_effective_min_words_relaxes_to_source_capacity():
+    result = resolve_effective_min_words(
+        ["x " * 10, "y " * 10, "z " * 10],
+        requested_min_words=200,
+        max_length=250,
+        length_unit="words",
+    )
+    assert result.source_capacity_words == 30
+    assert result.effective_min_words == 30
+    assert result.min_words_relaxed is True
+    assert result.relaxation_reason == "source_intrinsic_capacity"
+
+
+def test_resolve_selection_eligibility_excludes_oversized_sentences():
+    sentences = ["x " * 30, "y " * 10, "z " * 10]
+    records = [{"sentence_id": f"s{i}"} for i in range(3)]
+    eligibility = resolve_selection_eligibility(
+        sentences,
+        records,
+        max_length=25,
+        length_unit="words",
+        require_nonempty=True,
+    )
+    assert eligibility.eligible_indices == [1, 2]
+    assert eligibility.ineligible_sentences == [
+        {
+            "sentence_id": "s0",
+            "original_index": 0,
+            "word_count": 30,
+            "reason": "exceeds_active_output_budget",
+        }
+    ]
+
+
+def test_resolve_selection_eligibility_raises_when_nothing_fits():
+    sentences = ["x " * 30]
+    records = [{"sentence_id": "s0"}]
+    with pytest.raises(ValueError, match="no sentence eligible"):
+        resolve_selection_eligibility(
+            sentences,
+            records,
+            max_length=25,
+            length_unit="words",
+            require_nonempty=True,
+            document_id="doc1",
+        )
 
 
 def _golden_evaluator(**constraint_overrides):
