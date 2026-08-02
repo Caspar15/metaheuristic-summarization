@@ -1,6 +1,6 @@
 # IEEE Access 全面重建計畫
 
-版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-07-30
+版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果
 
 文件治理：本文件是研究標準與投稿 gate 的唯一規範來源；`ACTION_PLAN.md` 是日常執行清單；`CODE_AUDIT_IEEE_Access.md` 與 `STRATEGY_ASSESSMENT.md` 只能作證據快照與衍生判斷。若數字衝突，以可重現 artifact、版本化程式、資料 fingerprint 與明確 evaluator protocol 為準，而不是以任何一份敘述文件為準。
@@ -44,7 +44,7 @@
 
 以下任一項未解決，都不應投稿。
 
-### 2.0 ⚠️ 各 P0 的目前狀態（2026-07-29 逐項對程式核對）
+### 2.0 ⚠️ 各 P0 的目前狀態（2026-08-02 逐項對 master 覆核）
 
 > **以下 P0-01～P0-10 的內文描述的是稽核當時（commit `1b9fe6f`）的狀態，以現在式書寫。**
 > 其中多項已在 Phase 1 重構中修好。沒有這張表，讀者會把已完成的項目當成待辦，
@@ -68,7 +68,9 @@
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **本文件 §6 的 baseline 一個都還沒實作** —— 這是回答新 pipeline F-0 的最便宜且最大的缺口，見 §9 Go/No-Go
+1. 🔴 **Baseline Gate 2 尚未通過** —— PR #10 已加入 shared baseline contract、CLI 與 Lead，
+   但 GovReport + Multi-News 的正式 Lead run 尚未完成，TextRank／LexRank／PacSum／
+   sentence-encoder／Random 仍未進 master。程式基礎完成不能替代兩個 primary 的實測，見 §9 Go/No-Go
 2. 🔴 **第二個 primary benchmark GovReport 尚未建立**；Multi-News 也只有 validation 完成，train/test 尚未生成
 3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
 4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張
@@ -76,7 +78,8 @@
 6. 🟡 P0-06 的 published-protocol parity、P0-09 的正式計時，以及 validation-frozen Pareto/output policy
 
 > ⚠️ **「P0 修好」不等於「可以投稿」。** §9 的 Go 條件要求相對強 baseline 有一致正向效果，
-> 而 baseline 尚未存在，因此 F-0（系統是否勝過 Lead）**在新 pipeline 上仍未被回答**。
+> 而目前只有 Lead 程式存在、沒有兩個 primary 的 governed baseline 結果，因此 F-0
+>（系統是否勝過 Lead）**在新 pipeline 上仍未被回答**。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

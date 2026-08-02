@@ -302,6 +302,11 @@ Phase 1e 已實作此工程契約：coverage 明確使用 `full source sentences
 - 與 NSGA-II 使用完全相同候選、相似度、objective 與長度限制。
 - 它既是 baseline，也是判斷 metaheuristic 是否必要的對照組。
 
+> **實作狀態（2026-08-02）**：上面描述的「方法內 deterministic selector」已由
+> shared objective 支援；Phase 2 的外部對照則已有 PR #10 Lead baseline contract／CLI。
+> 兩者角色不同，不能把方法內 greedy 當成 Lead。TextRank、LexRank、PacSum、
+> sentence-encoder 與 Random 尚未在 master 完成，兩個 primary 也尚未產生正式 baseline 結果。
+
 ### 7.2 NSGA-II selector
 
 - 回傳完整 Pareto front 與 per-solution objectives，不得只回傳一個不可追溯 index set。

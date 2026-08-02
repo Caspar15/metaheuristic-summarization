@@ -1,6 +1,6 @@
 # ⚠️ 這個目錄裡沒有任何可用於論文的結果
 
-`runs/` 底下的所有 `metrics.csv` 與 `predictions.jsonl` **都不能作為新論文的證據**。
+截至 2026-08-02，`runs/` 現存的 `metrics.csv` 與 `predictions.jsonl` **都不能作為新論文的證據**。
 理由分三類，每一類的失效原因不同。
 
 > 這個目錄本身已被 `.gitignore` 排除（只有這份 README 進版本庫）。
@@ -81,9 +81,14 @@ routes rank the full input, shared objectives respect the declared length band�
 
 依 `docs/research/ACTION_PLAN.md`：
 
-- 新的 validation 結果寫入 **`runs_v2/`**（尚未建立）
+- 新的 governed validation 結果寫入 **`runs_v2/`**（尚未建立／追蹤）
 - test split 只有在 configuration freeze 之後才解鎖，且只跑一次
 - 每個正式 run 必須附 data fingerprint、effective config hash、commit、seed 與 manifest
+
+PR #10 已提供 Lead baseline CLI，但其 `--run_dir` 預設仍是 `runs`。這個預設值不是
+研究有效性的保證；正式 Phase 2 命令必須明確傳 `--run_dir runs_v2`。即使某個新檔案
+意外寫進 `runs/`，也必須依 artifact 的 policy/preflight/config/commit 身分判定，不能
+只看目錄名稱把它升格為有效結果。現在尚無任何兩個-primary完成的正式 Lead 結果。
 
 ## 引用數字前先確認三件事
 

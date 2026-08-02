@@ -17,13 +17,13 @@
 
 → 詳見 `ACTION_PLAN.md` 的 Phase −1；這兩件事已被版本化為研究治理前提。**後續不得再以 legacy 結果直接改寫或支撐新論文。**
 
-### 目前進度速覽（2026-07-30）
+### 目前進度速覽（2026-08-02）
 
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、canonical schema 與 frozen-policy preflight 已完成；published-protocol parity、GovReport 資料層、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ 202 項全過（PR #9 合併後）；CI 已接 GitHub Actions |
-| **baseline** | 🔴 **完全沒做** —— Gate 2 的全部內容。沒有它，上面那條 F-0 永遠無法回答 |
+| 測試 | ✅ **217 tests 全過**（PR #10 合併後）；CI 已接 GitHub Actions |
+| **baseline** | 🟡 **Phase 2 已開始** —— shared baseline contract、CLI 與 Lead 已進 master；兩個 primary 尚無正式 Lead 結果，TextRank／LexRank／PacSum／sentence-encoder／Random 尚未完成，Gate 2 未過 |
 | 新 pipeline 的實測結果 | 🔴 **零** —— 還沒跑過任何 validation 評估 |
 | 資料 | 🟡 Multi-News validation main/clean policy、fingerprints 與 manifests 已凍結；GovReport 與其餘 splits 尚未完成 |
 
@@ -33,7 +33,7 @@
 > 各項稽核發現的 legacy／新 pipeline 現況對照見
 > `CODE_AUDIT_IEEE_Access.md` **§0.0 狀態表**。
 
-### 實驗資料集到底跑哪些（2026-07-30）
+### 實驗資料集到底跑哪些（決策凍結 2026-07-30；狀態覆核 2026-08-02）
 
 | 類別 | 決定 |
 |---|---|

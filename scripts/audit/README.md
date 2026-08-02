@@ -8,6 +8,10 @@
 > 不保證可比。greedy reference **不是** exact upper bound，也不是任何資料集的官方 oracle 協定。
 > 正式結果必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程。
 
+> 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；
+> 本目錄的 `lead_vs_system.py` 仍只用來重現 test-tuned legacy F-0，不是 Phase 2
+> baseline runner，也不會因 Lead 程式已合併而自動變成投稿級結果。
+
 執行位置：`metaheuristic-summarization/`（模組路徑需要 repo root 在 `sys.path`）
 
 ---

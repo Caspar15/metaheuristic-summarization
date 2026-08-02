@@ -3,7 +3,7 @@
 > 這是**唯一的執行清單**。研究標準以 `paper_revision_plan_IEEE_Access.md` 為準；程式稽核與策略評估的結論全部收斂到這裡。
 > 每天工作看這份就好，需要理由再回去翻對應的分析文件。
 >
-> 版本：2026-07-30 ｜ 進度標記：`[ ]` 未開始 `[~]` 進行中 `[x]` 完成 `[!]` 卡住
+> 版本：2026-08-02 ｜ 進度標記：`[ ]` 未開始 `[~]` 進行中 `[x]` 完成 `[!]` 卡住
 
 ---
 
@@ -95,8 +95,8 @@
 
 **1a 的共同驗收條件**（全部完成才能把上面的 `[~]` 改成 `[x]`）：
 
-- [x] `pip install pytest` 並讓 `tests/` 能跑（2026-07-30：202 passed）
-- [~] Phase 1 canonical 主路徑的 patch 已有 golden／regression／10-document snapshot；TF-IDF/TF-ISF similarity parity、published-protocol parity 與尚未實作的多資料集路徑不在現有 202 tests 的完成範圍
+- [x] `pip install pytest` 並讓 `tests/` 能跑（2026-08-02 master：217 passed）
+- [~] Phase 1 canonical 主路徑的 patch 已有 golden／regression／10-document snapshot；TF-IDF/TF-ISF similarity parity、published-protocol parity 與尚未實作的多資料集路徑不在現有 217 tests 的完成範圍
 - [x] v1 已排除 SciTLDR，因此 official single-sentence oracle conformance 不屬目前 Phase 1；evaluator 維持 fail-closed。若日後重新納入，須重開此 gate
 
 ### 1b. 資料層
@@ -163,6 +163,12 @@
 
 > **這階段的唯一目的：確認新架構真的比 Lead 好。沒過就不要往下走。**
 
+- [x] **PR #10：baseline foundation + Lead 已進 master** —— `src/baselines/contract.py`、
+      `lead.py`、`cli.py` 共用 canonical data preflight 與 upper-budget contract，保存
+      ordering、requested/effective budget、source capacity、selected words 與 `min_words`
+      不適用原因；217-test checkpoint 已涵蓋其 golden／CLI provenance。這只完成程式基礎，
+      **不等於下方兩個 primary 的正式 Lead run 已完成**
+
 ### 2.0 執行資料集矩陣 v1（2026-07-30 決定）
 
 | 資料集／分析 | v1 決策 | Phase 2–3 | Phase 4 locked test | 是否阻塞主線 |
@@ -181,7 +187,8 @@
 - [ ] 在兩個 primary 跑 TextRank、LexRank（本地執行同 pipeline；優先重用官方／可信實作並鎖版本）
 - [ ] 在兩個 primary 跑 PacSum
 - [ ] 在兩個 primary 跑 Sentence-BERT centroid + MMR
-- [ ] 在兩個 primary 跑 Random（固定 seed）
+- [ ] 在兩個 primary 跑 Random（固定 seed）。2026-08-02：PR #11 仍在 review，
+      full-split feasibility 與 Windows fixture line-ending blocker 未解決，不得標完成或合併後直接跑正式結果
 - [ ] 在兩個 primary 跑 exact extractive oracle（可行時）或明確標示的 greedy reference（不可稱 upper bound）
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
@@ -314,8 +321,8 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 202 tests、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
-| 2 Baseline | `[ ]` | | |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 217 tests、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 2 Baseline | `[~]` | | PR #10 已完成 shared contract + Lead 程式；兩個 primary 的正式 Lead run、其餘 baseline 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[ ]` | | 🔴 中途檢查點在這 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |

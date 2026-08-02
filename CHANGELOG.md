@@ -6,7 +6,18 @@ All notable changes to the `metaheuristic-summarization` project will be documen
 > invalidated.** They are kept for history, with corrections noted inline.
 > See `docs/research/CODE_AUDIT_IEEE_Access.md`.
 
-## [Unreleased] - Phase 1e objective/selector isolation
+## [Unreleased] - Phase 1e correctness + Phase 2 baseline foundation
+
+- **PR #10 merged the first production baseline path**: a shared baseline
+  contract, governed CLI, and Lead with `document_order`, `round_robin`, and
+  diagnostic `fabbri_first_k` orderings. Lead shares the canonical data-policy
+  preflight and upper-budget contract with the system pipeline. Its artifact
+  explicitly records that the provisional `min_words` floor is not applied,
+  together with the requested floor, source capacity, selected length, and
+  reason; the full-split distribution is documented as F-16.
+- The current master checkpoint passes **217 tests** (2026-08-02). This is a
+  correctness checkpoint, not a baseline result: no governed Lead run has yet
+  been completed on both GovReport and Multi-News, and Gate 2 remains open.
 
 - **Sentence segmentation is now shared between the data layer and the
   evaluator** (PR #9). `src/eval/rouge.py` previously segmented with a

@@ -3,6 +3,7 @@
 
 > 稽核日期：2026-07-26
 > 稽核對象：repo 根目錄（commit `1b9fe6f`）
+> 新 pipeline 狀態覆核：2026-08-02（master 已含 PR #10）
 > 與 `paper_revision_plan_IEEE_Access.md` 的關係：**本文件是 evidence ledger，不取代研究主計畫**。
 > 研究主計畫定義「論文該怎麼改」；本文件記錄「legacy 程式碼與 artifact 實際上做了什麼」。
 > 本文件是 legacy snapshot 的 evidence ledger，不是目前 working tree 的驗收證書。
@@ -37,7 +38,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🔴 **仍然成立** | **未做。Phase 2 / Gate 2 的全部內容** |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | PR #10 已加入 shared baseline contract、CLI 與 Lead；兩個 primary 尚無正式 Lead 結果，其餘 baseline 未完成，Gate 2 仍未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動,GovReport/CNN-DM 待做** |
@@ -46,7 +47,7 @@
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
 1. 🔴 **F-0 尚未在新 pipeline 上回答** —— 修好一堆東西不等於贏過 Lead
-2. 🔴 **F-9 baseline 完全沒做** —— 沒有它,F-0 永遠無法回答
+2. 🔴 **F-9 只完成 Lead 程式基礎** —— 兩個 primary 的 governed Lead run 與其餘 baseline 尚未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句、GovReport/CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -101,7 +102,7 @@ Section 4.4.1 與 Table 7：
 **Table 7 的圖說自己寫明了問題所在**：
 > "The results of Lead, LexRank, and TextRank are **adopted from [16]**, while the remaining results are obtained from our proposed framework."
 
-也就是說 —— **baseline 數字是從別的論文抄來的，不是在你自己的 pipeline 上跑的**（與 F-9 一致：repo 中確實沒有任何 baseline 實作）。
+也就是說 —— **baseline 數字是從別的論文抄來的，不是在你自己的 pipeline 上跑的**（與稽核當時的 F-9 一致：commit `1b9fe6f` 中確實沒有任何 baseline 實作；目前 master 已有 Lead，但不能回溯挽救舊表）。
 
 ### 實測結果 ✅
 
@@ -456,9 +457,17 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 
 ---
 
-### 🟠 F-9. Repo 中完全沒有任何 baseline 實作
+### 🟠 F-9. 稽核當時 repo 完全沒有 baseline；目前只完成 Lead 基礎
 
 **稽核結果 ✅**：以 `lead`, `LexRank`, `PacSum`, `BERTScore`, `bert_score` 等關鍵字全域搜尋 `src/`、`scripts/`、`tests/` —— **零命中**（唯一命中是 `position.py` 裡的變數名）。
+
+**目前狀態（2026-08-02）**：PR #10 已在 master 新增 `src/baselines/contract.py`、
+`lead.py` 與 `cli.py`，所以「目前 repo 零 baseline」已不再成立。Lead 共用 canonical
+data-policy preflight 與 output upper-bound contract，並保存 ordering、requested floor、
+source capacity、selected words 及 `min_words` 不適用原因；F-16 記錄其 full-split
+長度分布。然而兩個 primary 尚未完成 governed Lead run，TextRank／LexRank／PacSum／
+sentence-encoder／Random 也尚未進 master，因此只能把 F-9 從「未開始」降為「部分解除」，
+不能把 Gate 2 標成完成。
 
 **後果**：論文 Table 6 在 Multi-News 上報告的 Lead / TextRank / LexRank 數字，**無法由本 repo 重現**。若這些數字是從其他論文抄來的，那麼它們與本文的預處理、分句方式、ROUGE 設定都不一致 —— 這在 IEEE Access 公開程式碼後會是明顯的破綻，而且恰好落在 R4 已經點名的「selective reporting」疑慮上。
 
@@ -639,7 +648,7 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 0. 🔴 **F-0（legacy Multi-News 未贏 Lead）** —— 同資料同內部 evaluator 下，ExpB 只在 R1 高 0.0021，R2/R-Lsum 較低；因 ExpB test-tuned，只能觸發 redesign，不能當新結果。
 1. **F-3（Stage 2 無 PLM）** —— 方法章與實作不符，必須在任何新實驗前解決。
 2. **F-5（相似度矩陣就地竄改）** —— 會靜默改變實驗語意；狀態見 §0.0 狀態表。
-3. **F-9（無 baseline 實作）** —— 影響現有表格的可重現性，不只是「要補新 baseline」。
+3. **F-9（legacy 無 baseline、目前只完成 Lead 基礎）** —— 舊表仍不可重現；PR #10 不能回溯修復它，且 Gate 2 尚缺正式兩-primary結果與其餘 baseline。
 4. **F-12（分句品質）** —— 855 words 的「句子」會直接破壞長度控制，且系統對它有正向偏好。
 5. **F-13(f)（靜默退回 greedy）** —— 需先確認沒有既有實驗其實跑的是 greedy。
 
@@ -793,8 +802,12 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 
 ## 附錄 A：本次已直接修改的程式碼
 
-以下是初次 audit patch 與目前 Phase 1 狀態的對照。pytest 已安裝，2026-07-30 實跑為 **202 tests 全過**；這只代表 correctness regression、10-document snapshot 與內部 hand-calculated golden 通過，不代表方法效果或 published-protocol parity 已通過。
-Sentence-BERT production route、canonical NLTK segmentation 與 shared objective/selector contract 已接線；baseline 模組與正式 validation 仍未完成。
+以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-02 的 master
+**217 tests 全過**；這只代表 correctness regression、10-document snapshot、內部
+hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
+Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
+contract 與 PR #10 Lead baseline 已接線；其餘 baseline、兩個 primary 的正式 baseline
+結果與 proposed-method validation 仍未完成。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
 |---|---|---|---|

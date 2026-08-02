@@ -27,3 +27,8 @@ scores are observed; it must not be used as an ordinary setup command.
 Do not regenerate or edit the policy after observing validation scores merely
 to select a more favorable row set. A justified policy change requires a new
 versioned policy ID, manifest, fingerprints, and an explicit research note.
+
+Status checked on 2026-08-02: this same policy is enforced by both the proposed
+pipeline and the PR #10 Lead baseline CLI. Adding a baseline does not authorize
+a new subset or a rewritten policy; formal baseline outputs must carry the same
+preflight identity as the system run they are compared with.

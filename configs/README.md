@@ -17,6 +17,18 @@
 
 此設定刻意不含 graph 與 NSGA-II：先確認 lexical + semantic MVP 能否勝過同協定 Lead／PacSum，再決定是否擴張完整架構。
 
+### Phase 2 baseline 共用設定
+
+PR #10 的 `src.baselines.cli` 會讀同一份 `phase1_mvp_multinews.yaml`，因此 Lead
+與 proposed run 共用 dataset identity、frozen policy、split guard 與輸出上限；它不是
+另一套偷偷放寬的 config。Lead 因為是 prefix baseline、沒有 mean-salience objective，
+不套用 provisional `min_words=200` 下限，但 artifact 必須逐列保存 requested floor、
+source capacity、selected words 與 reason。正式 run 請明確指定 `--run_dir runs_v2`；
+CLI 目前的 `runs` 預設值不可當作新舊結果分界。
+
+截至 2026-08-02，master 只包含 Lead。Random 的 PR #11 尚未合併；其他 baseline
+仍是 Phase 2 待辦。
+
 ---
 
 ## 兩階段流程對照

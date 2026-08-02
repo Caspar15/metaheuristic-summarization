@@ -14,8 +14,9 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline（Lead / TextRank / LexRank / PacSum） | 🔴 **尚未實作** —— 舊論文表格的 baseline 數字引用自其他論文，不是本 repo 產出 |
+| Baseline | 🟡 **Phase 2 已開始** —— PR #10 已合併 shared baseline contract、CLI 與 Lead（3 種 ordering）；TextRank / LexRank / PacSum / sentence-encoder / Random 尚未進 master，兩個 primary 的正式 baseline run 也尚未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
+| 測試 | ✅ **217 tests passed**（2026-08-02，PR #10 合併後）；CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 
@@ -152,7 +153,24 @@ python -m src.pipeline.select_sentences --config configs/phase1_mvp_multinews.ya
   --run_dir runs --stamp phase1-mvp-multinews-validation
 ```
 
-相同 frozen method 的 clean sensitivity run：
+Phase 2 Lead baseline 的程式已進 master，但還沒有形成正式研究結果。正式 validation
+輸出必須明確寫到 `runs_v2/`；`src.baselines.cli` 的預設 `--run_dir runs` 只保留相容性，
+不要依賴預設值：
+
+```bash
+python -m src.baselines.cli --baseline lead \
+  --config configs/phase1_mvp_multinews.yaml --split validation \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --ordering document_order --run_dir runs_v2 \
+  --stamp lead-multinews-validation
+```
+
+Lead 會共用資料 preflight 與長度上限，但不套用為 mean-salience 防退化而設的
+`min_words=200` 下限；每列仍會記錄 requested floor、source capacity、實際字數與
+不套用原因。這是 PR #10 / F-16 已測試的 baseline-specific contract，不代表 Gate 2
+已通過。
+
+回到 proposed pipeline；相同 frozen method 的 clean sensitivity run：
 
 ```bash
 python -m src.pipeline.select_sentences --config configs/phase1_mvp_multinews.yaml \

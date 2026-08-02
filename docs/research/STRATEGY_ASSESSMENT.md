@@ -1,6 +1,6 @@
 # 總體可行性評估 —— 設計是否有救、主場在哪、文件如何分工
 
-> 初稿日期：2026-07-26 ｜ 程式／資料狀態覆核：2026-07-30
+> 初稿日期：2026-07-26 ｜ 程式／資料狀態覆核：2026-08-02
 > 對象問題：「是不是設計本身就有問題？分數這麼低還投得出去嗎？我們的優勢在哪？架構還有救嗎？」
 > 本文件是策略 memo，不是數字權威來源。Legacy Multi-News 的 ROUGE/Lead 已重現。
 > headroom、位置與 oracle overlap 的腳本**已版本化**至 `scripts/audit/`
@@ -242,7 +242,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 202 tests、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff 與 Multi-News validation policy preflight 已通過；這仍只證明 correctness。published-protocol parity、GovReport、正式成本 pilot 與品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 217 tests、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff 與 Multi-News validation policy preflight 已通過；PR #10 又加入 shared baseline contract 與 Lead。這仍只證明 correctness／baseline plumbing。published-protocol parity、GovReport、正式成本 pilot、其餘 baseline 與品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -286,8 +286,8 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 202 tests、snapshot、shared objectives 與 Multi-News frozen-policy preflight 已完成；published-protocol parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍是未完成範圍；CNN/DM 是 Gate 3 後 optional |
-| Phase 2（baseline validation） | **Lead 必須是第一個跑的 baseline**，且長度預算嚴格對齊。這是最便宜的 reality check |
+| Phase 1（correctness refactor） | canonical 主路徑的 217 tests、snapshot、shared objectives 與 Multi-News frozen-policy preflight 已完成；published-protocol parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍是未完成範圍；CNN/DM 是 Gate 3 後 optional |
+| Phase 2（baseline validation） | PR #10 已完成 Lead 程式與共用 contract；下一步仍是**先在兩個 primary 正式跑 Lead**，且長度上限、資料 policy 與 evaluator 嚴格對齊。程式存在不等於 reality check 已完成 |
 | Phase 3（方法實驗） | **新增核心指標：候選池對 validated oracle／greedy reference 的 recall@K，以及選句位置分布**。先在 validation 建立可重現版本 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |

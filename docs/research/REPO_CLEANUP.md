@@ -1,7 +1,7 @@
 # 專案整理計畫
 
 > 對應 `ACTION_PLAN.md` 的 Phase 0。以下是提案，不是已授權的刪除清單；任何 move/delete/tag 前都要先核對 dirty worktree、legacy 重現需求與精確目標。
-> 初始盤點數字保留為 2026-07-26 snapshot；目前任務狀態已覆核至 2026-07-29，應以 §7 為準。
+> 初始盤點數字保留為 2026-07-26 snapshot；目前任務狀態已覆核至 2026-08-02，應以 §7 為準。
 
 ---
 
@@ -138,7 +138,7 @@ scikit-learn>=1.3.0     # 第 27 行  ← 重複；實際有效下限為 1.3.0
 ```
 
 - [x] 合併重複項，鎖定單一版本（2026-07-26：`pymoo` / `scikit-learn` 各只剩一條）
-- [x] 補上 `pytest`（已在依賴與 CI；2026-07-30 實跑 202 項全過）
+- [x] 補上 `pytest`（已在依賴與 CI；2026-08-02 master 之 217 tests 全過）
 - [x] 拆出 `requirements-demo.txt`（fastapi / flask / uvicorn）與 `requirements-ci.txt`（輕量 CI）
 - [x] 補上 `nltk`（canonical Multi-News 分句已使用 Punkt）
 - [ ] 補上 `bert-score`（Phase 5 語意指標才需要）
@@ -150,6 +150,10 @@ scikit-learn>=1.3.0     # 第 27 行  ← 重複；實際有效下限為 1.3.0
 - [ ] `_minmax_norm`（`fast_fused.py`）常數輸入回傳 0.0，`_minmax_normalize`（`compose.py`）回傳 0.5 —— 行為不一致
 - [ ] `src/features/semantic.py` 的 `centrality` 與 `novelty` 數學上完全反相關（`centrality_norm = 1 - novelty_norm`），
       同時給獨立權重是退化的；且 `centrality` 錯誤地含對角線自身相似度
+- [ ] **公開 repo 的授權／資料再散布決策**：目前 GitHub repository 是 public 且沒有
+      LICENSE；Multi-News dataset card 標示 license 為 `other`。在 tests 中提交任何原始新聞
+      文字 fixture 前，必須先確認可再散布依據，或改用結構等價的 synthetic／生成式 fixture，
+      不能因檔案很小就默認可公開。
 
 ---
 
