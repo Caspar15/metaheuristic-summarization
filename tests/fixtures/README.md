@@ -34,9 +34,10 @@ license that clearly covers redistributing article/summary text), and
 IEEE Access reviewers will have access to this repo during review. Keeping
 15-16 verbatim news articles and their reference summaries checked into
 version control indefinitely is an avoidable redistribution risk this
-fixture does not need to take on, since none of the three tests that use
+fixture does not need to take on, since none of the four tests that use
 it (`test_per_row_independence_single_row_vs_full_file`,
-`test_real_data_sample_is_feasible_with_min_words_applied`,
+`test_real_data_sample_is_feasible_with_min_words_not_applied`,
+`test_validation_4576_succeeds_with_apply_min_words_false`,
 `test_fixture_sha256_matches_recorded_value`, in
 `tests/test_baselines_random.py`) reads sentence *content* at all — they
 only depend on **word counts** (`src.utils.tokenizer.count_tokens` is a

@@ -97,8 +97,19 @@ def _run_variant(
     return failures
 
 
-def _pool_vs_selected_word_stats(rows: List[Dict], seed: int, max_words: int, min_words: int):
+def _pool_word_lengths(rows: List[Dict]):
+    """Seed-independent: computed once, not once per seed."""
     from src.data.schemas import flatten_sentence_records
+    from src.utils.tokenizer import count_tokens
+
+    pool_lengths = []
+    for doc in rows:
+        sentence_records = flatten_sentence_records(doc)
+        pool_lengths.extend(count_tokens(r["text"]) for r in sentence_records)
+    return pool_lengths
+
+
+def _selected_word_stats(rows: List[Dict], seed: int, max_words: int, min_words: int):
     from src.utils.tokenizer import count_tokens
 
     cfg = {
@@ -109,13 +120,10 @@ def _pool_vs_selected_word_stats(rows: List[Dict], seed: int, max_words: int, mi
             "require_nonempty": True,
         }
     }
-    pool_lengths = []
     selected_lengths = []
     selected_counts = []
     skipped = 0
     for doc in rows:
-        sentence_records = flatten_sentence_records(doc)
-        pool_lengths.extend(count_tokens(r["text"]) for r in sentence_records)
         try:
             result = summarize_one_baseline(
                 doc,
@@ -138,7 +146,7 @@ def _pool_vs_selected_word_stats(rows: List[Dict], seed: int, max_words: int, mi
         selected_counts.append(len(result["summary_sentences"]))
     if skipped:
         print(f"  (excluded {skipped} infeasible rows from word-length stats)")
-    return pool_lengths, selected_lengths, selected_counts
+    return selected_lengths, selected_counts
 
 
 def main():
@@ -167,9 +175,9 @@ def main():
                 print(f"    example ids: {failures[seed][:5]}")
 
     print("\nPool vs. selected sentence word-length (naming honesty), per seed:")
-    pool_lengths = None
+    pool_lengths = _pool_word_lengths(rows)
     for seed in seeds:
-        pool_lengths, selected_lengths, selected_counts = _pool_vs_selected_word_stats(
+        selected_lengths, selected_counts = _selected_word_stats(
             rows, seed=seed, max_words=args.max_words, min_words=args.min_words
         )
         print(
