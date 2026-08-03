@@ -2,3 +2,6 @@
 # their line endings across Windows/Linux collaborators.
 configs/data_policies/*.json text eol=lf
 configs/data_policies/*.jsonl text eol=lf
+
+# Test fixtures are integrity-checked by raw-file SHA-256 for the same reason.
+tests/fixtures/*.jsonl text eol=lf
