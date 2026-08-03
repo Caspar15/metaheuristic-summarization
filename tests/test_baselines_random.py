@@ -10,8 +10,11 @@ by design, not left to a follow-up.
 The real-data sample is a checked-in fixture, not a direct read of
 ``data/processed/`` (which is ``.gitignore``d and absent in CI): see
 ``tests/fixtures/README.md`` for where it came from, why it is a curated
-15-row sample rather than a blind "first N rows" slice (the first 20 rows
-turned out to all be the easy case), and the recorded SHA-256 this module
+16-row sample rather than a blind "first N rows" slice (the first 20 rows
+turned out to all be the easy case), why its sentence/reference text is
+placeholder text rather than real Multi-News content (de-lexicalized for
+redistribution-risk reasons -- this fixture must not be used by any test
+that depends on actual word content), and the recorded SHA-256 this module
 checks on every load.
 """
 
@@ -31,7 +34,7 @@ FIXTURE_PATH = os.path.join(
 # Recorded in tests/fixtures/README.md. If this fixture is intentionally
 # changed, update both the file and this constant together -- that is the
 # whole point of the check below.
-FIXTURE_SHA256 = "33018d8e1b9b6f4ab3b843f51f9d138a3ab52efef8da18fa5818d6a05d00aa04"
+FIXTURE_SHA256 = "dca3bae4f93a1bb51fe0b66ed5c23367988fcc51a0a425a397a87d24c38bd848"
 
 
 def _assert_fixture_integrity() -> None:
@@ -192,24 +195,51 @@ def test_output_stays_in_original_document_order_despite_random_draw_order():
     assert result["selected_indices"] == sorted(result["selected_indices"])
 
 
-def test_real_data_sample_is_feasible_with_min_words_applied():
-    """The 15-row curated real-data fixture (not 5,621, not synthetic, and
+def test_real_data_sample_is_feasible_with_min_words_not_applied():
+    """The 16-row curated real-data fixture (not 5,621, not synthetic, and
     not just the easy first-20-rows case -- see tests/fixtures/README.md)
     under the project's Gate 2 protocol (max_words=250, requested
-    min_words=200). apply_min_words=True here relies on the skip-tolerant
-    sampling in _select_random (see random_baseline.py's docstring for the
-    measured justification); every row must come out feasible, including
-    the min_words_relaxed rows and the single-source-document rows."""
+    min_words=200). Random uses apply_min_words=False, same as Lead -- see
+    random_baseline.py's docstring, "MIN_WORDS DOES NOT APPLY HERE EITHER",
+    for why: min_words is out of scope for any baseline that does not
+    search over subsets to satisfy it, this module's skip-tolerant selector
+    included. Every row must still come out feasible under the upper bound
+    alone (including the min_words_relaxed rows, the single-source-document
+    rows, and validation_4576 -- see the dedicated regression test below for
+    that last one), and requested_min_words must stay recorded even though
+    it is not enforced."""
 
     rows = _load_fixture_rows()
-    assert len(rows) == 15
+    assert len(rows) == 16
     for doc in rows:
         result = summarize_one_random(doc, cfg=_gate2_cfg(), seed=42)
         assert result["selection_evaluation"]["feasible"] is True, doc["id"]
-        assert result["output_budget"]["min_words_applied"] is True
-        assert result["output_budget"]["selected_words"] >= (
-            result["output_budget"]["effective_min_words"]
-        )
+        assert result["output_budget"]["min_words_applied"] is False
+        assert result["output_budget"]["requested_min_words"] == 200
+        assert result["output_budget"]["effective_min_words"] == 0
+
+
+def test_validation_4576_succeeds_with_apply_min_words_false():
+    """Pins the concrete row that motivated flipping Random's
+    apply_min_words to False (PR #11 review, "Blocking 1"). validation_4576
+    has source_capacity_words=244 and min_words_relaxed=False -- 200 words
+    is genuinely reachable by *some* subset of its 7 eligible sentences --
+    but a full-split rerun (scripts/audit/random_baseline_min_words.py)
+    found the skip-tolerant selector this module implements fails to reach
+    it under every one of seeds 0, 1, 42, and 9999: the 244-word optimum
+    requires keeping both of the two long sentences (72 and 83 words) while
+    dropping the two shortest, a combination one random walk rarely lands
+    on. With apply_min_words=False this row must succeed regardless, and
+    requested_min_words must still be recorded as 200 -- the request is
+    never dropped, only not enforced."""
+
+    rows = _load_fixture_rows()
+    target = next(doc for doc in rows if doc["id"] == "validation_4576")
+    for seed in (0, 42):
+        result = summarize_one_random(target, cfg=_gate2_cfg(), seed=seed)
+        assert result["selection_evaluation"]["feasible"] is True, seed
+        assert result["output_budget"]["requested_min_words"] == 200
+        assert result["output_budget"]["min_words_applied"] is False
 
 
 def test_fixture_sha256_matches_recorded_value():

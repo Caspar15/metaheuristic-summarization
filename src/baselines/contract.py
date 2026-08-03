@@ -83,13 +83,19 @@ def derive_row_seed(base_seed: int, document_id: Any) -> int:
     ``random.Random`` directly with a formatted string
     (``random.Random(f"{base_seed}:{document_id}")``). CPython's handling of
     non-numeric seeds is not a cross-version stability contract -- it
-    changed once already, in Python 3.11, for hash-flooding security reasons
-    -- and this project runs the identical seed across at least two
-    environments (the author's macOS arm64 machine and the national
-    computing center's Linux x86_64 cluster) whose reproducibility is a
-    claim that goes into the paper. SHA-256 is a fixed, versioned standard
-    with no such risk, so the derivation is spelled out explicitly instead
-    of trusting an implementation detail of the standard library.
+    already changed once, in Python 3.2, when string seeding was moved to a
+    new algorithm specifically to improve determinism across platforms and
+    Python versions; Python 3.11 made a further, narrower change, restricting
+    ``random.seed()`` to a fixed set of acceptable seed types (``None``,
+    ``int``, ``float``, ``str``, ``bytes``, ``bytearray``) rather than
+    changing how a given string seed maps to internal state. Either kind of
+    change is exactly the risk this project cannot take: it runs the
+    identical seed across at least two environments (the author's macOS
+    arm64 machine and the national computing center's Linux x86_64 cluster)
+    whose reproducibility is a claim that goes into the paper. SHA-256 is a
+    fixed, versioned standard with no such risk, so the derivation is
+    spelled out explicitly instead of trusting an implementation detail of
+    the standard library.
     """
 
     digest = hashlib.sha256(f"{int(base_seed)}:{document_id}".encode("utf-8")).digest()

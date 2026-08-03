@@ -122,6 +122,45 @@
 
 ---
 
+## `random_baseline_min_words.py` — Random baseline 的 `apply_min_words` 決策
+
+```bash
+python -m scripts.audit.random_baseline_min_words \
+  --data data/processed/multi_news_validation_canonical.jsonl \
+  --max_words 250 --min_words 200 --seeds 0,1,42,9999
+```
+
+支撐 `src/baselines/random_baseline.py` 把 `apply_min_words` 改為 `False` 的決策
+（PR #11 review "Blocking 1"）。取代舊有的 400-row 量測 —— PR #11 review 發現
+`validation_4576`（`source_capacity_words=244`、`min_words_relaxed=False`）在
+skip-tolerant selector 下對 seed 0 與 42 都失敗,與舊 docstring「四個 seed、400
+篇零失敗」的說法矛盾。
+
+**已重現的輸出**（全 5,621 篇 validation split，2026-08-03）：
+
+| selector | seed 0 | seed 1 | seed 42 | seed 9999 |
+|---|---|---|---|---|
+| 樸素 stop-at-first-miss（結構等同 Lead 的停止規則，只是換成隨機排列） | 2.60% (146) | 2.51% (141) | 2.38% (134) | 2.31% (130) |
+| skip-tolerant（`random_baseline.py` 實際實作的 `_select_random`） | 0.07% (4) | 0.04% (2) | 0.05% (3) | 0.05% (3) |
+
+`validation_4576` 在 skip-tolerant selector 下四個 seed **全部**失敗
+（實際選到 180-191 字，`effective_min_words=200`）—— 這一列在
+`tests/fixtures/multi_news_validation_diagnostic_sample.jsonl` 中被單獨釘住
+（見 `tests/test_baselines_random.py`）。
+
+Pool 與選中句子的字數分布（同一次全量重跑）：
+
+| | 平均字數/句 | 平均選中句數/篇 |
+|---|---|---|
+| Eligible pool（全部候選句） | 21.55 | -- |
+| 選中（seed 0/1/42/9999） | 18.83 / 18.75 / 18.74 / 18.82 | 13.11 / 13.16 / 13.17 / 13.12 |
+
+> skip-tolerant selector **不是零失敗**（舊 docstring 的說法在全量下不成立），
+> 且系統性偏好較短句子（選中平均字數 < pool 平均字數）——見
+> `random_baseline.py`docstring 的 "NAMING HONESTY" 一節。
+
+---
+
 ## 與文件的對應
 
 | 腳本 | 支撐的結論 | 文件位置 |
@@ -130,3 +169,4 @@
 | `selection_diagnostics.py` | 病因：像昂貴版 Lead | `STRATEGY_ASSESSMENT.md` §1.2 |
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |
+| `random_baseline_min_words.py` | Random baseline `apply_min_words=False` 決策 | `src/baselines/random_baseline.py` 模組 docstring |

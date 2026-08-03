@@ -5,6 +5,12 @@ config but different ``--ordering`` produced run directories with no way to
 tell them apart. ``baseline_run.json`` must record ``--baseline``,
 ``--ordering``, ``--first_k``, and (for Random) ``--seed`` at the run
 level -- the same shape of problem, just recurring for a different flag.
+
+Also pins down PR #11 review item ("Minor"): a baseline only accepts flags
+that apply to it (``SEEDED_BASELINES`` in ``src.baselines.cli`` is the single
+source of truth), so ``baseline_run.json`` must not carry a field for a flag
+the baseline in question never accepted -- a Lead run has no ``seed`` key at
+all, a Random run has no ``ordering``/``first_k`` keys at all.
 """
 
 import json
@@ -67,6 +73,7 @@ def test_main_writes_baseline_run_provenance(tmp_path, monkeypatch):
     assert provenance["first_k"] == 2
     assert provenance["split"] == "validation"
     assert provenance["input"] == str(input_path)
+    assert "seed" not in provenance
 
 
 def test_main_provenance_distinguishes_orderings_for_the_same_config(tmp_path, monkeypatch):
@@ -190,6 +197,8 @@ def test_random_baseline_run_records_seed_matching_every_row(tmp_path, monkeypat
     provenance = json.loads((run_dir / "random-run" / "baseline_run.json").read_text(encoding="utf-8"))
     assert provenance["baseline"] == "random"
     assert provenance["seed"] == 42
+    assert "ordering" not in provenance
+    assert "first_k" not in provenance
 
     rows = list(read_jsonl(str(run_dir / "random-run" / "predictions.jsonl")))
     assert len(rows) == 1

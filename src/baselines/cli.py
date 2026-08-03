@@ -16,6 +16,13 @@ used" with "how this particular run was invoked". ``--baseline``,
 fields -- without a dedicated file, two ``document_order``/``round_robin``
 Lead runs against the same config, or two Random runs with different
 ``--seed``, would be indistinguishable from their run directories alone.
+``baseline_run.json`` only records the flags that actually apply to
+``args.baseline`` (keyed off ``SEEDED_BASELINES``, the same single source of
+truth used by ``_validate_baseline_seed_pairing``): a Random run has no
+``ordering``/``first_k`` field, and a Lead run has no ``seed`` field --
+recording a flag a baseline does not accept would misrepresent it as having
+been considered and left at some default, when it was never applicable at
+all.
 
 ``--seed`` is unrelated to ``cfg.get("seed")`` (read via
 ``set_global_seed`` below): the latter is this project's existing global
@@ -193,12 +200,14 @@ def main():
         json.dump(cfg, f, ensure_ascii=False, indent=2)
     baseline_run = {
         "baseline": args.baseline,
-        "ordering": args.ordering,
-        "first_k": args.first_k,
-        "seed": args.seed,
         "split": args.split,
         "input": args.input,
     }
+    if args.baseline in SEEDED_BASELINES:
+        baseline_run["seed"] = args.seed
+    else:
+        baseline_run["ordering"] = args.ordering
+        baseline_run["first_k"] = args.first_k
     with open(os.path.join(out_dir, "baseline_run.json"), "w", encoding="utf-8") as f:
         json.dump(baseline_run, f, ensure_ascii=False, indent=2)
     if dataset_preflight is not None:
