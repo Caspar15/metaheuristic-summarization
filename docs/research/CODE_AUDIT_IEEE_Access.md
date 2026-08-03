@@ -627,6 +627,149 @@ sentence-encoder／Random 也尚未進 master，因此只能把 F-9 從「未開
 
 ---
 
+### 🔴 F-17. `min_words` 下界對著「沒有任何 selector 保證達得到」的容量定義，四處同源
+
+**發現日期**：2026-08-03（第一次 validation pilot；`src/models/extractive/greedy.py:87`）。
+
+**症狀**：以 `configs/phase1_mvp_multinews.yaml` 跑全量 validation，在**第 4,066 篇**中止：
+
+```
+Summarizing: 4066it [09:16]
+  greedy.py:87  evaluator.assert_feasible(selected)
+ValueError: selector returned an infeasible summary: {'min_words': 15.0}
+```
+
+因為 `write_jsonl_atomic` 消費 generator，**整整 9 分 16 秒的計算全部作廢，`predictions.jsonl` 不會產生**。全量 5,621 篇只有 **1 篇（0.02%）** 觸發。
+
+**逐項診斷**（`validation_4066`）：
+
+- 該文件只有 **15 句**，候選池上限是 60 —— **完全沒有發生池子縮減**，池子就是全文。因此**不是 candidate-induced**。
+- `source_capacity_words = 250`、`effective_min_words = 200`、`min_words_relaxed = False` —— 放寬邏輯正確地判定「來源達得到 200 字」，因此**也不是 relaxation bug**。
+- 15 句的長度是 `[13, 12, 3, 4, 22, 4, 15, 35, 40, 2, 140, 9, 18, 6, 2]`（總和 325）。greedy 依效用先吃掉 14 個短句 = **185 字**，只剩 140 字那句，`185 + 140 = 325 > 250` 上限 → `can_add` 為 False → 迴圈以 `if not ranked: break` 結束，停在 185 < 200。
+- **可行解確實存在**：窮舉後落在 `[200, 250]` 的子集有 **428 組以上**（例如 `{22, 40, 140} = 202` 字）。greedy 拿不到，是因為**它沒有回溯**——早期為效用 commit 到短句，之後長句再也塞不進去。
+
+**根因（這一條是重點，四個看似獨立的失敗是同一件事）**：
+
+`resolve_effective_min_words` 的放寬目標是 `maximum_feasible_words`，那是**任意子集的精確 bitset subset-sum 最佳解**。但實際的 selector 沒有一個是最佳裝箱器：
+
+| selector | 為什麼不是最佳 | 實測失敗率 |
+|---|---|---|
+| Lead（`document_order`） | 閱讀順序嚴格前綴，不回頭補洞 | 140/5,621（F-16） |
+| Random（`_select_random`） | 隨機排列 first-fit | 2–4/5,621（PR #11） |
+| **greedy** | **短視效用最大化，無回溯** | **1/5,621（本條）** |
+| Random（樸素 stop 變體） | 同 Lead 的停止規則 | 130–146/5,621（PR #11） |
+
+**下界是對著一個沒有任何 selector 保證達得到的容量定義的。** PR #10 第一版的 Lead、PR #11 的 Random、以及本條的 greedy，是同一個根因的三種表現。GRASP 與 NSGA-II 尚未逐一驗證（NSGA-II 在本次全量 run 中為零失敗，見 F-18）。
+
+**目前狀態**：🔴 **未修**。Lead 與 Random 已各自以 `apply_min_words=False` 迴避（見 F-16 與 `random_baseline.py`），但**主線 selector 尚未處理**——`select_sentences` 仍會因單一文件中止整批 run。
+
+**待決策（研究層級，不應為了讓程式跑完而隨手改）**：
+
+1. **逐篇記錄不可行並繼續**（PR #10 為 Lead 採用的先例）：保留 fail-loud（沒有任何東西被靜默填補），run 拿得回來，並把「N/5,621 篇不可行」當成 finding 報出。
+2. **給 greedy 加修復／回溯步驟**：428 組可行解存在而 greedy 一組都找不到，這是**搜尋品質訊號**，而搜尋品質正是本論文在賣的東西。但這是改方法。
+3. **重新定義下界**：讓 `effective_min_words` 對齊「該 selector 實際達得到的容量」而非理論最佳。一般情況難以計算。
+
+**重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
+
+---
+
+### 🟠 F-18. 第一次 validation pilot：`mean` 節流、長度括弧、與 §7.3 初步結果
+
+**量測日期**：2026-08-03。**全部是 diagnostic，不是 Gate 2 結果**（見末尾適用範圍）。
+
+Lead 的 governed baseline artifact 已保存於 `runs/gate2_lead_document_order_val/`
+（5,621 篇、14.9 秒、`0.433204 / 0.146768 / 0.394039`）。以下系統端量測因 F-17 而**跳過不可行文件後繼續**，故各 run 的文件數略有差異（5,613 / 5,620 / 5,621）；Lead 在三組上分別為 `0.4332 / 0.4333 / 0.4332`，交叉比較安全。
+
+#### (a) `importance_aggregation: mean` 在節流輸出
+
+| config | R-1 | R-2 | R-Lsum | 句/篇 | 字/篇 | 不可行 |
+|---|---|---|---|---|---|---|
+| greedy + `mean` | 0.4230 | 0.1292 | 0.3728 | **6.05** | 227.0 | 1 |
+| greedy + `length_normalized` | **0.4347** | **0.1354** | **0.3960** | **13.47** | 244.0 | 8 |
+
+用 `mean` 時，一旦 `min_words` 滿足，再加入任何低於當前平均的句子都會**降低**目標值，greedy 因此停手 —— 句數只有 Lead 的一半多。改成 `length_normalized`（`factory.py` 允許的另一個值；raw `sum` 因 F-14 被禁）後三項全面上升，**R-Lsum +0.0232**。
+
+> ⚠️ 副作用：不可行文件由 1 篇增為 8 篇（`length_normalized` 偏好高分密度短句，更容易湊不到下界）。
+
+#### (b) 長度括弧：沒有任何配置贏過 Lead
+
+以 `scripts/audit/length_matched_lead.py` 對 `greedy + length_normalized` 產生上下界（句子粒度使精確等長不可能，故必須兩側都報）：
+
+| | R-1 | R-2 | R-Lsum | 字/篇 |
+|---|---|---|---|---|
+| Lead，對齊系統長度（**不足**） | 0.4324 | 0.1460 | 0.3931 | 229.4 |
+| Lead，固定 250 字預算 | 0.4333 | 0.1468 | 0.3941 | 233.6 |
+| **系統（greedy + `length_normalized`）** | **0.4347** | **0.1354** | **0.3960** | **244.0** |
+| Lead，對齊系統長度（**超過**） | **0.4354** | **0.1495** | **0.3965** | 258.8 |
+
+按字數排序，R-1 與 R-Lsum **單調遞增**（0.4324 → 0.4333 → 0.4347 → 0.4354；0.3931 → 0.3941 → 0.3960 → 0.3965），系統的位置剛好對應它的字數。
+
+**結論：系統看似領先的 R-1 (+0.0014) 與 R-Lsum (+0.0019) 完全由多用的 10.4 個字解釋。給 Lead 同等字數，Lead 三項全勝。** R-2 更直接 —— Lead 在三種長度下都是 0.146–0.149，系統 0.1354，**在任何長度下都輸 0.011–0.014**。
+
+#### (c) §7.3 NSGA-II 生存 gate 初步結果
+
+同一 objective（`mean`）、同一候選池、同一預算，僅更換 selector：
+
+| | greedy | NSGA-II | Δ |
+|---|---|---|---|
+| R-1 | 0.4230 | 0.4242 | +0.0012 |
+| R-2 | 0.1292 | 0.1299 | +0.0007 |
+| R-Lsum | 0.3728 | 0.3767 | **+0.0039** |
+| 字/篇 | 227.0 | 226.8 | −0.2 |
+| 不可行文件 | 1 | **0** | −1 |
+| 選句時間 | ~10 分 | **322 分** | **32×** |
+
+三項均正、且字數幾乎相同（故非長度效應），§7.3 **條件 1 名目成立**。NSGA-II 另有一項獨立優點：**零不可行文件**（族群搜尋找得到 greedy 因無回溯而錯過的可行解，見 F-17）。
+
+但 quality-cost 很難講：
+
+| 改動 | ΔR-Lsum | 成本 |
+|---|---|---|
+| `mean` → `length_normalized`（改一行 config） | **+0.0232** | 10 分 |
+| greedy → NSGA-II（5.4 小時搜尋） | **+0.0039** | 322 分 |
+
+**目標函數的選擇比最佳化演算法重要約 6 倍。** 尚未量測的 §7.3 條件 2（等品質下的 coverage/redundancy Pareto 優勢）與條件 3（跨 budget 的穩定 operating points）仍可能成立。
+
+> 附帶驗證：本次 322 分鐘與 `docs/research/` 先前估計的 legacy NSGA-II「平均 5.0 小時」一致，即 §9 ablation 矩陣（8 配置 × 2 資料集 × 5 seeds ≈ 399 小時）的估計**成立**，排程時必須計入。
+
+#### (d) 🔴 用 `mean` 時系統低於 Random baseline
+
+PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.378817`。
+
+| | R-1 | R-2 | R-Lsum |
+|---|---|---|---|
+| Lead | 0.4332 | 0.1468 | 0.3940 |
+| **Random** | 0.4162 | 0.1220 | **0.3788** |
+| 系統 greedy + `mean` | 0.4230 | 0.1292 | **0.3728** ❌ |
+| 系統 NSGA-II + `mean` | 0.4242 | 0.1299 | **0.3767** ❌ |
+| 系統 greedy + `length_normalized` | 0.4347 | 0.1354 | 0.3960 ✅ |
+
+**`mean` 配置下，greedy 與 NSGA-II 的 ROUGE-Lsum 都低於隨機抽樣。** 這正是 Random baseline 存在的理由（「打不贏隨機抽樣的方法，問題在調參之前就出了」），且沒有 PR #11 就看不到這個訊號。改用 `length_normalized` 後三項均超過 Random。
+
+#### (e) 選句與 Lead 的重疊率
+
+`scripts/audit/selection_overlap.py`，全量、以 `sentence_id` 比對（不受排序影響）：
+
+| config | 重疊率（平均） | 中位數 | Jaccard | 與 Lead 完全相同 |
+|---|---|---|---|---|
+| greedy + `mean` | 27.5% | 25.0% | 14.7% | 124（2.2%） |
+| greedy + `length_normalized` | 24.3% | 18.8% | 17.9% | 131（2.3%） |
+| NSGA-II + `mean` | 27.6% | 22.2% | 15.5% | 125（2.2%） |
+
+**候選池漏斗確實打開了** —— 系統不再是「昂貴版的 Lead」。但如 (b) 所示，**不再像 Lead 並未轉化為品質**：診斷正確、修法照做、結果仍不如 Lead。
+
+> ⚠️ 舊 diagnostic 的 **61.7%** 來自不同 split、200 篇抽樣、test-tuned artifact，**方向可比、數值不可相減**。
+
+#### 適用範圍（引用前必讀）
+
+- ⚠️ **全部是 diagnostic，不是 Gate 2 結果**：因 F-17 跳過不可行文件（1 / 8 / 0 篇）。
+- ⚠️ **單一 seed、未做 paired bootstrap** —— 上表所有差距（含 +0.0039 與 −0.0174）**都尚未驗證顯著性**。
+- ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
+- ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。
+- 重現腳本：`scripts/audit/length_matched_lead.py`、`scripts/audit/selection_overlap.py`。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

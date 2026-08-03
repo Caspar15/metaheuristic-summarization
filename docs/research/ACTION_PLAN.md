@@ -168,6 +168,32 @@
       ordering、requested/effective budget、source capacity、selected words 與 `min_words`
       不適用原因；217-test checkpoint 已涵蓋其 golden／CLI provenance。這只完成程式基礎，
       **不等於下方兩個 primary 的正式 Lead run 已完成**
+- [x] **PR #11：Random baseline 已進 master**（235 tests）—— per-row SHA-256 seed 衍生、
+      `--seed` 雙向 fail loud、去詞彙化的診斷 fixture、`scripts/audit/random_baseline_min_words.py`
+- [x] **Multi-News validation 的 Lead governed artifact 已產出** ——
+      `runs/gate2_lead_document_order_val/`，5,621 篇，`0.433204 / 0.146768 / 0.394039`
+- [x] **第一次 validation pilot 已量測（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` F-18
+
+> 🔴 **2026-08-03 pilot 的結論：目前沒有任何配置贏過 Lead。**
+> 最佳配置 `greedy + length_normalized` 的 R-1／R-Lsum 領先**完全由多用 10.4 字解釋**
+> （長度括弧兩側皆已量測）；R-2 在任何長度下都輸 0.011–0.024。
+> `mean` 配置下系統 R-Lsum 甚至**低於 Random baseline**。
+> 這不是 Gate 2 的最終裁決（MVP config、無 graph 軌、單 seed、未做 paired bootstrap），
+> 但**足以說明「契約做完」離「方法有效」還很遠**。
+
+**接下來的優先順序（依成本效益排序，2026-08-03）：**
+
+- [ ] 🔴 **決定 F-17 怎麼修** —— `greedy` 目前會因單一不可行文件中止整批 run，
+      `select_sentences` **跑不完一次完整 validation**。三個選項見 F-17「待決策」。
+      這是研究決策，不得為了讓程式跑完而隨手改。**在此之前無法產生 governed 系統 artifact。**
+- [ ] 🔴 **`objectives.importance_aggregation` 的正式選擇** ——
+      pilot 顯示它的影響是 selector 的約 6 倍（+0.0232 vs +0.0039）。
+      這個參數必須在 validation 上決定並凍結，不能沿用 MVP 的 `mean`。
+- [ ] 🟠 **NSGA-II + `length_normalized`** —— 目前最佳 objective 配最佳 selector，
+      **尚未跑過**。約 5.4 小時。
+- [ ] 🟠 **開啟 graph 軌的配置** —— §5.4 刪除條件尚未被任何實測觸及。
+- [ ] 🟡 **paired bootstrap** —— pilot 的所有差距（含 +0.0039 與 −0.0174）都還沒有顯著性。
+      在此之前不得對任何一項宣稱勝負。
 
 ### 2.0 執行資料集矩陣 v1（2026-07-30 決定）
 

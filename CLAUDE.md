@@ -74,6 +74,14 @@
    論文再從中挑 best config → test-set overfitting。
    **受此選模流程影響的 legacy 數字不可用於新論文。**
 
+3. 🔴 **主線 selector 跑不完一次完整 validation run**（2026-08-03，F-17）
+   `greedy` 在 `validation_4066` 停在 185 字（下界 200），`assert_feasible` 拋錯，
+   因 `write_jsonl_atomic` 消費 generator，**整批 run 作廢、不產生 predictions**。
+   全量只有 1/5,621（0.02%）觸發，但足以讓 Gate 2 拿不到系統數字。
+   根因：`min_words` 下界對著 `maximum_feasible_words`（**任意子集精確最佳解**）定義，
+   而 Lead（前綴）／Random（first-fit）／greedy（無回溯）**沒有一個是最佳裝箱器**。
+   Lead 與 Random 已各自以 `apply_min_words=False` 迴避；**主線未修**。
+
 ### 病因診斷（為什麼輸給 Lead）
 
 系統選句位置中位數 0.143、前 25% 佔 67.6%；legacy greedy reference 是 0.462 / 31.3%。
@@ -106,6 +114,11 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 | CNN/DM 既有 run | 13368 筆 = **validation**，不是官方 test（11490） |
 | pymoo `BitflipMutation()` | `prob=1.0` 是 per-individual；per-gene 為 `1/n_var` |
 | Headroom exploratory diagnostic | Multi-News 0.152 / CNN-DM 0.171 / SciTLDR 0.190；需以正式 protocol 重做 |
+| **Lead governed artifact**（新 pipeline 首個） | `runs/gate2_lead_document_order_val/`，5,621 篇，`0.433204 / 0.146768 / 0.394039` |
+| **第一次 validation pilot**（2026-08-03, F-18, diagnostic） | **沒有任何配置贏過 Lead**。最佳 greedy+`length_normalized` 的 R-1/R-Lsum 領先**完全由多用 10.4 字解釋**（長度括弧 229.4→258.8 字，兩指標單調遞增）；R-2 在任何長度下都輸 0.011–0.014 |
+| **`importance_aggregation` 的影響 > selector** | `mean`→`length_normalized`：R-Lsum **+0.0232**、句數 6.05→13.47（10 分鐘）；greedy→NSGA-II：**+0.0039**（322 分鐘）|
+| **`mean` 配置低於 Random baseline** | Random R-Lsum `0.3788` > greedy `0.3728`、NSGA-II `0.3767` |
+| §7.3 NSGA-II 初步 | 同 objective/候選/預算下三項均勝 greedy（+0.0012/+0.0007/+0.0039）、字數幾乎相同、**零不可行文件**（greedy 有 1）；但 **32× 計算成本**。條件 2/3 未量測 |
 
 ---
 

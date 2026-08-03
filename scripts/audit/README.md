@@ -161,11 +161,53 @@ Pool 與選中句子的字數分布（同一次全量重跑）：
 
 ---
 
+## `length_matched_lead.py` — 長度括弧（F-18b）
+
+比系統多用字數就可能贏 R-1／R-Lsum，這正是稽核批評舊稿的那一點。句子粒度使精確等長不可能，所以**兩側都要報**：
+
+```bash
+python -m scripts.audit.length_matched_lead \
+  --data data/processed/multi_news_validation_canonical.jsonl \
+  --pred <run>/predictions.jsonl \
+  --out_dir <run>/length_bracket
+```
+
+輸出 `lead_undershoot.jsonl`（≤ 系統字數）與 `lead_overshoot.jsonl`（≥ 系統字數），各自以 `src.pipeline.evaluate` 評分。
+
+**已重現的輸出**（`greedy + length_normalized`，5,613 篇，2026-08-03）：
+
+| | R-1 | R-2 | R-Lsum | 字/篇 |
+|---|---|---|---|---|
+| Lead（不足） | 0.4324 | 0.1460 | 0.3931 | 229.4 |
+| Lead（250 字預算） | 0.4333 | 0.1468 | 0.3941 | 233.6 |
+| **系統** | 0.4347 | 0.1354 | 0.3960 | 244.0 |
+| Lead（超過） | **0.4354** | **0.1495** | **0.3965** | 258.8 |
+
+> R-1 與 R-Lsum 隨字數單調遞增，系統位置對應其字數 —— **領先由長度解釋，不是選句品質**。
+
+---
+
+## `selection_overlap.py` — 選句重疊率（F-18e）
+
+```bash
+python -m scripts.audit.selection_overlap \
+  --a <system>/predictions.jsonl \
+  --b runs/gate2_lead_document_order_val/predictions.jsonl
+```
+
+以 `sentence_id` 比對（不受排序影響）。**已重現**（全量，2026-08-03）：greedy+`mean` 27.5%、greedy+`length_normalized` 24.3%、NSGA-II+`mean` 27.6%。
+
+> ⚠️ legacy 的 **61.7%** 來自不同 split、200 篇抽樣、test-tuned artifact，**方向可比、數值不可相減**。
+
+---
+
 ## 與文件的對應
 
 | 腳本 | 支撐的結論 | 文件位置 |
 |---|---|---|
 | `lead_vs_system.py` | F-0 系統未贏 Lead | `CODE_AUDIT_IEEE_Access.md` F-0 |
+| `length_matched_lead.py` | 長度括弧：領先由字數解釋 | `CODE_AUDIT_IEEE_Access.md` F-18(b) |
+| `selection_overlap.py` | 漏斗打開但未轉化為品質 | `CODE_AUDIT_IEEE_Access.md` F-18(e) |
 | `selection_diagnostics.py` | 病因：像昂貴版 Lead | `STRATEGY_ASSESSMENT.md` §1.2 |
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |

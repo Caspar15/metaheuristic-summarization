@@ -8,6 +8,43 @@ All notable changes to the `metaheuristic-summarization` project will be documen
 
 ## [Unreleased] - Phase 1e correctness + Phase 2 baseline foundation
 
+- **First validation pilot measured (2026-08-03, diagnostic).** See
+  `docs/research/CODE_AUDIT_IEEE_Access.md` F-17 and F-18. Headlines:
+
+  > 🔴 **`greedy` cannot complete a full validation run.** One document in
+  > 5,621 (`validation_4066`) leaves it below `min_words`, `assert_feasible`
+  > raises, and because the artifact is written atomically the whole run is
+  > discarded. The root cause is shared with the Lead and Random baselines:
+  > the lower bound is defined against `maximum_feasible_words`, an exact
+  > arbitrary-subset optimum, while no actual selector is an optimal packer.
+  > Lead and Random each opt out via `apply_min_words=False`; the main
+  > selector is **not yet fixed**.
+
+  > 🟠 **No configuration beats Lead.** The best one so far,
+  > `greedy + length_normalized`, appears to win ROUGE-1 (+0.0014) and
+  > ROUGE-Lsum (+0.0019) — but a length bracket (Lead at 229.4 / 233.6 /
+  > 258.8 words against the system's 244.0) shows both metrics rising
+  > monotonically with word count, so the lead is explained entirely by
+  > spending 10.4 more words. ROUGE-2 loses by 0.011–0.014 at every length.
+
+  > 🟡 **The objective matters about 6× more than the optimizer.** Switching
+  > `importance_aggregation` from `mean` to `length_normalized` is worth
+  > +0.0232 ROUGE-Lsum for 10 minutes of compute; switching greedy to
+  > NSGA-II is worth +0.0039 for 322 minutes.
+
+  > 🔴 **Under `mean`, the system scores below the Random baseline on
+  > ROUGE-Lsum** (greedy 0.3728, NSGA-II 0.3767, Random 0.3788).
+
+  All of the above are single-seed, no paired bootstrap, MVP config only (no
+  graph route, `position` weight 0), and skip the documents F-17 makes
+  infeasible. They are **not** Gate 2 results.
+
+- Added `scripts/audit/length_matched_lead.py` and
+  `scripts/audit/selection_overlap.py` so the two measurements above are
+  reproducible rather than asserted.
+- First governed baseline artifact: `runs/gate2_lead_document_order_val/`
+  (Multi-News validation, 5,621 rows, 0.433204 / 0.146768 / 0.394039).
+
 - **PR #10 merged the first production baseline path**: a shared baseline
   contract, governed CLI, and Lead with `document_order`, `round_robin`, and
   diagnostic `fabbri_first_k` orderings. Lead shares the canonical data-policy
