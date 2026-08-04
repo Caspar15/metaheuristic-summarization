@@ -81,18 +81,19 @@ def test_resolve_selection_eligibility_excludes_oversized_sentences():
     ]
 
 
-def test_resolve_selection_eligibility_raises_when_nothing_fits():
+def test_resolve_selection_eligibility_records_when_nothing_fits():
     sentences = ["x " * 30]
     records = [{"sentence_id": "s0"}]
-    with pytest.raises(ValueError, match="no sentence eligible"):
-        resolve_selection_eligibility(
-            sentences,
-            records,
-            max_length=25,
-            length_unit="words",
-            require_nonempty=True,
-            document_id="doc1",
-        )
+    eligibility = resolve_selection_eligibility(
+        sentences,
+        records,
+        max_length=25,
+        length_unit="words",
+        require_nonempty=True,
+        document_id="doc1",
+    )
+    assert eligibility.eligible_indices == []
+    assert eligibility.ineligible_sentences[0]["reason"] == "exceeds_active_output_budget"
 
 
 def _golden_evaluator(**constraint_overrides):

@@ -73,6 +73,43 @@ class TestPipelineGrasp:
         result = summarize_one(sample_doc, base_config)
         assert len(result["selected_indices"]) > 0
 
+    def test_grasp_no_feasible_solution_is_recorded(self, base_config, monkeypatch):
+        doc = {
+            "id": "grasp-min-shortfall",
+            "sentences": [
+                "aa bb",
+                "one two three four five six seven eight nine",
+            ],
+            "highlights": "Reference.",
+        }
+        base_config["optimizer"] = {"method": "grasp"}
+        base_config["grasp"] = {"iters": 5, "rcl_ratio": 0.5}
+        base_config["seed"] = 0
+        base_config["length_control"] = {
+            "unit": "words",
+            "max_words": 10,
+            "min_words": 8,
+        }
+        base_config["redundancy"] = {"lambda": 0.0}
+        base_config["objectives"] = {
+            "importance_aggregation": "sum",
+            "coverage_method": "max",
+            "lambda_importance": 1.0,
+            "lambda_coverage": 0.0,
+            "lambda_redundancy": 0.0,
+        }
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.build_base_scores",
+            lambda *args, **kwargs: [10.0, 1.0],
+        )
+
+        result = summarize_one(doc, base_config)
+
+        assert result["selected_indices"] == [0]
+        assert result["feasible"] is False
+        assert result["infeasible_code"] == "optimizer_no_feasible_solution"
+        assert result["violations"]["min_words"] == 6.0
+
 
 class TestPipelineWithV2Features:
     def test_v2_tf_isf(self, sample_doc, base_config):
@@ -99,6 +136,42 @@ class TestPipelineNsga2:
         ]
         assert selected_solution["selected_indices"] == result["selected_indices"]
         assert selected_solution["feasible"] is True
+
+    def test_nsga2_impossible_candidate_floor_is_recorded(
+        self, base_config, monkeypatch
+    ):
+        pytest.importorskip("pymoo")
+        doc = {
+            "id": "nsga2-candidate-shortfall",
+            "sentences": [
+                "aa bb",
+                "one two three four five six seven eight nine",
+            ],
+            "highlights": "Reference.",
+        }
+        base_config["optimizer"] = {"method": "nsga2", "pop_size": 8, "n_gen": 3}
+        base_config["seed"] = 0
+        base_config["length_control"] = {
+            "unit": "words",
+            "max_words": 10,
+            "min_words": 8,
+        }
+        base_config["candidates"] = {
+            "use": True,
+            "mode": "hard",
+            "sources": ["score"],
+        }
+        base_config["candidate_budget"] = {"route_top_k": 1, "total": 1}
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.build_base_scores",
+            lambda *args, **kwargs: [10.0, 1.0],
+        )
+
+        result = summarize_one(doc, base_config)
+
+        assert result["feasible"] is False
+        assert result["infeasible_code"] == "candidate_capacity_shortfall"
+        assert result["violations"]["min_words"] > 0
     def test_v2_position(self, sample_doc, base_config):
         base_config["features"] = {
             "position": {"version": "v2", "method": "inverse"},
@@ -264,11 +337,33 @@ class TestPipelineEdgeCases:
         result = summarize_one(doc, base_config)
         assert result["selected_indices"] == []
         assert result["summary"] == ""
+        assert result["feasible"] is False
+        assert result["infeasible_code"] == "empty_source"
+        assert result["violations"]["nonempty"] > 0
 
     def test_single_sentence(self, base_config):
         doc = {"id": "single", "sentences": ["Hello world."], "highlights": "Hello."}
         result = summarize_one(doc, base_config)
         assert result["selected_indices"] == [0]
+
+    def test_no_sentence_fits_is_recorded_not_raised(self, base_config):
+        doc = {
+            "id": "all-oversized",
+            "sentences": ["one two three four five six"],
+            "highlights": "Reference.",
+        }
+        base_config["length_control"] = {
+            "unit": "words",
+            "max_words": 5,
+            "min_words": 0,
+        }
+
+        result = summarize_one(doc, base_config)
+
+        assert result["selected_indices"] == []
+        assert result["feasible"] is False
+        assert result["infeasible_code"] == "source_no_eligible_sentence"
+        assert result["violations"]["nonempty"] > 0
 
     def test_canonical_document_is_supported(self, base_config):
         doc = build_document_example(
@@ -376,8 +471,11 @@ class TestPipelineEdgeCases:
                 "novelty": 0.0,
             }
         }
-        with pytest.raises(ValueError, match="candidate pool.*cannot satisfy"):
-            summarize_one(doc, base_config)
+        result = summarize_one(doc, base_config)
+        assert result["feasible"] is False
+        assert result["infeasible_code"] == "candidate_capacity_shortfall"
+        assert result["output_budget"]["candidate_capacity_words"] == 3
+        assert result["output_budget"]["effective_min_words"] == 6
 
     def test_min_words_only_shortfall_is_recorded_not_raised(self, base_config):
         """F-17 option 1: greedy has no backtracking, so it can commit to a
@@ -585,6 +683,7 @@ class TestPipelineEdgeCases:
             {
                 "id": "min-words-shortfall",
                 "feasible": False,
+                "infeasible_code": "selector_min_words_shortfall",
                 "infeasible_reason": "selector could not reach effective_min_words",
                 "violations": {"nonempty": 0.0, "min_words": 6.0,
                                "max_length": -8.0, "max_sentences": 0.0},
@@ -603,6 +702,7 @@ class TestPipelineEdgeCases:
         assert report["infeasible_ids"] == [
             {
                 "id": "min-words-shortfall",
+                "infeasible_code": "selector_min_words_shortfall",
                 "violations": {"nonempty": 0.0, "min_words": 6.0,
                                "max_length": -8.0, "max_sentences": 0.0},
                 "infeasible_reason": "selector could not reach effective_min_words",

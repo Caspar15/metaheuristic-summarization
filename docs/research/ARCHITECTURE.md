@@ -332,7 +332,10 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 - 每句保存 sentence_id、route provenance、final objectives 與選取理由。
 - 保存 data fingerprint、commit、config hash、model revision、hardware、seed、runtime 分解與 peak memory。
 - evaluator 依 task protocol 分開：v1 的 GovReport／Multi-News 使用驗證後的 Lsum protocol；SciTLDR 若日後重新納入才使用官方 files2rouge。
-- 所有 route/selector failure 都是 failed run，不產生看似正常的 predictions。
+- route/model/config/schema failure 是 failed run，不產生看似正常的 predictions；
+  但文件層 lower-bound infeasibility 必須產生 `feasible=false` 的完整 row，
+  保留 attempted selection、reason code 與 violations。primary 計分 all rows，
+  common-feasible intersection 只作 paired sensitivity。
 
 ## 9. 必跑消融矩陣
 

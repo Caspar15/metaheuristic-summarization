@@ -186,11 +186,10 @@ def resolve_selection_eligibility(
         for index in range(len(sentences))
         if index not in eligible_set
     ]
-    if sentences and require_nonempty and not eligible_indices:
-        raise ValueError(
-            f"source document {document_id!r} has no sentence eligible under "
-            f"the active {unit} budget {max_length}"
-        )
+    # An empty eligible set is a document-level feasibility outcome, not a
+    # malformed experiment.  Callers must evaluate the empty subset against
+    # ``require_nonempty`` and record the row as infeasible.  Raising here used
+    # to abort the atomic writer and discard every preceding document.
     return SelectionEligibility(
         eligible_indices=eligible_indices,
         ineligible_sentences=ineligible_sentences,
@@ -257,9 +256,16 @@ class InfeasibleSelectionError(ValueError):
     upper-bound bug can inspect ``.evaluation`` instead of parsing the message.
     """
 
-    def __init__(self, message: str, evaluation: "SelectionEvaluation") -> None:
+    def __init__(
+        self,
+        message: str,
+        evaluation: "SelectionEvaluation",
+        *,
+        reason_code: str = "selector_constraint_violation",
+    ) -> None:
         super().__init__(message)
         self.evaluation = evaluation
+        self.reason_code = reason_code
 
 
 class SelectionObjective:

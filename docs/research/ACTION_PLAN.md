@@ -181,11 +181,17 @@
 > 這不是 Gate 2 的最終裁決（MVP config、無 graph 軌、單 seed、未做 paired bootstrap），
 > 但**足以說明「契約做完」離「方法有效」還很遠**。
 
-**接下來的優先順序（依成本效益排序，2026-08-03）：**
+**接下來的優先順序（依成本效益排序，2026-08-04）：**
 
-- [ ] 🔴 **決定 F-17 怎麼修** —— `greedy` 目前會因單一不可行文件中止整批 run，
-      `select_sentences` **跑不完一次完整 validation**。三個選項見 F-17「待決策」。
-      這是研究決策，不得為了讓程式跑完而隨手改。**在此之前無法產生 governed 系統 artifact。**
+- [x] ✅ **F-17 已選 option 1，契約與 full-split regression 完成** ——
+      lower-bound document infeasibility 保留 selector 實際嘗試結果，逐列寫入
+      `feasible=false`、`infeasible_code`、reason 與 violations；candidate capacity、
+      Greedy、GRASP、NSGA-II、空來源／無 eligible sentence 均不得再中止 atomic batch。
+      upper-bound、schema、config 與 route failure 仍 fail loud。正式主報 all rows，
+      common-feasible intersection 只作 paired sensitivity，不得讓各方法各自刪列比較。
+      2026-08-04 實測 governed Multi-News validation 5,621/5,621 rows 成功落地，
+      5,620 feasible／1 recorded infeasible；primary all-rows R1/R2/Lsum =
+      `0.423018 / 0.129178 / 0.372800`，selection time 2,146.53 秒（本機 CPU）。
 - [ ] 🔴 **`objectives.importance_aggregation` 的正式選擇** ——
       pilot 顯示它的影響是 selector 的約 6 倍（+0.0232 vs +0.0039）。
       這個參數必須在 validation 上決定並凍結，不能沿用 MVP 的 `mean`。

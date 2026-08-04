@@ -6,8 +6,10 @@ import random
 import numpy as np
 
 from src.objectives.evaluator import (
+    InfeasibleSelectionError,
     ObjectiveWeights,
     SelectionConstraints,
+    SelectionEvaluation,
     SelectionObjective,
 )
 
@@ -146,12 +148,26 @@ def grasp_select(
     rng = random.Random(seed)
     best: List[int] | None = None
     best_value = -np.inf
+    best_infeasible: SelectionEvaluation | None = None
+    best_infeasible_key: tuple | None = None
     stale_rounds = 0
     for _ in range(max(1, iters)):
         solution = _construct_greedy_randomized(
             evaluator, len(sentences), rcl_ratio, rng
         )
-        if not evaluator.evaluate(solution).feasible:
+        construction_evaluation = evaluator.evaluate(solution)
+        if not construction_evaluation.feasible:
+            # Preserve the best solution GRASP actually attempted so the
+            # caller can emit an auditable per-document infeasible row.  This
+            # is not repair/backfill: feasible-run selection is unchanged.
+            key = (
+                sum(max(0.0, value) for value in construction_evaluation.violations.values()),
+                -construction_evaluation.scalar_utility,
+                tuple(construction_evaluation.selected_indices),
+            )
+            if best_infeasible_key is None or key < best_infeasible_key:
+                best_infeasible = construction_evaluation
+                best_infeasible_key = key
             continue
         solution = _local_search(solution, evaluator, len(sentences))
         value = evaluator.evaluate(solution).scalar_utility
@@ -164,16 +180,11 @@ def grasp_select(
             if stale_rounds >= max(3, iters // 3):
                 break
     if best is None:
-        # F-17 (CODE_AUDIT_IEEE_Access.md): unlike the assert_feasible raise
-        # below, this raise fires when every randomized-construction attempt
-        # was infeasible, so there is no winning `best` and therefore no
-        # SelectionEvaluation to attach -- select_sentences.py's min_words-only
-        # downgrade (which needs exc.evaluation.selected_indices) cannot apply
-        # here. Scoped out of F-17 because the validation pilot observed zero
-        # GRASP failures (only greedy failed, 1/5,621 docs); if this ever
-        # fires in practice, decide then whether to carry a partial/attempted
-        # solution through an evaluation object the same way greedy's
-        # assert_feasible does, rather than guessing preemptively.
-        raise ValueError("GRASP could not construct a feasible summary")
+        attempted = best_infeasible or evaluator.evaluate([])
+        raise InfeasibleSelectionError(
+            "GRASP could not construct a feasible summary",
+            attempted,
+            reason_code="optimizer_no_feasible_solution",
+        )
     evaluator.assert_feasible(best)
     return sorted(best)

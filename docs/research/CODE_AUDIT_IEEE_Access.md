@@ -627,7 +627,7 @@ sentence-encoder／Random 也尚未進 master，因此只能把 F-9 從「未開
 
 ---
 
-### 🔴 F-17. `min_words` 下界對著「沒有任何 selector 保證達得到」的容量定義，四處同源
+### ✅ F-17. `min_words` 下界對著「沒有任何 selector 保證達得到」的容量定義，已採 option 1
 
 **發現日期**：2026-08-03（第一次 validation pilot；`src/models/extractive/greedy.py:87`）。
 
@@ -661,13 +661,13 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 **下界是對著一個沒有任何 selector 保證達得到的容量定義的。** PR #10 第一版的 Lead、PR #11 的 Random、以及本條的 greedy，是同一個根因的三種表現。GRASP 與 NSGA-II 尚未逐一驗證（NSGA-II 在本次全量 run 中為零失敗，見 F-18）。
 
-**目前狀態**：🔴 **未修**。Lead 與 Random 已各自以 `apply_min_words=False` 迴避（見 F-16 與 `random_baseline.py`），但**主線 selector 尚未處理**——`select_sentences` 仍會因單一文件中止整批 run。
+**修正決策（2026-08-04，PR #12 修正版）**：採用 option 1，**逐篇記錄不可行並繼續**；不替 selector backfill、不放寬 candidate-induced shortfall，也不把 NSGA-II／GRASP 靜默換成 greedy。這保留「某 optimizer 找不到可行解」作為研究結果，而不是把它修掉。
 
-**待決策（研究層級，不應為了讓程式跑完而隨手改）**：
+實作 contract 不只捕捉 `greedy.assert_feasible`：candidate capacity shortfall、Greedy／GRASP／NSGA-II 的 least-violating attempted solution、空來源與無 eligible sentence 都會產生一列完整 artifact，包含 `feasible=false`、machine-readable `infeasible_code`、文字 reason、violations 與 selection evaluation。只有 `max_length`／`max_sentences` 上界違規、schema/config 錯誤與 route/model failure 仍中止整批，因為那些不是合理的文件層結果。
 
-1. **逐篇記錄不可行並繼續**（PR #10 為 Lead 採用的先例）：保留 fail-loud（沒有任何東西被靜默填補），run 拿得回來，並把「N/5,621 篇不可行」當成 finding 報出。
-2. **給 greedy 加修復／回溯步驟**：428 組可行解存在而 greedy 一組都找不到，這是**搜尋品質訊號**，而搜尋品質正是本論文在賣的東西。但這是改方法。
-3. **重新定義下界**：讓 `effective_min_words` 對齊「該 selector 實際達得到的容量」而非理論最佳。一般情況難以計算。
+評估政策同時修正：**正式 primary 預設計分 all rows 並另報 infeasibility rate**；`--feasible-only` 是單 run 診斷，跨方法則只能用共同 feasible ID intersection 作 paired sensitivity。不得讓各方法排除各自失敗列後，把不同 denominator 的 ROUGE 放在同一表直接比較。legacy 缺列 artifact 必須顯式 `--assume-legacy-feasible`，且只保留 diagnostic 身分。
+
+**驗收結果（2026-08-04）**：單元／整合／negative tests 已增至 **261 passed**。完整 governed Multi-News validation 成功產生 **5,621/5,621 rows**，其中 5,620 feasible、1 recorded infeasible；唯一一列仍是 `validation_4066`，保留 185-word attempted summary、`min_words` shortfall 15，而非中止。primary all-rows R1/R2/Lsum 為 `0.423018 / 0.129178 / 0.372800`；5,620-row feasible-only sensitivity 為 `0.423007 / 0.129171 / 0.372792`，證明本案例排除與否只影響約 `1e-5`，但正式 denominator 仍固定用 all rows。selection time 為 2,146.53 秒（本機 CPU；成本數字不可脫離 hardware 環境引用）。
 
 **重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
 

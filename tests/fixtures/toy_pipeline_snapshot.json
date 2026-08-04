@@ -214,6 +214,7 @@
     ],
     "feasible": true,
     "id": "toy_01",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -480,6 +481,7 @@
     ],
     "feasible": true,
     "id": "toy_02",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -641,6 +643,7 @@
     ],
     "feasible": true,
     "id": "toy_03",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -798,6 +801,7 @@
     ],
     "feasible": true,
     "id": "toy_04",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -1088,6 +1092,7 @@
     ],
     "feasible": true,
     "id": "toy_05",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -1349,6 +1354,7 @@
     ],
     "feasible": true,
     "id": "toy_06",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -1615,6 +1621,7 @@
     ],
     "feasible": true,
     "id": "toy_07",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -1808,6 +1815,7 @@
     ],
     "feasible": true,
     "id": "toy_08",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -2075,6 +2083,7 @@
     ],
     "feasible": true,
     "id": "toy_09",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [
@@ -2302,6 +2311,7 @@
     ],
     "feasible": true,
     "id": "toy_10",
+    "infeasible_code": null,
     "infeasible_reason": null,
     "objective_spec": {
       "active": [

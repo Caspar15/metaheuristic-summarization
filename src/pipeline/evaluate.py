@@ -5,15 +5,9 @@ import time
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from src.data.schemas import extract_references
+from src.eval.feasibility import classify_feasibility_row
 from src.eval.protocol import KNOWN_PROTOCOLS, evaluate_corpus
 from src.utils.io import read_jsonl
-
-LEGACY_SCHEMA_MESSAGE = (
-    "prediction row {row_id!r} has no top-level 'feasible' field. This artifact "
-    "predates the F-17 feasibility schema (see CODE_AUDIT_IEEE_Access.md); rerun "
-    "it with the current pipeline, or pass --assume-legacy-feasible to explicitly "
-    "assume every row in this artifact is feasible."
-)
 
 
 def align_evaluation_rows(
@@ -87,25 +81,32 @@ def plan_feasibility_scoring(
 
     total = 0
     feasible_ids: Set[str] = set()
+    feasible_count = 0
     infeasible_count = 0
     legacy_count = 0
+    schema_count = sum("feasible" in row for row in prediction_rows)
+    if 0 < schema_count < len(prediction_rows):
+        raise ValueError(
+            "prediction artifact mixes F-17 rows with legacy rows missing "
+            "'feasible'; rerun or migrate the artifact as one schema version"
+        )
     for row in prediction_rows:
         total += 1
         row_id = row.get("id")
-        if "feasible" not in row:
-            if not assume_legacy_feasible:
-                raise ValueError(LEGACY_SCHEMA_MESSAGE.format(row_id=row_id))
+        feasible, used_legacy_assumption = classify_feasibility_row(
+            row, assume_legacy_feasible=assume_legacy_feasible
+        )
+        if used_legacy_assumption:
             legacy_count += 1
-            feasible_ids.add(row_id)
-            continue
-        if row.get("feasible") is True:
+        if feasible:
+            feasible_count += 1
             feasible_ids.add(row_id)
         else:
             infeasible_count += 1
 
     stats = {
         "total_rows": total,
-        "feasible_rows": len(feasible_ids),
+        "feasible_rows": feasible_count,
         "infeasible_rows": infeasible_count,
         "legacy_schema_assumed_feasible_rows": legacy_count,
         "scoring_mode": "feasible_only" if feasible_only else "all_rows",
@@ -118,7 +119,7 @@ def load_evaluation_inputs(
     prediction_path: str,
     gold_path: str,
     *,
-    feasible_only: bool = True,
+    feasible_only: bool = False,
     assume_legacy_feasible: bool = False,
 ) -> Tuple[List[str], List[List[str]], Dict[str, Any]]:
     raw_predictions = list(read_jsonl(prediction_path))
@@ -127,6 +128,11 @@ def load_evaluation_inputs(
         feasible_only=feasible_only,
         assume_legacy_feasible=assume_legacy_feasible,
     )
+    if feasible_only and not include_ids:
+        raise ValueError(
+            "feasible-only evaluation requested, but the artifact contains zero "
+            "feasible rows; use the primary all-rows view and report feasibility"
+        )
     predictions, references = align_evaluation_rows(
         raw_predictions, read_jsonl(gold_path), include_ids=include_ids
     )
@@ -147,11 +153,12 @@ def main():
     ap.add_argument(
         "--feasible-only",
         action=argparse.BooleanOptionalAction,
-        default=True,
+        default=False,
         help=(
-            "score only rows with feasible=true (default). Use "
-            "--no-feasible-only to score every row regardless of feasibility, "
-            "e.g. for the all-rows diagnostic view."
+            "diagnostic sensitivity: score only rows with feasible=true. "
+            "The default primary view scores every input row so methods share "
+            "the dataset denominator; use paired_run_intersection.py for a "
+            "common-feasible comparison across methods."
         ),
     )
     ap.add_argument(
@@ -160,7 +167,9 @@ def main():
         help=(
             "required to evaluate an artifact predating the F-17 'feasible' "
             "field; assumes every such row is feasible and records that "
-            "assumption in the output metrics rather than silently defaulting to it."
+            "assumption in the output metrics rather than silently defaulting to it. "
+            "This schema opt-in does not waive full gold-ID coverage; use the "
+            "paired intersection audit for explicitly diagnostic partial artifacts."
         ),
     )
     args = ap.parse_args()

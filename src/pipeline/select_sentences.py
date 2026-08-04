@@ -25,6 +25,7 @@ from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.data.schemas import flatten_sentence_records, validate_candidate_record
 from src.data.policy import validate_dataset_policy_request
+from src.eval.feasibility import classify_feasibility_row
 
 from src.pipeline.feature_builder import build_base_scores
 from src.pipeline.candidate_builder import build_candidate_pool
@@ -306,6 +307,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
 
     # 5. Apply candidate mode
     if use_cand and mode == "hard":
+        sub_original_indices = list(cand_idx)
         sub_sentences = [sentences[i] for i in cand_idx]
         sub_scores = attach_selector_salience(
             candidate_records, base_scores, salience_source
@@ -318,17 +320,37 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 raise ValueError(
                     "provenance-aware selector salience requires candidates.mode='hard'"
                 )
-            sub_sentences = sentences
-            sub_scores = base_scores[:]
-            for i in cand_idx:
-                sub_scores[i] = float(sub_scores[i]) * soft_boost
-            sub_sim = sim
-            sub_coverage = sim
+            sub_original_indices = list(selection_eligible_indices)
+            eligible_position = {
+                original: relative
+                for relative, original in enumerate(sub_original_indices)
+            }
+            sub_sentences = [sentences[i] for i in sub_original_indices]
+            sub_scores = [float(base_scores[i]) for i in sub_original_indices]
+            for original in cand_idx:
+                relative = eligible_position[original]
+                sub_scores[relative] = float(sub_scores[relative]) * soft_boost
+            sub_sim = (
+                sim[np.ix_(sub_original_indices, sub_original_indices)]
+                if sim is not None
+                else None
+            )
+            sub_coverage = (
+                sim[:, sub_original_indices] if sim is not None else None
+            )
     else:
-        sub_sentences = sentences
-        sub_scores = base_scores
-        sub_sim = sim
-        sub_coverage = sim
+        # Eligibility is independent of whether candidate routing is enabled.
+        # Individually over-budget sentences must never re-enter through the
+        # no-candidate or empty-soft-candidate path.
+        sub_original_indices = list(selection_eligible_indices)
+        sub_sentences = [sentences[i] for i in sub_original_indices]
+        sub_scores = [float(base_scores[i]) for i in sub_original_indices]
+        sub_sim = (
+            sim[np.ix_(sub_original_indices, sub_original_indices)]
+            if sim is not None
+            else None
+        )
+        sub_coverage = sim[:, sub_original_indices] if sim is not None else None
 
     candidate_capacity_words = maximum_feasible_words(
         sub_sentences,
@@ -336,84 +358,147 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         length_unit=unit,
         max_sentences=max_sents,
     )
-    if use_cand and mode == "hard" and candidate_capacity_words < effective_min_words:
-        raise ValueError(
-            f"candidate pool for document {doc.get('id')!r} cannot satisfy the "
-            f"effective minimum: candidate_capacity_words={candidate_capacity_words}, "
-            f"effective_min_words={effective_min_words}, "
-            f"source_capacity_words={source_capacity_words}"
-        )
+    candidate_capacity_shortfall = (
+        use_cand
+        and mode == "hard"
+        and candidate_capacity_words < effective_min_words
+    )
 
     # 6. Optimizer dispatch. A word budget no longer bypasses the configured
     # selector; it is simply the selector's independent output constraint.
     #
-    # F-17 option 1: a selector (greedy has no backtracking; GRASP/NSGA-II are
-    # not guaranteed either) can end its search below effective_min_words even
-    # though the pool itself can reach it -- that is a property of the search,
-    # not a bug in the objective or the candidate pool. That one axis is
-    # recorded and the run continues with the selector's actual output kept
-    # as-is (no backfill, no re-search). Any other violation (max_length,
-    # max_sentences, nonempty) means an upper bound the selector is supposed
-    # to enforce by construction was broken, which is a real bug and must
-    # still abort the whole run.
+    # F-17 option 1: document-level lower-bound infeasibility is data, not a
+    # batch-level exception.  Keep the optimizer's actual attempted output and
+    # record why it was infeasible; do not backfill or silently re-search.
+    # Upper-bound violations still indicate a selector bug and remain fatal.
     optimizer_diagnostics: Dict = {}
-    downgraded_evaluation = None
+    evaluator_similarity = (
+        np.zeros((0, 0), dtype=float)
+        if not sub_sentences and sub_sim is None
+        else sub_sim
+    )
+    evaluator_coverage = (
+        np.zeros((0, 0), dtype=float)
+        if not sub_sentences and sub_coverage is None
+        else sub_coverage
+    )
+    evaluator = objective_from_spec(
+        sub_sentences,
+        sub_scores,
+        evaluator_similarity,
+        objective_spec,
+        max_length=selector_budget,
+        length_unit=unit,
+        max_sentences=max_sents,
+        min_words=effective_min_words,
+        require_nonempty=require_nonempty,
+        coverage_matrix=evaluator_coverage,
+    )
+    caught_infeasible_error = None
+    infeasible_code = None
     infeasible_reason = None
-    try:
-        picked_sub = dispatch_optimizer(
-            method_opt,
-            sub_sentences,
-            sub_scores,
-            sub_sim,
-            selector_budget,
-            cfg,
-            alpha,
-            unit,
-            max_sents,
-            objective_spec,
-            effective_min_words,
-            require_nonempty,
-            optimizer_diagnostics,
-            sub_coverage,
-        )
-    except InfeasibleSelectionError as exc:
-        positive_violations = {
-            key: value for key, value in exc.evaluation.violations.items() if value > 0
-        }
-        if set(positive_violations) != {"min_words"}:
-            raise
-        picked_sub = exc.evaluation.selected_indices
-        downgraded_evaluation = exc.evaluation
-        infeasible_reason = (
-            "selector could not reach effective_min_words for this document "
-            f"(shortfall={positive_violations['min_words']:.0f} words); "
-            "recorded per F-17 option 1, selection kept as-is"
-        )
-
-    selection_evaluation = None
-    if sub_sentences:
-        if downgraded_evaluation is not None:
-            selection_evaluation = downgraded_evaluation.to_dict()
-        else:
-            evaluator = objective_from_spec(
+    if not sub_sentences:
+        picked_sub = []
+        evaluation = evaluator.evaluate([])
+    else:
+        try:
+            picked_sub = dispatch_optimizer(
+                method_opt,
                 sub_sentences,
                 sub_scores,
                 sub_sim,
+                selector_budget,
+                cfg,
+                alpha,
+                unit,
+                max_sents,
                 objective_spec,
-                max_length=selector_budget,
-                length_unit=unit,
-                max_sentences=max_sents,
-                min_words=effective_min_words,
-                require_nonempty=require_nonempty,
-                coverage_matrix=sub_coverage,
+                effective_min_words,
+                require_nonempty,
+                optimizer_diagnostics,
+                sub_coverage,
             )
-            selection_evaluation = evaluator.assert_feasible(picked_sub).to_dict()
+            evaluation = evaluator.evaluate(picked_sub)
+        except InfeasibleSelectionError as exc:
+            caught_infeasible_error = exc
+            picked_sub = exc.evaluation.selected_indices
+            evaluation = exc.evaluation
+
+    positive_violations = {
+        key: value for key, value in evaluation.violations.items() if value > 0
+    }
+    upper_bound_violations = set(positive_violations) & {
+        "max_length",
+        "max_sentences",
+    }
+    if upper_bound_violations:
+        if caught_infeasible_error is not None:
+            raise caught_infeasible_error
+        raise InfeasibleSelectionError(
+            f"selector returned an infeasible summary: {positive_violations}",
+            evaluation,
+        )
+    unexpected_violations = set(positive_violations) - {"min_words", "nonempty"}
+    if unexpected_violations:
+        raise InfeasibleSelectionError(
+            f"selector returned an infeasible summary: {positive_violations}",
+            evaluation,
+        )
+
+    if positive_violations:
+        if not sub_sentences:
+            if sentences and not selection_eligible_indices:
+                infeasible_code = "source_no_eligible_sentence"
+                infeasible_reason = (
+                    "source has no sentence eligible under the active output "
+                    f"budget ({unit}={selector_budget}); empty selection recorded"
+                )
+            elif use_cand and mode == "hard":
+                infeasible_code = "candidate_pool_empty"
+                infeasible_reason = (
+                    "hard candidate routing produced an empty pool; empty "
+                    "selection recorded"
+                )
+            else:
+                infeasible_code = "empty_source"
+                infeasible_reason = "source contains no selectable sentence"
+        elif candidate_capacity_shortfall:
+            infeasible_code = "candidate_capacity_shortfall"
+            infeasible_reason = (
+                "hard candidate pool cannot reach effective_min_words "
+                f"(candidate_capacity_words={candidate_capacity_words}, "
+                f"effective_min_words={effective_min_words}, "
+                f"source_capacity_words={source_capacity_words}); selector's "
+                "attempted output recorded as-is"
+            )
+        elif (
+            caught_infeasible_error is not None
+            and caught_infeasible_error.reason_code
+            == "optimizer_no_feasible_solution"
+        ):
+            infeasible_code = "optimizer_no_feasible_solution"
+            infeasible_reason = (
+                f"{method_opt} found no feasible solution; its least-violating "
+                "attempted output was recorded as-is"
+            )
+        elif "min_words" in positive_violations:
+            infeasible_code = "selector_min_words_shortfall"
+            infeasible_reason = (
+                "selector could not reach effective_min_words for this document "
+                f"(shortfall={positive_violations['min_words']:.0f} words); "
+                "selection kept as-is"
+            )
+        else:
+            infeasible_code = "selector_nonempty_shortfall"
+            infeasible_reason = (
+                "selector returned an empty summary despite require_nonempty=true; "
+                "selection kept as-is"
+            )
+
+    selection_evaluation = evaluation.to_dict()
 
     # 7. Map back to original indices
-    if use_cand and cand_idx and mode == "hard":
-        selected = sorted(cand_idx[i] for i in picked_sub)
-    else:
-        selected = sorted(picked_sub)
+    selected = sorted(sub_original_indices[i] for i in picked_sub)
 
     selected.sort()
     if selection_evaluation is not None:
@@ -425,10 +510,8 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         for solution in optimizer_diagnostics["pareto_front"]:
             relative = list(solution["selected_indices"])
             solution["candidate_relative_indices"] = relative
-            solution["selected_indices"] = (
-                sorted(cand_idx[index] for index in relative)
-                if use_cand and cand_idx and mode == "hard"
-                else relative
+            solution["selected_indices"] = sorted(
+                sub_original_indices[index] for index in relative
             )
     summary_sentences = [sentences[i] for i in selected]
     summary = "\n".join(summary_sentences)
@@ -483,12 +566,11 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         "objective_spec": objective_spec,
         "selection_evaluation": selection_evaluation,
         "feasible": (
-            None if selection_evaluation is None else selection_evaluation["feasible"]
+            selection_evaluation["feasible"]
         ),
+        "infeasible_code": infeasible_code,
         "infeasible_reason": infeasible_reason,
-        "violations": (
-            None if selection_evaluation is None else selection_evaluation["violations"]
-        ),
+        "violations": selection_evaluation["violations"],
         "optimizer_diagnostics": optimizer_diagnostics or None,
         "output_budget": {
             "unit": unit,
@@ -523,10 +605,14 @@ def build_feasibility_report(predictions_path: str) -> Dict:
     feasible_count = 0
     infeasible_ids = []
     for row in read_jsonl(predictions_path):
-        if row.get("feasible") is False:
+        feasible, _ = classify_feasibility_row(
+            row, assume_legacy_feasible=False
+        )
+        if not feasible:
             infeasible_ids.append(
                 {
                     "id": row.get("id"),
+                    "infeasible_code": row.get("infeasible_code"),
                     "violations": row.get("violations"),
                     "infeasible_reason": row.get("infeasible_reason"),
                     "selected_words": (

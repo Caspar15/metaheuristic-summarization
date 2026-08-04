@@ -1,5 +1,7 @@
 """Golden tests for the audited evaluation semantics."""
 
+import json
+
 import pytest
 
 from src.eval.rouge import rouge_scores, score_single
@@ -9,7 +11,11 @@ from src.eval.protocol import (
     ProtocolUnavailableError,
     evaluate_corpus,
 )
-from src.pipeline.evaluate import align_evaluation_rows, plan_feasibility_scoring
+from src.pipeline.evaluate import (
+    align_evaluation_rows,
+    load_evaluation_inputs,
+    plan_feasibility_scoring,
+)
 
 
 def test_multireference_uses_one_reference_selected_by_rouge1():
@@ -140,3 +146,67 @@ def test_plan_feasibility_scoring_assume_legacy_feasible_records_the_assumption(
     assert include_ids == {"a", "b"}
     assert stats["legacy_schema_assumed_feasible_rows"] == 2
     assert stats["feasible_rows"] == 2
+
+
+@pytest.mark.parametrize("value", [None, "true", 1, 0])
+def test_plan_feasibility_scoring_rejects_non_boolean_schema(value):
+    with pytest.raises(ValueError, match="non-boolean 'feasible'"):
+        plan_feasibility_scoring(
+            [{"id": "a", "feasible": value}],
+            feasible_only=False,
+            assume_legacy_feasible=False,
+        )
+
+
+def test_plan_feasibility_scoring_rejects_mixed_legacy_and_f17_schema():
+    with pytest.raises(ValueError, match="mixes F-17 rows with legacy rows"):
+        plan_feasibility_scoring(
+            [{"id": "a", "feasible": True}, {"id": "b"}],
+            feasible_only=False,
+            assume_legacy_feasible=True,
+        )
+
+
+def test_load_evaluation_inputs_defaults_to_primary_all_rows(tmp_path):
+    pred_path = tmp_path / "predictions.jsonl"
+    gold_path = tmp_path / "gold.jsonl"
+    pred_rows = [
+        {"id": "a", "summary": "prediction a", "feasible": True},
+        {"id": "b", "summary": "prediction b", "feasible": False},
+    ]
+    gold_rows = [
+        {"id": "a", "highlights": "reference a"},
+        {"id": "b", "highlights": "reference b"},
+    ]
+    pred_path.write_text(
+        "".join(json.dumps(row) + "\n" for row in pred_rows), encoding="utf-8"
+    )
+    gold_path.write_text(
+        "".join(json.dumps(row) + "\n" for row in gold_rows), encoding="utf-8"
+    )
+
+    predictions, references, stats = load_evaluation_inputs(
+        str(pred_path), str(gold_path)
+    )
+
+    assert predictions == ["prediction a", "prediction b"]
+    assert references == [["reference a"], ["reference b"]]
+    assert stats["scoring_mode"] == "all_rows"
+
+
+def test_feasible_only_rejects_zero_feasible_rows(tmp_path):
+    pred_path = tmp_path / "predictions.jsonl"
+    gold_path = tmp_path / "gold.jsonl"
+    pred_path.write_text(
+        json.dumps({"id": "a", "summary": "", "feasible": False}) + "\n",
+        encoding="utf-8",
+    )
+    gold_path.write_text(
+        json.dumps({"id": "a", "highlights": "reference"}) + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="zero feasible rows"):
+        load_evaluation_inputs(
+            str(pred_path), str(gold_path), feasible_only=True
+        )
