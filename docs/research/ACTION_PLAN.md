@@ -171,7 +171,7 @@
 - [x] **PR #11：Random baseline 已進 master**（235 tests）—— per-row SHA-256 seed 衍生、
       `--seed` 雙向 fail loud、去詞彙化的診斷 fixture、`scripts/audit/random_baseline_min_words.py`
 - [x] **Multi-News validation 的 Lead governed artifact 已產出** ——
-      `runs/gate2_lead_document_order_val/`，5,621 篇，`0.433204 / 0.146768 / 0.394039`
+      `runs_v2/gate2_lead_document_order_validation/`，5,621 篇，`0.433204 / 0.146768 / 0.394039`
 - [x] **第一次 validation pilot 已量測（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` F-18
 
 > 🔴 **2026-08-03 pilot 的結論：目前沒有任何配置贏過 Lead。**

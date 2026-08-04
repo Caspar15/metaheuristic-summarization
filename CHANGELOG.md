@@ -11,14 +11,13 @@ All notable changes to the `metaheuristic-summarization` project will be documen
 - **First validation pilot measured (2026-08-03, diagnostic).** See
   `docs/research/CODE_AUDIT_IEEE_Access.md` F-17 and F-18. Headlines:
 
-  > 🔴 **`greedy` cannot complete a full validation run.** One document in
-  > 5,621 (`validation_4066`) leaves it below `min_words`, `assert_feasible`
-  > raises, and because the artifact is written atomically the whole run is
+  > 🔴 **`greedy` could not complete a full validation run.** One document in
+  > 5,621 (`validation_4066`) left it below `min_words`, `assert_feasible`
+  > raised, and because the artifact is written atomically the whole run was
   > discarded. The root cause is shared with the Lead and Random baselines:
   > the lower bound is defined against `maximum_feasible_words`, an exact
   > arbitrary-subset optimum, while no actual selector is an optimal packer.
-  > Lead and Random each opt out via `apply_min_words=False`; the main
-  > selector is **not yet fixed**.
+  > **Fixed in PR #12** — see the F-17 entry below.
 
   > 🟠 **No configuration beats Lead.** The best one so far,
   > `greedy + length_normalized`, appears to win ROUGE-1 (+0.0014) and
@@ -36,13 +35,24 @@ All notable changes to the `metaheuristic-summarization` project will be documen
   > ROUGE-Lsum** (greedy 0.3728, NSGA-II 0.3767, Random 0.3788).
 
   All of the above are single-seed, no paired bootstrap, MVP config only (no
-  graph route, `position` weight 0), and skip the documents F-17 makes
-  infeasible. They are **not** Gate 2 results.
+  graph route, `position` weight 0), and were measured before F-17 was fixed,
+  so they skipped the documents it made infeasible. They are **not** Gate 2
+  results, and they have not been re-measured under the post-F-17 pipeline.
+
+- **F-17 fixed (PR #12).** All four document-level infeasibility outcomes —
+  `source_no_eligible_sentence`, `candidate_capacity_shortfall`,
+  `selector_min_words_shortfall`, `optimizer_no_feasible_solution` — are now
+  written as complete prediction rows with a reason code instead of aborting
+  the batch. Upper-bound violations and config/schema/programming errors still
+  fail loud. `evaluate` now scores **all rows by default** so methods share a
+  denominator; `scripts/audit/paired_run_intersection.py` produces the
+  common-feasible intersection for paired sensitivity. Verified on the full
+  governed split: 5,621 rows completed, 5,620 feasible, 1 recorded.
 
 - Added `scripts/audit/length_matched_lead.py` and
   `scripts/audit/selection_overlap.py` so the two measurements above are
   reproducible rather than asserted.
-- First governed baseline artifact: `runs/gate2_lead_document_order_val/`
+- First governed baseline artifact: `runs_v2/gate2_lead_document_order_validation/`
   (Multi-News validation, 5,621 rows, 0.433204 / 0.146768 / 0.394039).
 
 - **PR #10 merged the first production baseline path**: a shared baseline

@@ -5,6 +5,20 @@
   "implementation_commit": "6abd4e950095d2139a5b6004a34b5f780fc077df",
   "python": "3.12.7",
   "environment_note": "Local Windows CPU run; detailed processor metadata was unavailable, so timing must not be generalized across hardware.",
+  "independent_rerun_2026_08_05": {
+    "note": "A second machine reran the same commit. Per-document selected_indices were identical on all 5,621 rows against both this run's config and the pre-fix PR#12 artifact, so selection is confirmed unchanged. The SHA-256 and ROUGE below did NOT match, and because bulk artifacts are not committed the discrepancy cannot be localized further.",
+    "predictions_jsonl_sha256": "609ee5c98fd6ac4f8e48d3a2d9a92108addcf07ec66d2a3b7b7d14b43f1a665e",
+    "primary_all_rows": {"rouge1": 0.423017, "rouge2": 0.129173, "rougeLsum": 0.372800},
+    "feasible_only_sensitivity": {"rouge1": 0.423006, "rouge2": 0.129166, "rougeLsum": 0.372792},
+    "max_abs_metric_delta": 5e-06,
+    "evaluator_dependencies": {
+      "rouge-score": "0.1.2",
+      "nltk": "3.9.1",
+      "numpy": "1.26.4",
+      "absl-py": "2.3.1"
+    },
+    "action_required": "Future evidence files must record evaluator dependency versions alongside 'python'. Artifact SHA-256 values are environment-specific and cannot be used as a cross-machine reproducibility check on their own; per-document selection comparison is the check that actually held."
+  },
   "dataset": {
     "policy_id": "multinews-validation-v1",
     "analysis": "main",

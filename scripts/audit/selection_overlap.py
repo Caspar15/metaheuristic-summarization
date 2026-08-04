@@ -22,7 +22,7 @@ USAGE
 -----
     python -m scripts.audit.selection_overlap \\
       --a <system>/predictions.jsonl \\
-      --b runs/gate2_lead_document_order_val/predictions.jsonl
+      --b runs_v2/gate2_lead_document_order_validation/predictions.jsonl
 """
 from __future__ import annotations
 

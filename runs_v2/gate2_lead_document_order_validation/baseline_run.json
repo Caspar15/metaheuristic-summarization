@@ -1,0 +1,7 @@
+{
+  "baseline": "lead",
+  "split": "validation",
+  "input": "data/processed/multi_news_validation_canonical.jsonl",
+  "ordering": "document_order",
+  "first_k": 3
+}

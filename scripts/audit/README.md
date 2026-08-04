@@ -192,7 +192,7 @@ python -m scripts.audit.length_matched_lead \
 ```bash
 python -m scripts.audit.selection_overlap \
   --a <system>/predictions.jsonl \
-  --b runs/gate2_lead_document_order_val/predictions.jsonl
+  --b runs_v2/gate2_lead_document_order_validation/predictions.jsonl
 ```
 
 以 `sentence_id` 比對（不受排序影響）。**已重現**（全量，2026-08-03）：greedy+`mean` 27.5%、greedy+`length_normalized` 24.3%、NSGA-II+`mean` 27.6%。

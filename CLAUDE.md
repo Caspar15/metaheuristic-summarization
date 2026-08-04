@@ -74,13 +74,16 @@
    論文再從中挑 best config → test-set overfitting。
    **受此選模流程影響的 legacy 數字不可用於新論文。**
 
-3. 🔴 **主線 selector 跑不完一次完整 validation run**（2026-08-03，F-17）
-   `greedy` 在 `validation_4066` 停在 185 字（下界 200），`assert_feasible` 拋錯，
+3. ✅ **F-17 已修**（2026-08-04, PR #12）—— 但根因值得記住
+   曾經：`greedy` 在 `validation_4066` 停在 185 字（下界 200），`assert_feasible` 拋錯，
    因 `write_jsonl_atomic` 消費 generator，**整批 run 作廢、不產生 predictions**。
-   全量只有 1/5,621（0.02%）觸發，但足以讓 Gate 2 拿不到系統數字。
    根因：`min_words` 下界對著 `maximum_feasible_words`（**任意子集精確最佳解**）定義，
    而 Lead（前綴）／Random（first-fit）／greedy（無回溯）**沒有一個是最佳裝箱器**。
-   Lead 與 Random 已各自以 `apply_min_words=False` 迴避；**主線未修**。
+   現在：四種 document-level 不可行都寫成完整 prediction row 並記 reason code
+   （`source_no_eligible_sentence` / `candidate_capacity_shortfall` /
+   `selector_min_words_shortfall` / `optimizer_no_feasible_solution`），
+   **upper-bound 違規與 config/schema/programming error 仍 fail loud 中止整批**。
+   實測 5,621 篇全部完成、5,620 feasible／1 recorded。
 
 ### 病因診斷（為什麼輸給 Lead）
 
@@ -114,7 +117,7 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 | CNN/DM 既有 run | 13368 筆 = **validation**，不是官方 test（11490） |
 | pymoo `BitflipMutation()` | `prob=1.0` 是 per-individual；per-gene 為 `1/n_var` |
 | Headroom exploratory diagnostic | Multi-News 0.152 / CNN-DM 0.171 / SciTLDR 0.190；需以正式 protocol 重做 |
-| **Lead governed artifact**（新 pipeline 首個） | `runs/gate2_lead_document_order_val/`，5,621 篇，`0.433204 / 0.146768 / 0.394039` |
+| **Lead governed artifact**（新 pipeline 首個） | `runs_v2/gate2_lead_document_order_validation/`，5,621 篇，`0.433204 / 0.146768 / 0.394039` |
 | **第一次 validation pilot**（2026-08-03, F-18, diagnostic） | **沒有任何配置贏過 Lead**。最佳 greedy+`length_normalized` 的 R-1/R-Lsum 領先**完全由多用 10.4 字解釋**（長度括弧 229.4→258.8 字，兩指標單調遞增）；R-2 在任何長度下都輸 0.011–0.014 |
 | **`importance_aggregation` 的影響 > selector** | `mean`→`length_normalized`：R-Lsum **+0.0232**、句數 6.05→13.47（10 分鐘）；greedy→NSGA-II：**+0.0039**（322 分鐘）|
 | **`mean` 配置低於 Random baseline** | Random R-Lsum `0.3788` > greedy `0.3728`、NSGA-II `0.3767` |
@@ -141,8 +144,8 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 
 ### 已套用並通過 regression tests
 
-以下 patch 已接線。`pytest` 已加入依賴；2026-08-02 的 master（PR #10 合併後）
-目前 **217 tests 全過**。這是 correctness checkpoint，不是方法效果證據；
+以下 patch 已接線。`pytest` 已加入依賴；2026-08-05 的 master（PR #12 合併後）
+目前 **261 tests 全過**。這是 correctness checkpoint，不是方法效果證據；
 SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress test 時才是必要驗收，不阻塞 GovReport + Multi-News 主線：
 
 | 檔案 | 修正 |

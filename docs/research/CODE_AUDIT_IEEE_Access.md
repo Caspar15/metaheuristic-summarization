@@ -679,7 +679,7 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 **量測日期**：2026-08-03。**全部是 diagnostic，不是 Gate 2 結果**（見末尾適用範圍）。
 
-Lead 的 governed baseline artifact 已保存於 `runs/gate2_lead_document_order_val/`
+Lead 的 governed baseline artifact 已保存於 `runs_v2/gate2_lead_document_order_validation/`
 （5,621 篇、14.9 秒、`0.433204 / 0.146768 / 0.394039`）。以下系統端量測因 F-17 而**跳過不可行文件後繼續**，故各 run 的文件數略有差異（5,613 / 5,620 / 5,621）；Lead 在三組上分別為 `0.4332 / 0.4333 / 0.4332`，交叉比較安全。
 
 #### (a) `importance_aggregation: mean` 在節流輸出
@@ -764,7 +764,10 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 #### 適用範圍（引用前必讀）
 
-- ⚠️ **全部是 diagnostic，不是 Gate 2 結果**：因 F-17 跳過不可行文件（1 / 8 / 0 篇）。
+- ⚠️ **全部是 diagnostic，不是 Gate 2 結果**：量測時 F-17 尚未修，因此以臨時腳本跳過不可行文件（1 / 8 / 0 篇）後繼續。
+  **F-17 修好之後（PR #12）這個限制消失** —— 主 pipeline 現在會把不可行列寫成完整 prediction row 並跑完全部 5,621 篇。
+  本節數字未依新 pipeline 重跑；重跑時 primary view 應採**全列計分**（`evaluate` 的新預設），
+  跨 config 比較另以 `scripts/audit/paired_run_intersection.py` 產生共同 feasible 交集作 sensitivity。
 - ⚠️ **單一 seed、未做 paired bootstrap** —— 上表所有差距（含 +0.0039 與 −0.0174）**都尚未驗證顯著性**。
 - ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
 - ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。

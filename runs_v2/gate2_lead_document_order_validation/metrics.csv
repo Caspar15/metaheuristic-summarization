@@ -1,0 +1,12 @@
+metric,value
+evaluation_protocol,multisentence_lsum
+rouge1,0.433204
+rouge2,0.146768
+rougeLsum,0.394039
+feasibility_scoring_mode,all_rows
+feasibility_total_rows,5621
+feasibility_feasible_rows,5621
+feasibility_infeasible_rows,0
+feasibility_legacy_schema_assumed_feasible_rows,0
+time_select_seconds,8.031431
+time_eval_seconds,97.268576
