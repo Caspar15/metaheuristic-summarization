@@ -439,6 +439,13 @@ def summarize_one_baseline(
         "candidate_pool": _empty_candidate_pool(ineligible_sentences),
         "objective_spec": _baseline_objective_spec(method, doc.get("task_profile")),
         "selection_evaluation": selection_evaluation,
+        "feasible": (
+            None if selection_evaluation is None else selection_evaluation["feasible"]
+        ),
+        "infeasible_reason": None,
+        "violations": (
+            None if selection_evaluation is None else selection_evaluation["violations"]
+        ),
         "optimizer_diagnostics": None,
         "output_budget": {
             "unit": budget.unit,

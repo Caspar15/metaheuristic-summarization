@@ -164,6 +164,16 @@ def grasp_select(
             if stale_rounds >= max(3, iters // 3):
                 break
     if best is None:
+        # F-17 (CODE_AUDIT_IEEE_Access.md): unlike the assert_feasible raise
+        # below, this raise fires when every randomized-construction attempt
+        # was infeasible, so there is no winning `best` and therefore no
+        # SelectionEvaluation to attach -- select_sentences.py's min_words-only
+        # downgrade (which needs exc.evaluation.selected_indices) cannot apply
+        # here. Scoped out of F-17 because the validation pilot observed zero
+        # GRASP failures (only greedy failed, 1/5,621 docs); if this ever
+        # fires in practice, decide then whether to carry a partial/attempted
+        # solution through an evaluation object the same way greedy's
+        # assert_feasible does, rather than guessing preemptively.
         raise ValueError("GRASP could not construct a feasible summary")
     evaluator.assert_feasible(best)
     return sorted(best)

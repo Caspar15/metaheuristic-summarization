@@ -31,6 +31,7 @@ from src.pipeline.candidate_builder import build_candidate_pool
 from src.pipeline.optimizer_dispatch import dispatch_optimizer
 from src.objectives.factory import build_objective_spec, validate_selector_for_task
 from src.objectives.evaluator import (
+    InfeasibleSelectionError,
     maximum_feasible_words,
     objective_from_spec,
     resolve_effective_min_words,
@@ -345,39 +346,68 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
 
     # 6. Optimizer dispatch. A word budget no longer bypasses the configured
     # selector; it is simply the selector's independent output constraint.
+    #
+    # F-17 option 1: a selector (greedy has no backtracking; GRASP/NSGA-II are
+    # not guaranteed either) can end its search below effective_min_words even
+    # though the pool itself can reach it -- that is a property of the search,
+    # not a bug in the objective or the candidate pool. That one axis is
+    # recorded and the run continues with the selector's actual output kept
+    # as-is (no backfill, no re-search). Any other violation (max_length,
+    # max_sentences, nonempty) means an upper bound the selector is supposed
+    # to enforce by construction was broken, which is a real bug and must
+    # still abort the whole run.
     optimizer_diagnostics: Dict = {}
-    picked_sub = dispatch_optimizer(
-        method_opt,
-        sub_sentences,
-        sub_scores,
-        sub_sim,
-        selector_budget,
-        cfg,
-        alpha,
-        unit,
-        max_sents,
-        objective_spec,
-        effective_min_words,
-        require_nonempty,
-        optimizer_diagnostics,
-        sub_coverage,
-    )
-
-    selection_evaluation = None
-    if sub_sentences:
-        evaluator = objective_from_spec(
+    downgraded_evaluation = None
+    infeasible_reason = None
+    try:
+        picked_sub = dispatch_optimizer(
+            method_opt,
             sub_sentences,
             sub_scores,
             sub_sim,
+            selector_budget,
+            cfg,
+            alpha,
+            unit,
+            max_sents,
             objective_spec,
-            max_length=selector_budget,
-            length_unit=unit,
-            max_sentences=max_sents,
-            min_words=effective_min_words,
-            require_nonempty=require_nonempty,
-            coverage_matrix=sub_coverage,
+            effective_min_words,
+            require_nonempty,
+            optimizer_diagnostics,
+            sub_coverage,
         )
-        selection_evaluation = evaluator.assert_feasible(picked_sub).to_dict()
+    except InfeasibleSelectionError as exc:
+        positive_violations = {
+            key: value for key, value in exc.evaluation.violations.items() if value > 0
+        }
+        if set(positive_violations) != {"min_words"}:
+            raise
+        picked_sub = exc.evaluation.selected_indices
+        downgraded_evaluation = exc.evaluation
+        infeasible_reason = (
+            "selector could not reach effective_min_words for this document "
+            f"(shortfall={positive_violations['min_words']:.0f} words); "
+            "recorded per F-17 option 1, selection kept as-is"
+        )
+
+    selection_evaluation = None
+    if sub_sentences:
+        if downgraded_evaluation is not None:
+            selection_evaluation = downgraded_evaluation.to_dict()
+        else:
+            evaluator = objective_from_spec(
+                sub_sentences,
+                sub_scores,
+                sub_sim,
+                objective_spec,
+                max_length=selector_budget,
+                length_unit=unit,
+                max_sentences=max_sents,
+                min_words=effective_min_words,
+                require_nonempty=require_nonempty,
+                coverage_matrix=sub_coverage,
+            )
+            selection_evaluation = evaluator.assert_feasible(picked_sub).to_dict()
 
     # 7. Map back to original indices
     if use_cand and cand_idx and mode == "hard":
@@ -452,6 +482,13 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         },
         "objective_spec": objective_spec,
         "selection_evaluation": selection_evaluation,
+        "feasible": (
+            None if selection_evaluation is None else selection_evaluation["feasible"]
+        ),
+        "infeasible_reason": infeasible_reason,
+        "violations": (
+            None if selection_evaluation is None else selection_evaluation["violations"]
+        ),
         "optimizer_diagnostics": optimizer_diagnostics or None,
         "output_budget": {
             "unit": unit,
@@ -474,6 +511,41 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
 # ------------------------------------------------------------------ #
 #  CLI entry-point                                                     #
 # ------------------------------------------------------------------ #
+
+def build_feasibility_report(predictions_path: str) -> Dict:
+    """Summarize predictions.jsonl's feasible/infeasible rows (F-17).
+
+    A summary index over the artifact, not a second source of truth: every
+    field here is re-read from the rows already written, the same way any
+    downstream consumer would filter them.
+    """
+
+    feasible_count = 0
+    infeasible_ids = []
+    for row in read_jsonl(predictions_path):
+        if row.get("feasible") is False:
+            infeasible_ids.append(
+                {
+                    "id": row.get("id"),
+                    "violations": row.get("violations"),
+                    "infeasible_reason": row.get("infeasible_reason"),
+                    "selected_words": (
+                        row.get("selection_evaluation", {}) or {}
+                    ).get("selected_words"),
+                    "effective_min_words": (
+                        row.get("output_budget", {}) or {}
+                    ).get("effective_min_words"),
+                }
+            )
+        else:
+            feasible_count += 1
+    return {
+        "total_count": feasible_count + len(infeasible_ids),
+        "feasible_count": feasible_count,
+        "infeasible_count": len(infeasible_ids),
+        "infeasible_ids": infeasible_ids,
+    }
+
 
 def summarize_jsonl(
     input_path: str,
@@ -568,6 +640,13 @@ def main():
             encoding="utf-8",
         ) as f:
             json.dump(dataset_preflight, f, ensure_ascii=False, indent=2)
+
+    feasibility_report = build_feasibility_report(preds_path)
+    with open(
+        os.path.join(out_dir, "feasibility_report.json"), "w", encoding="utf-8"
+    ) as f:
+        json.dump(feasibility_report, f, ensure_ascii=False, indent=2)
+
     # A formal run is incomplete if its timing artifact cannot be written.
     with open(os.path.join(out_dir, "time_select_seconds.txt"), "w", encoding="utf-8") as f:
         f.write(f"{t1 - t0:.6f}")

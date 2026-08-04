@@ -212,7 +212,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_01",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -270,7 +272,13 @@
     "summary_sentences": [
       "Alpha signal opens the story.",
       "Delta signal reports separately."
-    ]
+    ],
+    "violations": {
+      "max_length": -31.0,
+      "max_sentences": 0.0,
+      "min_words": -9.0,
+      "nonempty": -1.0
+    }
   },
   {
     "candidate_pool": {
@@ -470,7 +478,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_02",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -528,7 +538,13 @@
     "summary_sentences": [
       "Three continues.",
       "Four concludes."
-    ]
+    ],
+    "violations": {
+      "max_length": -36.0,
+      "max_sentences": 0.0,
+      "min_words": -4.0,
+      "nonempty": -1.0
+    }
   },
   {
     "candidate_pool": {
@@ -623,7 +639,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_03",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -677,7 +695,13 @@
     },
     "summary_sentences": [
       "Only one signal sentence exists."
-    ]
+    ],
+    "violations": {
+      "max_length": -35.0,
+      "max_sentences": 0.0,
+      "min_words": -5.0,
+      "nonempty": 0.0
+    }
   },
   {
     "candidate_pool": {
@@ -772,7 +796,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_04",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -826,7 +852,13 @@
     },
     "summary_sentences": [
       "Short signal tail."
-    ]
+    ],
+    "violations": {
+      "max_length": -37.0,
+      "max_sentences": 0.0,
+      "min_words": -3.0,
+      "nonempty": 0.0
+    }
   },
   {
     "candidate_pool": {
@@ -1054,7 +1086,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_05",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -1108,7 +1142,13 @@
     },
     "summary_sentences": [
       "Short line 10."
-    ]
+    ],
+    "violations": {
+      "max_length": -37.0,
+      "max_sentences": 0.0,
+      "min_words": -3.0,
+      "nonempty": 0.0
+    }
   },
   {
     "candidate_pool": {
@@ -1307,7 +1347,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_06",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -1365,7 +1407,13 @@
     "summary_sentences": [
       "The signal repeats often here.",
       "A different closing remark."
-    ]
+    ],
+    "violations": {
+      "max_length": -31.0,
+      "max_sentences": 0.0,
+      "min_words": -9.0,
+      "nonempty": -1.0
+    }
   },
   {
     "candidate_pool": {
@@ -1565,7 +1613,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_07",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -1619,7 +1669,13 @@
     },
     "summary_sentences": [
       "Rare vocabulary dominates this opening clause."
-    ]
+    ],
+    "violations": {
+      "max_length": -34.0,
+      "max_sentences": 0.0,
+      "min_words": -6.0,
+      "nonempty": 0.0
+    }
   },
   {
     "candidate_pool": {
@@ -1750,7 +1806,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_08",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -1808,7 +1866,13 @@
     "summary_sentences": [
       "First signal.",
       "Second line."
-    ]
+    ],
+    "violations": {
+      "max_length": -36.0,
+      "max_sentences": 0.0,
+      "min_words": -4.0,
+      "nonempty": -1.0
+    }
   },
   {
     "candidate_pool": {
@@ -2009,7 +2073,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_09",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -2063,7 +2129,13 @@
     },
     "summary_sentences": [
       "Doc three signal opening."
-    ]
+    ],
+    "violations": {
+      "max_length": -36.0,
+      "max_sentences": 0.0,
+      "min_words": -4.0,
+      "nonempty": 0.0
+    }
   },
   {
     "candidate_pool": {
@@ -2228,7 +2300,9 @@
         ]
       }
     ],
+    "feasible": true,
     "id": "toy_10",
+    "infeasible_reason": null,
     "objective_spec": {
       "active": [
         "salience",
@@ -2282,6 +2356,12 @@
     },
     "summary_sentences": [
       "Dr. Smith reported a 3.5 percent signal increase."
-    ]
+    ],
+    "violations": {
+      "max_length": -32.0,
+      "max_sentences": 0.0,
+      "min_words": -8.0,
+      "nonempty": 0.0
+    }
   }
 ]

@@ -130,6 +130,13 @@ def test_case1_document_order_normal_length_matched_case():
     assert evaluation["selected_words"] == 20
     assert evaluation["feasible"] is True
 
+    # F-17 schema parity: the top-level feasible/violations mirror
+    # selection_evaluation so evaluate.py can read one flat field regardless
+    # of whether the row came from the system pipeline or a baseline.
+    assert result["feasible"] is True
+    assert result["infeasible_reason"] is None
+    assert result["violations"] == evaluation["violations"]
+
 
 def test_case2_document_order_does_not_apply_min_words_but_still_records_it():
     """3x10-word sentences cannot reach a 200-word floor.

@@ -2,18 +2,33 @@ import argparse
 import csv
 import os
 import time
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from src.data.schemas import extract_references
 from src.eval.protocol import KNOWN_PROTOCOLS, evaluate_corpus
 from src.utils.io import read_jsonl
 
+LEGACY_SCHEMA_MESSAGE = (
+    "prediction row {row_id!r} has no top-level 'feasible' field. This artifact "
+    "predates the F-17 feasibility schema (see CODE_AUDIT_IEEE_Access.md); rerun "
+    "it with the current pipeline, or pass --assume-legacy-feasible to explicitly "
+    "assume every row in this artifact is feasible."
+)
+
 
 def align_evaluation_rows(
     prediction_rows: Iterable[Dict[str, Any]],
     gold_rows: Iterable[Dict[str, Any]],
+    *,
+    include_ids: Optional[Set[str]] = None,
 ) -> Tuple[List[str], List[List[str]]]:
-    """Join predictions to gold references by ID and reject partial alignment."""
+    """Join predictions to gold references by ID and reject partial alignment.
+
+    ``include_ids``, when given, limits which rows are actually scored while
+    every row still counts toward the completeness check below -- a row
+    excluded from scoring (e.g. marked infeasible) is not the same as a row
+    missing from the artifact, and must not trip the ID-mismatch guard.
+    """
 
     gold_by_id: Dict[str, List[str]] = {}
     for line_number, row in enumerate(gold_rows, start=1):
@@ -41,6 +56,8 @@ def align_evaluation_rows(
             raise ValueError(f"prediction row {line_number} must contain a string 'summary'")
         if row_id not in gold_by_id:
             raise ValueError(f"prediction id {row_id!r} is missing from the gold dataset")
+        if include_ids is not None and row_id not in include_ids:
+            continue
         predictions.append(row["summary"])
         references.append(gold_by_id[row_id])
 
@@ -54,10 +71,66 @@ def align_evaluation_rows(
     return predictions, references
 
 
+def plan_feasibility_scoring(
+    prediction_rows: List[Dict[str, Any]],
+    *,
+    feasible_only: bool,
+    assume_legacy_feasible: bool,
+) -> Tuple[Optional[Set[str]], Dict[str, Any]]:
+    """Classify prediction rows by feasibility and decide which IDs to score.
+
+    Returns ``(include_ids, stats)``. ``include_ids`` is ``None`` when every
+    row should be scored regardless of feasibility (``feasible_only=False``);
+    otherwise it is the set of row IDs that are feasible, or assumed feasible
+    under an explicitly acknowledged legacy (pre-F-17) schema.
+    """
+
+    total = 0
+    feasible_ids: Set[str] = set()
+    infeasible_count = 0
+    legacy_count = 0
+    for row in prediction_rows:
+        total += 1
+        row_id = row.get("id")
+        if "feasible" not in row:
+            if not assume_legacy_feasible:
+                raise ValueError(LEGACY_SCHEMA_MESSAGE.format(row_id=row_id))
+            legacy_count += 1
+            feasible_ids.add(row_id)
+            continue
+        if row.get("feasible") is True:
+            feasible_ids.add(row_id)
+        else:
+            infeasible_count += 1
+
+    stats = {
+        "total_rows": total,
+        "feasible_rows": len(feasible_ids),
+        "infeasible_rows": infeasible_count,
+        "legacy_schema_assumed_feasible_rows": legacy_count,
+        "scoring_mode": "feasible_only" if feasible_only else "all_rows",
+    }
+    include_ids = feasible_ids if feasible_only else None
+    return include_ids, stats
+
+
 def load_evaluation_inputs(
-    prediction_path: str, gold_path: str
-) -> Tuple[List[str], List[List[str]]]:
-    return align_evaluation_rows(read_jsonl(prediction_path), read_jsonl(gold_path))
+    prediction_path: str,
+    gold_path: str,
+    *,
+    feasible_only: bool = True,
+    assume_legacy_feasible: bool = False,
+) -> Tuple[List[str], List[List[str]], Dict[str, Any]]:
+    raw_predictions = list(read_jsonl(prediction_path))
+    include_ids, stats = plan_feasibility_scoring(
+        raw_predictions,
+        feasible_only=feasible_only,
+        assume_legacy_feasible=assume_legacy_feasible,
+    )
+    predictions, references = align_evaluation_rows(
+        raw_predictions, read_jsonl(gold_path), include_ids=include_ids
+    )
+    return predictions, references, stats
 
 
 def main():
@@ -71,9 +144,52 @@ def main():
         choices=KNOWN_PROTOCOLS,
         help="explicit dataset evaluation protocol",
     )
+    ap.add_argument(
+        "--feasible-only",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "score only rows with feasible=true (default). Use "
+            "--no-feasible-only to score every row regardless of feasibility, "
+            "e.g. for the all-rows diagnostic view."
+        ),
+    )
+    ap.add_argument(
+        "--assume-legacy-feasible",
+        action="store_true",
+        help=(
+            "required to evaluate an artifact predating the F-17 'feasible' "
+            "field; assumes every such row is feasible and records that "
+            "assumption in the output metrics rather than silently defaulting to it."
+        ),
+    )
     args = ap.parse_args()
 
-    preds, refs = load_evaluation_inputs(args.pred, args.gold)
+    preds, refs, feasibility_stats = load_evaluation_inputs(
+        args.pred,
+        args.gold,
+        feasible_only=args.feasible_only,
+        assume_legacy_feasible=args.assume_legacy_feasible,
+    )
+
+    if feasibility_stats["legacy_schema_assumed_feasible_rows"]:
+        print(
+            "WARNING: assumed "
+            f"{feasibility_stats['legacy_schema_assumed_feasible_rows']} "
+            "legacy-schema row(s) (no top-level 'feasible' field) are feasible "
+            "via --assume-legacy-feasible; this is an unverified assumption and "
+            "is recorded in the output metrics."
+        )
+    print(
+        f"{feasibility_stats['feasible_rows']}/{feasibility_stats['total_rows']} "
+        f"rows feasible ({feasibility_stats['scoring_mode']}); "
+        f"{feasibility_stats['infeasible_rows']} excluded from scoring"
+        if args.feasible_only
+        else
+        f"{feasibility_stats['feasible_rows']}/{feasibility_stats['total_rows']} "
+        f"rows feasible ({feasibility_stats['scoring_mode']}, all rows scored "
+        "regardless of feasibility)"
+    )
 
     t0 = time.perf_counter()
     m = evaluate_corpus(preds, refs, protocol=args.protocol)
@@ -86,6 +202,18 @@ def main():
         # write rouge metrics
         for k, v in m.items():
             w.writerow([k, f"{v:.6f}"])
+        # feasibility scoring metadata -- an assumption about unverifiable
+        # legacy rows must be a recorded fact in the artifact, not a silent default
+        w.writerow(["feasibility_scoring_mode", feasibility_stats["scoring_mode"]])
+        w.writerow(["feasibility_total_rows", feasibility_stats["total_rows"]])
+        w.writerow(["feasibility_feasible_rows", feasibility_stats["feasible_rows"]])
+        w.writerow(["feasibility_infeasible_rows", feasibility_stats["infeasible_rows"]])
+        w.writerow(
+            [
+                "feasibility_legacy_schema_assumed_feasible_rows",
+                feasibility_stats["legacy_schema_assumed_feasible_rows"],
+            ]
+        )
         # append time statistics
         # selection time (if produced by select_sentences in the same directory)
         sel_time_file = os.path.join(os.path.dirname(args.out), "time_select_seconds.txt")

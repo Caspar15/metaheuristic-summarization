@@ -248,6 +248,20 @@ class SelectionEvaluation:
         return asdict(self)
 
 
+class InfeasibleSelectionError(ValueError):
+    """Raised by ``assert_feasible`` when a selector's result violates a bound.
+
+    Carries the already-computed ``SelectionEvaluation`` (including
+    ``selected_indices`` and the full ``violations`` mapping) so a caller that
+    wants to distinguish an unreachable ``min_words`` floor from a genuine
+    upper-bound bug can inspect ``.evaluation`` instead of parsing the message.
+    """
+
+    def __init__(self, message: str, evaluation: "SelectionEvaluation") -> None:
+        super().__init__(message)
+        self.evaluation = evaluation
+
+
 class SelectionObjective:
     """Evaluate subsets with one objective definition and one constraint set."""
 
@@ -442,8 +456,9 @@ class SelectionObjective:
                 for key, value in evaluation.violations.items()
                 if value > 0
             }
-            raise ValueError(
-                f"selector returned an infeasible summary: {positive}"
+            raise InfeasibleSelectionError(
+                f"selector returned an infeasible summary: {positive}",
+                evaluation,
             )
         return evaluation
 

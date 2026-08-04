@@ -266,6 +266,9 @@ def _record(result: dict) -> dict:
         },
         "selection_evaluation": result["selection_evaluation"],
         "output_budget": result["output_budget"],
+        "feasible": result["feasible"],
+        "infeasible_reason": result["infeasible_reason"],
+        "violations": result["violations"],
     }
 
 

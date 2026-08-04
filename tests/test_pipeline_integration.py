@@ -3,7 +3,10 @@
 import pytest
 
 from src.data.schemas import build_document_example
+import json
+
 from src.pipeline.select_sentences import (
+    build_feasibility_report,
     summarize_jsonl,
     summarize_one,
     validate_requested_split,
@@ -376,6 +379,68 @@ class TestPipelineEdgeCases:
         with pytest.raises(ValueError, match="candidate pool.*cannot satisfy"):
             summarize_one(doc, base_config)
 
+    def test_min_words_only_shortfall_is_recorded_not_raised(self, base_config):
+        """F-17 option 1: greedy has no backtracking, so it can commit to a
+        short high-utility sentence, then be unable to add the only other
+        sentence without exceeding max_words -- even though that other
+        sentence alone would have reached min_words. The document must not
+        abort the run; it must come back marked infeasible."""
+        doc = {
+            "id": "min-words-shortfall",
+            "sentences": ["aa bb", "cc dd ee ff gg hh ii jj kk"],
+        }
+        base_config["length_control"] = {
+            "unit": "words",
+            "max_words": 10,
+            "min_words": 8,
+        }
+        result = summarize_one(doc, base_config)
+        assert result["selected_indices"] == [0]
+        assert result["feasible"] is False
+        assert "effective_min_words" in result["infeasible_reason"]
+        assert result["violations"]["min_words"] > 0
+        assert result["violations"]["max_length"] <= 0
+        assert result["violations"]["max_sentences"] <= 0
+        assert result["violations"]["nonempty"] <= 0
+        assert result["selection_evaluation"]["feasible"] is False
+
+    def test_non_min_words_violation_from_optimizer_still_aborts(
+        self, sample_doc, base_config, monkeypatch
+    ):
+        """Only an unreachable min_words floor is downgraded to a recorded
+        row. Any other violation reaching this point means an upper bound the
+        selector is supposed to enforce by construction was broken -- a real
+        bug, not a packing limitation -- and must still abort the whole run."""
+        from src.objectives.evaluator import InfeasibleSelectionError, SelectionEvaluation
+
+        def fake_dispatch(*args, **kwargs):
+            raise InfeasibleSelectionError(
+                "selector returned an infeasible summary: {'max_length': 1.0}",
+                SelectionEvaluation(
+                    selected_indices=[0],
+                    salience=0.0,
+                    facility_coverage=0.0,
+                    redundancy=0.0,
+                    scalar_utility=0.0,
+                    selected_words=5,
+                    selected_sentences=1,
+                    coverage_universe_size=0,
+                    feasible=False,
+                    violations={
+                        "nonempty": 0.0,
+                        "min_words": 0.0,
+                        "max_length": 1.0,
+                        "max_sentences": 0.0,
+                    },
+                ),
+            )
+
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.dispatch_optimizer", fake_dispatch
+        )
+        with pytest.raises(InfeasibleSelectionError):
+            summarize_one(sample_doc, base_config)
+
     def test_over_budget_sentence_does_not_consume_candidate_quota(
         self, base_config
     ):
@@ -467,6 +532,84 @@ class TestPipelineEdgeCases:
         assert count == 1
         assert captured["path"] == "predictions.jsonl"
         assert len(captured["rows"]) == 1
+
+    def test_jsonl_runner_continues_past_an_infeasible_document(
+        self, sample_doc, base_config, monkeypatch
+    ):
+        """F-17: one infeasible document must not throw away the whole run.
+        predictions.jsonl must still get a row for every input document, with
+        the infeasible one marked rather than silently dropped or aborting."""
+        infeasible_doc = {
+            "id": "min-words-shortfall",
+            "sentences": ["aa bb", "cc dd ee ff gg hh ii jj kk"],
+        }
+        docs = [sample_doc, infeasible_doc]
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.read_jsonl", lambda _path: iter(docs)
+        )
+        captured = {}
+
+        def capture_writer(path, rows):
+            captured["path"] = path
+            captured["rows"] = list(rows)
+
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.write_jsonl_atomic", capture_writer
+        )
+        base_config["length_control"] = {
+            "unit": "words",
+            "max_words": 10,
+            "min_words": 8,
+        }
+        count = summarize_jsonl(
+            "input.jsonl", "predictions.jsonl", base_config, "test"
+        )
+        assert count == 2
+        rows_by_id = {row["id"]: row for row in captured["rows"]}
+        assert set(rows_by_id) == {sample_doc["id"], "min-words-shortfall"}
+        assert rows_by_id["min-words-shortfall"]["feasible"] is False
+        assert rows_by_id["min-words-shortfall"]["selected_indices"] == [0]
+
+    def test_build_feasibility_report_summarizes_predictions_jsonl(self, tmp_path):
+        preds_path = tmp_path / "predictions.jsonl"
+        rows = [
+            {
+                "id": "feasible-doc",
+                "feasible": True,
+                "infeasible_reason": None,
+                "violations": {"nonempty": 0.0, "min_words": -2.0,
+                               "max_length": -3.0, "max_sentences": 0.0},
+                "selection_evaluation": {"selected_words": 10},
+                "output_budget": {"effective_min_words": 8},
+            },
+            {
+                "id": "min-words-shortfall",
+                "feasible": False,
+                "infeasible_reason": "selector could not reach effective_min_words",
+                "violations": {"nonempty": 0.0, "min_words": 6.0,
+                               "max_length": -8.0, "max_sentences": 0.0},
+                "selection_evaluation": {"selected_words": 2},
+                "output_budget": {"effective_min_words": 8},
+            },
+        ]
+        with open(preds_path, "w", encoding="utf-8") as f:
+            for row in rows:
+                f.write(json.dumps(row) + "\n")
+
+        report = build_feasibility_report(str(preds_path))
+        assert report["total_count"] == 2
+        assert report["feasible_count"] == 1
+        assert report["infeasible_count"] == 1
+        assert report["infeasible_ids"] == [
+            {
+                "id": "min-words-shortfall",
+                "violations": {"nonempty": 0.0, "min_words": 6.0,
+                               "max_length": -8.0, "max_sentences": 0.0},
+                "infeasible_reason": "selector could not reach effective_min_words",
+                "selected_words": 2,
+                "effective_min_words": 8,
+            }
+        ]
 
     def test_governed_jsonl_runner_requires_dataset_preflight(
         self, sample_doc, base_config, monkeypatch
