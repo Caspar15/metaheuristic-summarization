@@ -669,6 +669,8 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 **驗收結果（2026-08-04）**：單元／整合／negative tests 已增至 **261 passed**。完整 governed Multi-News validation 成功產生 **5,621/5,621 rows**，其中 5,620 feasible、1 recorded infeasible；唯一一列仍是 `validation_4066`，保留 185-word attempted summary、`min_words` shortfall 15，而非中止。primary all-rows R1/R2/Lsum 為 `0.423018 / 0.129178 / 0.372800`；5,620-row feasible-only sensitivity 為 `0.423007 / 0.129171 / 0.372792`，證明本案例排除與否只影響約 `1e-5`，但正式 denominator 仍固定用 all rows。selection time 為 2,146.53 秒（本機 CPU；成本數字不可脫離 hardware 環境引用）。
 
+可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；任何聲稱重現本次結果的檔案都必須先對上該 SHA-256。
+
 **重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
 
 ---
