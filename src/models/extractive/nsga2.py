@@ -8,8 +8,10 @@ from pymoo.optimize import minimize
 from pymoo.core.problem import ElementwiseProblem
 
 from src.objectives.evaluator import (
+    InfeasibleSelectionError,
     ObjectiveWeights,
     SelectionConstraints,
+    SelectionEvaluation,
     SelectionObjective,
 )
 
@@ -37,6 +39,44 @@ class SummarizationProblem(ElementwiseProblem):
 
 
 # --------------- public API ---------------
+
+def _least_violating_evaluation(
+    evaluator: SelectionObjective,
+    vectors,
+) -> SelectionEvaluation:
+    """Return the best population member actually attempted by NSGA-II."""
+
+    # The empty subset is always upper-bound safe and is preferable to
+    # emitting an attempted solution that itself exceeds max_length or
+    # max_sentences.  Population members compete only if those hard upper
+    # bounds are also satisfied.
+    best: SelectionEvaluation | None = evaluator.evaluate([])
+    best_key: tuple | None = None
+    if best is not None:
+        best_key = (
+            sum(max(0.0, value) for value in best.violations.values()),
+            -best.scalar_utility,
+            tuple(best.selected_indices),
+        )
+    if vectors is not None:
+        for vector in np.atleast_2d(vectors):
+            indices = np.where(vector > 0)[0]
+            evaluation = evaluator.evaluate(indices)
+            if (
+                evaluation.violations["max_length"] > 0
+                or evaluation.violations["max_sentences"] > 0
+            ):
+                continue
+            key = (
+                sum(max(0.0, value) for value in evaluation.violations.values()),
+                -evaluation.scalar_utility,
+                tuple(evaluation.selected_indices),
+            )
+            if best_key is None or key < best_key:
+                best = evaluation
+                best_key = key
+    assert best is not None
+    return best
 
 def nsga2_select(
     sentences: List[str],
@@ -102,7 +142,12 @@ def nsga2_select(
         verbose=False,
     )
     if res.X is None:
-        raise ValueError("NSGA-II returned no feasible Pareto solution")
+        population_x = None if res.pop is None else res.pop.get("X")
+        raise InfeasibleSelectionError(
+            "NSGA-II returned no feasible Pareto solution",
+            _least_violating_evaluation(evaluator, population_x),
+            reason_code="optimizer_no_feasible_solution",
+        )
 
     X = np.atleast_2d(res.X)
     best_val = -1e18
@@ -156,7 +201,11 @@ def nsga2_select(
             )
         return sel
     else:
-        raise ValueError("NSGA-II returned no feasible summary")
+        raise InfeasibleSelectionError(
+            "NSGA-II returned no feasible summary",
+            _least_violating_evaluation(evaluator, X),
+            reason_code="optimizer_no_feasible_solution",
+        )
 
 
 if __name__ == "__main__":

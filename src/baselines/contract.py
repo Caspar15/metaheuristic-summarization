@@ -413,14 +413,38 @@ def summarize_one_baseline(
         picked_relative = select_fn(eligible_records, evaluator)
     selected = sorted(eligible_indices[index] for index in picked_relative)
 
-    selection_evaluation = None
-    if eligible_sentences:
-        evaluation = evaluator.assert_feasible(picked_relative)
-        selection_evaluation = evaluation.to_dict()
-        selection_evaluation["candidate_relative_indices"] = list(
-            selection_evaluation["selected_indices"]
-        )
-        selection_evaluation["selected_indices"] = list(selected)
+    evaluation = evaluator.evaluate(picked_relative)
+    positive_violations = {
+        key: value for key, value in evaluation.violations.items() if value > 0
+    }
+    if set(positive_violations) - {"min_words", "nonempty"}:
+        evaluator.assert_feasible(picked_relative)
+    infeasible_code = None
+    infeasible_reason = None
+    if positive_violations:
+        if not eligible_sentences:
+            infeasible_code = "source_no_eligible_sentence"
+            infeasible_reason = (
+                "source has no sentence eligible under the active output budget; "
+                "empty baseline selection recorded"
+            )
+        elif "min_words" in positive_violations:
+            infeasible_code = "baseline_min_words_shortfall"
+            infeasible_reason = (
+                f"{method} could not reach effective_min_words "
+                f"(shortfall={positive_violations['min_words']:.0f} words); "
+                "selection kept as-is"
+            )
+        else:
+            infeasible_code = "baseline_nonempty_shortfall"
+            infeasible_reason = (
+                f"{method} returned an empty summary despite require_nonempty=true"
+            )
+    selection_evaluation = evaluation.to_dict()
+    selection_evaluation["candidate_relative_indices"] = list(
+        selection_evaluation["selected_indices"]
+    )
+    selection_evaluation["selected_indices"] = list(selected)
 
     summary_sentences = [sentences[index] for index in selected]
     summary = "\n".join(summary_sentences)
@@ -439,16 +463,16 @@ def summarize_one_baseline(
         "candidate_pool": _empty_candidate_pool(ineligible_sentences),
         "objective_spec": _baseline_objective_spec(method, doc.get("task_profile")),
         "selection_evaluation": selection_evaluation,
+        "feasible": selection_evaluation["feasible"],
+        "infeasible_code": infeasible_code,
+        "infeasible_reason": infeasible_reason,
+        "violations": selection_evaluation["violations"],
         "optimizer_diagnostics": None,
         "output_budget": {
             "unit": budget.unit,
             "require_nonempty": budget.require_nonempty,
             "length_gate": length_gate,
-            "selected_words": (
-                selection_evaluation["selected_words"]
-                if selection_evaluation is not None
-                else 0
-            ),
+            "selected_words": selection_evaluation["selected_words"],
             **output_budget_length_fields,
         },
         "seed": seed,

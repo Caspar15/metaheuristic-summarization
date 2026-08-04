@@ -201,6 +201,27 @@ python -m scripts.audit.selection_overlap \
 
 ---
 
+## `paired_run_intersection.py` — 共同 feasible denominator（F-17/F-18）
+
+正式 primary evaluation 必須計分 all rows；本工具只產生跨方法共同 feasible
+intersection 的 paired sensitivity，不能取代 primary。它會拒絕 duplicate IDs、
+未知 gold IDs、缺列的 post-F-17 artifact、混合 schema 與未明示的 evaluator protocol，
+並在 `intersection_report.json` 保存 input SHA-256、每個 run 自身的 infeasible
+IDs/reasons、legacy 缺列，以及純粹為了配對而排除的 feasible IDs。
+
+```bash
+python -m scripts.audit.paired_run_intersection \
+  --pred <run-a>/predictions.jsonl <run-b>/predictions.jsonl \
+  --gold data/processed/multi_news_validation_canonical.jsonl \
+  --out_dir runs_v2/audit/<name> \
+  --protocol multisentence_lsum
+```
+
+只有 pre-F-17 artifact 才可另加 `--assume-legacy-feasible`；這是未驗證假設，
+產出的數字維持 diagnostic。
+
+---
+
 ## 與文件的對應
 
 | 腳本 | 支撐的結論 | 文件位置 |
@@ -208,6 +229,7 @@ python -m scripts.audit.selection_overlap \
 | `lead_vs_system.py` | F-0 系統未贏 Lead | `CODE_AUDIT_IEEE_Access.md` F-0 |
 | `length_matched_lead.py` | 長度括弧：領先由字數解釋 | `CODE_AUDIT_IEEE_Access.md` F-18(b) |
 | `selection_overlap.py` | 漏斗打開但未轉化為品質 | `CODE_AUDIT_IEEE_Access.md` F-18(e) |
+| `paired_run_intersection.py` | 共同 feasible denominator 與 per-example scores | `CODE_AUDIT_IEEE_Access.md` F-17/F-18 |
 | `selection_diagnostics.py` | 病因：像昂貴版 Lead | `STRATEGY_ASSESSMENT.md` §1.2 |
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |

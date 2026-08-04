@@ -186,11 +186,10 @@ def resolve_selection_eligibility(
         for index in range(len(sentences))
         if index not in eligible_set
     ]
-    if sentences and require_nonempty and not eligible_indices:
-        raise ValueError(
-            f"source document {document_id!r} has no sentence eligible under "
-            f"the active {unit} budget {max_length}"
-        )
+    # An empty eligible set is a document-level feasibility outcome, not a
+    # malformed experiment.  Callers must evaluate the empty subset against
+    # ``require_nonempty`` and record the row as infeasible.  Raising here used
+    # to abort the atomic writer and discard every preceding document.
     return SelectionEligibility(
         eligible_indices=eligible_indices,
         ineligible_sentences=ineligible_sentences,
@@ -246,6 +245,27 @@ class SelectionEvaluation:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+class InfeasibleSelectionError(ValueError):
+    """Raised by ``assert_feasible`` when a selector's result violates a bound.
+
+    Carries the already-computed ``SelectionEvaluation`` (including
+    ``selected_indices`` and the full ``violations`` mapping) so a caller that
+    wants to distinguish an unreachable ``min_words`` floor from a genuine
+    upper-bound bug can inspect ``.evaluation`` instead of parsing the message.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        evaluation: "SelectionEvaluation",
+        *,
+        reason_code: str = "selector_constraint_violation",
+    ) -> None:
+        super().__init__(message)
+        self.evaluation = evaluation
+        self.reason_code = reason_code
 
 
 class SelectionObjective:
@@ -442,8 +462,9 @@ class SelectionObjective:
                 for key, value in evaluation.violations.items()
                 if value > 0
             }
-            raise ValueError(
-                f"selector returned an infeasible summary: {positive}"
+            raise InfeasibleSelectionError(
+                f"selector returned an infeasible summary: {positive}",
+                evaluation,
             )
         return evaluation
 

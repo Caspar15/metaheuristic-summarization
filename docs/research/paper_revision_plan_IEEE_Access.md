@@ -738,6 +738,15 @@ Secondary：
 - summary length compliance。
 - candidate recall against extractive oracle。
 
+Feasibility／denominator policy（F-17）：
+
+- 每個 input 必須恰有一列 prediction；lower-bound 不可行不得讓 atomic batch 缺列。
+- primary metric 計分 all rows，並另報 feasible count／rate 與 reason-code 分布。
+- `feasible-only` 只作單 run 診斷；跨方法 sensitivity 必須取共同 feasible ID
+  intersection，保存每篇 score 後才作 paired bootstrap。
+- post-F-17 artifact 少任何 gold ID、duplicate ID、混合 schema 或非 boolean
+  `feasible` 都是 artifact failure；pre-F-17 缺列 artifact 只能在顯式未驗證假設下作 diagnostic。
+
 對 extractive system 不需把 factuality 當主要賣點，因句子源自原文；但多文件拼接仍可能造成指涉與時間順序問題，可在 human evaluation 評 coherence。
 
 ### 7.2 統計
@@ -779,6 +788,8 @@ Secondary：
 - 兩個 primary datasets（GovReport、原版 Multi-News）的完整 official test。
 - 分組報 sanity、no-task-training、supervised reference、LLM。
 - 所有本地 baseline 使用同一 evaluator。
+- 所有方法的 primary table 使用完整 official split 的同一 denominator；另列
+  infeasibility rate，不能各自刪除失敗文件後比較 ROUGE。
 - Multi-News main 是 primary 結果；frozen clean sensitivity 只在共同 rows 報 paired 差異。
 - CNN/DailyMail 只有在 Gate 3 後預先納入才追加 frozen official-test sanity；SciTLDR-AIC v1 不跑。
 

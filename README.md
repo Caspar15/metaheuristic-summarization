@@ -188,6 +188,12 @@ manifest 的 SHA-256，並將通過的身份寫入 `dataset_preflight.json`。
 python -m src.pipeline.evaluate --pred runs/<run>/predictions.jsonl --gold data/processed/<dataset>_<split>.jsonl --out runs/<run>/metrics.csv --protocol multisentence_lsum
 ```
 
+F-17 後 primary evaluation 預設計分**全部輸入列**，並在 `metrics.csv` 另報
+feasible／infeasible 數；不能讓不同方法各自排除失敗列後直接比較。
+`--feasible-only` 僅是單一 run 的診斷。跨方法 common-feasible sensitivity
+必須使用 `scripts/audit/paired_run_intersection.py`，並明確指定 protocol；legacy
+缺列 artifact 只能在 `--assume-legacy-feasible` 下作 diagnostic，不能升格正式結果。
+
 Greedy oracle reference（**不是** exact upper bound）：
 
 ```bash

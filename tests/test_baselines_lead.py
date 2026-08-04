@@ -62,6 +62,18 @@ def _doc_with_oversized_leading_sentence():
     )
 
 
+def _doc_with_only_oversized_sentences():
+    return build_document_example(
+        example_id="lead_all_oversized",
+        split="validation",
+        documents=[[_words("x", 30)]],
+        references=["a reference"],
+        input_mode="single_document",
+        output_mode="multi_sentence",
+        dataset_name="toy",
+    )
+
+
 def _doc_three_documents_two_sentences_each():
     eight_words = _words("s", 8)
     return build_document_example(
@@ -129,6 +141,13 @@ def test_case1_document_order_normal_length_matched_case():
     evaluation = result["selection_evaluation"]
     assert evaluation["selected_words"] == 20
     assert evaluation["feasible"] is True
+
+    # F-17 schema parity: the top-level feasible/violations mirror
+    # selection_evaluation so evaluate.py can read one flat field regardless
+    # of whether the row came from the system pipeline or a baseline.
+    assert result["feasible"] is True
+    assert result["infeasible_reason"] is None
+    assert result["violations"] == evaluation["violations"]
 
 
 def test_case2_document_order_does_not_apply_min_words_but_still_records_it():
@@ -269,6 +288,25 @@ def test_case3_oversized_leading_sentence_is_excluded_not_truncated():
     assert ineligible[0]["original_index"] == 0
     assert ineligible[0]["word_count"] == 30
     assert ineligible[0]["reason"] == "exceeds_active_output_budget"
+
+
+def test_all_oversized_baseline_source_is_recorded_not_raised():
+    doc = _doc_with_only_oversized_sentences()
+    cfg = {
+        "length_control": {
+            "unit": "words",
+            "max_words": 25,
+            "min_words": 0,
+            "require_nonempty": True,
+        }
+    }
+
+    result = summarize_one_lead(doc, cfg, ordering="document_order")
+
+    assert result["selected_indices"] == []
+    assert result["feasible"] is False
+    assert result["infeasible_code"] == "source_no_eligible_sentence"
+    assert result["violations"]["nonempty"] > 0
 
 
 def test_case4_round_robin_differs_from_document_order_under_a_sentence_cap():

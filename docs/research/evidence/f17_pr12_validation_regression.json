@@ -1,0 +1,63 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-04",
+  "status": "diagnostic_validation_regression",
+  "implementation_commit": "6abd4e950095d2139a5b6004a34b5f780fc077df",
+  "python": "3.12.7",
+  "environment_note": "Local Windows CPU run; detailed processor metadata was unavailable, so timing must not be generalized across hardware.",
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "analysis": "main",
+    "role": "primary_validation",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615"
+  },
+  "artifacts": {
+    "predictions_jsonl_sha256": "669f46c5859aee318d4ec2527c17296d12b30b80a2ea5c470195752a61e20bb8",
+    "config_used_json_sha256": "973844b2d5bace665091c792712efd600c0f9ef392e23f7917544b23a5eb943a",
+    "dataset_preflight_json_sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7",
+    "feasibility_report_json_sha256": "f7b0fba67e369f2eb2083db43e99c895275c3277c62996baf55f5b4cc351221a",
+    "metrics_all_rows_csv_sha256": "a878d7fc9a6566c9468eb4f14dedc6636b7f9661245a9655de174be35fcf51d0",
+    "metrics_feasible_only_csv_sha256": "10975d86df60045d51d74f6b4ed402386dba4a5af0bbad6167fa1ed1e37f3326",
+    "bulk_artifacts_committed": false
+  },
+  "feasibility": {
+    "total_rows": 5621,
+    "feasible_rows": 5620,
+    "infeasible_rows": 1,
+    "infeasible": [
+      {
+        "id": "validation_4066",
+        "infeasible_code": "selector_min_words_shortfall",
+        "selected_words": 185,
+        "effective_min_words": 200,
+        "min_words_shortfall": 15
+      }
+    ]
+  },
+  "primary_all_rows": {
+    "evaluation_protocol": "multisentence_lsum",
+    "scored_rows": 5621,
+    "rouge1": 0.423018,
+    "rouge2": 0.129178,
+    "rougeLsum": 0.372800,
+    "evaluation_seconds": 113.145902
+  },
+  "feasible_only_sensitivity": {
+    "evaluation_protocol": "multisentence_lsum",
+    "scored_rows": 5620,
+    "rouge1": 0.423007,
+    "rouge2": 0.129171,
+    "rougeLsum": 0.372792,
+    "evaluation_seconds": 105.357855
+  },
+  "selection_seconds": 2146.532667,
+  "tests": {
+    "passed": 261,
+    "compileall": "passed"
+  },
+  "interpretation": "F-17 option 1 completed the governed split without dropping rows. The ROUGE difference between all-rows primary and feasible-only sensitivity is approximately 1e-5; this does not make the F-18 pilot a Gate 2 result."
+}

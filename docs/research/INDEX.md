@@ -22,13 +22,14 @@
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、canonical schema 與 frozen-policy preflight 已完成；published-protocol parity、GovReport 資料層、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **235 tests 全過**（PR #11 合併後）；CI 已接 GitHub Actions |
+| 測試 | ✅ **261 tests 全過**（PR #12 修正版 worktree）；CI 已接 GitHub Actions，遠端數字待 branch push 後更新 |
 | **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、**Lead 與 Random** 已進 master；Multi-News validation 的 Lead governed artifact 已產出（`runs/gate2_lead_document_order_val/`）。TextRank／LexRank／PacSum／sentence-encoder 未做，GovReport 未做，**Gate 2 未過** |
 | 新 pipeline 的實測結果 | 🟡 **第一次 validation pilot 已完成（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` **F-18**。**沒有任何配置贏過 Lead**；`mean` 配置下甚至低於 Random baseline |
-| 🔴 **主線 selector 阻塞** | `greedy` 因單一不可行文件中止整批 run（**F-17**），`select_sentences` 目前**跑不完一次完整 validation**；Lead／Random 已各自迴避，主線未修 |
+| ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。261 tests 與 5,621-row governed regression 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | 🟡 Multi-News validation main/clean policy、fingerprints 與 manifests 已凍結；GovReport 與其餘 splits 尚未完成 |
 
-> ⚠️ **「契約完成」不等於「方法有效」。** 目前沒有任何一個新配置被評估過。
+> ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
+> validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。
 > 每個 route 的刪除條件（`ARCHITECTURE.md` §5.3／§5.4／§7.3）都仍然有效。
 >
 > 各項稽核發現的 legacy／新 pipeline 現況對照見

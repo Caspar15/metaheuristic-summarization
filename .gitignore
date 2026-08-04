@@ -109,3 +109,7 @@ nltk_data/
 # ---------------------------------------------------------------------------
 node_modules/
 frontend/dist/
+
+# runs_v2: exclude bulk artifacts, keep the small evidence files
+runs_v2/**/predictions.jsonl
+runs_v2/**/per_example.jsonl

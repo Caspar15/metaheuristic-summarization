@@ -6,6 +6,7 @@ import pytest
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
 from src.objectives.evaluator import (
+    InfeasibleSelectionError,
     ObjectiveWeights,
     SelectionConstraints,
     SelectionObjective,
@@ -80,18 +81,19 @@ def test_resolve_selection_eligibility_excludes_oversized_sentences():
     ]
 
 
-def test_resolve_selection_eligibility_raises_when_nothing_fits():
+def test_resolve_selection_eligibility_records_when_nothing_fits():
     sentences = ["x " * 30]
     records = [{"sentence_id": "s0"}]
-    with pytest.raises(ValueError, match="no sentence eligible"):
-        resolve_selection_eligibility(
-            sentences,
-            records,
-            max_length=25,
-            length_unit="words",
-            require_nonempty=True,
-            document_id="doc1",
-        )
+    eligibility = resolve_selection_eligibility(
+        sentences,
+        records,
+        max_length=25,
+        length_unit="words",
+        require_nonempty=True,
+        document_id="doc1",
+    )
+    assert eligibility.eligible_indices == []
+    assert eligibility.ineligible_sentences[0]["reason"] == "exceeds_active_output_budget"
 
 
 def _golden_evaluator(**constraint_overrides):
@@ -168,6 +170,19 @@ def test_empty_and_too_short_subsets_are_explicitly_infeasible():
     assert empty.violations["min_words"] > 0
     assert not short.feasible
     assert short.violations["min_words"] > 0
+
+
+def test_assert_feasible_raises_infeasible_selection_error_carrying_evaluation():
+    """F-17: the exception must carry the already-computed evaluation so a
+    caller (select_sentences.summarize_one) can recover the selector's actual
+    selected_indices and violations without re-running the search."""
+    evaluator = _golden_evaluator()
+    with pytest.raises(InfeasibleSelectionError) as excinfo:
+        evaluator.assert_feasible([1])
+    assert excinfo.value.evaluation.selected_indices == [1]
+    assert excinfo.value.evaluation.feasible is False
+    assert excinfo.value.evaluation.violations["min_words"] > 0
+    assert isinstance(excinfo.value, ValueError)
 
 
 def test_greedy_satisfies_lower_and_upper_bounds():
