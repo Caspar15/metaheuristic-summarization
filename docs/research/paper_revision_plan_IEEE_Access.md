@@ -68,9 +68,10 @@
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **Baseline Gate 2 尚未通過** —— PR #10 已加入 shared baseline contract、CLI 與 Lead，
-   但 GovReport + Multi-News 的正式 Lead run 尚未完成，TextRank／LexRank／PacSum／
-   sentence-encoder／Random 仍未進 master。程式基礎完成不能替代兩個 primary 的實測，見 §9 Go/No-Go
+1. 🔴 **Baseline Gate 2 尚未通過** —— Lead、Random、TextRank／LexRank 程式已進
+   master，但 centrality offline tokenizer hotfix 與正式重跑尚未完成；PacSum、
+   SBERT+MMR、GovReport 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎完成不能
+   替代兩個 primary 的實測，見 §9 Go/No-Go
 2. 🔴 **第二個 primary benchmark GovReport 尚未建立**；Multi-News 也只有 validation 完成，train/test 尚未生成
 3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
 4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張

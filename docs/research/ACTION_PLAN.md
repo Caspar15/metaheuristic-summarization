@@ -170,6 +170,11 @@
       **不等於下方兩個 primary 的正式 Lead run 已完成**
 - [x] **PR #11：Random baseline 已進 master**（235 tests）—— per-row SHA-256 seed 衍生、
       `--seed` 雙向 fail loud、去詞彙化的診斷 fixture、`scripts/audit/random_baseline_min_words.py`
+- [~] **PR #14：TextRank／LexRank 程式已進 master，但 Gate 2 尚未完成** —— pinned
+      `sumy==0.12.0`、shared baseline contract 與 historical diagnostic 已加入；合併 head
+      在乾淨 Linux 因隱性 `punkt_tab` 依賴失敗（15 tests）。offline tokenizer hotfix 已在
+      Windows 通過 289 tests，仍待 Linux CI 與 hotfix 後正式 full-split rerun；舊 ROUGE
+      不得升格為正式結果
 - [x] **Multi-News validation 的 Lead governed artifact 已產出** ——
       `runs_v2/gate2_lead_document_order_validation/`，5,621 篇，`0.433204 / 0.146768 / 0.394039`
 - [x] **第一次 validation pilot 已量測（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` F-18
@@ -354,7 +359,7 @@
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
 | 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 217 tests、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
-| 2 Baseline | `[~]` | | PR #10 已完成 shared contract + Lead 程式；兩個 primary 的正式 Lead run、其餘 baseline 與 Gate 2 尚未完成 |
+| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank 程式已接線；offline tokenizer hotfix 待 Linux CI，TextRank／LexRank 正式重跑、PacSum、SBERT+MMR、GovReport 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[ ]` | | 🔴 中途檢查點在這 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |

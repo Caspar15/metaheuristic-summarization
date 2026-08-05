@@ -31,12 +31,14 @@ constructs ``sumy.models.dom.Sentence`` objects directly from canonical
 sentence strings (``Sentence.__init__`` takes a raw string and never
 splits it) and wraps them in a single ``Paragraph``/``ObjectDocumentModel``.
 A word-level tokenizer is still required (TF-IDF/word-overlap scoring needs
-words). ``_WordOnlySumyTokenizer`` deliberately reuses sumy's own
-``Tokenizer.to_words`` and ``DefaultWordTokenizer`` implementation while
-disabling ``to_sentences``. This preserves sumy's English word boundaries
-exactly without loading an NLTK Punkt sentence model that this code path
-never calls. The parity test in ``tests/test_baselines_centrality.py``
-binds this adapter to the pinned sumy implementation.
+words). ``_WordOnlySumyTokenizer`` keeps sumy's ``Tokenizer.to_words``
+filtering contract while calling NLTK's Treebank word tokenizer with
+``preserve_line=True``. The input is already one frozen canonical sentence,
+so asking ``nltk.word_tokenize`` to sentence-split it again is both redundant
+and incorrect; it also creates an otherwise unnecessary ``punkt_tab`` data
+dependency. The parity and no-Punkt tests in
+``tests/test_baselines_centrality.py`` bind this adapter to the pinned
+sumy/NLTK implementation.
 
 SCORING IS OVER THE FULL DOCUMENT, SELECTION IS RESTRICTED TO ELIGIBLE
 SENTENCES AFTERWARD
@@ -97,7 +99,9 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Any, Dict, Mapping, Optional
 
+import nltk
 import numpy as np
+from sumy._compat import to_unicode
 from sumy.models.dom import ObjectDocumentModel, Paragraph, Sentence
 from sumy.nlp.stemmers import Stemmer
 from sumy.nlp.tokenizers import Tokenizer
@@ -158,22 +162,25 @@ class _LexRankWithRatings(LexRankSummarizer):
 
 
 class _WordOnlySumyTokenizer(Tokenizer):
-    """Sumy's exact English word tokenizer without a sentence-model load.
+    """Sumy-compatible word tokenization for one canonical sentence.
 
-    ``Tokenizer.__init__`` eagerly loads both a Punkt sentence tokenizer and
-    the code-only ``DefaultWordTokenizer``. This module constructs
-    ``sumy.models.dom.Sentence`` objects from already-frozen canonical
-    boundaries, so only ``Sentence.words -> tokenizer.to_words`` is ever
-    needed. Initialising the two fields used by inherited ``to_words`` keeps
-    that implementation byte-for-byte upstream while avoiding an unused,
-    separately licensed NLTK data package. ``to_sentences`` fails loud so a
-    future refactor cannot silently reintroduce sumy sentence splitting.
+    ``Tokenizer.__init__`` eagerly loads a Punkt sentence tokenizer, while
+    sumy's ``DefaultWordTokenizer`` later calls ``nltk.word_tokenize`` with
+    its default ``preserve_line=False`` and therefore loads Punkt a second
+    time. Canonical inputs are already individual sentences, so this adapter
+    uses the same NLTK Treebank word-tokenization path with
+    ``preserve_line=True`` and retains sumy's inherited ``_is_word`` filter.
+    No sentence model or downloaded NLTK data is needed. ``to_sentences``
+    fails loud so a future refactor cannot silently reintroduce splitting.
     """
 
     def __init__(self) -> None:
         self._language = "english"
         self._sentence_tokenizer = None
-        self._word_tokenizer = self._get_word_tokenizer("english")
+
+    def to_words(self, sentence):
+        words = nltk.word_tokenize(to_unicode(sentence), preserve_line=True)
+        return tuple(filter(self._is_word, words))
 
     def to_sentences(self, paragraph):
         raise RuntimeError(
@@ -184,7 +191,7 @@ class _WordOnlySumyTokenizer(Tokenizer):
 
 @lru_cache(maxsize=1)
 def _get_tokenizer() -> Tokenizer:
-    """Return the cached word-only adapter bound to sumy's implementation."""
+    """Return the cached code-only tokenizer for canonical sentences."""
 
     return _WordOnlySumyTokenizer()
 

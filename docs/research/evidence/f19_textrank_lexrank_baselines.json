@@ -6,7 +6,7 @@
   "implementation_commit": "b9b7fb87d36760d27838f15eb4e47d667a2d7504",
   "implementation_scope": "The recorded ROUGE artifacts were produced at the commit above, before PR #14's final word-only tokenizer and artifact-contract cleanup. They remain historical diagnostic evidence, not a final-implementation replication.",
   "final_implementation_verification": {
-    "word_tokenization": "Unit tests prove the final _WordOnlySumyTokenizer.to_words output matches pinned sumy==0.12.0 on regression cases without loading Punkt data.",
+    "word_tokenization": "Superseded: clean Linux CI showed the PR #14 adapter still loaded punkt_tab. The offline preserve_line=True hotfix intentionally differs from the old sumy/Punkt token stream on 1,550 of 456,942 canonical sentences; see f19_word_tokenizer_parity.json. Historical metrics must be rerun.",
     "full_split_predictions_preserved": false,
     "selected_index_comparison_preserved": false,
     "cross_machine_byte_identity_claim_allowed": false,

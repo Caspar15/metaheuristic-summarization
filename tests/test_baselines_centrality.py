@@ -3,8 +3,8 @@
 import json
 import sys
 
+import nltk
 import pytest
-from sumy.nlp.tokenizers import Tokenizer
 
 from src.baselines import cli as baseline_cli
 from src.baselines.centrality import (
@@ -17,20 +17,13 @@ from src.data.schemas import build_document_example
 from src.utils.io import write_jsonl_atomic
 
 
-def test_word_only_tokenizer_matches_sumy_english_to_words_without_punkt(monkeypatch):
-    """The adapter must preserve sumy's word scoring while never splitting.
+def test_word_only_tokenizer_uses_canonical_sentence_without_punkt(monkeypatch):
+    """Word scoring must work when every sentence-tokenizer call is forbidden."""
 
-    A normal Tokenizer("english") eagerly loads Punkt even though to_words()
-    never uses it. Replacing only that constructor hook gives us the exact
-    upstream word-tokenization reference without requiring any NLTK data.
-    """
+    def fail_if_sentence_tokenized(*args, **kwargs):
+        raise AssertionError("canonical sentences must not be sentence-tokenized")
 
-    monkeypatch.setattr(
-        Tokenizer,
-        "_get_sentence_tokenizer",
-        lambda self, language: None,
-    )
-    reference = Tokenizer("english")
+    monkeypatch.setattr(nltk.tokenize, "sent_tokenize", fail_if_sentence_tokenized)
     adapter = _get_tokenizer()
     samples = [
         "Dr. Smith's well-known result rose 3.5%.",
@@ -38,7 +31,17 @@ def test_word_only_tokenizer_matches_sumy_english_to_words_without_punkt(monkeyp
         "Unicode café naïve coöperate — punctuation!",
     ]
     assert [adapter.to_words(text) for text in samples] == [
-        reference.to_words(text) for text in samples
+        ("Smith", "well-known", "result", "rose"),
+        (
+            "E-mail",
+            "and",
+            "state-of-the-art",
+            "systems",
+            "are",
+            "n't",
+            "identical",
+        ),
+        ("Unicode", "café", "naïve", "coöperate", "punctuation"),
     ]
     with pytest.raises(RuntimeError, match="canonical sentence boundaries"):
         adapter.to_sentences("This must never be split. Another sentence.")
