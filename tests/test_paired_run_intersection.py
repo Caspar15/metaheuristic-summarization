@@ -141,3 +141,6 @@ def test_main_writes_paired_report_and_scores(tmp_path, monkeypatch):
     assert json.loads((out_dir / "include_ids.json").read_text(encoding="utf-8")) == ["a"]
     assert (out_dir / "run-a" / "per_example.jsonl").exists()
     assert (out_dir / "run-b" / "metrics.csv").exists()
+    for generated in out_dir.rglob("*"):
+        if generated.is_file():
+            assert b"\r\n" not in generated.read_bytes()

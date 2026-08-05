@@ -669,7 +669,14 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 **驗收結果（2026-08-04）**：單元／整合／negative tests 已增至 **261 passed**。完整 governed Multi-News validation 成功產生 **5,621/5,621 rows**，其中 5,620 feasible、1 recorded infeasible；唯一一列仍是 `validation_4066`，保留 185-word attempted summary、`min_words` shortfall 15，而非中止。primary all-rows R1/R2/Lsum 為 `0.423018 / 0.129178 / 0.372800`；5,620-row feasible-only sensitivity 為 `0.423007 / 0.129171 / 0.372792`，證明本案例排除與否只影響約 `1e-5`，但正式 denominator 仍固定用 all rows。selection time 為 2,146.53 秒（本機 CPU；成本數字不可脫離 hardware 環境引用）。
 
-可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；任何聲稱重現本次結果的檔案都必須先對上該 SHA-256。
+可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；該 SHA-256 只能驗證同環境下的完全一致；跨機器重現請比對逐篇 selected_indices，見下方判讀規則。
+
+> **跨機器可重現性的判讀規則**：先分開比較 dataset/config identity、逐篇
+> `selected_indices`、逐篇 metrics 與序列化檔案。即使方法沒有 PLM、optimizer
+> 或隨機性，dependency、排序 tie-break、文字編碼與換行仍可能改變 artifact；
+> 只有完整鎖定環境與 serialization contract 時才能要求 byte identity。
+> `5e-6` 是本次兩個 evaluator 環境的**觀察值**，不是所有 PLM／optimizer run
+> 的通用容忍度。任何差異都須先定位到哪一層，不能先宣布是浮點噪音。
 
 **重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
 
@@ -764,10 +771,52 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 #### 適用範圍（引用前必讀）
 
-- ⚠️ **全部是 diagnostic，不是 Gate 2 結果**：量測時 F-17 尚未修，因此以臨時腳本跳過不可行文件（1 / 8 / 0 篇）後繼續。
-  **F-17 修好之後（PR #12）這個限制消失** —— 主 pipeline 現在會把不可行列寫成完整 prediction row 並跑完全部 5,621 篇。
-  本節數字未依新 pipeline 重跑；重跑時 primary view 應採**全列計分**（`evaluate` 的新預設），
-  跨 config 比較另以 `scripts/audit/paired_run_intersection.py` 產生共同 feasible 交集作 sensitivity。
+- ✅ **已依新 pipeline 以 primary all-rows 協議重算**（2026-08-05）。
+  ⚠️ **但本節仍全部是 diagnostic，不是 Gate 2 結果**——重算只換掉了計分
+  協議，沒有改變下面三條限制中的任何一條。三格同分母 5,621 篇：
+
+  | config | R-1 | R-2 | R-Lsum | 不可行 |
+  |---|---|---|---|---|
+  | Lead (document_order) | 0.433204 | 0.146768 | 0.394039 | 0 |
+  | greedy + mean | 0.423018 | 0.129178 | 0.372800 | 1 |
+  | greedy + length_normalized | 0.434669 | 0.135345 | 0.395945 | 8 |
+
+  ⚠️ `length_normalized` 在 R-1／R-Lsum 上高於 Lead，但那是長度效應：
+  該配置平均 244.0 字、Lead 233.6 字。以 §F-18 的長度括弧對照，Lead 在
+  244 字附近的 R-Lsum 約 0.395，與本表持平。R-2 則在所有長度下都輸
+  0.011–0.014，且 selector 換成 NSGA-II 只給 +0.0007。詳見 (b)。
+
+  provenance 必須分開標註，不要混記成同一次量測：
+  - Lead：`runs_v2/gate2_lead_document_order_validation/`，commit `6abd4e9`。
+    另一台機器曾回報六位小數相同；因兩端完整 predictions 未一併 version，
+    這只支持 aggregate metric replication，不等於跨環境逐位元組確定。
+  - greedy + `mean`：commit `6abd4e9`，見
+    `docs/research/evidence/f17_pr12_validation_regression.json`。
+  - greedy + `length_normalized`：原表的 5,621-row 數字來源沒有獨立
+    versioned manifest／prediction hash，且「與 pre-fix artifact 逐篇相同」只
+    存在敘述、沒有可重跑的 comparison artifact；因此已在本修正分支以 commit
+    `d5346c0` 的 pipeline 與獨立 tracked config 全量重跑。最終產生 5,621 個
+    unique rows、5,613 feasible／8 recorded，all-rows 為
+    `0.434669 / 0.135345 / 0.395945`。完整 config、dependency、artifact hashes、
+    8 個 ID 與 integrity checks 見
+    `docs/research/evidence/f18_length_normalized_final_pipeline.json`；這份 manifest
+    取代舊的 `0.434678 / 0.135353 / 0.395951`。
+
+  final all-rows 下，mean → length-normalized 的 R-Lsum 差為 **+0.023145**；
+  目前兩份 full predictions 的共同 5,613 feasible IDs 重算則為 **+0.023136**
+  （mean `0.372865` → length-normalized `0.396001`）。共同 ID、兩組逐篇 ROUGE、
+  metrics 與 report 已版本化於
+  `docs/research/evidence/f18_paired_intersection/`。因此「objective 影響遠大於
+  當時 greedy → NSGA-II 的 +0.0039」在 all-rows 與 paired-feasible 兩種視角
+  方向一致；但尚未跑 paired significance test。舊的「跨集合 +0.0232」仍沒有
+  可稽核 artifact，不再列作第三個已驗證協議。
+
+  不可行率對 primary 數字的影響只能在各 run **直接量測**：mean 的 all-rows
+  與 feasible-only R-Lsum 差 8e-6（1 篇）；本次 final length-normalized rerun
+  實測差 5.6e-5（8 篇）。不能把「每篇平均影響」
+  線性外推到 GovReport：不可行列的 ROUGE、資料列數、摘要長度與失敗機制都
+  不同。GovReport 必須在 frozen split 上同時報 all-rows、infeasibility rate 與
+  paired feasible sensitivity，不能沿用 Multi-News 的比例估計。
 - ⚠️ **單一 seed、未做 paired bootstrap** —— 上表所有差距（含 +0.0039 與 −0.0174）**都尚未驗證顯著性**。
 - ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
 - ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。

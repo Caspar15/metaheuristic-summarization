@@ -1,0 +1,139 @@
+{
+  "evaluation_protocol": "multisentence_lsum",
+  "gold_path": "..\\..\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+  "gold_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "intersection_size": 5613,
+  "runs": [
+    {
+      "label": "greedy_mean_final",
+      "path": "..\\pr12-full-run\\f17-contract-review\\predictions.jsonl",
+      "sha256": "669f46c5859aee318d4ec2527c17296d12b30b80a2ea5c470195752a61e20bb8",
+      "total_rows": 5621,
+      "feasible_rows": 5620,
+      "legacy_schema_assumed_feasible_rows": 0,
+      "infeasible": [
+        {
+          "id": "validation_4066",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=15 words); selection kept as-is",
+          "violations": {
+            "nonempty": -13.0,
+            "min_words": 15.0,
+            "max_length": -65.0,
+            "max_sentences": 0.0
+          }
+        }
+      ],
+      "missing_prediction_ids": [],
+      "excluded_feasible_from_intersection": [
+        "validation_1335",
+        "validation_2893",
+        "validation_3349",
+        "validation_3817",
+        "validation_4495",
+        "validation_4576",
+        "validation_679"
+      ]
+    },
+    {
+      "label": "greedy_length_normalized_final",
+      "path": "..\\pr13-full-run\\f18-length-normalized-final\\predictions.jsonl",
+      "sha256": "1a254eb149ab6929381389e8150762b1a5103d7644fcee5e6a7a1be43ec02b33",
+      "total_rows": 5621,
+      "feasible_rows": 5613,
+      "legacy_schema_assumed_feasible_rows": 0,
+      "infeasible": [
+        {
+          "id": "validation_679",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=14 words); selection kept as-is",
+          "violations": {
+            "nonempty": -9.0,
+            "min_words": 14.0,
+            "max_length": -64.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_1335",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=7 words); selection kept as-is",
+          "violations": {
+            "nonempty": -8.0,
+            "min_words": 7.0,
+            "max_length": -57.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_2893",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=5 words); selection kept as-is",
+          "violations": {
+            "nonempty": -9.0,
+            "min_words": 5.0,
+            "max_length": -55.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_3349",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=12 words); selection kept as-is",
+          "violations": {
+            "nonempty": -8.0,
+            "min_words": 12.0,
+            "max_length": -62.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_3817",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=14 words); selection kept as-is",
+          "violations": {
+            "nonempty": -7.0,
+            "min_words": 14.0,
+            "max_length": -64.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_4066",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=15 words); selection kept as-is",
+          "violations": {
+            "nonempty": -13.0,
+            "min_words": 15.0,
+            "max_length": -65.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_4495",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=14 words); selection kept as-is",
+          "violations": {
+            "nonempty": -6.0,
+            "min_words": 14.0,
+            "max_length": -64.0,
+            "max_sentences": 0.0
+          }
+        },
+        {
+          "id": "validation_4576",
+          "infeasible_code": "selector_min_words_shortfall",
+          "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=20 words); selection kept as-is",
+          "violations": {
+            "nonempty": -5.0,
+            "min_words": 20.0,
+            "max_length": -70.0,
+            "max_sentences": 0.0
+          }
+        }
+      ],
+      "missing_prediction_ids": [],
+      "excluded_feasible_from_intersection": []
+    }
+  ]
+}

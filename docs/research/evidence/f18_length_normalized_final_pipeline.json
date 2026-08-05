@@ -1,0 +1,147 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-05",
+  "status": "diagnostic_full_split_current_pipeline",
+  "finding": "F-18 (docs/research/CODE_AUDIT_IEEE_Access.md)",
+  "implementation_commit": "d5346c06cb156312a0d08a8182b80301a73b9641",
+  "implementation_note": "Selection code exactly matched this commit. The working tree added only the tracked diagnostic config and documentation/evidence changes.",
+  "config": {
+    "path": "configs/phase1_mvp_multinews_length_normalized.yaml",
+    "sha256": "93e88d0282906ec15a21df0de1c010371a557d766bcf8abbd1e536bf7a108fca",
+    "semantic_delta_from_phase1_mvp_multinews": {
+      "path": "objectives.importance_aggregation",
+      "base": "mean",
+      "variant": "length_normalized"
+    },
+    "experiment_status": "validation_pilot_only"
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7",
+    "dependencies": {
+      "torch": "2.8.0+cpu",
+      "transformers": "4.56.0",
+      "sentence-transformers": "5.1.0",
+      "scikit-learn": "1.7.1",
+      "numpy": "1.26.4",
+      "nltk": "3.9.1",
+      "rouge-score": "0.1.2",
+      "absl-py": "2.3.1",
+      "PyYAML": "6.0.2"
+    }
+  },
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "analysis": "main",
+    "role": "primary_validation",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615"
+  },
+  "artifacts": {
+    "predictions_jsonl_sha256": "1a254eb149ab6929381389e8150762b1a5103d7644fcee5e6a7a1be43ec02b33",
+    "config_used_json_sha256": "c88e4d87b1b30ebcebe6e45ac23097e72ab4afba8f60a9fed9f812836e4f8405",
+    "dataset_preflight_json_sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7",
+    "feasibility_report_json_sha256": "8f4ca548eb3a234e70acb004bf04208d8ba1c4426ab7c04f51d1451a26906e9d",
+    "metrics_all_rows_csv_sha256": "2aaddce3614a59a2b6f81823b1421f69bf80320f8cee89a5d15c149b6bfa6167",
+    "metrics_feasible_only_csv_sha256": "213cdc70341e7974820818756404c9db21bcdedb422de719428c44b84b0bb6d0",
+    "bulk_artifacts_committed": false,
+    "bulk_artifact_location_note": "The 528,957,155-byte predictions file remains a local run artifact and is identified by SHA-256 above."
+  },
+  "integrity": {
+    "prediction_rows": 5621,
+    "unique_ids": 5621,
+    "duplicate_ids": 0,
+    "non_boolean_feasible_rows": 0,
+    "selected_index_contract_mismatches": 0
+  },
+  "feasibility": {
+    "feasible_rows": 5613,
+    "infeasible_rows": 8,
+    "infeasible_rate": 0.0014232343,
+    "infeasible_code_counts": {
+      "selector_min_words_shortfall": 8
+    },
+    "infeasible": [
+      {"id": "validation_679", "selected_words": 186, "effective_min_words": 200, "shortfall": 14},
+      {"id": "validation_1335", "selected_words": 193, "effective_min_words": 200, "shortfall": 7},
+      {"id": "validation_2893", "selected_words": 195, "effective_min_words": 200, "shortfall": 5},
+      {"id": "validation_3349", "selected_words": 188, "effective_min_words": 200, "shortfall": 12},
+      {"id": "validation_3817", "selected_words": 186, "effective_min_words": 200, "shortfall": 14},
+      {"id": "validation_4066", "selected_words": 185, "effective_min_words": 200, "shortfall": 15},
+      {"id": "validation_4495", "selected_words": 186, "effective_min_words": 200, "shortfall": 14},
+      {"id": "validation_4576", "selected_words": 180, "effective_min_words": 200, "shortfall": 20}
+    ]
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "primary_all_rows": {
+      "scored_rows": 5621,
+      "rouge1": 0.434669,
+      "rouge2": 0.135345,
+      "rougeLsum": 0.395945,
+      "evaluation_seconds": 126.961431
+    },
+    "feasible_only_sensitivity": {
+      "scored_rows": 5613,
+      "rouge1": 0.434709,
+      "rouge2": 0.135384,
+      "rougeLsum": 0.396001,
+      "evaluation_seconds": 123.531171
+    },
+    "feasible_only_minus_all_rows": {
+      "rouge1": 0.000040,
+      "rouge2": 0.000039,
+      "rougeLsum": 0.000056
+    }
+  },
+  "paired_intersection": {
+    "status": "versioned_per_example_diagnostic",
+    "directory": "docs/research/evidence/f18_paired_intersection",
+    "intersection_size": 5613,
+    "mean_predictions_sha256": "669f46c5859aee318d4ec2527c17296d12b30b80a2ea5c470195752a61e20bb8",
+    "length_normalized_predictions_sha256": "1a254eb149ab6929381389e8150762b1a5103d7644fcee5e6a7a1be43ec02b33",
+    "greedy_mean": {"rouge1": 0.423094, "rouge2": 0.129215, "rougeLsum": 0.372865},
+    "greedy_length_normalized": {"rouge1": 0.434709, "rouge2": 0.135384, "rougeLsum": 0.396001},
+    "length_normalized_minus_mean": {"rouge1": 0.011615, "rouge2": 0.006169, "rougeLsum": 0.023136},
+    "files": {
+      "hash_target": "Raw committed LF bytes; the generator writes LF and .gitattributes enforces text eol=lf.",
+      "include_ids_json_sha256": "7f6697ea05cdce80e89d617f66a590c5057d17664cbbab154a1a7d91207be7b2",
+      "intersection_report_json_sha256": "9174d5d9a0f0132112a8af597c34d8ff32911e945b9839bdf4d57ee66a39fa8e",
+      "greedy_mean_metrics_csv_sha256": "02c547cd999f9a372086e1fcac25c941fa820696ae239be0954f292bfc8f77f0",
+      "greedy_mean_per_example_jsonl_sha256": "3dc11b5d0a2116ffe11244d8caad911100d1a7b9b18c26e3ddef987a402f0c28",
+      "greedy_length_normalized_metrics_csv_sha256": "16e13eb79d0b21960653064977a8d40c9fdd63d8cb3d52d2ceaeeff773e12cf2",
+      "greedy_length_normalized_per_example_jsonl_sha256": "ab6dab36937117027944c7b58eaeae0a9625e019725cd2c97cec5b4d14c8764d"
+    },
+    "significance_test_run": false,
+    "note": "The per-example files are versioned inputs for a paired bootstrap or Wilcoxon test; their presence does not imply statistical significance."
+  },
+  "length_distribution": {
+    "all_rows": {
+      "mean_selected_words": 243.8816936488,
+      "mean_selected_sentences": 13.4655755204
+    },
+    "feasible_only": {
+      "mean_selected_words": 243.9622305363,
+      "mean_selected_sentences": 13.4717619811
+    }
+  },
+  "timing": {
+    "selection_seconds": 2061.254351,
+    "usable_for_cost_claims": false,
+    "reason": "Tests and tokenizer audits ran concurrently on the same CPU during selection. The value documents this run only and must not be used for an efficiency comparison."
+  },
+  "supersedes_pr13_unversioned_values": {
+    "prior_claim": {"rouge1": 0.434678, "rouge2": 0.135353, "rougeLsum": 0.395951},
+    "current_minus_prior": {"rouge1": -0.000009, "rouge2": -0.000008, "rougeLsum": -0.000006},
+    "decision": "Use the current values. The prior row had no versioned evidence manifest or independently auditable selected-index comparison."
+  },
+  "tests": {
+    "passed": 261,
+    "platform": "Windows",
+    "note": "The first local attempt failed only because pytest could not access its Windows basetemp; rerunning with an isolated accessible basetemp passed all tests."
+  },
+  "interpretation": "The final pipeline confirms 5,621 output rows and the same count of eight recorded selector_min_words_shortfall cases, but aggregate metrics differ slightly from PR #13's unversioned row. The objective diagnostic remains directionally unchanged and is still not a Gate 2 result."
+}

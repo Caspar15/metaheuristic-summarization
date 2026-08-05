@@ -206,7 +206,12 @@ def main() -> None:
     references = [gold_by_id[i] for i in sorted_ids]
 
     os.makedirs(args.out_dir, exist_ok=True)
-    with open(os.path.join(args.out_dir, "include_ids.json"), "w", encoding="utf-8") as f:
+    with open(
+        os.path.join(args.out_dir, "include_ids.json"),
+        "w",
+        encoding="utf-8",
+        newline="\n",
+    ) as f:
         json.dump(sorted_ids, f, ensure_ascii=False, indent=2)
 
     intersection_report = {
@@ -234,7 +239,10 @@ def main() -> None:
         ],
     }
     with open(
-        os.path.join(args.out_dir, "intersection_report.json"), "w", encoding="utf-8"
+        os.path.join(args.out_dir, "intersection_report.json"),
+        "w",
+        encoding="utf-8",
+        newline="\n",
     ) as f:
         json.dump(intersection_report, f, ensure_ascii=False, indent=2)
 
@@ -256,13 +264,13 @@ def main() -> None:
         run_dir = os.path.join(args.out_dir, label)
         os.makedirs(run_dir, exist_ok=True)
         per_example_path = os.path.join(run_dir, "per_example.jsonl")
-        with open(per_example_path, "w", encoding="utf-8") as f:
+        with open(per_example_path, "w", encoding="utf-8", newline="\n") as f:
             for doc_id, scores in zip(sorted_ids, per_example):
                 f.write(json.dumps({"id": doc_id, **scores}, ensure_ascii=False) + "\n")
 
         metrics_path = os.path.join(run_dir, "metrics.csv")
         with open(metrics_path, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
+            w = csv.writer(f, lineterminator="\n")
             w.writerow(["metric", "value"])
             w.writerow(["evaluation_protocol", args.protocol])
             w.writerow(["prediction_sha256", run["sha256"]])
