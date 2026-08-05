@@ -66,6 +66,60 @@ SeededSelectFn = Callable[
 ]
 
 
+def select_by_score(
+    eligible_records: List[Dict[str, Any]],
+    evaluator: SelectionObjective,
+    scores: Sequence[float],
+) -> List[int]:
+    """Sort eligible sentences by an external score, then walk once.
+
+    Shared budget-fill primitive for any "rank once, fill once" baseline
+    (TextRank, LexRank, and any future rank-then-fill method) -- the same
+    role Lead's ``_select_document_order`` and Random's ``_select_random``
+    already play for their own traversal orders, built on the same
+    ``evaluator.can_add`` feasibility gate. Deliberately NOT
+    ``src.models.extractive.greedy.greedy_select``: that function is a
+    marginal-utility *search* that recomputes the shared objective's
+    aggregation/redundancy at every step and stops early once nothing
+    improves it (the exact mechanism behind F-18(a)'s ``mean``-aggregation
+    degenerate short summaries) -- reusing it here would make a citable
+    "TextRank baseline" secretly inherit that search's stopping behaviour,
+    which is not what rank-then-truncate literature baselines do.
+
+    Skip-tolerant, like Random's ``_select_random`` -- not stop-tolerant
+    like Lead's reading-order prefix: once sentences are visited in score
+    order rather than reading order, there is no positional integrity left
+    to protect by stopping at the first miss (same argument
+    ``random_baseline.py``'s module docstring makes for shuffled order).
+
+    Tie-break is the sentence's own position in ``eligible_records``
+    (stable ``sorted``, descending score, ties keep their relative order),
+    not ``original_index`` explicitly -- ``eligible_records`` is already in
+    ascending ``original_index`` order by construction
+    (``flatten_sentence_records``/``resolve_selection_eligibility`` never
+    reorder), so this is equivalent to and simpler than re-deriving
+    ``original_index`` from each record.
+
+    ``scores`` must already be aligned one-to-one with ``eligible_records``
+    (same length, same order) -- computing the score graph over eligible
+    sentences only vs. the full document is the caller's decision to make
+    (see ``src.baselines.centrality``, which scores the full document and
+    slices down to eligible indices before calling this).
+    """
+
+    if len(scores) != len(eligible_records):
+        raise ValueError(
+            f"scores length ({len(scores)}) must match eligible_records "
+            f"length ({len(eligible_records)})"
+        )
+    order = sorted(range(len(eligible_records)), key=lambda i: scores[i], reverse=True)
+    selected: List[int] = []
+    for relative_index in order:
+        if evaluator.can_add(selected, relative_index):
+            selected.append(relative_index)
+    return selected
+
+
 def derive_row_seed(base_seed: int, document_id: Any) -> int:
     """Derive a stable per-row seed from a run-level seed and a document id.
 
