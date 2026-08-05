@@ -1,7 +1,8 @@
 {
-  "evidence_version": 1,
+  "evidence_version": 2,
   "measured_at": "2026-08-05",
-  "status": "historical_diagnostic_not_final_replication",
+  "status": "historical_diagnostic_superseded_by_final_pipeline_rerun",
+  "superseded_by": "docs/research/evidence/f19_centrality_final_pipeline.json",
   "finding": "F-19 (docs/research/CODE_AUDIT_IEEE_Access.md)",
   "implementation_commit": "b9b7fb87d36760d27838f15eb4e47d667a2d7504",
   "implementation_scope": "The recorded ROUGE artifacts were produced at the commit above, before PR #14's final word-only tokenizer and artifact-contract cleanup. They remain historical diagnostic evidence, not a final-implementation replication.",

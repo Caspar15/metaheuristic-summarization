@@ -1,0 +1,5 @@
+{
+  "baseline": "lexrank",
+  "split": "validation",
+  "input": "data\\processed\\multi_news_validation_canonical.jsonl"
+}

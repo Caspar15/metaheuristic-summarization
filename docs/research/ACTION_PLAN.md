@@ -95,8 +95,8 @@
 
 **1a 的共同驗收條件**（全部完成才能把上面的 `[~]` 改成 `[x]`）：
 
-- [x] `pip install pytest` 並讓 `tests/` 能跑（2026-08-02 master：217 passed）
-- [~] Phase 1 canonical 主路徑的 patch 已有 golden／regression／10-document snapshot；TF-IDF/TF-ISF similarity parity、published-protocol parity 與尚未實作的多資料集路徑不在現有 217 tests 的完成範圍
+- [x] `pip install pytest` 並讓 `tests/` 能跑（2026-08-05：289 local passed，PR #15 Linux CI 綠燈）
+- [~] Phase 1 canonical 主路徑的 patch 已有 golden／regression／10-document snapshot；TF-IDF/TF-ISF similarity parity、published-protocol parity 與尚未實作的多資料集路徑不在現有 289 tests 的完成範圍
 - [x] v1 已排除 SciTLDR，因此 official single-sentence oracle conformance 不屬目前 Phase 1；evaluator 維持 fail-closed。若日後重新納入，須重開此 gate
 
 ### 1b. 資料層
@@ -170,16 +170,20 @@
       **不等於下方兩個 primary 的正式 Lead run 已完成**
 - [x] **PR #11：Random baseline 已進 master**（235 tests）—— per-row SHA-256 seed 衍生、
       `--seed` 雙向 fail loud、去詞彙化的診斷 fixture、`scripts/audit/random_baseline_min_words.py`
-- [~] **PR #14：TextRank／LexRank 程式已進 master，但 Gate 2 尚未完成** —— pinned
-      `sumy==0.12.0`、shared baseline contract 與 historical diagnostic 已加入；合併 head
-      在乾淨 Linux 因隱性 `punkt_tab` 依賴失敗（15 tests）。offline tokenizer hotfix 已在
-      Windows 通過 289 tests，仍待 Linux CI 與 hotfix 後正式 full-split rerun；舊 ROUGE
-      不得升格為正式結果
+- [x] **PR #14 + #15：TextRank／LexRank 程式與 offline tokenizer hotfix 已進 master** ——
+      pinned `sumy==0.12.0`、shared baseline contract、`preserve_line=True` word-only adapter；
+      Windows 289 tests 全過且 PR #15 Linux CI 綠燈。最終實作已在 frozen Multi-News
+      validation 完成 5,621-row full-split rerun：TextRank `0.413845 / 0.128837 / 0.368487`，
+      LexRank `0.430671 / 0.135995 / 0.389532`；完整 hashes 與 integrity 見
+      `evidence/f19_centrality_final_pipeline.json`。**這只完成 Multi-News 的兩個 baseline，
+      不代表 Gate 2 已完成**
 - [x] **Multi-News validation 的 Lead governed artifact 已產出** ——
       `runs_v2/gate2_lead_document_order_validation/`，5,621 篇，`0.433204 / 0.146768 / 0.394039`
 - [x] **第一次 validation pilot 已量測（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` F-18
 
-> 🔴 **2026-08-03 pilot 的結論：目前沒有任何配置贏過 Lead。**
+> 🔴 **2026-08-03 pilot 的結論：沒有配置在三項 ROUGE 全面贏過 Lead。** 後續 final
+> `length_normalized` 在 R-1／R-Lsum 略高，但 R-2 低 0.011423，且未做 paired significance；
+> 因此仍不可寫成「贏過 Lead」。
 > 最佳配置 `greedy + length_normalized` 的 R-1／R-Lsum 領先**完全由多用 10.4 字解釋**
 > （長度括弧兩側皆已量測）；R-2 在任何長度下都輸 0.011–0.024。
 > `mean` 配置下系統 R-Lsum 甚至**低於 Random baseline**。
@@ -221,7 +225,8 @@
 > 「不用 train」只表示 proposed method 不做 task-specific training；若日後納入需要訓練的比較系統，必須另列 training regime，不能混入 no-task-training 主表。
 
 - [ ] 🔴 **先在兩個 primary 跑 Lead** —— GovReport 與 Multi-News 都使用同 word budget；這是最便宜的 reality check，優先於一切
-- [ ] 在兩個 primary 跑 TextRank、LexRank（本地執行同 pipeline；優先重用官方／可信實作並鎖版本）
+- [~] 在兩個 primary 跑 TextRank、LexRank（✅ Multi-News final-implementation full split；
+      ⬜ GovReport，待資料政策與成本 preflight 凍結後執行）
 - [ ] 在兩個 primary 跑 PacSum
 - [ ] 在兩個 primary 跑 Sentence-BERT centroid + MMR
 - [ ] 在兩個 primary 跑 Random（固定 seed）。2026-08-02：PR #11 仍在 review，
@@ -358,8 +363,8 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 217 tests、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
-| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank 程式已接線；offline tokenizer hotfix 待 Linux CI，TextRank／LexRank 正式重跑、PacSum、SBERT+MMR、GovReport 與 Gate 2 尚未完成 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 289 local tests、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank 程式已接線；offline tokenizer hotfix 與 Multi-News TextRank／LexRank 正式重跑已完成。PacSum、SBERT+MMR、GovReport、paired significance 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[ ]` | | 🔴 中途檢查點在這 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |

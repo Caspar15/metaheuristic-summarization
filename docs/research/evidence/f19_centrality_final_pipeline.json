@@ -1,0 +1,137 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-05",
+  "status": "final_implementation_full_split_rerun_verified_gate2_incomplete",
+  "finding": "F-19 (docs/research/CODE_AUDIT_IEEE_Access.md)",
+  "purpose": "Replace the pre-hotfix TextRank/LexRank diagnostic metrics with full-split results produced by the merged offline tokenizer implementation.",
+  "implementation": {
+    "commit": "c38dfae7cfd022d9bd1b90961d14fa1c59626578",
+    "commit_subject": "fix(baselines): remove hidden Punkt dependency (#15)",
+    "centrality_py_sha256": "b1cdad03fc4fdbb901ced0c34d5163df7fe22d0475ff9d923bd013081e14e1c0",
+    "tokenizer_contract": "Each governed canonical sentence is word-tokenized with nltk.word_tokenize(..., preserve_line=True), then filtered by sumy's Tokenizer._is_word. No downloaded Punkt model is used.",
+    "semantic_delta_evidence": "docs/research/evidence/f19_word_tokenizer_parity.json"
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "nltk": "3.10.0",
+    "sumy": "0.12.0",
+    "rouge-score": "0.1.2",
+    "numpy": "1.26.4",
+    "execution_policy": "TextRank and LexRank selection were run in isolation, one process at a time. Evaluation was executed only after selection timing had stopped.",
+    "timing_scope": "Single-machine wall-clock evidence only; do not generalize across hardware."
+  },
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "analysis": "main",
+    "role": "primary_validation",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "input": "data/processed/multi_news_validation_canonical.jsonl",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615"
+  },
+  "config": {
+    "path": "configs/phase1_mvp_multinews.yaml",
+    "sha256": "0e545807100642c0523b697e781df2577a63bfa987f815edc81deda8d1c3f1f8",
+    "evaluation_protocol": "multisentence_lsum",
+    "feasibility_scoring_mode": "all_rows"
+  },
+  "commands": {
+    "selection_template": "python -m src.baselines.cli --baseline <textrank|lexrank> --config configs/phase1_mvp_multinews.yaml --split validation --input data/processed/multi_news_validation_canonical.jsonl --run_dir runs_v2 --stamp gate2_<baseline>_multinews_validation_offline_v1",
+    "evaluation_template": "python -m src.pipeline.evaluate --pred runs_v2/gate2_<baseline>_multinews_validation_offline_v1/predictions.jsonl --gold data/processed/multi_news_validation_canonical.jsonl --out runs_v2/gate2_<baseline>_multinews_validation_offline_v1/metrics_all_rows.csv --protocol multisentence_lsum"
+  },
+  "runs": {
+    "textrank": {
+      "run_dir": "runs_v2/gate2_textrank_multinews_validation_offline_v1",
+      "selection_seconds": 523.539498,
+      "evaluation_seconds": 122.894940,
+      "integrity": {
+        "rows": 5621,
+        "unique_ids": 5621,
+        "feasible_rows": 5621,
+        "infeasible_rows": 0,
+        "scorer_degenerate_ids": [],
+        "selected_index_mismatches": 0,
+        "summary_reconstruction_mismatches": 0
+      },
+      "metrics_all_rows": {
+        "rouge1": 0.413845,
+        "rouge2": 0.128837,
+        "rougeLsum": 0.368487
+      },
+      "length_distribution": {
+        "words_per_doc": {"mean": 247.348337, "p25": 249.0, "p50": 250.0, "p75": 250.0},
+        "sentences_per_doc": {"mean": 8.078100, "p25": 6.0, "p50": 8.0, "p75": 9.0},
+        "per_document_words_per_sentence_mean": 34.016499,
+        "pooled_selected_sentence_words_mean": 30.619618
+      },
+      "delta_vs_pre_hotfix_historical": {
+        "rouge1": -0.000010,
+        "rouge2": -0.000001,
+        "rougeLsum": -0.000005
+      },
+      "artifacts": {
+        "predictions.jsonl": {"sha256": "8760bd16a302f2b7c39713a4ff52c27d5c1bdd6fd4c27aa83e45b9510cd65efa", "bytes": 67082862},
+        "metrics_all_rows.csv": {"sha256": "5b205646000d0e68cd09a494963e0bd37676e7e020d4c84503c7f6699ab57318", "bytes": 348},
+        "config_used.json": {"sha256": "973844b2d5bace665091c792712efd600c0f9ef392e23f7917544b23a5eb943a", "bytes": 1896},
+        "dataset_preflight.json": {"sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7", "bytes": 933},
+        "feasibility_report.json": {"sha256": "89c009f21dacd6ddb757f41a25377109ab8a9416af8fd1cae32a41cde2d670be", "bytes": 105},
+        "baseline_run.json": {"sha256": "6b79a890eb6f97fa8a5b830462f1abeb94feb7996004c3c2d3de23320d7dd480", "bytes": 126},
+        "time_select_seconds.txt": {"sha256": "22ffeaff0c4364bedbb8ee790a75ab934e698d60b4406b5737cface150400d75", "bytes": 10}
+      }
+    },
+    "lexrank": {
+      "run_dir": "runs_v2/gate2_lexrank_multinews_validation_offline_v1",
+      "selection_seconds": 766.732306,
+      "evaluation_seconds": 124.673174,
+      "integrity": {
+        "rows": 5621,
+        "unique_ids": 5621,
+        "feasible_rows": 5621,
+        "infeasible_rows": 0,
+        "scorer_degenerate_ids": ["validation_1082", "validation_2303"],
+        "selected_index_mismatches": 0,
+        "summary_reconstruction_mismatches": 0
+      },
+      "metrics_all_rows": {
+        "rouge1": 0.430671,
+        "rouge2": 0.135995,
+        "rougeLsum": 0.389532
+      },
+      "length_distribution": {
+        "words_per_doc": {"mean": 246.985412, "p25": 248.0, "p50": 250.0, "p75": 250.0},
+        "sentences_per_doc": {"mean": 11.017968, "p25": 9.0, "p50": 11.0, "p75": 13.0},
+        "per_document_words_per_sentence_mean": 24.078508,
+        "pooled_selected_sentence_words_mean": 22.416602
+      },
+      "delta_vs_pre_hotfix_historical": {
+        "rouge1": 0.000095,
+        "rouge2": 0.000069,
+        "rougeLsum": 0.000084
+      },
+      "artifacts": {
+        "predictions.jsonl": {"sha256": "9451e709ef474a5a0c2287c755071f1157bc6cd26c3d3d031ad781b6bde93889", "bytes": 76004779},
+        "metrics_all_rows.csv": {"sha256": "df1fa87c48be3b96512f5d5b782622e687756b5a1cf5b6a1dfc8f6f576104181", "bytes": 348},
+        "config_used.json": {"sha256": "973844b2d5bace665091c792712efd600c0f9ef392e23f7917544b23a5eb943a", "bytes": 1896},
+        "dataset_preflight.json": {"sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7", "bytes": 933},
+        "feasibility_report.json": {"sha256": "89c009f21dacd6ddb757f41a25377109ab8a9416af8fd1cae32a41cde2d670be", "bytes": 105},
+        "baseline_run.json": {"sha256": "286757eca617425869b128ef8e051cba6cc71ae9e9f4626893f69ce6f2f69ba8", "bytes": 125},
+        "time_select_seconds.txt": {"sha256": "e29de759d0248629d0e68f133f4d4cee88791660472eb7dfbcba336db21d8ce3", "bytes": 10}
+      }
+    }
+  },
+  "comparison": {
+    "lead_document_order": {"rouge1": 0.433204, "rouge2": 0.146768, "rougeLsum": 0.394039, "source": "runs_v2/gate2_lead_document_order_validation"},
+    "system_greedy_length_normalized": {"rouge1": 0.434669, "rouge2": 0.135345, "rougeLsum": 0.395945, "source": "docs/research/evidence/f18_length_normalized_final_pipeline.json"},
+    "interpretation": "The current system is higher than final LexRank on R-1 and R-Lsum but lower on R-2; it is higher than Lead on R-1 and R-Lsum but materially lower on R-2. These aggregate differences are not significance claims. Paired bootstrap and the remaining baselines are still required."
+  },
+  "artifact_retention": {
+    "bulk_run_artifacts_committed": false,
+    "reason": "The two predictions files total about 143 MB and runs_v2 is intentionally excluded from source control.",
+    "current_retention": "Bulk predictions remain in the local run directories named above; their hashes are recorded here. The small run manifests, metrics, preflight, feasibility, and timing files are versioned in the same run directories.",
+    "publication_requirement": "Before paper submission or external artifact review, publish immutable bulk outputs in a release or artifact store and verify them against these hashes."
+  },
+  "scope_decision": "These numbers supersede the pre-hotfix F-19 metrics for the merged implementation on Multi-News validation. They do not complete Gate 2: GovReport, PacSum, SBERT centroid+MMR, matched paired significance, and both-primary coverage remain open."
+}

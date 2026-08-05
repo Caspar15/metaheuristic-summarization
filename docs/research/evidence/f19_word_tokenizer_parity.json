@@ -1,5 +1,5 @@
 {
-  "evidence_version": 2,
+  "evidence_version": 3,
   "measured_at": "2026-08-05",
   "status": "full_split_semantic_delta_verified",
   "purpose": "Audit the scoring-semantic change required to remove the hidden punkt_tab dependency from TextRank and LexRank.",
@@ -35,10 +35,10 @@
       "old_only_token": "Jr"
     }
   },
-  "decision": "Use preserve_line=True because the governed input is already one frozen canonical sentence and CI/offline execution must not depend on downloaded Punkt data. This is an intentional word-scoring change, not parity. Keep all pre-hotfix TextRank/LexRank metrics historical and rerun both baselines before formal citation.",
+  "decision": "Use preserve_line=True because the governed input is already one frozen canonical sentence and CI/offline execution must not depend on downloaded Punkt data. This is an intentional word-scoring change, not parity. Keep all pre-hotfix TextRank/LexRank metrics historical. The required final-implementation full-split reruns are now recorded in docs/research/evidence/f19_centrality_final_pipeline.json.",
   "tests": {
     "focused": "34 passed",
     "full_windows": "289 passed",
-    "linux_ci": "pending hotfix PR"
+    "linux_ci": "passed on PR #15"
   }
 }

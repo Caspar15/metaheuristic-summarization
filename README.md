@@ -14,9 +14,9 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 程式已進 master；目前分支正修復 PR #14 暴露的離線 tokenizer CI regression。TextRank／LexRank 舊分數僅為 historical diagnostic；PacSum、sentence-encoder／MMR、GovReport 與兩個 primary 的正式 baseline run 尚未完成 |
+| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 程式已進 master；PR #15 已移除離線 tokenizer regression，Linux CI 綠燈，且 TextRank／LexRank 已在 frozen Multi-News validation 以最終實作完成 5,621-row full-split rerun。PacSum、sentence-encoder／MMR、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **217 tests passed**（2026-08-02，PR #10 合併後）；CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **289 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 
