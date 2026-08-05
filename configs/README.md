@@ -14,6 +14,7 @@
 | 檔案 | 用途 | 尚未完成 |
 |---|---|---|
 | `phase1_mvp_multinews.yaml` | canonical Multi-News 上隔離 lexical + pinned sentence encoder；top-K proposals、route reservations、RRF selector salience、total cap 與 document guard | provenance-aware 3-row smoke 已過；尚缺正式 cost、baseline reality check、route unique recall、budget freeze，未過 gate 前不可跑 test |
+| `phase1_mvp_multinews_length_normalized.yaml` | F-18 validation-only diagnostic；與上一列只有 `importance_aggregation: mean → length_normalized` 一項實驗差異 | 不得當正式 frozen config 或 test config；結果須綁定 F-18 evidence manifest |
 
 此設定刻意不含 graph 與 NSGA-II：先確認 lexical + semantic MVP 能否勝過同協定 Lead／PacSum，再決定是否擴張完整架構。
 

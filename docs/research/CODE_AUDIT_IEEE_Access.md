@@ -671,7 +671,12 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；該 SHA-256 只能驗證同環境下的完全一致；跨機器重現請比對逐篇 selected_indices，見下方判讀規則。
 
-> **跨機器可重現性的判讀規則**：無 PLM、無 optimizer、無隨機性的 baseline（如 Lead）應該逐位元組相同——跨機器差一位小數就代表有真的差異，不能歸因浮點數。含 PLM 推論或 optimizer 搜尋的系統 run 只保證到約 `5e-6`，因為浮點累加順序會隨環境（BLAS、執行緒排程）變化。爭議發生時，先問「差在第幾位」，再決定是浮點噪音還是真的不一致。
+> **跨機器可重現性的判讀規則**：先分開比較 dataset/config identity、逐篇
+> `selected_indices`、逐篇 metrics 與序列化檔案。即使方法沒有 PLM、optimizer
+> 或隨機性，dependency、排序 tie-break、文字編碼與換行仍可能改變 artifact；
+> 只有完整鎖定環境與 serialization contract 時才能要求 byte identity。
+> `5e-6` 是本次兩個 evaluator 環境的**觀察值**，不是所有 PLM／optimizer run
+> 的通用容忍度。任何差異都須先定位到哪一層，不能先宣布是浮點噪音。
 
 **重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
 
@@ -774,7 +779,7 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
   |---|---|---|---|---|
   | Lead (document_order) | 0.433204 | 0.146768 | 0.394039 | 0 |
   | greedy + mean | 0.423018 | 0.129178 | 0.372800 | 1 |
-  | greedy + length_normalized | 0.434678 | 0.135353 | 0.395951 | 8 |
+  | greedy + length_normalized | 0.434669 | 0.135345 | 0.395945 | 8 |
 
   ⚠️ `length_normalized` 在 R-1／R-Lsum 上高於 Lead，但那是長度效應：
   該配置平均 244.0 字、Lead 233.6 字。以 §F-18 的長度括弧對照，Lead 在
@@ -783,23 +788,35 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
   provenance 必須分開標註，不要混記成同一次量測：
   - Lead：`runs_v2/gate2_lead_document_order_validation/`，commit `6abd4e9`。
-    另一台機器獨立重跑得到六位小數完全相同的結果——Lead 無 PLM、
-    無 optimizer、無隨機性，跨環境逐位元組確定。
+    另一台機器曾回報六位小數相同；因兩端完整 predictions 未一併 version，
+    這只支持 aggregate metric replication，不等於跨環境逐位元組確定。
   - greedy + `mean`：commit `6abd4e9`，見
     `docs/research/evidence/f17_pr12_validation_regression.json`。
-  - greedy + `length_normalized`：選句是在 **PR #12 修 blocking 之前**的
-    實作上跑的，以 `6abd4e9` 的 `evaluate` 重新計分。選句不變已由該證據檔
-    的逐篇 `selected_indices` 比對（5,621/5,621 相同）確立，故重新計分
-    合法；但 implementation commit 不同，必須標出。
+  - greedy + `length_normalized`：原表的 5,621-row 數字來源沒有獨立
+    versioned manifest／prediction hash，且「與 pre-fix artifact 逐篇相同」只
+    存在敘述、沒有可重跑的 comparison artifact；因此已在本修正分支以 commit
+    `d5346c0` 的 pipeline 與獨立 tracked config 全量重跑。最終產生 5,621 個
+    unique rows、5,613 feasible／8 recorded，all-rows 為
+    `0.434669 / 0.135345 / 0.395945`。完整 config、dependency、artifact hashes、
+    8 個 ID 與 integrity checks 見
+    `docs/research/evidence/f18_length_normalized_final_pipeline.json`；這份 manifest
+    取代舊的 `0.434678 / 0.135353 / 0.395951`。
 
-  objective 效果在三種計分協議下一致：跨集合 +0.0232（F-18 原始）、
-  共同 5,613 交集 +0.0231、全列 5,621 +0.0232。§7.3 那個「objective 比
-  optimizer 重要約 6 倍」的論斷因此不依賴計分協議的選擇。
+  final all-rows 下，mean → length-normalized 的 R-Lsum 差為 **+0.023145**；
+  目前兩份 full predictions 的共同 5,613 feasible IDs 重算則為 **+0.023136**
+  （mean `0.372865` → length-normalized `0.396001`）。共同 ID、兩組逐篇 ROUGE、
+  metrics 與 report 已版本化於
+  `docs/research/evidence/f18_paired_intersection/`。因此「objective 影響遠大於
+  當時 greedy → NSGA-II 的 +0.0039」在 all-rows 與 paired-feasible 兩種視角
+  方向一致；但尚未跑 paired significance test。舊的「跨集合 +0.0232」仍沒有
+  可稽核 artifact，不再列作第三個已驗證協議。
 
-  不可行率對 primary 數字的影響量級（首次實測）：strict 與 all-rows 的差
-  為 mean 1.1e-5（1 篇）、length_normalized 5.6e-5（8 篇），約每 1 篇
-  不可行影響 R-Lsum 6e-6。Multi-News 上可忽略；GovReport 若不可行率
-  達 5%（約 281 篇）影響量級為 1.7e-3，屆時協議選擇將實質影響結論。
+  不可行率對 primary 數字的影響只能在各 run **直接量測**：mean 的 all-rows
+  與 feasible-only R-Lsum 差 8e-6（1 篇）；本次 final length-normalized rerun
+  實測差 5.6e-5（8 篇）。不能把「每篇平均影響」
+  線性外推到 GovReport：不可行列的 ROUGE、資料列數、摘要長度與失敗機制都
+  不同。GovReport 必須在 frozen split 上同時報 all-rows、infeasibility rate 與
+  paired feasible sensitivity，不能沿用 Multi-News 的比例估計。
 - ⚠️ **單一 seed、未做 paired bootstrap** —— 上表所有差距（含 +0.0039 與 −0.0174）**都尚未驗證顯著性**。
 - ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
 - ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。

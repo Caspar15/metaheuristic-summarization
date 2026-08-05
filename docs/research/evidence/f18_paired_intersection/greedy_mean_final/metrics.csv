@@ -1,0 +1,8 @@
+metric,value
+evaluation_protocol,multisentence_lsum
+prediction_sha256,669f46c5859aee318d4ec2527c17296d12b30b80a2ea5c470195752a61e20bb8
+gold_sha256,24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1
+intersection_size,5613
+rouge1,0.423094
+rouge2,0.129215
+rougeLsum,0.372865
