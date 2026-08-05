@@ -304,8 +304,9 @@ Phase 1e 已實作此工程契約：coverage 明確使用 `full source sentences
 
 > **實作狀態（2026-08-02）**：上面描述的「方法內 deterministic selector」已由
 > shared objective 支援；Phase 2 的外部對照則已有 PR #10 Lead baseline contract／CLI。
-> 兩者角色不同，不能把方法內 greedy 當成 Lead。TextRank、LexRank、PacSum、
-> sentence-encoder 與 Random 尚未在 master 完成，兩個 primary 也尚未產生正式 baseline 結果。
+> 兩者角色不同，不能把方法內 greedy 當成 Lead。Lead、Random、TextRank／LexRank
+> 程式已進 master；TextRank／LexRank 的 offline tokenizer hotfix 與正式重跑、PacSum、
+> sentence-encoder／MMR 及兩個 primary 的正式 baseline 結果仍未完成。
 
 ### 7.2 NSGA-II selector
 

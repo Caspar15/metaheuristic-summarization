@@ -1,13 +1,14 @@
 {
-  "evidence_version": 1,
+  "evidence_version": 2,
   "measured_at": "2026-08-05",
-  "status": "verified_full_split",
-  "purpose": "Verify that removing the unused Punkt sentence model does not change any word tokens consumed by sumy TextRank or LexRank.",
+  "status": "full_split_semantic_delta_verified",
+  "purpose": "Audit the scoring-semantic change required to remove the hidden punkt_tab dependency from TextRank and LexRank.",
   "implementation": {
-    "pr14_head_before_fix": "a68152b59abdfdfdc0f73e07f733c9438aacca7b",
-    "centrality_py_sha256": "d682f5fef41d8b063ad496c70bd5ecbc3ec0de690af832707f0aa8d7a98ec7e1",
+    "base_commit": "bbd43f2",
+    "centrality_py_sha256": "f75c558a1469c8cef3eee052b5127a03e32161b6ab3c5127d65902d0772e82c6",
     "adapter": "src.baselines.centrality._WordOnlySumyTokenizer",
-    "reference": "sumy.nlp.tokenizers.Tokenizer('english').to_words with only its unused sentence-tokenizer constructor hook disabled"
+    "old_reference": "sumy.nlp.tokenizers.Tokenizer('english').to_words, which calls nltk.word_tokenize with preserve_line=False and therefore requires downloaded Punkt data",
+    "new_path": "nltk.word_tokenize(canonical_sentence, preserve_line=True) followed by sumy's inherited Tokenizer._is_word filter"
   },
   "environment": {
     "python": "3.12.7",
@@ -21,10 +22,23 @@
     "canonical_sentences": 456942,
     "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1"
   },
+  "hash_contract": "For each sentence, JSON-encode the filtered token tuple with ensure_ascii=false and compact separators, append LF, and update SHA-256 in canonical row/sentence order.",
   "result": {
-    "mismatched_sentences": 0,
-    "first_mismatch_sentence_id": null,
-    "adapter_token_stream_sha256": "9e2d9d45d72ad137b4b37d95bbe01e8034eed9717e9900ffc9f23401c73b6892"
+    "mismatched_sentences": 1550,
+    "mismatch_rate": 0.0033921154,
+    "old_sumy_punkt_token_stream_sha256": "c94508864c082d24ac0206fe91fe09531f657b4a99bc830bad9c258194a79294",
+    "offline_preserve_line_token_stream_sha256": "e84da00f634aa8ad6ac4837063f166e9e7deb8b75fc93e6fcb16aaf36b1b8684",
+    "first_mismatch": {
+      "sentence_id": "validation_11:d000:s000001",
+      "cause_class": "sentence-internal abbreviation",
+      "text": "Dressed in an orange jail uniform and walking with a cane, a hand-cuffed Patrick Sullivan, 68, watched as a judge raised his bail amount to a half-million dollars and sent him back to the Patrick J. Sullivan Jr. Detention Facility.",
+      "old_only_token": "Jr"
+    }
   },
-  "interpretation": "For every frozen Multi-News validation sentence, the final word-only adapter emits exactly the same token sequence as pinned sumy. Punkt is not part of this scoring path. This proves tokenizer parity, but it does not by itself prove that historical and final predictions are byte-identical; the final selected-index artifacts must still be preserved and compared."
+  "decision": "Use preserve_line=True because the governed input is already one frozen canonical sentence and CI/offline execution must not depend on downloaded Punkt data. This is an intentional word-scoring change, not parity. Keep all pre-hotfix TextRank/LexRank metrics historical and rerun both baselines before formal citation.",
+  "tests": {
+    "focused": "34 passed",
+    "full_windows": "289 passed",
+    "linux_ci": "pending hotfix PR"
+  }
 }

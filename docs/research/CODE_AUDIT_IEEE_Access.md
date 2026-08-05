@@ -38,7 +38,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | PR #10 已加入 shared baseline contract、CLI 與 Lead；兩個 primary 尚無正式 Lead 結果，其餘 baseline 未完成，Gate 2 仍未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank 程式已加入；TextRank／LexRank offline hotfix 與正式重跑、PacSum、SBERT+MMR、GovReport 尚未完成，Gate 2 未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動,GovReport/CNN-DM 待做** |
@@ -47,7 +47,7 @@
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
 1. 🔴 **F-0 尚未在新 pipeline 上回答** —— 修好一堆東西不等於贏過 Lead
-2. 🔴 **F-9 只完成 Lead 程式基礎** —— 兩個 primary 的 governed Lead run 與其餘 baseline 尚未完成，F-0 仍無法回答
+2. 🔴 **F-9 baseline 矩陣仍不完整** —— TextRank／LexRank 尚待 hotfix 後正式重跑；PacSum、SBERT+MMR 與 GovReport 未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句、GovReport/CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -457,17 +457,16 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 
 ---
 
-### 🟠 F-9. 稽核當時 repo 完全沒有 baseline；目前只完成 Lead 基礎
+### 🟠 F-9. 稽核當時 repo 完全沒有 baseline；目前矩陣仍不完整
 
 **稽核結果 ✅**：以 `lead`, `LexRank`, `PacSum`, `BERTScore`, `bert_score` 等關鍵字全域搜尋 `src/`、`scripts/`、`tests/` —— **零命中**（唯一命中是 `position.py` 裡的變數名）。
 
-**目前狀態（2026-08-02）**：PR #10 已在 master 新增 `src/baselines/contract.py`、
-`lead.py` 與 `cli.py`，所以「目前 repo 零 baseline」已不再成立。Lead 共用 canonical
-data-policy preflight 與 output upper-bound contract，並保存 ordering、requested floor、
-source capacity、selected words 及 `min_words` 不適用原因；F-16 記錄其 full-split
-長度分布。然而兩個 primary 尚未完成 governed Lead run，TextRank／LexRank／PacSum／
-sentence-encoder／Random 也尚未進 master，因此只能把 F-9 從「未開始」降為「部分解除」，
-不能把 Gate 2 標成完成。
+**目前狀態（2026-08-05）**：Lead、Random、TextRank／LexRank 程式皆已進 master，
+所以「目前 repo 零 baseline」已不再成立。Lead／Random 共用 canonical data-policy
+preflight 與 output upper-bound contract；TextRank／LexRank 包裝 pinned sumy。PR #14
+合併後仍暴露 offline `punkt_tab` regression，目前 hotfix 已在 Windows 通過完整測試，
+但正式 Linux CI 與 hotfix 後 full-split rerun 尚未完成；PacSum、SBERT+MMR 與 GovReport
+也未完成。因此 F-9 仍只能列「部分解除」，Gate 2 不能標成完成。
 
 **後果**：論文 Table 6 在 Multi-News 上報告的 Lead / TextRank / LexRank 數字，**無法由本 repo 重現**。若這些數字是從其他論文抄來的，那麼它們與本文的預處理、分句方式、ROUGE 設定都不一致 —— 這在 IEEE Access 公開程式碼後會是明顯的破綻，而且恰好落在 R4 已經點名的「selective reporting」疑慮上。
 
@@ -864,7 +863,7 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 ### 🟠 F-19. TextRank／LexRank baseline：歷史 diagnostic ROUGE，與 TextRank 的長句偏好證據
 
-**量測日期**：2026-08-05。**historical diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。選句實作由 evidence manifest 記為 commit `b9b7fb8`；該量測早於 PR #14 最終 tokenizer／artifact contract。最終實作雖以測試證明 word tokenization 與 pinned sumy 相同，仍須保存新 predictions、selected indices 與 metrics 後，才能把下表升格為最終可引用結果。
+**量測日期**：2026-08-05。**historical diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。選句實作由 evidence manifest 記為 commit `b9b7fb8`；該量測早於 PR #14 tokenizer／artifact contract。PR #14 合併後的乾淨 Linux CI 又證明 word-only adapter 仍會要求 `punkt_tab`；hotfix 改用 canonical-sentence `preserve_line=True` 後，全量有 1,550／456,942 句的 word tokens 與舊 sumy/Punkt 路徑不同。因此必須保存新 predictions、selected indices 與 metrics 後，才能把下表升格為最終可引用結果。
 
 以新 all-rows 預設協議（PR #12 之後 `evaluate` 的預設）、`protocol multisentence_lsum`、分母皆為 **5,621**：
 
@@ -923,12 +922,12 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 #### 適用範圍（引用前必讀）
 
 - ⚠️ **全部是 diagnostic**：單一 run、未做 paired bootstrap，上表所有差距皆未驗證顯著性。
-- ⚠️ **不是最終實作的正式重現**：原量測 commit 早於 PR #14 最終 word-only adapter；adapter 的 token parity 已由測試鎖定，但目前 repository 沒有一份最終實作的完整 predictions／selected-index artifact 可逐列比較。不得聲稱跨機器逐位元組相同。
+- ⚠️ **不是最終實作的正式重現**：原量測 commit 早於 offline tokenizer hotfix；新 adapter 明確不與舊 Punkt 路徑 token-identical（1,550／456,942 句不同），且目前沒有 hotfix 後的完整 predictions／selected-index artifact。不得沿用舊 ROUGE 或聲稱跨機器逐位元組相同。
 - ⚠️ **TextRank/LexRank 皆為 MVP baseline 設定**（`length_gate=True`、`apply_min_words=False`），與系統兩列的候選路線／objective 設定不對稱，不是同一個 pipeline 的兩端。
 - ⚠️ 300 篇相關係數樣本非全量，方向可信、數值可能隨樣本略有浮動；全量重算尚未做。
 - 完整 provenance（dataset SHA-256、artifact SHA-256、依賴版本、原始 log）：
   `docs/research/evidence/f19_textrank_lexrank_baselines.json`。
-- 最終 word-only adapter 的全量 token parity（456,942 句、0 mismatch）：
+- offline word-only adapter 的全量 token 差異稽核（456,942 句、1,550 mismatch）：
   `docs/research/evidence/f19_word_tokenizer_parity.json`。
 - 重現：`python -m src.pipeline.evaluate --pred runs_v2/<textrank|lexrank>_val/predictions.jsonl --gold data/processed/multi_news_validation_canonical.jsonl --out <out>.csv --protocol multisentence_lsum`。
 
@@ -955,7 +954,7 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 0. 🔴 **F-0（legacy Multi-News 未贏 Lead）** —— 同資料同內部 evaluator 下，ExpB 只在 R1 高 0.0021，R2/R-Lsum 較低；因 ExpB test-tuned，只能觸發 redesign，不能當新結果。
 1. **F-3（Stage 2 無 PLM）** —— 方法章與實作不符，必須在任何新實驗前解決。
 2. **F-5（相似度矩陣就地竄改）** —— 會靜默改變實驗語意；狀態見 §0.0 狀態表。
-3. **F-9（legacy 無 baseline、目前只完成 Lead 基礎）** —— 舊表仍不可重現；PR #10 不能回溯修復它，且 Gate 2 尚缺正式兩-primary結果與其餘 baseline。
+3. **F-9（legacy 無 baseline、目前矩陣仍不完整）** —— 舊表不能回溯當作本地重現；Gate 2 尚缺 hotfix 後 TextRank／LexRank、PacSum、SBERT+MMR 與正式兩-primary結果。
 4. **F-12（分句品質）** —— 855 words 的「句子」會直接破壞長度控制，且系統對它有正向偏好。
 5. **F-13(f)（靜默退回 greedy）** —— 需先確認沒有既有實驗其實跑的是 greedy。
 
@@ -1113,8 +1112,9 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 **217 tests 全過**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
-contract 與 PR #10 Lead baseline 已接線；其餘 baseline、兩個 primary 的正式 baseline
-結果與 proposed-method validation 仍未完成。
+contract 與 Lead／Random／TextRank／LexRank baseline 已接線；centrality offline hotfix、
+PacSum、SBERT+MMR、兩個 primary 的正式 baseline 結果與 proposed-method validation
+仍未完成。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
 |---|---|---|---|

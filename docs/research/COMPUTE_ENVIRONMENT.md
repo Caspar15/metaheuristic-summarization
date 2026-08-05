@@ -12,24 +12,29 @@ paragraph sentence splitter。
 centrality scorer 真正需要的是 `Sentence.words`。目前的
 `_WordOnlySumyTokenizer`：
 
-- 繼承 pinned `sumy==0.12.0` 的 `Tokenizer.to_words`；
-- 使用 sumy 自己的 English `DefaultWordTokenizer`；
+- 保留 pinned `sumy==0.12.0` 的 `_is_word` 過濾契約；
+- 使用 pinned `nltk==3.10.0` 的 `word_tokenize(..., preserve_line=True)`；
 - 不載入、也不呼叫 NLTK Punkt sentence model；
 - `to_sentences()` 一律 fail loud，避免未來 refactor 靜默改變 frozen 句界。
 
 因此 CI 與離線叢集不需要下載或 vendoring `punkt`／`punkt_tab`。這也避免把
-授權未釐清的 NLTK data package 放進 repository。word-only adapter 與正常
-sumy English `to_words()` 的 parity 由 `tests/test_baselines_centrality.py`
-固定。另以全部 5,621 篇、456,942 個 canonical sentences 掃描，結果為
-**0 mismatch**；資料 SHA、程式 SHA 與 token-stream SHA 見
-`docs/research/evidence/f19_word_tokenizer_parity.json`。
+授權未釐清的 NLTK data package 放進 repository。測試會把任何 sentence
+tokenizer 呼叫改成例外，確保 word scoring 只消費既有 canonical sentence。
+
+PR #14 原本宣稱此 adapter 與正常 sumy English `to_words()` 全量 0 mismatch，
+但乾淨 Linux CI 證明該 adapter 仍會透過 `nltk.word_tokenize` 的預設參數載入
+`punkt_tab`。修成 `preserve_line=True` 後，5,621 篇、456,942 個 canonical
+sentences 中有 **1,550 句（0.339%）** 與舊 sumy/Punkt token stream 不同，主要
+來自句內縮寫。這是移除二次分句後的預期 scoring 語義變更，不得再稱 token
+parity；舊 TextRank／LexRank ROUGE 維持 historical，正式引用前必須重跑。
+完整 hash 與首個差異見 `docs/research/evidence/f19_word_tokenizer_parity.json`。
 
 `nltk==3.10.0` 仍精確 pin，原因是 reproducibility 與 sumy runtime code
 dependency，不代表 repo 會散布任何 NLTK data package。若未來升版：
 
 1. 跑完整 unit tests；
 2. 在 frozen canonical inputs 上比較共用 sentence splitter 的輸出；
-3. 比較 centrality word-token parity 與 baseline selected indices；
+3. 比較 centrality word-token delta 與 baseline selected indices；
 4. 重新記錄 dependency versions。
 
 本次由 3.9.1 升至 3.10.0 已對全部 frozen source sentences 與 references
@@ -101,13 +106,12 @@ TextRank 與第一次 LexRank 同時執行時，TextRank 的
 
 ## CI coverage
 
-PR #14 原 GitHub Linux run 的實際摘要是 `285 passed, 4 skipped`，不是
-`289 passed`。四個 skips 來自 `pytest.importorskip("pymoo")`；因此 CI 尚未
-覆蓋 NSGA-II。這是既存 coverage gap，與 centrality correctness 分開處理，
-但在下一次正式 NSGA-II run 前應將 `pymoo` 納入 CI dependency。
-
-移除 vendored Punkt、加入 word-only parity 與 scorer／feasibility 正交回歸後，
-Windows 隔離環境的完整結果亦為 `285 passed, 4 skipped`。
+PR #14 合併 head 的 GitHub Linux run 實際為 `15 failed, 270 passed, 4 skipped`；
+15 個 failure 都源自乾淨 runner 找不到 `punkt_tab`，不能視為綠燈。hotfix 改成
+`preserve_line=True` 後，Windows 本機完整結果為 `289 passed`；Linux CI 結果
+須以 hotfix PR 的新 run 為準。CI 的四個既存 skips 來自
+`pytest.importorskip("pymoo")`，因此仍未覆蓋 NSGA-II；在下一次正式 NSGA-II
+run 前應將 `pymoo` 納入 CI dependency。
 
 跨平台驗收至少包含 Linux CI 與 Windows 本機 suite。路徑測試必須以
 `pathlib.Path`／normalized path component 比較，不能硬編碼 `/`。
