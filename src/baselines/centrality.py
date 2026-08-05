@@ -31,12 +31,12 @@ constructs ``sumy.models.dom.Sentence`` objects directly from canonical
 sentence strings (``Sentence.__init__`` takes a raw string and never
 splits it) and wraps them in a single ``Paragraph``/``ObjectDocumentModel``.
 A word-level tokenizer is still required (TF-IDF/word-overlap scoring needs
-words), so the real ``sumy.nlp.tokenizers.Tokenizer("english")`` is used
-rather than a hand-rolled one -- word tokenization affects TF-IDF and
-LexRank's scores directly, and substituting a custom tokenizer would reopen
-exactly the "weaker self-implementation" question this module exists to
-avoid (see docs/research/COMPUTE_ENVIRONMENT.md for the NLTK data this
-requires and why it is offline-safe once cached).
+words). ``_WordOnlySumyTokenizer`` deliberately reuses sumy's own
+``Tokenizer.to_words`` and ``DefaultWordTokenizer`` implementation while
+disabling ``to_sentences``. This preserves sumy's English word boundaries
+exactly without loading an NLTK Punkt sentence model that this code path
+never calls. The parity test in ``tests/test_baselines_centrality.py``
+binds this adapter to the pinned sumy implementation.
 
 SCORING IS OVER THE FULL DOCUMENT, SELECTION IS RESTRICTED TO ELIGIBLE
 SENTENCES AFTERWARD
@@ -95,10 +95,8 @@ constraint layer to paper over it.
 from __future__ import annotations
 
 from functools import lru_cache
-from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
-import nltk
 import numpy as np
 from sumy.models.dom import ObjectDocumentModel, Paragraph, Sentence
 from sumy.nlp.stemmers import Stemmer
@@ -109,40 +107,6 @@ from sumy.utils import get_stop_words
 
 from src.baselines.contract import select_by_score, summarize_one_baseline
 from src.data.schemas import flatten_sentence_records
-
-# DELIBERATE MODULE-LEVEL MUTATION OF GLOBAL nltk.data.path -- not an
-# accidental import side effect. This has to happen here, at import time of
-# this module specifically, rather than in a pytest conftest.py fixture:
-# the offline compute cluster runs `python -m src.baselines.cli` directly
-# and never goes through conftest.py at all, so a fixture-based approach
-# would leave the actual production entry point unregistered while only
-# tests worked. Registered at import time, not via an environment variable:
-# NLTK_DATA would need to be set identically in CI, on this machine, and on
-# the offline compute cluster, and is exactly the kind of per-environment
-# setup step that gets forgotten on one of the three. Doing it here means
-# every caller that imports this module -- pytest, `python -m
-# src.baselines.cli`, a future audit script -- gets the same vendored data
-# with no setup step at all. See vendor/nltk_punkt_tab/README.md for what
-# this is and why it is vendored rather than downloaded (a download step in
-# CI would make CI depend on NLTK's servers being reachable, which does
-# nothing for the offline cluster this is actually for).
-#
-# .resolve() is not cosmetic: this nltk version's resource resolution
-# (nltk/tokenize/punkt.py's find(), via a _assert_no_encoded_bypass-style
-# check) requires an absolute path with no ".."/traversal-like components --
-# confirmed necessary by a real CI failure on a clean GitHub Actions runner,
-# not assumed. Inserted at the front of nltk.data.path (not appended) so
-# this vendored copy always wins over any other punkt_tab a given machine
-# might happen to already have cached, keeping resolution identical across
-# environments rather than depending on search-path ordering. The cost of
-# that front-insertion priority: a stale vendored copy left behind after an
-# nltk version bump would also win silently, not raise -- see
-# tests/test_nltk_punkt_tab_pin.py, which is the gate against exactly that.
-_VENDORED_NLTK_DATA_DIR = str(
-    Path(__file__).resolve().parent.parent.parent / "vendor" / "nltk_punkt_tab"
-)
-if _VENDORED_NLTK_DATA_DIR not in nltk.data.path:
-    nltk.data.path.insert(0, _VENDORED_NLTK_DATA_DIR)
 
 METHODS = ("textrank", "lexrank")
 
@@ -193,14 +157,36 @@ class _LexRankWithRatings(LexRankSummarizer):
         return dict(zip(document.sentences, scores))
 
 
+class _WordOnlySumyTokenizer(Tokenizer):
+    """Sumy's exact English word tokenizer without a sentence-model load.
+
+    ``Tokenizer.__init__`` eagerly loads both a Punkt sentence tokenizer and
+    the code-only ``DefaultWordTokenizer``. This module constructs
+    ``sumy.models.dom.Sentence`` objects from already-frozen canonical
+    boundaries, so only ``Sentence.words -> tokenizer.to_words`` is ever
+    needed. Initialising the two fields used by inherited ``to_words`` keeps
+    that implementation byte-for-byte upstream while avoiding an unused,
+    separately licensed NLTK data package. ``to_sentences`` fails loud so a
+    future refactor cannot silently reintroduce sumy sentence splitting.
+    """
+
+    def __init__(self) -> None:
+        self._language = "english"
+        self._sentence_tokenizer = None
+        self._word_tokenizer = self._get_word_tokenizer("english")
+
+    def to_sentences(self, paragraph):
+        raise RuntimeError(
+            "centrality baselines must consume frozen canonical sentence "
+            "boundaries; sentence splitting through sumy is forbidden"
+        )
+
+
 @lru_cache(maxsize=1)
 def _get_tokenizer() -> Tokenizer:
-    """Cached: constructing Tokenizer("english") loads NLTK's punkt_tab
-    resource from disk (see docs/research/COMPUTE_ENVIRONMENT.md); doing
-    that once per run, not once per document, matches this project's
-    model-caching convention (see src/models/extractive/encoder_rank.py)."""
+    """Return the cached word-only adapter bound to sumy's implementation."""
 
-    return Tokenizer("english")
+    return _WordOnlySumyTokenizer()
 
 
 @lru_cache(maxsize=1)
@@ -314,7 +300,7 @@ def summarize_one_centrality(
         raise ValueError(f"unknown centrality method {method!r}; choose one of {METHODS}")
 
     scores_by_original_index = _score_document_by_original_index(method, doc)
-    degenerate = {"triggered": False}
+    scorer_degenerate = scores_by_original_index is None
 
     def select_fn(eligible_records, evaluator):
         if scores_by_original_index is not None:
@@ -350,7 +336,6 @@ def summarize_one_centrality(
                 "this needs a policy decision, not a guess -- see "
                 "docs/research/COMPUTE_ENVIRONMENT.md"
             )
-        degenerate["triggered"] = True
         return selected
 
     result = summarize_one_baseline(
@@ -362,19 +347,23 @@ def summarize_one_centrality(
         apply_min_words=False,
         min_words_not_applied_reason=CENTRALITY_MIN_WORDS_NOT_APPLIED_REASON,
     )
-    result["scorer_degenerate"] = degenerate["triggered"]
-    result["scorer_degenerate_reason"] = (
-        (
+    result["scorer_degenerate"] = scorer_degenerate
+    if not scorer_degenerate:
+        result["scorer_degenerate_reason"] = None
+    elif result["infeasible_code"] == "source_no_eligible_sentence":
+        result["scorer_degenerate_reason"] = (
             f"{method}'s similarity matrix collapsed to all-zero for this "
-            "document (see docs/research/COMPUTE_ENVIRONMENT.md, 'LexRank "
-            "相似度矩陣的已知退化'); every eligible sentence fit under the "
-            "active budget regardless of ranking, so selection is "
-            "well-defined (all eligible sentences, original document "
-            "order) despite the undefined score."
+            "document; selection was independently empty because no source "
+            "sentence was eligible under the active output budget."
         )
-        if degenerate["triggered"]
-        else None
-    )
+    else:
+        result["scorer_degenerate_reason"] = (
+            f"{method}'s similarity matrix collapsed to all-zero for this "
+            "document; every eligible sentence fit under the active budget "
+            "regardless of ranking, so selection is well-defined (all "
+            "eligible sentences, original document order) despite the "
+            "undefined score."
+        )
     return result
 
 

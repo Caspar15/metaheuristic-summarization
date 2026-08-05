@@ -813,9 +813,9 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 ---
 
-### 🟠 F-19. TextRank／LexRank baseline：全量 ROUGE，與 TextRank 的長句系統性偏誤
+### 🟠 F-19. TextRank／LexRank baseline：歷史 diagnostic ROUGE，與 TextRank 的長句偏好證據
 
-**量測日期**：2026-08-05。**diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。commit `134bf50` 之上的未提交 working tree（`src/baselines/centrality.py`、`contract.py` 的 `select_by_score`）。
+**量測日期**：2026-08-05。**historical diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。選句實作由 evidence manifest 記為 commit `b9b7fb8`；該量測早於 PR #14 最終 tokenizer／artifact contract。最終實作雖以測試證明 word tokenization 與 pinned sumy 相同，仍須保存新 predictions、selected indices 與 metrics 後，才能把下表升格為最終可引用結果。
 
 以新 all-rows 預設協議（PR #12 之後 `evaluate` 的預設）、`protocol multisentence_lsum`、分母皆為 **5,621**：
 
@@ -830,7 +830,7 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 **TextRank 是六個方法裡 R-1 與 R-Lsum 最低的**（R-1 甚至低於 Random；R-2 與 Random、系統 `mean` 相近）。**LexRank 全面優於 TextRank**，且三項都逼近（但仍略遜於）Lead——與系統 `mean` 落後 Lead 的量級相近。
 
-#### 病因：TextRank 對長句有系統性偏誤，LexRank 沒有（已驗證，非臆測）
+#### 機制證據：TextRank 分數與句長有強關聯，LexRank 較弱
 
 觀察：TextRank 平均 8.08 句/篇、34.01 字/句；LexRank 11.02 句/篇、24.07 字/句；Random 13.11 句/篇、18.8 字/句。TextRank 是六者中唯一明顯偏長句的，34.01 字/句接近 F-18(a) `mean` 病理的 ~37.5 字/句（227.0/6.05）——但**這是表面症狀相似，不是同一個機制**，見下方判讀。
 
@@ -848,11 +848,11 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 | TextRank | 0.2234 | **0.6601** |
 | LexRank | 0.1498 | 0.2225 |
 
-**假說成立**：TextRank 文件內分數與句長的平均相關係數高達 0.66，選中句平均比候選池平均長 9.07 字（約 42%）；LexRank（TF-IDF cosine，無 log-length 正規化這個機制）只有 0.22、選中句幾乎等於候選池平均（+0.87 字）。**這是 sumy 對 Mihalcea 原論文 TextRank 邊權重公式的忠實實作、屬於文獻定義本身的性質，不是本專案的 bug**——必須寫進論文作為 baseline 的已知性質。
+**證據支持此假說，但不是單獨的因果證明**：TextRank 文件內分數與句長的平均相關係數為 0.66，選中句平均比候選池長 9.07 字（約 42%）；LexRank（TF-IDF cosine，沒有相同的 log-length 邊權重）則為 0.22 與 +0.87 字。這與 sumy 對 Mihalcea TextRank 邊權重公式的實作機制一致；可在論文中寫成已量測的 baseline 特性，但不可寫成已排除主題、位置、詞彙密度等混淆因素的因果結論。
 
 #### ROUGE 判讀：效應類別相同，機制不同，不可混為一談
 
-TextRank 的 R-Lsum（0.3685）明顯低於 LexRank（0.3894），且兩者主要差別正是選句數（8.08 vs 11.02）與句長（34.01 vs 24.07 字）。**效應類別**與 F-18(a) 的 `mean` 病理相同：句數少、句子長，減少 ROUGE-Lsum 逐句 LCS 比對的獨立匹配機會，拉低召回。
+TextRank 的 R-Lsum（0.3685）低於 LexRank（0.3894），同時伴隨較少選句（8.08 vs 11.02）與較長句子（34.01 vs 24.07 字）。這個型態**與** F-18(a) 的 `mean` 病理一致：句數少、句子長可能減少 ROUGE-Lsum 逐句 LCS 比對的獨立匹配機會；但目前沒有受控介入或 paired causal analysis，因此只能寫「consistent with」，不能寫「完全由此造成」。
 
 但**根因不同，不能寫成同一個機制**：
 - F-18(a) 的 `mean` 病理：**搜尋型目標函數的聚合規則**造成的提早停止——加入任何低於目前平均分數的句子會拉低 `mean`，greedy 因此主動停手。這是系統選句過程中的動態（贏了就停）。
@@ -874,10 +874,13 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 #### 適用範圍（引用前必讀）
 
 - ⚠️ **全部是 diagnostic**：單一 run、未做 paired bootstrap，上表所有差距皆未驗證顯著性。
+- ⚠️ **不是最終實作的正式重現**：原量測 commit 早於 PR #14 最終 word-only adapter；adapter 的 token parity 已由測試鎖定，但目前 repository 沒有一份最終實作的完整 predictions／selected-index artifact 可逐列比較。不得聲稱跨機器逐位元組相同。
 - ⚠️ **TextRank/LexRank 皆為 MVP baseline 設定**（`length_gate=True`、`apply_min_words=False`），與系統兩列的候選路線／objective 設定不對稱，不是同一個 pipeline 的兩端。
 - ⚠️ 300 篇相關係數樣本非全量，方向可信、數值可能隨樣本略有浮動；全量重算尚未做。
 - 完整 provenance（dataset SHA-256、artifact SHA-256、依賴版本、原始 log）：
   `docs/research/evidence/f19_textrank_lexrank_baselines.json`。
+- 最終 word-only adapter 的全量 token parity（456,942 句、0 mismatch）：
+  `docs/research/evidence/f19_word_tokenizer_parity.json`。
 - 重現：`python -m src.pipeline.evaluate --pred runs_v2/<textrank|lexrank>_val/predictions.jsonl --gold data/processed/multi_news_validation_canonical.jsonl --out <out>.csv --protocol multisentence_lsum`。
 
 ---

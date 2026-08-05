@@ -242,3 +242,4 @@ python -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_wor
 | 套件 | 授權 | 用途 |
 |---|---|---|
 | [sumy](https://github.com/miso-belica/sumy) `==0.12.0` | Apache-2.0 | TextRank／LexRank baseline（`src/baselines/centrality.py`），見 `docs/research/COMPUTE_ENVIRONMENT.md` |
+| [NLTK](https://github.com/nltk/nltk) `==3.10.0` | Apache-2.0 | sumy runtime 與專案 tokenizer code；repository **不含** NLTK data package |

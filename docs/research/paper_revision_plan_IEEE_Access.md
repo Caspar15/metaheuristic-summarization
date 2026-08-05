@@ -1010,7 +1010,7 @@ ICACT 已獲獎且屬 prior publication。IEEE Access 接受作者自己 confere
 - 一鍵 smoke test。
 - 一鍵重製每張表與圖。
 - expected outputs 與容許誤差。
-- hardware/software manifest。見 `docs/research/COMPUTE_ENVIRONMENT.md`（目前僅涵蓋 sumy baseline 的離線 NLTK 快取，非完整清單）。
+- hardware/software manifest。見 `docs/research/COMPUTE_ENVIRONMENT.md`（目前涵蓋 sumy word-only tokenizer 契約、dependency pin、baseline 成本與 timing 限制，仍非完整硬體清單）。
 - seeds、configs、per-example predictions、per-example metrics。
 - 不包含受授權限制的 dataset 或 model weights；提供合法下載方式與 checksum。
 

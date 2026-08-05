@@ -1,9 +1,17 @@
 {
   "evidence_version": 1,
   "measured_at": "2026-08-05",
-  "status": "diagnostic_full_split",
+  "status": "historical_diagnostic_not_final_replication",
   "finding": "F-19 (docs/research/CODE_AUDIT_IEEE_Access.md)",
   "implementation_commit": "b9b7fb87d36760d27838f15eb4e47d667a2d7504",
+  "implementation_scope": "The recorded ROUGE artifacts were produced at the commit above, before PR #14's final word-only tokenizer and artifact-contract cleanup. They remain historical diagnostic evidence, not a final-implementation replication.",
+  "final_implementation_verification": {
+    "word_tokenization": "Unit tests prove the final _WordOnlySumyTokenizer.to_words output matches pinned sumy==0.12.0 on regression cases without loading Punkt data.",
+    "full_split_predictions_preserved": false,
+    "selected_index_comparison_preserved": false,
+    "cross_machine_byte_identity_claim_allowed": false,
+    "required_before_formal_citation": "Run the final implementation on the governed split; preserve predictions, selected indices, config, dependency manifest, and hashes; then compare rows before adopting replacement metrics."
+  },
   "python": "3.11.7",
   "dependency_versions": {
     "sumy": "0.12.0",
@@ -138,8 +146,8 @@
       "textrank": {"pooled_correlation": 0.2234, "mean_within_document_correlation": 0.6601},
       "lexrank": {"pooled_correlation": 0.1498, "mean_within_document_correlation": 0.2225}
     },
-    "conclusion": "Hypothesis confirmed quantitatively. This is a faithful property of sumy's implementation of Mihalcea's original TextRank edge weight formula, not a bug in this repo's wiring -- must be documented as a baseline characteristic in the paper.",
-    "downstream_rougeLsum_interpretation": "TextRank's lower R-Lsum vs LexRank is consistent with fewer/longer selected sentences reducing per-sentence LCS-matching opportunities -- the same EFFECT CLASS as F-18(a)'s mean-aggregation pathology (greedy+mean's 6.05-sentence collapse), but a DIFFERENT ROOT CAUSE: F-18(a) is a searching objective's aggregation rule triggering early stopping; F-19 is the base scorer itself being length-biased in a pure rank-then-fill baseline with no aggregation or search dynamics at all. Do not conflate the two mechanisms."
+    "conclusion": "The measurements support a strong association between sumy TextRank scores and sentence length and are consistent with its published edge-weight formula. They do not by themselves establish causality or exclude topic, position, or lexical-density confounds.",
+    "downstream_rougeLsum_interpretation": "TextRank's lower R-Lsum vs LexRank is consistent with fewer/longer selected sentences reducing per-sentence LCS-matching opportunities -- the same EFFECT CLASS as F-18(a)'s mean-aggregation pathology (greedy+mean's 6.05-sentence collapse), but not proven to be caused exclusively by sentence length. F-18(a) is a searching objective's aggregation rule triggering early stopping; F-19 is a rank-then-fill scorer whose scores are strongly associated with length. Do not conflate the mechanisms or claim a completed causal attribution."
   },
   "literature_comparison": {
     "note": "docs/research/CODE_AUDIT_IEEE_Access.md's Table 6 records Lead/TextRank/LexRank as 'adopted from [16]', a different paper's pipeline (different preprocessing, sentence splitting, ROUGE settings, and possibly split) -- this is a directional sanity check only, NOT a validated apples-to-apples reproduction. See CLAUDE.md's global rule against treating cross-paper baseline numbers as a fair local comparison.",
@@ -165,6 +173,7 @@
     "f19_lexrank_idf_collapse_scan_json": {
       "path": "docs/research/evidence/f19_lexrank_idf_collapse_scan.json",
       "sha256": "5ef5fb89e11a201839a9f24712fb2ce545ca4ff037cf2587e859baf24ed74fae",
+      "sha256_target": "Committed Git blob bytes (LF line endings). A Windows working tree with core.autocrlf may have different raw bytes; verify against the Git blob or normalize CRLF to LF before hashing.",
       "description": "Full-split scan (5,621 docs, 456,942 sentences, 79.9s) checking, per document, whether every term's LexRank idf collapses to exactly 0 -- the actual necessary-and-sufficient trigger for the NaN guard (not the 'all-stopword sentence' misconception an earlier version of the guard's message assumed). Found exactly 2 hits (validation_1082, validation_2303), matching scorer_degenerate_rows above. Also records the misleading secondary signal (10,364 individual zero-effective-word sentences across 2,818 documents) that does NOT predict document-level collapse on its own."
     }
   }

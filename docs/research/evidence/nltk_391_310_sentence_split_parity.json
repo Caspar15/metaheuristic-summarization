@@ -1,0 +1,36 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-05",
+  "status": "verified_full_split",
+  "purpose": "Verify that the project's code-only PunktSentenceTokenizer produces identical boundaries under nltk 3.9.1 and 3.10.0.",
+  "implementation": {
+    "sentence_split_py_sha256": "b7527d9677ea514bf3da023b5cf0cb06c1d4459780fd9885b36e00e80b4dad29",
+    "external_nltk_data_loaded": false
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows",
+    "compared_nltk_versions": [
+      "3.9.1",
+      "3.10.0"
+    ]
+  },
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "rows": 5621,
+    "input_texts": 462563,
+    "input_definition": "Every frozen canonical source sentence plus every reference string.",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1"
+  },
+  "results": {
+    "nltk_3_9_1": {
+      "output_sentences": 513195,
+      "split_stream_sha256": "e23f5f424dcb4f34864b5a53bd7a34fbc9dc2c9c2d283582ba1865169bf0f703"
+    },
+    "nltk_3_10_0": {
+      "output_sentences": 513195,
+      "split_stream_sha256": "e23f5f424dcb4f34864b5a53bd7a34fbc9dc2c9c2d283582ba1865169bf0f703"
+    }
+  },
+  "interpretation": "The dependency pin change does not alter the repository's sentence splitter on the governed Multi-News validation inputs. This does not imply that arbitrary NLTK APIs or downloaded Punkt models are equivalent across versions."
+}

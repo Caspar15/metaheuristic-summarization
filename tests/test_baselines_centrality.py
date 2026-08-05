@@ -1,27 +1,47 @@
-"""Golden and correctness tests for the TextRank/LexRank baselines.
-
-Requires the classic-NLTK-avoiding shared tokenizer's opposite number: sumy's
-own Tokenizer("english") needs the NLTK punkt_tab/english resource cached
-somewhere on nltk.data.path (see docs/research/COMPUTE_ENVIRONMENT.md for
-exactly what and why). On a machine that has already run
-`python -c "import nltk; nltk.download('punkt_tab')"` once, no extra
-environment setup is needed here -- nltk's default search path picks up
-~/nltk_data automatically.
-"""
+"""Golden and correctness tests for the TextRank/LexRank baselines."""
 
 import json
 import sys
 
 import pytest
+from sumy.nlp.tokenizers import Tokenizer
 
 from src.baselines import cli as baseline_cli
 from src.baselines.centrality import (
+    _get_tokenizer,
     _score_document_by_original_index,
     summarize_one_lexrank,
     summarize_one_textrank,
 )
 from src.data.schemas import build_document_example
 from src.utils.io import write_jsonl_atomic
+
+
+def test_word_only_tokenizer_matches_sumy_english_to_words_without_punkt(monkeypatch):
+    """The adapter must preserve sumy's word scoring while never splitting.
+
+    A normal Tokenizer("english") eagerly loads Punkt even though to_words()
+    never uses it. Replacing only that constructor hook gives us the exact
+    upstream word-tokenization reference without requiring any NLTK data.
+    """
+
+    monkeypatch.setattr(
+        Tokenizer,
+        "_get_sentence_tokenizer",
+        lambda self, language: None,
+    )
+    reference = Tokenizer("english")
+    adapter = _get_tokenizer()
+    samples = [
+        "Dr. Smith's well-known result rose 3.5%.",
+        "E-mail and state-of-the-art systems aren't identical.",
+        "Unicode café naïve coöperate — punctuation!",
+    ]
+    assert [adapter.to_words(text) for text in samples] == [
+        reference.to_words(text) for text in samples
+    ]
+    with pytest.raises(RuntimeError, match="canonical sentence boundaries"):
+        adapter.to_sentences("This must never be split. Another sentence.")
 
 
 def _finance_and_bakery_doc():
@@ -168,6 +188,42 @@ def test_length_two_disjoint_vocabulary_document_resolves_the_same_way_with_rich
     assert result["feasible"] is True
     assert sorted(result["selected_indices"]) == [0, 1]
     assert result["scorer_degenerate"] is True
+
+
+def test_degenerate_scorer_is_recorded_even_when_no_sentence_is_eligible():
+    """Scoring degeneracy and source infeasibility are orthogonal facts.
+
+    Both sentences are individually oversized, so the shared baseline
+    contract never invokes select_fn. The scorer has already run over the
+    full source graph and collapsed, which still must be recorded.
+    """
+
+    doc = build_document_example(
+        example_id="degenerate_and_oversized",
+        split="validation",
+        documents=[[
+            " ".join(["alpha"] * 12),
+            " ".join(["beta"] * 12),
+        ]],
+        references=["a reference"],
+        input_mode="single_document",
+        output_mode="multi_sentence",
+        dataset_name="toy",
+    )
+    cfg = {
+        "length_control": {
+            "unit": "words",
+            "max_words": 10,
+            "min_words": 0,
+            "require_nonempty": True,
+        }
+    }
+    with pytest.warns(RuntimeWarning, match="invalid value"):
+        result = summarize_one_lexrank(doc, cfg)
+    assert result["feasible"] is False
+    assert result["infeasible_code"] == "source_no_eligible_sentence"
+    assert result["scorer_degenerate"] is True
+    assert "no source sentence was eligible" in result["scorer_degenerate_reason"]
 
 
 def test_length_two_disjoint_vocabulary_document_fails_loud_when_it_does_not_all_fit():
