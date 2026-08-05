@@ -708,7 +708,7 @@ Lead 的 governed baseline artifact 已保存於 `runs_v2/gate2_lead_document_or
 
 **結論：系統看似領先的 R-1 (+0.0014) 與 R-Lsum (+0.0019) 完全由多用的 10.4 個字解釋。給 Lead 同等字數，Lead 三項全勝。** R-2 更直接 —— Lead 在三種長度下都是 0.146–0.149，系統 0.1354，**在任何長度下都輸 0.011–0.014**。
 
-> ⚠️ **機制修正，結論不變**（2026-08-06，加入 TextRank／LexRank baseline 時發現）：
+> ⚠️ **機制修正，結論不變**（2026-08-05，加入 TextRank／LexRank baseline 時發現）：
 > 上面「系統多用 10.4 個字」的原始寫法容易讀成「系統這個方法本身」的性質。
 > 實測顯示這其實是**填充規則**的性質，不是任何單一方法的性質——
 >
@@ -815,7 +815,7 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 ### 🟠 F-19. TextRank／LexRank baseline：全量 ROUGE，與 TextRank 的長句系統性偏誤
 
-**量測日期**：2026-08-06。**diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。commit `134bf50` 之上的未提交 working tree（`src/baselines/centrality.py`、`contract.py` 的 `select_by_score`）。
+**量測日期**：2026-08-05。**diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。commit `134bf50` 之上的未提交 working tree（`src/baselines/centrality.py`、`contract.py` 的 `select_by_score`）。
 
 以新 all-rows 預設協議（PR #12 之後 `evaluate` 的預設）、`protocol multisentence_lsum`、分母皆為 **5,621**：
 

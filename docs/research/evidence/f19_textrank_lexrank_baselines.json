@@ -1,6 +1,6 @@
 {
   "evidence_version": 1,
-  "measured_at": "2026-08-06",
+  "measured_at": "2026-08-05",
   "status": "diagnostic_full_split",
   "finding": "F-19 (docs/research/CODE_AUDIT_IEEE_Access.md)",
   "implementation_commit": "b9b7fb87d36760d27838f15eb4e47d667a2d7504",
@@ -27,7 +27,11 @@
       "run_dir": "runs_v2/textrank_val",
       "baseline": "textrank",
       "config": "configs/phase1_mvp_multinews.yaml",
-      "selection_seconds": 475.123528,
+      "selection_seconds": {
+        "value": 475.123528,
+        "usable": false,
+        "reason": "This run executed concurrently with the first (crashed) lexrank attempt, both competing for the same CPU cores. This value is >5x inconsistent with the tqdm-derived wall time in evidence_files.f19_textrank_run_log (40:28 elapsed = 2428s for the same 5,621 docs). Faithfully transcribed from time_select_seconds.txt, but that source value is itself a contention artifact -- matching the source file does not make the source usable. Not usable for any cost claim; see docs/research/COMPUTE_ENVIRONMENT.md's methodology warning. No isolated-run re-measurement exists for TextRank at full scale (only the isolated calibration points in COMPUTE_ENVIRONMENT.md: a single 3,347-sentence document and a 30-document batch)."
+      },
       "evaluation_seconds": 67.660420,
       "artifacts": {
         "predictions_jsonl_sha256": "3884bd1c1dd7e04b476ec42879ed9bce119152186a690b99ba6e4ec5ee36d7b3",
@@ -62,7 +66,11 @@
       "run_dir": "runs_v2/lexrank_val",
       "baseline": "lexrank",
       "config": "configs/phase1_mvp_multinews.yaml",
-      "selection_seconds": 507.927737,
+      "selection_seconds": {
+        "value": 507.927737,
+        "usable": true,
+        "reason": "This is the isolated re-run (evidence_files.f19_lexrank_run2_isolated_success_log below), executed alone with no concurrent process -- NOT the crashed concurrent attempt (evidence_files.f19_lexrank_run_crash_log). Consistent with its own tqdm-derived wall time (08:27 elapsed = 507s for the same 5,621 docs) to within rounding, unlike textrank's contaminated value above. Usable for cost claims about this specific run, subject to the usual single-machine caveat (see COMPUTE_ENVIRONMENT.md)."
+      },
       "evaluation_seconds": 69.792726,
       "note": "Re-run in isolation after the scorer_degenerate fix (see docs/research/COMPUTE_ENVIRONMENT.md's 'LexRank 相似度矩陣的已知退化'); an earlier attempt (see evidence_files.f19_lexrank_run_crash_log below) aborted at validation_1082 under the pre-fix fail-loud-and-abort behavior, 36 minutes into a concurrent run alongside textrank, and left no predictions.jsonl artifact at all (write_jsonl_atomic never reached its commit step).",
       "artifacts": {
