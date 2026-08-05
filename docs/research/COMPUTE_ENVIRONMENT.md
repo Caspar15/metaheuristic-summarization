@@ -22,6 +22,27 @@ tokenizers/punkt_tab/english/collocations.tab
 `TextRankSummarizer.rate_sentences` 與 `LexRankSummarizer.__call__` 都正常
 運作。移除 README 與其他 19 種語言後結果不變。
 
+**已 vendored 進 repo**：`vendor/nltk_punkt_tab/tokenizers/punkt_tab/english/`
+（見該目錄的 `README.md`）。CI 上第一次不帶這份資料跑時，GitHub Actions
+的乾淨 runner 直接重現了國網會遇到的情況——沒有本機快取、沒有外網——
+並印出下面這個真實 traceback，把「需要什麼」從實驗變成了程式碼本身可以
+指認的證據：
+
+```
+sumy/nlp/tokenizers.py:203   nltk.data.load("tokenizers/punkt/english.pickle")
+nltk/data.py:1126            switch_punkt(fil)
+nltk/tokenize/punkt.py:1769  find("tokenizers/punkt_tab/english/")
+```
+
+這個 traceback 同時證實了三件事：(1) sumy 呼叫的是舊 `.pickle` 路徑，
+`switch_punkt` 在 `nltk.data.load` 內部攔截並改向 `punkt_tab`——`.pickle`
+從未被讀到，佐證上面 244 KB 的結論不是巧合；(2) `find()` 要找的是**目錄**
+（資源名結尾有斜線），路徑層級必須完全對上 `tokenizers/punkt_tab/english/`，
+少一層多一層都會失敗；(3) 這個 nltk 版本的 `find()` 對路徑做過安全檢查
+（拒絕含 `..` 或非絕對路徑的項目），所以加進 `nltk.data.path` 的必須是
+`Path(...).resolve()` 過的絕對路徑（見 `src/baselines/centrality.py` 的
+註冊程式碼）。
+
 ### 不需要什麼
 
 **古典 `punkt`（pickle 格式，49 MB）不需要，即使 sumy 的原始碼字面上在讀
@@ -37,7 +58,7 @@ pickle 反序列化任意資料本身是供應鏈風險，`punkt_tab` 改用純�
 `punkt`，同一組操作（建構 Tokenizer、跑 TextRank rate_sentences、跑
 LexRank `__call__`）全部成功。**古典 `punkt` pickle 從未被讀取。**
 
-### 為什麼是 sumy 專屬，不是叢集前置條件（範圍判定，2026-08-05 實測）
+### 為什麼是 sumy 專屬，不是叢集前置條件（範圍判定，2026-08-05 實測，含 vendored 資料上線後的回歸驗證）
 
 本專案自己的分句器 `src/data/sentence_split.py`（Multi-News canonical
 前處理與 ROUGE-Lsum 評測共用，見該檔 docstring 與 F-12）**不需要任何
@@ -45,9 +66,14 @@ NLTK 資料檔**：它直接用 `PunktParameters()` + 手動維護的縮寫清�
 **未訓練**的 `PunktSentenceTokenizer`，從不呼叫 `nltk.data.load`。這正是
 該檔 docstring 說明的設計動機——避免依賴一個本 repo 未 vendor 的下載資源。
 
-實測：`nltk.data.path` 指向一個不存在的空目錄、socket 層級完全封網，
-`build_sentence_tokenizer()`/`split_sentences()` 正常運作（含縮寫測試句
-`"Mr. Smith met U.S. officials..."` 正確切句）。
+實測兩次，條件逐次收緊，同一天內完成：第一次 `nltk.data.path` 指向一個
+不存在的空目錄；第二次（vendored 資料上線後的回歸驗證）改成
+`nltk.data.path` **只含** `vendor/nltk_punkt_tab/`（也就是 sumy baseline
+實際會用的那份資料本身），兩次都在 socket 層級完全封網。兩次
+`build_sentence_tokenizer()`/`split_sentences()` 都正常運作（含縮寫測試句
+`"Mr. Smith met U.S. officials..."` 正確切句），結果與是否存在 vendored
+資料無關——不是「沒有資料所以繞過了檢查」，而是這條路徑本來就不查
+`nltk.data`。
 
 **結論：這份 244 KB 快取只給 sumy-based baseline（TextRank/LexRank）用。**
 Multi-News canonical 前處理、GovReport 前處理（若沿用同一個共用
@@ -69,25 +95,61 @@ sumy baseline，就完全不需要這一節的任何東西。
 是否正確」的前提**——版本一變，這整節要不要用、要放哪個目錄都要重新
 實測，不能假設沿用。
 
-## 如何在有網路的機器上產生這份快取
+## 這份資料已 vendored 進 repo，不需要每個環境各自下載
 
-```bash
-# 1. 下載（會落在預設的 ~/nltk_data）
-python3 -c "import nltk; nltk.download('punkt_tab')"
+**位置：`vendor/nltk_punkt_tab/tokenizers/punkt_tab/english/`**（詳見該目錄
+`README.md`）。CI、本機、國網計算節點三者共用同一份檔案，不需要在 CI
+另外加下載步驟——加下載步驟會讓 CI 依賴 NLTK 的伺服器（跟這份資料存在
+的理由自相矛盾），對完全無外網的國網節點也毫無幫助。
 
-# 2. 裁剪到只留 english（見上方「不需要什麼」——19 種其他語言與
-#    README 都不需要）
-mkdir -p /path/to/offline_cache/tokenizers/punkt_tab
-cp -r ~/nltk_data/tokenizers/punkt_tab/english \
-      /path/to/offline_cache/tokenizers/punkt_tab/
+**註冊方式：`src/baselines/centrality.py` 在 import 時直接把這個目錄的
+絕對路徑插進 `nltk.data.path` 最前面**，不是環境變數。理由：環境變數
+（`NLTK_DATA`）必須在 CI、本機、國網三個環境**各自設定一次**，而且會被
+忘記；import-time 註冊則是任何 import 這個模組的呼叫者（pytest、
+`python -m src.baselines.cli`、未來的稽核腳本）都自動拿到同一份資料，
+不需要額外的環境設定步驟。用 `Path(__file__).resolve()` 而非相對路徑，
+因為這個 nltk 版本的 `find()` 對路徑做過安全檢查（見上方 CI traceback
+段落），拒絕含 `..` 或非絕對路徑的項目。插在最前面（`insert(0, ...)`
+而非 append）是為了讓這份 vendored 資料永遠優先於機器上其他可能存在的
+`punkt_tab`，三個環境的行為才會一致，不受各機器既有快取的搜尋順序影響。
 
-# 3. 帶到離線節點後，指向它
-export NLTK_DATA=/path/to/offline_cache
+驗證（不是只看測試通過）：
+
+```python
+import nltk
+import src.baselines.centrality  # 觸發 import-time 路徑註冊
+nltk.data.find("tokenizers/punkt_tab/english/")
+# 必須成功，且回傳路徑在 vendor/nltk_punkt_tab/ 底下
 ```
 
-第 3 步之後，任何呼叫 `sumy.nlp.tokenizers.Tokenizer("english")` 的程式碼
-（本專案僅限 `src/baselines/centrality.py` 的 TextRank/LexRank baseline）
-不需要外網即可運作。
+若日後升級 `nltk` 版本，用 `vendor/nltk_punkt_tab/README.md` 裡的指令
+重新產生這份資料，並重跑本文件與下方「乾淨環境驗證」——不能假設沿用。
+
+## 乾淨環境驗證（2026-08-05，這才算修好，本機通過不算）
+
+本機有 `~/nltk_data`，所以「本機測試通過」不能證明離線環境真的沒問題。
+實測條件：`nltk.data.path` 清空後只加回 `vendor/nltk_punkt_tab/`
+（不含任何其他路徑，包括預設的 home directory）、`socket.socket.connect`
+在程式層級直接 monkeypatch 成擲錯（比只設代理更嚴格，連 DNS 前的連線
+嘗試都擋下）、`HTTP_PROXY`/`HTTPS_PROXY` 指向不可路由位址。在這個條件下
+跑完整的 287 個測試（不是 smoke test），結果：**287 passed**。
+
+```python
+import socket
+def _blocked_connect(self, *a, **kw):
+    raise OSError("network access blocked for clean-environment simulation")
+socket.socket.connect = _blocked_connect
+
+import nltk
+nltk.data.path = []
+import src.baselines.centrality  # 這一行本身必須把 nltk.data.path 填成
+                                  # 只有 vendor/nltk_punkt_tab/ 這一項
+assert nltk.data.path == [".../vendor/nltk_punkt_tab"]
+nltk.data.find("tokenizers/punkt_tab/english/")  # 必須成功
+
+import pytest
+pytest.main(["-q", "tests/"])
+```
 
 ## LexRank 相似度矩陣的已知退化（2026-08-05 實測，Multi-News validation）
 
@@ -267,6 +329,24 @@ TextRank 與 LexRank 兩個全量 5,621 篇的 process，兩者搶同一批 CPU
 contention 解釋清楚。**這個數字不可信、不可用於外推**，本節的常數
 只採用上方兩個隔離、單一 process 的乾淨量測。若要精確的全量 wall-clock
 基準，必須重新用單一 process 個別重跑（本文件尚未做這件事）。
+
+## CI 綠不等於全部測試執行（2026-08-05 查證）
+
+`pytest -q` 在 CI 與本機都回報 `269 passed, 4 skipped`（加上 14 個原本因
+vendored 資料缺失而 failed、修好後轉為 passed，合計 287）。**查證結果：
+那 4 個 skip 與 canonical 資料無關**，是 `tests/test_pipeline_integration.py`
+與 `tests/test_objective_evaluator.py` 裡 4 處 `pytest.importorskip("pymoo")`——
+`requirements-ci.txt`（CI 用的輕量依賴集）刻意不含 `pymoo`（該檔自己的
+註解說明：「Full research runs still require requirements.txt (including
+torch/transformers/pymoo)」），本機因為裝了完整 `requirements.txt` 才會
+全部執行、0 skip。這 4 個測試本身只用內建的合成 fixture（`sample_doc`／
+手造 `evaluator`），跟是否有 canonical 資料完全無關，是既有的、與本
+PR 無關的 CI/本機依賴集差異。
+
+**結論記錄下來，供之後查閱**：CI 綠不代表 287 個測試都真的執行過——
+在只裝 `requirements-ci.txt` 的環境（如 CI）跑，NSGA-II 相關的 4 個測試
+會被跳過而非執行。若之後任何人改動 `nsga2.py`／pymoo 介接，CI 綠也
+不能當作那 4 個測試通過的證據，必須用完整 `requirements.txt` 另外驗證。
 
 ## 版本
 

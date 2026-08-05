@@ -95,8 +95,10 @@ constraint layer to paper over it.
 from __future__ import annotations
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
+import nltk
 import numpy as np
 from sumy.models.dom import ObjectDocumentModel, Paragraph, Sentence
 from sumy.nlp.stemmers import Stemmer
@@ -107,6 +109,40 @@ from sumy.utils import get_stop_words
 
 from src.baselines.contract import select_by_score, summarize_one_baseline
 from src.data.schemas import flatten_sentence_records
+
+# DELIBERATE MODULE-LEVEL MUTATION OF GLOBAL nltk.data.path -- not an
+# accidental import side effect. This has to happen here, at import time of
+# this module specifically, rather than in a pytest conftest.py fixture:
+# the offline compute cluster runs `python -m src.baselines.cli` directly
+# and never goes through conftest.py at all, so a fixture-based approach
+# would leave the actual production entry point unregistered while only
+# tests worked. Registered at import time, not via an environment variable:
+# NLTK_DATA would need to be set identically in CI, on this machine, and on
+# the offline compute cluster, and is exactly the kind of per-environment
+# setup step that gets forgotten on one of the three. Doing it here means
+# every caller that imports this module -- pytest, `python -m
+# src.baselines.cli`, a future audit script -- gets the same vendored data
+# with no setup step at all. See vendor/nltk_punkt_tab/README.md for what
+# this is and why it is vendored rather than downloaded (a download step in
+# CI would make CI depend on NLTK's servers being reachable, which does
+# nothing for the offline cluster this is actually for).
+#
+# .resolve() is not cosmetic: this nltk version's resource resolution
+# (nltk/tokenize/punkt.py's find(), via a _assert_no_encoded_bypass-style
+# check) requires an absolute path with no ".."/traversal-like components --
+# confirmed necessary by a real CI failure on a clean GitHub Actions runner,
+# not assumed. Inserted at the front of nltk.data.path (not appended) so
+# this vendored copy always wins over any other punkt_tab a given machine
+# might happen to already have cached, keeping resolution identical across
+# environments rather than depending on search-path ordering. The cost of
+# that front-insertion priority: a stale vendored copy left behind after an
+# nltk version bump would also win silently, not raise -- see
+# tests/test_nltk_punkt_tab_pin.py, which is the gate against exactly that.
+_VENDORED_NLTK_DATA_DIR = str(
+    Path(__file__).resolve().parent.parent.parent / "vendor" / "nltk_punkt_tab"
+)
+if _VENDORED_NLTK_DATA_DIR not in nltk.data.path:
+    nltk.data.path.insert(0, _VENDORED_NLTK_DATA_DIR)
 
 METHODS = ("textrank", "lexrank")
 
