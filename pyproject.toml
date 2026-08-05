@@ -3,3 +3,8 @@ testpaths = ["tests"]
 norecursedirs = [".venv", ".git", "data", "runs", "runs_v2",
                  "archive", "frontend", "backend",
                  "experimental", "notebooks", "__pycache__"]
+# 測試套件不觸及 PLM 推論路徑，所以真實資料上的 transformers 警告
+# （例如 token 長度超過 512）不會被這條規則覆蓋。若全量 run 因某個
+# warning 變成 error 而中止，先判斷該 warning 該不該被容許，
+# 不要直接放寬這條規則。
+filterwarnings = ["error"]

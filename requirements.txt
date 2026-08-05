@@ -19,9 +19,14 @@ pymoo==0.6.1.1
 # NLP / evaluation
 # ---------------------------------------------------------------------------
 rouge-score>=0.1.2
-nltk>=3.8.1
+# 精確 pin，不是下限：離線 NLTK_DATA 快取內容隨版本改變（3.8.x 讀 punkt
+# pickle，3.9+ 的 switch_punkt shim 一律改讀 punkt_tab），升版前必須重跑
+# docs/research/COMPUTE_ENVIRONMENT.md 的三個實測，不能假設沿用快取。
+nltk==3.10.0
 regex>=2023.6.3
 datasets>=2.14.0
+# LexRank/TextRank baseline（Phase 2）；Apache-2.0，見 NOTICE。
+sumy==0.12.0
 
 # ---------------------------------------------------------------------------
 # Encoders (Stage-1 semantic route)

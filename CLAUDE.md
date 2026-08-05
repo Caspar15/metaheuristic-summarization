@@ -237,6 +237,7 @@ python -m scripts.audit.lead_vs_system --data <data.jsonl> --pred <run>/predicti
 | `docs/research/CODE_AUDIT_IEEE_Access.md` | 已驗證的程式缺陷 + 實測數字 |
 | `docs/research/STRATEGY_ASSESSMENT.md` | 可行性評估、資料集選擇 |
 | `docs/research/REPO_CLEANUP.md` | 專案整理計畫 |
+| `docs/research/COMPUTE_ENVIRONMENT.md` | hardware/software manifest；離線 NLTK 快取範圍與 nltk 版本 pin 耦合 |
 
 > 重構前的 legacy 文件已移至 `docs/_legacy_docs/`（排除於版本庫外，只在原作者本機）。
 > 它們引用的 `configs/stage1/`、`scripts/build_union_stage2.py` 等路徑多數已不存在，
