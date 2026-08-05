@@ -669,7 +669,9 @@ ValueError: selector returned an infeasible summary: {'min_words': 15.0}
 
 **驗收結果（2026-08-04）**：單元／整合／negative tests 已增至 **261 passed**。完整 governed Multi-News validation 成功產生 **5,621/5,621 rows**，其中 5,620 feasible、1 recorded infeasible；唯一一列仍是 `validation_4066`，保留 185-word attempted summary、`min_words` shortfall 15，而非中止。primary all-rows R1/R2/Lsum 為 `0.423018 / 0.129178 / 0.372800`；5,620-row feasible-only sensitivity 為 `0.423007 / 0.129171 / 0.372792`，證明本案例排除與否只影響約 `1e-5`，但正式 denominator 仍固定用 all rows。selection time 為 2,146.53 秒（本機 CPU；成本數字不可脫離 hardware 環境引用）。
 
-可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；任何聲稱重現本次結果的檔案都必須先對上該 SHA-256。
+可追蹤的 dataset identity、commit、artifact SHA-256、metrics 與 timing 摘要：`docs/research/evidence/f17_pr12_validation_regression.json`。495 MB predictions 保持本機 bulk artifact，不進 Git；該 SHA-256 只能驗證同環境下的完全一致；跨機器重現請比對逐篇 selected_indices，見下方判讀規則。
+
+> **跨機器可重現性的判讀規則**：無 PLM、無 optimizer、無隨機性的 baseline（如 Lead）應該逐位元組相同——跨機器差一位小數就代表有真的差異，不能歸因浮點數。含 PLM 推論或 optimizer 搜尋的系統 run 只保證到約 `5e-6`，因為浮點累加順序會隨環境（BLAS、執行緒排程）變化。爭議發生時，先問「差在第幾位」，再決定是浮點噪音還是真的不一致。
 
 **重現**：`data/processed/multi_news_validation_canonical.jsonl` 第 4,066 列（`validation_4066`），config `configs/phase1_mvp_multinews.yaml`。
 
@@ -764,10 +766,40 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 
 #### 適用範圍（引用前必讀）
 
-- ⚠️ **全部是 diagnostic，不是 Gate 2 結果**：量測時 F-17 尚未修，因此以臨時腳本跳過不可行文件（1 / 8 / 0 篇）後繼續。
-  **F-17 修好之後（PR #12）這個限制消失** —— 主 pipeline 現在會把不可行列寫成完整 prediction row 並跑完全部 5,621 篇。
-  本節數字未依新 pipeline 重跑；重跑時 primary view 應採**全列計分**（`evaluate` 的新預設），
-  跨 config 比較另以 `scripts/audit/paired_run_intersection.py` 產生共同 feasible 交集作 sensitivity。
+- ✅ **已依新 pipeline 以 primary all-rows 協議重算**（2026-08-05）。
+  ⚠️ **但本節仍全部是 diagnostic，不是 Gate 2 結果**——重算只換掉了計分
+  協議，沒有改變下面三條限制中的任何一條。三格同分母 5,621 篇：
+
+  | config | R-1 | R-2 | R-Lsum | 不可行 |
+  |---|---|---|---|---|
+  | Lead (document_order) | 0.433204 | 0.146768 | 0.394039 | 0 |
+  | greedy + mean | 0.423018 | 0.129178 | 0.372800 | 1 |
+  | greedy + length_normalized | 0.434678 | 0.135353 | 0.395951 | 8 |
+
+  ⚠️ `length_normalized` 在 R-1／R-Lsum 上高於 Lead，但那是長度效應：
+  該配置平均 244.0 字、Lead 233.6 字。以 §F-18 的長度括弧對照，Lead 在
+  244 字附近的 R-Lsum 約 0.395，與本表持平。R-2 則在所有長度下都輸
+  0.011–0.014，且 selector 換成 NSGA-II 只給 +0.0007。詳見 (b)。
+
+  provenance 必須分開標註，不要混記成同一次量測：
+  - Lead：`runs_v2/gate2_lead_document_order_validation/`，commit `6abd4e9`。
+    另一台機器獨立重跑得到六位小數完全相同的結果——Lead 無 PLM、
+    無 optimizer、無隨機性，跨環境逐位元組確定。
+  - greedy + `mean`：commit `6abd4e9`，見
+    `docs/research/evidence/f17_pr12_validation_regression.json`。
+  - greedy + `length_normalized`：選句是在 **PR #12 修 blocking 之前**的
+    實作上跑的，以 `6abd4e9` 的 `evaluate` 重新計分。選句不變已由該證據檔
+    的逐篇 `selected_indices` 比對（5,621/5,621 相同）確立，故重新計分
+    合法；但 implementation commit 不同，必須標出。
+
+  objective 效果在三種計分協議下一致：跨集合 +0.0232（F-18 原始）、
+  共同 5,613 交集 +0.0231、全列 5,621 +0.0232。§7.3 那個「objective 比
+  optimizer 重要約 6 倍」的論斷因此不依賴計分協議的選擇。
+
+  不可行率對 primary 數字的影響量級（首次實測）：strict 與 all-rows 的差
+  為 mean 1.1e-5（1 篇）、length_normalized 5.6e-5（8 篇），約每 1 篇
+  不可行影響 R-Lsum 6e-6。Multi-News 上可忽略；GovReport 若不可行率
+  達 5%（約 281 篇）影響量級為 1.7e-3，屆時協議選擇將實質影響結論。
 - ⚠️ **單一 seed、未做 paired bootstrap** —— 上表所有差距（含 +0.0039 與 −0.0174）**都尚未驗證顯著性**。
 - ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
 - ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。
