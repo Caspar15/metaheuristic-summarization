@@ -227,9 +227,19 @@ python -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_wor
 - graph candidate route 已使用有界 sparse kNN，但 selector／coverage objective 目前仍可能建立 dense `N×N` similarity；完成 sparse selector/objective 後才能宣稱整條長文件 pipeline 都是 sparse
 - canonical task-profile objective 已禁止 raw-sum salience；Greedy／GRASP／NSGA-II 已共用 objective 與 feasibility contract。legacy config 仍保留歷史 sum 行為，因此舊 run 依然有被長度上限支配的問題
 - NSGA-II 已保存完整可行 Pareto front，但目前 final selection 仍是 provisional weighted sum；knee／reference-point policy 必須只用 validation 凍結
+- `src/features/graph.py` 的 `compute_textrank_scores`（自製 PageRank power iteration）缺少已知答案的單元測試（星形圖、路徑圖、完全圖、不連通分量）；開啟 graph 候選路線之前必做，目前尚未排程
 
 ---
 
 ## 授權
 
 尚未指定。在加入 LICENSE 之前，預設保留所有權利。
+
+### 第三方依賴授權
+
+投稿 IEEE Access 公開程式碼時會被檢視，先列在這裡：
+
+| 套件 | 授權 | 用途 |
+|---|---|---|
+| [sumy](https://github.com/miso-belica/sumy) `==0.12.0` | Apache-2.0 | TextRank／LexRank baseline（`src/baselines/centrality.py`），見 `docs/research/COMPUTE_ENVIRONMENT.md` |
+| [NLTK](https://github.com/nltk/nltk) `==3.10.0` | Apache-2.0 | sumy runtime 與專案 tokenizer code；repository **不含** NLTK data package |

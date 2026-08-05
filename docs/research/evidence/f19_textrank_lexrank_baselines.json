@@ -1,0 +1,180 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-05",
+  "status": "historical_diagnostic_not_final_replication",
+  "finding": "F-19 (docs/research/CODE_AUDIT_IEEE_Access.md)",
+  "implementation_commit": "b9b7fb87d36760d27838f15eb4e47d667a2d7504",
+  "implementation_scope": "The recorded ROUGE artifacts were produced at the commit above, before PR #14's final word-only tokenizer and artifact-contract cleanup. They remain historical diagnostic evidence, not a final-implementation replication.",
+  "final_implementation_verification": {
+    "word_tokenization": "Unit tests prove the final _WordOnlySumyTokenizer.to_words output matches pinned sumy==0.12.0 on regression cases without loading Punkt data.",
+    "full_split_predictions_preserved": false,
+    "selected_index_comparison_preserved": false,
+    "cross_machine_byte_identity_claim_allowed": false,
+    "required_before_formal_citation": "Run the final implementation on the governed split; preserve predictions, selected indices, config, dependency manifest, and hashes; then compare rows before adopting replacement metrics."
+  },
+  "python": "3.11.7",
+  "dependency_versions": {
+    "sumy": "0.12.0",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "numpy": "1.26.4"
+  },
+  "environment_note": "Local macOS CPU run; wall-clock timing must not be generalized across hardware (see docs/research/COMPUTE_ENVIRONMENT.md's methodology warning -- an earlier concurrent two-process run of these same two baselines produced a >5x internally-inconsistent time_select_seconds.txt vs. tqdm/file-mtime elapsed; the runs recorded here were re-executed in isolation, one process at a time, specifically to avoid that confound).",
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "analysis": "main",
+    "role": "primary_validation",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615"
+  },
+  "runs": {
+    "textrank": {
+      "run_dir": "runs_v2/textrank_val",
+      "baseline": "textrank",
+      "config": "configs/phase1_mvp_multinews.yaml",
+      "selection_seconds": {
+        "value": 475.123528,
+        "usable": false,
+        "reason": "This run executed concurrently with the first (crashed) lexrank attempt, both competing for the same CPU cores. This value is >5x inconsistent with the tqdm-derived wall time in evidence_files.f19_textrank_run_log (40:28 elapsed = 2428s for the same 5,621 docs). Faithfully transcribed from time_select_seconds.txt, but that source value is itself a contention artifact -- matching the source file does not make the source usable. Not usable for any cost claim; see docs/research/COMPUTE_ENVIRONMENT.md's methodology warning. No isolated-run re-measurement exists for TextRank at full scale (only the isolated calibration points in COMPUTE_ENVIRONMENT.md: a single 3,347-sentence document and a 30-document batch)."
+      },
+      "evaluation_seconds": 67.660420,
+      "artifacts": {
+        "predictions_jsonl_sha256": "3884bd1c1dd7e04b476ec42879ed9bce119152186a690b99ba6e4ec5ee36d7b3",
+        "config_used_json_sha256": "c0f67786f87b991d015c3390c5e66ffffd35f96888541efc981a57ef5d201686",
+        "dataset_preflight_json_sha256": "5851356dda912316a9bd653e10824852953f1336a7d264d27eafcda01b8f1ba9",
+        "feasibility_report_json_sha256": "47680c7744073b349cb43fbc688fee3f7316a42939667a363efe35f4ec5cfcb7",
+        "baseline_run_json_sha256": "a8a0b449e9d855a831d612e0171f4cd08bdfea5055d5af117abb4ecba667d066",
+        "metrics_csv_sha256": "8b82ff473d89a9e21bd419d3f939a182d2bd16cd11a6b20ed9af57ac8cec88ca",
+        "bulk_artifacts_committed": false
+      },
+      "feasibility": {
+        "total_rows": 5621,
+        "feasible_rows": 5621,
+        "infeasible_rows": 0,
+        "infeasible": []
+      },
+      "scorer_degenerate_rows": [],
+      "metrics_all_rows": {
+        "evaluation_protocol": "multisentence_lsum",
+        "scored_rows": 5621,
+        "rouge1": 0.413855,
+        "rouge2": 0.128838,
+        "rougeLsum": 0.368492
+      },
+      "length_distribution": {
+        "words_per_doc": {"mean": 247.35, "p25": 249.00, "p50": 250.00, "p75": 250.00},
+        "sentences_per_doc": {"mean": 8.08, "p25": 6.00, "p50": 8.00, "p75": 9.00},
+        "words_per_sentence": {"mean": 34.01, "p25": 25.00, "p50": 31.25, "p75": 41.17}
+      }
+    },
+    "lexrank": {
+      "run_dir": "runs_v2/lexrank_val",
+      "baseline": "lexrank",
+      "config": "configs/phase1_mvp_multinews.yaml",
+      "selection_seconds": {
+        "value": 507.927737,
+        "usable": true,
+        "reason": "This is the isolated re-run (evidence_files.f19_lexrank_run2_isolated_success_log below), executed alone with no concurrent process -- NOT the crashed concurrent attempt (evidence_files.f19_lexrank_run_crash_log). Consistent with its own tqdm-derived wall time (08:27 elapsed = 507s for the same 5,621 docs) to within rounding, unlike textrank's contaminated value above. Usable for cost claims about this specific run, subject to the usual single-machine caveat (see COMPUTE_ENVIRONMENT.md)."
+      },
+      "evaluation_seconds": 69.792726,
+      "note": "Re-run in isolation after the scorer_degenerate fix (see docs/research/COMPUTE_ENVIRONMENT.md's 'LexRank 相似度矩陣的已知退化'); an earlier attempt (see evidence_files.f19_lexrank_run_crash_log below) aborted at validation_1082 under the pre-fix fail-loud-and-abort behavior, 36 minutes into a concurrent run alongside textrank, and left no predictions.jsonl artifact at all (write_jsonl_atomic never reached its commit step).",
+      "artifacts": {
+        "predictions_jsonl_sha256": "ff2c981c3d954a0d627e027e155a4150e17616885f0fedcc946a37ec5243c5e8",
+        "config_used_json_sha256": "c0f67786f87b991d015c3390c5e66ffffd35f96888541efc981a57ef5d201686",
+        "dataset_preflight_json_sha256": "5851356dda912316a9bd653e10824852953f1336a7d264d27eafcda01b8f1ba9",
+        "feasibility_report_json_sha256": "47680c7744073b349cb43fbc688fee3f7316a42939667a363efe35f4ec5cfcb7",
+        "baseline_run_json_sha256": "b48f6c3492a3db63fdcd5e1c6b32ada9d977f41e8beed06ce07911b9c096b28f",
+        "metrics_csv_sha256": "dd00ab04714b5da3606c3e5e7b05de6e7076f712c566844fbd86c43bc4a07db8",
+        "bulk_artifacts_committed": false
+      },
+      "feasibility": {
+        "total_rows": 5621,
+        "feasible_rows": 5621,
+        "infeasible_rows": 0,
+        "infeasible": []
+      },
+      "scorer_degenerate_rows": [
+        {
+          "id": "validation_1082",
+          "selected_words": 59,
+          "sentence_count": 2,
+          "mechanism": "length-2 document, zero shared vocabulary between the two sentences -> idf(term)=log(2/2)=0 for every term -> whole similarity matrix collapses to all-zero -> resolved automatically (both sentences fit under budget regardless of ranking)"
+        },
+        {
+          "id": "validation_2303",
+          "selected_words": 77,
+          "sentence_count": 2,
+          "mechanism": "same as validation_1082"
+        }
+      ],
+      "metrics_all_rows": {
+        "evaluation_protocol": "multisentence_lsum",
+        "scored_rows": 5621,
+        "rouge1": 0.430576,
+        "rouge2": 0.135926,
+        "rougeLsum": 0.389448
+      },
+      "length_distribution": {
+        "words_per_doc": {"mean": 246.99, "p25": 248.00, "p50": 250.00, "p75": 250.00},
+        "sentences_per_doc": {"mean": 11.02, "p25": 9.00, "p50": 11.00, "p75": 13.00},
+        "words_per_sentence": {"mean": 24.07, "p25": 19.23, "p50": 22.73, "p75": 27.67}
+      }
+    }
+  },
+  "comparison_table": {
+    "note": "Same denominator (5,621), same evaluate protocol (multisentence_lsum, all-rows default). Lead/Random/system rows are cited from F-16/F-18, not remeasured here.",
+    "rows": [
+      {"method": "Lead (document_order)", "rouge1": 0.4332, "rouge2": 0.1468, "rougeLsum": 0.3940, "words_per_doc": 233.6},
+      {"method": "Random (seed 0)", "rouge1": 0.4162, "rouge2": 0.1220, "rougeLsum": 0.3788, "words_per_doc": 246.8},
+      {"method": "system greedy + mean", "rouge1": 0.4230, "rouge2": 0.1292, "rougeLsum": 0.3728, "words_per_doc": 227.0},
+      {"method": "system greedy + length_normalized", "rouge1": 0.4347, "rouge2": 0.1354, "rougeLsum": 0.3960, "words_per_doc": 244.0},
+      {"method": "TextRank", "rouge1": 0.4139, "rouge2": 0.1288, "rougeLsum": 0.3685, "words_per_doc": 247.35},
+      {"method": "LexRank", "rouge1": 0.4306, "rouge2": 0.1359, "rougeLsum": 0.3894, "words_per_doc": 246.99}
+    ]
+  },
+  "f19_long_sentence_bias_evidence": {
+    "hypothesis": "sumy TextRank's edge weight (shared-word count / (log(len1)+log(len2))) under-normalizes for sentence length, biasing scores toward longer sentences; sumy LexRank (TF-IDF cosine) has no such coupling.",
+    "selected_vs_pool_word_counts_full_split": {
+      "textrank": {"pool_mean": 21.55, "pool_median": 19, "selected_mean": 30.62, "selected_median": 28, "selected_minus_pool_mean": 9.07},
+      "lexrank": {"pool_mean": 21.55, "pool_median": 19, "selected_mean": 22.42, "selected_median": 20, "selected_minus_pool_mean": 0.87}
+    },
+    "score_vs_sentence_length_correlation_300_doc_sample": {
+      "sample_size_docs": 300,
+      "textrank": {"pooled_correlation": 0.2234, "mean_within_document_correlation": 0.6601},
+      "lexrank": {"pooled_correlation": 0.1498, "mean_within_document_correlation": 0.2225}
+    },
+    "conclusion": "The measurements support a strong association between sumy TextRank scores and sentence length and are consistent with its published edge-weight formula. They do not by themselves establish causality or exclude topic, position, or lexical-density confounds.",
+    "downstream_rougeLsum_interpretation": "TextRank's lower R-Lsum vs LexRank is consistent with fewer/longer selected sentences reducing per-sentence LCS-matching opportunities -- the same EFFECT CLASS as F-18(a)'s mean-aggregation pathology (greedy+mean's 6.05-sentence collapse), but not proven to be caused exclusively by sentence length. F-18(a) is a searching objective's aggregation rule triggering early stopping; F-19 is a rank-then-fill scorer whose scores are strongly associated with length. Do not conflate the mechanisms or claim a completed causal attribution."
+  },
+  "literature_comparison": {
+    "note": "docs/research/CODE_AUDIT_IEEE_Access.md's Table 6 records Lead/TextRank/LexRank as 'adopted from [16]', a different paper's pipeline (different preprocessing, sentence splitting, ROUGE settings, and possibly split) -- this is a directional sanity check only, NOT a validated apples-to-apples reproduction. See CLAUDE.md's global rule against treating cross-paper baseline numbers as a fair local comparison.",
+    "textrank": {"literature_rouge1": 0.4151, "this_repo_rouge1": 0.413855, "abs_diff": 0.0012, "rel_diff_pct": 0.3},
+    "lexrank": {"literature_rouge1": 0.4124, "this_repo_rouge1": 0.430576, "abs_diff": 0.0182, "rel_diff_pct": 4.41}
+  },
+  "evidence_files": {
+    "f19_textrank_run_log": {
+      "path": "docs/research/evidence/f19_textrank_run.txt",
+      "sha256": "b01e4c9d80479a2dbd06b81556fdb40c220fec57c88cd59f6d9cd3b100d71ba6",
+      "description": "Full tqdm log of the TextRank run backing runs_v2/textrank_val (this run was executed concurrently with the first lexrank attempt; its own internal time_select_seconds.txt is NOT confounded the same way lexrank's crash was, but see environment_note above for why timing from this log should not be quoted directly -- use the isolated calibration points in COMPUTE_ENVIRONMENT.md instead)."
+    },
+    "f19_lexrank_run_crash_log": {
+      "path": "docs/research/evidence/f19_lexrank_run_crash.txt",
+      "sha256": "6cb9e9a3292b5f3b48a72fe8e1ba55c938dc53da8a5a9f25f7b08233f16b06b1",
+      "description": "The first LexRank attempt, aborted at validation_1082 (1082/5621, ~36 minutes in) under the pre-fix fail-loud-and-abort guard. Kept deliberately: this is F-17's original failure shape (one document's data characteristic destroying an entire batch's worth of completed work) recurring a third time in a code path F-17 never covered (after greedy's min_words and candidate_capacity_shortfall)."
+    },
+    "f19_lexrank_run2_isolated_success_log": {
+      "path": "docs/research/evidence/f19_lexrank_run2_isolated_success.txt",
+      "sha256": "0b718f1fdbc8fcbefa834b5cb1b8efd483c9df363d7f832fd60725cd7c105175",
+      "description": "The successful, isolated (no concurrent process) re-run backing runs_v2/lexrank_val, after the scorer_degenerate fix. time_select_seconds.txt (507.93s) matches this log's own tqdm elapsed almost exactly, confirming the earlier concurrent run's timing mismatch was a contention artifact, not broken instrumentation."
+    },
+    "f19_lexrank_idf_collapse_scan_json": {
+      "path": "docs/research/evidence/f19_lexrank_idf_collapse_scan.json",
+      "sha256": "5ef5fb89e11a201839a9f24712fb2ce545ca4ff037cf2587e859baf24ed74fae",
+      "sha256_target": "Committed Git blob bytes (LF line endings). A Windows working tree with core.autocrlf may have different raw bytes; verify against the Git blob or normalize CRLF to LF before hashing.",
+      "description": "Full-split scan (5,621 docs, 456,942 sentences, 79.9s) checking, per document, whether every term's LexRank idf collapses to exactly 0 -- the actual necessary-and-sufficient trigger for the NaN guard (not the 'all-stopword sentence' misconception an earlier version of the guard's message assumed). Found exactly 2 hits (validation_1082, validation_2303), matching scorer_degenerate_rows above. Also records the misleading secondary signal (10,364 individual zero-effective-word sentences across 2,818 documents) that does NOT predict document-level collapse on its own."
+    }
+  }
+}

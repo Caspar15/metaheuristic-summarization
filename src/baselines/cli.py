@@ -45,10 +45,12 @@ from typing import Dict, Mapping, Optional
 
 from tqdm import tqdm
 
+from src.baselines.centrality import summarize_one_lexrank, summarize_one_textrank
 from src.baselines.lead import ORDERINGS, summarize_one_lead
 from src.baselines.random_baseline import summarize_one_random
 from src.data.policy import validate_dataset_policy_request
 from src.pipeline.select_sentences import (
+    build_feasibility_report,
     validate_experiment_request,
     validate_requested_split,
 )
@@ -61,26 +63,50 @@ from src.utils.io import (
     write_jsonl_atomic,
 )
 
-BASELINE_METHODS = {"lead": summarize_one_lead, "random": summarize_one_random}
+BASELINE_METHODS = {
+    "lead": summarize_one_lead,
+    "random": summarize_one_random,
+    "textrank": summarize_one_textrank,
+    "lexrank": summarize_one_lexrank,
+}
 
 # Baselines whose select_fn needs an explicit --seed to be reproducible.
 SEEDED_BASELINES = {"random"}
 
 # Whether a baseline has a multi-document ordering concept (--ordering/
 # --first_k apply) is a SEPARATE axis from SEEDED_BASELINES above -- they
-# only coincide today because there happen to be exactly two baselines.
-# The next baseline (e.g. a deterministic, single-document-centrality
-# method with no ordering concept either) would be unseeded *and*
-# unordered, so "not in SEEDED_BASELINES" is not a valid stand-in for "has
-# no ordering concept": using it as one is exactly the bug this file used
-# to have (see git history / PR #11 review). Both sides are declared
-# explicitly, not derived as each other's complement, so a baseline that
-# is added to BASELINE_METHODS without being added to either set here is
-# caught by test_baseline_ordering_axis_declarations_are_complete below
-# instead of silently defaulting into whichever branch a stale complement
-# happens to fall into.
+# only coincide by accident (Lead is ordered+unseeded, Random is
+# unordered+seeded, TextRank/LexRank are unordered+unseeded like Random but
+# for an unrelated reason: their sentence graph is scored over the whole
+# document regardless of source-document boundaries, so there is no
+# per-document traversal order to interleave). "not in SEEDED_BASELINES" is
+# not a valid stand-in for "has no ordering concept": using it as one is
+# exactly the bug this file used to have (see git history / PR #11 review).
+# Both sides are declared explicitly, not derived as each other's
+# complement, so a baseline that is added to BASELINE_METHODS without being
+# added to either set here is caught by
+# test_baseline_ordering_axis_declarations_are_complete below instead of
+# silently defaulting into whichever branch a stale complement happens to
+# fall into.
 ORDERED_BASELINES = {"lead"}
-UNORDERED_BASELINES = {"random"}
+UNORDERED_BASELINES = {"random", "textrank", "lexrank"}
+
+# A third, independent axis: does this baseline's summarize_one_* wrapper
+# pass apply_min_words=True to summarize_one_baseline (see contract.py)?
+# Declared explicitly here too, not derived from SEEDED_BASELINES/
+# ORDERED_BASELINES -- it correlates with neither today (Lead is
+# ordered+ungoverned, Random is unordered+seeded+ungoverned, TextRank/
+# LexRank are unordered+unseeded+ungoverned). min_words is only in scope
+# for a *searching* selector (see random_baseline.py's module docstring,
+# "MIN_WORDS DOES NOT APPLY HERE EITHER", and centrality.py's docstring for
+# why TextRank/LexRank fall under the same principle despite being scored):
+# Lead/Random/TextRank/LexRank each walk their own selection rule exactly
+# once and cannot trade one sentence for another to satisfy the floor, so
+# all four are ungoverned -- this axis exists for the first baseline that
+# breaks that pattern (e.g. a restart-until-feasible variant), not because
+# any current baseline needs it.
+GOVERNED_LENGTH_BASELINES: set = set()
+UNGOVERNED_LENGTH_BASELINES = {"lead", "random", "textrank", "lexrank"}
 
 DEFAULT_ORDERING = "document_order"
 DEFAULT_FIRST_K = 3
@@ -189,10 +215,20 @@ def summarize_jsonl_baseline(
         nonlocal processed
         for doc in tqdm(read_jsonl(input_path), desc=f"{baseline} baseline"):
             validate_requested_split(doc, requested_split)
+            # Three-way, not binary: SEEDED_BASELINES and ORDERED_BASELINES
+            # are independent axes (see their own comments above), so a
+            # baseline can need neither extra kwarg -- TextRank/LexRank are
+            # unseeded AND unordered, and summarize_one_textrank/
+            # summarize_one_lexrank accept only (doc, cfg). A binary
+            # if-SEEDED-else-ordering dispatch would pass ordering/first_k
+            # to a function that does not accept them and crash with a
+            # TypeError the first time such a baseline was actually run.
             if baseline in SEEDED_BASELINES:
                 result = summarize_one(doc, cfg, seed=seed)
-            else:
+            elif baseline in ORDERED_BASELINES:
                 result = summarize_one(doc, cfg, ordering=ordering, first_k=first_k)
+            else:
+                result = summarize_one(doc, cfg)
             processed += 1
             yield result
         if processed == 0:
@@ -300,6 +336,19 @@ def main():
     if dataset_preflight is not None:
         with open(os.path.join(out_dir, "dataset_preflight.json"), "w", encoding="utf-8") as f:
             json.dump(dataset_preflight, f, ensure_ascii=False, indent=2)
+
+    # Same artifact the system pipeline writes (src.pipeline.select_sentences
+    # .main), retroactively closing a gap that predates TextRank/LexRank:
+    # Lead and Random can already produce infeasible rows (an oversized
+    # leading sentence, a min_words shortfall) but no baseline run has ever
+    # summarized them into a feasibility_report.json. build_feasibility_report
+    # is artifact-shape-agnostic (reads predictions.jsonl rows the same way
+    # any downstream consumer would), so it needs no baseline-specific
+    # variant.
+    feasibility_report = build_feasibility_report(preds_path)
+    with open(os.path.join(out_dir, "feasibility_report.json"), "w", encoding="utf-8") as f:
+        json.dump(feasibility_report, f, ensure_ascii=False, indent=2)
+
     with open(os.path.join(out_dir, "time_select_seconds.txt"), "w", encoding="utf-8") as f:
         f.write(f"{t1 - t0:.6f}")
     print(f"Wrote predictions to {preds_path}")

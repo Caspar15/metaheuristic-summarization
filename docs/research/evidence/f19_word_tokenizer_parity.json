@@ -1,0 +1,30 @@
+{
+  "evidence_version": 1,
+  "measured_at": "2026-08-05",
+  "status": "verified_full_split",
+  "purpose": "Verify that removing the unused Punkt sentence model does not change any word tokens consumed by sumy TextRank or LexRank.",
+  "implementation": {
+    "pr14_head_before_fix": "a68152b59abdfdfdc0f73e07f733c9438aacca7b",
+    "centrality_py_sha256": "d682f5fef41d8b063ad496c70bd5ecbc3ec0de690af832707f0aa8d7a98ec7e1",
+    "adapter": "src.baselines.centrality._WordOnlySumyTokenizer",
+    "reference": "sumy.nlp.tokenizers.Tokenizer('english').to_words with only its unused sentence-tokenizer constructor hook disabled"
+  },
+  "environment": {
+    "python": "3.12.7",
+    "sumy": "0.12.0",
+    "nltk": "3.10.0",
+    "platform": "Windows"
+  },
+  "dataset": {
+    "policy_id": "multinews-validation-v1",
+    "rows": 5621,
+    "canonical_sentences": 456942,
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1"
+  },
+  "result": {
+    "mismatched_sentences": 0,
+    "first_mismatch_sentence_id": null,
+    "adapter_token_stream_sha256": "9e2d9d45d72ad137b4b37d95bbe01e8034eed9717e9900ffc9f23401c73b6892"
+  },
+  "interpretation": "For every frozen Multi-News validation sentence, the final word-only adapter emits exactly the same token sequence as pinned sumy. Punkt is not part of this scoring path. This proves tokenizer parity, but it does not by itself prove that historical and final predictions are byte-identical; the final selected-index artifacts must still be preserved and compared."
+}

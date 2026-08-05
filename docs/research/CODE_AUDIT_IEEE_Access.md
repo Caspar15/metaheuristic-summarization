@@ -715,6 +715,44 @@ Lead 的 governed baseline artifact 已保存於 `runs_v2/gate2_lead_document_or
 
 **結論：系統看似領先的 R-1 (+0.0014) 與 R-Lsum (+0.0019) 完全由多用的 10.4 個字解釋。給 Lead 同等字數，Lead 三項全勝。** R-2 更直接 —— Lead 在三種長度下都是 0.146–0.149，系統 0.1354，**在任何長度下都輸 0.011–0.014**。
 
+> ⚠️ **機制修正，結論不變**（2026-08-05，加入 TextRank／LexRank baseline 時發現）：
+> 上面「系統多用 10.4 個字」的原始寫法容易讀成「系統這個方法本身」的性質。
+> 實測顯示這其實是**填充規則**的性質，不是任何單一方法的性質——
+>
+> | baseline | 字/篇（全量 5,621 篇） | 填充規則 |
+> |---|---|---|
+> | Lead（`document_order`） | **233.6** | **stop-tolerant**：碰到第一個放不進的句子就停 |
+> | Random（skip-tolerant fill） | 246.83 | skip-tolerant：放不進就跳過，繼續嘗試後面的句子 |
+> | 系統（greedy + `length_normalized`） | 244.0 | 邊際效用搜尋，非嚴格 stop-at-first-miss |
+> | TextRank（`select_by_score`） | 247.35 | skip-tolerant（見 `src/baselines/contract.py`） |
+>
+> 四個 baseline 裡，**Lead 是唯一的異常值，也是唯一用 stop-tolerant 規則的
+> 那一個**；其餘三個不論方法本身是什麼（隨機、邊際效用搜尋、centrality
+> 排序），只要填充規則是 skip-tolerant，字數都貼近 250 上界、彼此相差
+> 不到 3 個字。也就是說：**只要用 skip-tolerant 填充規則的方法，都會
+> 系統性地比 Lead 多用 13–14 個字**，這是規則造成的字數差，不是
+> 系統這個方法特有的優勢。原始的「10.4 個字」結論本身沒有錯（那次比較
+> 的兩個對象確實差 10.4 字），但把它寫成「系統的字數性質」而非「
+> skip-tolerant 填充規則的通性」會讓 reviewer 誤以為系統的 R-1/R-Lsum
+> 領先有某種方法特有的理由——沒有，純粹是填充規則。
+>
+> **Lead 用 stop-tolerant 是刻意選擇，不是缺陷**：標準 Lead-3／First-k
+> 定義就是照閱讀順序取前 k 句，跳句就不再是「Lead」這個基準線本來的定義
+> （見 `src/baselines/lead.py` 模組 docstring）。但這個刻意選擇有一個
+> 系統性代價——讓 Lead 在同一個字數上界下，比任何 skip-tolerant 方法
+> 少用約 13 個字——**論文必須明寫這一點**，否則 reviewer 會問「為什麼
+> Lead 用不到預算」，而正確答案是「這是 stop-tolerant 定義的必然結果，
+> 不是 Lead 這個基準線太弱」。
+>
+> **長度括弧分析升級為通用 follow-up，不是逐一為每個新 baseline 各做一次**：
+> 本節與 (b) 目前只對 `greedy + length_normalized` 做過括弧。既然差距的
+> 機制是通用的（填充規則，不是方法），正確的做法是**做一次通用的
+> length-matched bracket 基礎設施，套用到所有 skip-tolerant baseline／
+> 系統 vs. Lead 的比較**，而不是每加一個新方法（TextRank、LexRank、未來
+> 的 SBERT centroid 等）就重做一次 `scripts/audit/length_matched_lead.py`
+> 那樣的一次性分析。這是一項待排入 follow-up 的通用基礎設施工作，本輪
+> 只記錄機制，不實作。
+
 #### (c) §7.3 NSGA-II 生存 gate 初步結果
 
 同一 objective（`mean`）、同一候選池、同一預算，僅更換 selector：
@@ -821,6 +859,78 @@ PR #11 的 Random baseline（seed 0、5,621 篇）：`0.416164 / 0.121989 / 0.37
 - ⚠️ **MVP config only**：`enabled_routes: [lexical, semantic]`，**沒有 graph 軌**；`position` 與 `length` 特徵權重皆為 0。因此 (b) 不是「完整架構打不贏 Lead」的結論，(c) 也不是 §7.3 的最終裁決。
 - ⚠️ **尚未跑過的關鍵組合**：NSGA-II + `length_normalized`（目前最佳 objective 配最佳 selector）、以及開啟 graph 軌的任何配置（§5.4 刪除條件）。
 - 重現腳本：`scripts/audit/length_matched_lead.py`、`scripts/audit/selection_overlap.py`。
+
+---
+
+### 🟠 F-19. TextRank／LexRank baseline：歷史 diagnostic ROUGE，與 TextRank 的長句偏好證據
+
+**量測日期**：2026-08-05。**historical diagnostic，不是 Gate 2 結果**（單一 run、未做 paired significance test，見末尾適用範圍）。選句實作由 evidence manifest 記為 commit `b9b7fb8`；該量測早於 PR #14 最終 tokenizer／artifact contract。最終實作雖以測試證明 word tokenization 與 pinned sumy 相同，仍須保存新 predictions、selected indices 與 metrics 後，才能把下表升格為最終可引用結果。
+
+以新 all-rows 預設協議（PR #12 之後 `evaluate` 的預設）、`protocol multisentence_lsum`、分母皆為 **5,621**：
+
+| | R-1 | R-2 | R-Lsum | 字/篇 |
+|---|---|---|---|---|
+| Lead | 0.4332 | 0.1468 | 0.3940 | 233.6 |
+| Random (seed 0) | 0.4162 | 0.1220 | 0.3788 | 246.8 |
+| 系統 greedy + `mean` | 0.4230 | 0.1292 | 0.3728 | 227.0 |
+| 系統 greedy + `length_normalized` | 0.4347 | 0.1354 | 0.3960 | 244.0 |
+| **TextRank** | **0.4139** | **0.1288** | **0.3685** | 247.35 |
+| **LexRank** | **0.4306** | **0.1359** | **0.3894** | 246.99 |
+
+**TextRank 是六個方法裡 R-1 與 R-Lsum 最低的**（R-1 甚至低於 Random；R-2 與 Random、系統 `mean` 相近）。**LexRank 全面優於 TextRank**，且三項都逼近（但仍略遜於）Lead——與系統 `mean` 落後 Lead 的量級相近。
+
+#### 機制證據：TextRank 分數與句長有強關聯，LexRank 較弱
+
+觀察：TextRank 平均 8.08 句/篇、34.01 字/句；LexRank 11.02 句/篇、24.07 字/句；Random 13.11 句/篇、18.8 字/句。TextRank 是六者中唯一明顯偏長句的，34.01 字/句接近 F-18(a) `mean` 病理的 ~37.5 字/句（227.0/6.05）——但**這是表面症狀相似，不是同一個機制**，見下方判讀。
+
+**驗證假說**：sumy TextRank 的邊權重是「共同詞數 ÷ (log(句1長)+log(句2長))」（`TextRankSummarizer._rate_sentences_edge`），假設 log 正規化對長句不足以抵銷詞彙重疊機會的增加。全量 5,621 篇的選中句 vs. 候選池（全文件句子）字數分布：
+
+| | 候選池 mean | 候選池 median | 選中 mean | 選中 median | 選中−池 mean |
+|---|---|---|---|---|---|
+| TextRank | 21.55 | 19 | **30.62** | **28** | **+9.07** |
+| LexRank | 21.55 | 19 | 22.42 | 20 | +0.87 |
+
+300 篇樣本、句子分數 vs. 字數的相關係數（同一文件內，避免跨文件分數尺度不同造成的混淆）：
+
+| | pooled correlation | 文件內平均 correlation |
+|---|---|---|
+| TextRank | 0.2234 | **0.6601** |
+| LexRank | 0.1498 | 0.2225 |
+
+**證據支持此假說，但不是單獨的因果證明**：TextRank 文件內分數與句長的平均相關係數為 0.66，選中句平均比候選池長 9.07 字（約 42%）；LexRank（TF-IDF cosine，沒有相同的 log-length 邊權重）則為 0.22 與 +0.87 字。這與 sumy 對 Mihalcea TextRank 邊權重公式的實作機制一致；可在論文中寫成已量測的 baseline 特性，但不可寫成已排除主題、位置、詞彙密度等混淆因素的因果結論。
+
+#### ROUGE 判讀：效應類別相同，機制不同，不可混為一談
+
+TextRank 的 R-Lsum（0.3685）低於 LexRank（0.3894），同時伴隨較少選句（8.08 vs 11.02）與較長句子（34.01 vs 24.07 字）。這個型態**與** F-18(a) 的 `mean` 病理一致：句數少、句子長可能減少 ROUGE-Lsum 逐句 LCS 比對的獨立匹配機會；但目前沒有受控介入或 paired causal analysis，因此只能寫「consistent with」，不能寫「完全由此造成」。
+
+但**根因不同，不能寫成同一個機制**：
+- F-18(a) 的 `mean` 病理：**搜尋型目標函數的聚合規則**造成的提早停止——加入任何低於目前平均分數的句子會拉低 `mean`，greedy 因此主動停手。這是系統選句過程中的動態（贏了就停）。
+- F-19 的 TextRank 偏誤：**base scorer 本身**對長句的系統性偏誤（分數與句長相關係數 0.66）——`select_by_score` 是單純 rank-then-fill，完全沒有聚合公式或提早停止的概念，句數變少純粹是因為「長句先被排到前面、把預算填滿得比較快」。
+
+兩者都導致「句少字長 → R-Lsum 受損」這個**下游效應**，但上游成因一個是搜尋動態、一個是 scorer 本身的公式性質，論文若把兩者寫成同一件事會誤導審稿人。
+
+#### 與文獻 [16] 的方向性對照（不是驗證，兩邊 pipeline 不同）
+
+Table 6 的 Lead/LexRank/TextRank 數字「adopted from [16]」（見本文件 §0 附近的引文），前處理、分句、ROUGE 設定都與本專案不同，**不能當公平對照**——僅供方向參考：
+
+| | 文獻 [16] R-1 | 本專案 R-1 | 差距 |
+|---|---|---|---|
+| TextRank | 0.4151 | 0.4139 | −0.0012（0.3%） |
+| LexRank | 0.4124 | 0.4306 | +0.0182（4.4%） |
+
+TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高於文獻數字（4.4%）——但因為兩邊 pipeline 不同（分句、預處理、可能連 split 都不同），**這個接近或差距本身不能解讀為「重現成功」或「重現失敗」**，只是記錄下來備查。
+
+#### 適用範圍（引用前必讀）
+
+- ⚠️ **全部是 diagnostic**：單一 run、未做 paired bootstrap，上表所有差距皆未驗證顯著性。
+- ⚠️ **不是最終實作的正式重現**：原量測 commit 早於 PR #14 最終 word-only adapter；adapter 的 token parity 已由測試鎖定，但目前 repository 沒有一份最終實作的完整 predictions／selected-index artifact 可逐列比較。不得聲稱跨機器逐位元組相同。
+- ⚠️ **TextRank/LexRank 皆為 MVP baseline 設定**（`length_gate=True`、`apply_min_words=False`），與系統兩列的候選路線／objective 設定不對稱，不是同一個 pipeline 的兩端。
+- ⚠️ 300 篇相關係數樣本非全量，方向可信、數值可能隨樣本略有浮動；全量重算尚未做。
+- 完整 provenance（dataset SHA-256、artifact SHA-256、依賴版本、原始 log）：
+  `docs/research/evidence/f19_textrank_lexrank_baselines.json`。
+- 最終 word-only adapter 的全量 token parity（456,942 句、0 mismatch）：
+  `docs/research/evidence/f19_word_tokenizer_parity.json`。
+- 重現：`python -m src.pipeline.evaluate --pred runs_v2/<textrank|lexrank>_val/predictions.jsonl --gold data/processed/multi_news_validation_canonical.jsonl --out <out>.csv --protocol multisentence_lsum`。
 
 ---
 

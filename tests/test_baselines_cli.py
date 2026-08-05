@@ -316,6 +316,100 @@ def test_baseline_ordering_axis_declarations_are_complete():
     assert baseline_cli.ORDERED_BASELINES & baseline_cli.UNORDERED_BASELINES == set()
 
 
+@pytest.mark.parametrize("baseline", sorted(baseline_cli.BASELINE_METHODS))
+def test_every_baseline_is_dispatchable(tmp_path, monkeypatch, baseline):
+    """Declaring an axis is not the same as dispatching correctly on it.
+
+    TextRank/LexRank proved this the hard way: SEEDED_BASELINES and
+    ORDERED_BASELINES were both declared correctly for them (unseeded,
+    unordered), and the completeness assertions above were satisfied --
+    but summarize_jsonl_baseline's actual call-site dispatch was binary
+    (`if baseline in SEEDED_BASELINES: ... else: pass ordering/first_k`),
+    which does not leave a third shape for "needs neither kwarg". The
+    first real `--baseline textrank` invocation would have crashed with a
+    TypeError (summarize_one_textrank takes only (doc, cfg)), and no
+    completeness assertion catches that, because completeness is a
+    property of the *declaration* sets, not of the dispatch code that
+    reads them. This test exercises the actual dispatch path -- the
+    minimal fixture appropriate to each baseline's declared axes (--seed
+    for SEEDED_BASELINES, --ordering for ORDERED_BASELINES, neither for
+    plain baselines) -- end to end through main(), so a fourth baseline
+    that gets its axis declarations right but its dispatch wrong fails
+    here instead of the first time someone actually runs it.
+    """
+
+    # Deliberately NOT _toy_doc(): that fixture's two sentences share no
+    # vocabulary at all, which is exactly the small-N LexRank idf-collapse
+    # case test_baselines_centrality.py already covers on its own terms.
+    # This test is about dispatch shape, not that edge case, so it needs a
+    # document every baseline can score normally.
+    doc = build_document_example(
+        example_id="dispatch_doc1",
+        split="validation",
+        documents=[[
+            "The central bank raised interest rates on Tuesday.",
+            "Analysts expected the rate increase after months of inflation data.",
+            "Markets responded calmly to the widely anticipated decision.",
+        ]],
+        references=["a reference"],
+        input_mode="single_document",
+        output_mode="multi_sentence",
+        dataset_name="toy",
+    )
+    input_path = tmp_path / "toy.jsonl"
+    write_jsonl_atomic(str(input_path), [doc])
+    config_path = tmp_path / "cfg.yaml"
+    config_path.write_text(
+        "length_control:\n"
+        "  unit: words\n"
+        "  max_words: 50\n"
+        "  min_words: 0\n"
+        "  require_nonempty: true\n",
+        encoding="utf-8",
+    )
+    run_dir = tmp_path / "runs"
+
+    argv = [
+        "baselines-cli",
+        "--baseline", baseline,
+        "--config", str(config_path),
+        "--split", "validation",
+        "--input", str(input_path),
+        "--run_dir", str(run_dir),
+        "--stamp", "dispatch-check",
+    ]
+    if baseline in baseline_cli.SEEDED_BASELINES:
+        argv += ["--seed", "1"]
+    if baseline in baseline_cli.ORDERED_BASELINES:
+        argv += ["--ordering", "document_order"]
+    monkeypatch.setattr(sys, "argv", argv)
+
+    baseline_cli.main()
+
+    assert (run_dir / "dispatch-check" / "predictions.jsonl").exists()
+
+
+def test_baseline_governed_length_axis_declarations_are_complete():
+    """Mirror of test_baseline_ordering_axis_declarations_are_complete, for
+    the third, independent axis: does this baseline apply min_words (see
+    GOVERNED_LENGTH_BASELINES/UNGOVERNED_LENGTH_BASELINES's own comment in
+    src.baselines.cli for why this is not derivable from the other two
+    axes). A baseline missing from both sets here would silently read as
+    neither declared nor rejected by any runtime check -- unlike the seed
+    and ordering axes, nothing in main()/summarize_jsonl_baseline currently
+    branches on this axis at the CLI layer (it governs a choice made inside
+    each baseline module's own summarize_one_* wrapper instead), so this
+    completeness test is the only thing that would catch a new baseline
+    added to BASELINE_METHODS without an explicit governed/ungoverned
+    declaration here.
+    """
+
+    assert baseline_cli.GOVERNED_LENGTH_BASELINES | baseline_cli.UNGOVERNED_LENGTH_BASELINES == set(
+        baseline_cli.BASELINE_METHODS
+    )
+    assert baseline_cli.GOVERNED_LENGTH_BASELINES & baseline_cli.UNGOVERNED_LENGTH_BASELINES == set()
+
+
 def test_summarize_jsonl_baseline_rejects_ordering_for_unordered_baseline_without_cli(tmp_path):
     """The ordering guard must be enforced by summarize_jsonl_baseline
     itself, not only by main() -- any caller that builds a baseline run
@@ -409,3 +503,89 @@ def test_random_same_config_same_seed_reruns_produce_byte_identical_predictions(
     bytes_a = (run_dir / "rerun-a" / "predictions.jsonl").read_bytes()
     bytes_b = (run_dir / "rerun-b" / "predictions.jsonl").read_bytes()
     assert bytes_a == bytes_b
+
+
+def test_main_writes_feasibility_report_for_a_feasible_run(tmp_path, monkeypatch):
+    """Closes the gap found while adding TextRank/LexRank: no baseline run
+    ever produced feasibility_report.json even though Lead/Random can
+    already emit infeasible rows -- only the system pipeline's main() wrote
+    one. build_feasibility_report is artifact-shape-agnostic (reads
+    predictions.jsonl rows), so wiring it in here retroactively covers every
+    baseline, not just the two centrality ones."""
+
+    input_path = tmp_path / "toy.jsonl"
+    write_jsonl_atomic(str(input_path), [_toy_doc()])
+    config_path = _random_cfg_path(tmp_path)
+    run_dir = tmp_path / "runs"
+
+    argv = [
+        "baselines-cli",
+        "--baseline", "random",
+        "--config", str(config_path),
+        "--split", "validation",
+        "--input", str(input_path),
+        "--run_dir", str(run_dir),
+        "--stamp", "feasible-run",
+        "--seed", "1",
+    ]
+    _run_cli(monkeypatch, argv)
+
+    report_path = run_dir / "feasible-run" / "feasibility_report.json"
+    assert report_path.exists()
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["total_count"] == 1
+    assert report["feasible_count"] == 1
+    assert report["infeasible_count"] == 0
+    assert report["infeasible_ids"] == []
+
+
+def test_main_writes_feasibility_report_with_infeasible_row_recorded(tmp_path, monkeypatch):
+    """A document whose only sentence is individually oversized (excluded,
+    not truncated -- see test_baselines_lead.py's equivalent case) has no
+    eligible sentence at all, so Lead records it as feasible=False,
+    infeasible_code=source_no_eligible_sentence rather than raising. The
+    CLI-level feasibility_report.json must surface that, not just the
+    per-row predictions.jsonl field."""
+
+    oversized_doc = build_document_example(
+        example_id="cli_oversized",
+        split="validation",
+        documents=[[" ".join(["x"] * 30)]],
+        references=["a reference"],
+        input_mode="single_document",
+        output_mode="multi_sentence",
+        dataset_name="toy",
+    )
+    input_path = tmp_path / "oversized.jsonl"
+    write_jsonl_atomic(str(input_path), [oversized_doc])
+
+    config_path = tmp_path / "small_budget_config.yaml"
+    config_path.write_text(
+        "length_control:\n"
+        "  unit: words\n"
+        "  max_words: 10\n"
+        "  min_words: 0\n"
+        "  require_nonempty: true\n",
+        encoding="utf-8",
+    )
+    run_dir = tmp_path / "runs"
+
+    argv = [
+        "baselines-cli",
+        "--baseline", "lead",
+        "--config", str(config_path),
+        "--split", "validation",
+        "--input", str(input_path),
+        "--run_dir", str(run_dir),
+        "--stamp", "infeasible-run",
+    ]
+    _run_cli(monkeypatch, argv)
+
+    report = json.loads(
+        (run_dir / "infeasible-run" / "feasibility_report.json").read_text(encoding="utf-8")
+    )
+    assert report["total_count"] == 1
+    assert report["feasible_count"] == 0
+    assert report["infeasible_count"] == 1
+    assert report["infeasible_ids"][0]["id"] == "cli_oversized"
+    assert report["infeasible_ids"][0]["infeasible_code"] == "source_no_eligible_sentence"

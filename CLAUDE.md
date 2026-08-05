@@ -184,6 +184,11 @@ SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress 
    不要拿來寫進論文，也不要當作 regression baseline。
 4. 改完程式碼要說明**改了什麼、為什麼、怎麼驗證的**。
 5. 不確定的地方**問，不要猜**。
+6. **連續產生多份 evidence 檔（`docs/research/evidence/*.json`）時，日期欄位要回頭掃一次**。
+   已觀察到的可預測失效模式：一次連續寫多份 evidence 檔時，會把「下一份」誤打成「下一天」
+   （`measured_at` 被填成沒發生過的未來日期）。這不是隨機打錯字，是同一種操作下會重複出現的
+   模式，所以不能只在寫的當下自己讀一遍覺得順眼就算數——寫完一批 evidence 檔後，
+   用 `grep` 找出所有日期欄位，逐一核對是否等於實際量測發生的那一天。
 
 ---
 
@@ -237,6 +242,7 @@ python -m scripts.audit.lead_vs_system --data <data.jsonl> --pred <run>/predicti
 | `docs/research/CODE_AUDIT_IEEE_Access.md` | 已驗證的程式缺陷 + 實測數字 |
 | `docs/research/STRATEGY_ASSESSMENT.md` | 可行性評估、資料集選擇 |
 | `docs/research/REPO_CLEANUP.md` | 專案整理計畫 |
+| `docs/research/COMPUTE_ENVIRONMENT.md` | hardware/software manifest；sumy word-only tokenizer、dependency pin 與 baseline 成本限制 |
 
 > 重構前的 legacy 文件已移至 `docs/_legacy_docs/`（排除於版本庫外，只在原作者本機）。
 > 它們引用的 `configs/stage1/`、`scripts/build_union_stage2.py` 等路徑多數已不存在，
