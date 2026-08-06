@@ -12,9 +12,14 @@
       完全一致，3/3 可行。這一輪無 ROUGE，只是 correctness/cost evidence。
 - [x] 在看 comparative ROUGE 前凍結 reference-blind 200-row pilot manifest
       （SHA-256 `b0562eb4...c31b2e`）；NSGA-II pilot 固定 64×80、seed 2024。
-- [~] 執行 200-row matched-selector pilot：全量 policy preflight、完整 predictions、
+- [x] 完成 200-row matched-selector pilot：全量 policy preflight、完整 predictions、
       per-example ROUGE、10,000 次 paired bootstrap、Holm correction 與長度統計。
-- [ ] 跑 Multi-News validation Greedy/MMR/NSGA-II、full-source SBERT baselines、
+      MMR vs Greedy：R-1 `+0.01488`（95% CI `[+0.00697,+0.02272]`，
+      Holm `p=0.0024`）、R-2 `+0.01472`（`[+0.00523,+0.02371]`，
+      `p=0.0100`）；R-Lsum `+0.00770` 但校正後不顯著。MMR 平均只多
+      `3.08` words、少 `3.05` sentences。NSGA-II seed 2024 對 Greedy 三指標
+      全不顯著、總時間 `411.7s vs 90.0s`。暫定 MMR 主線、NSGA-II comparator。
+- [ ] 跑 full Multi-News validation Greedy/MMR/NSGA-II、full-source SBERT baselines、
       paired bootstrap；再依規則決定 NSGA-II retain/demote/remove。
 - [ ] PacSum 與 GovReport 仍未完成；test split 仍不得執行。
 

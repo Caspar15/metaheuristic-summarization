@@ -9,7 +9,10 @@
 utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROUGE，
 只能證明 NSGA-II 不會因較昂貴就自然優於 Greedy，不能作品質結論。正式去留須
 依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation
-完成多 seed、paired significance 與成本比較後決定。
+2026-08-06 frozen 200-row matched pilot 已提供第一個方向：candidate-matched MMR
+在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
+因此暫以 MMR 為主線、NSGA-II 為 comparator。這不是正式定案，仍須 full validation、
+至少五個 NSGA seeds、full-source SBERT+MMR 與第二 primary dataset 才能決定。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果

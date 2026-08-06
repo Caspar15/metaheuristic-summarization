@@ -1,0 +1,182 @@
+{
+  "status": "diagnostic_validation_pilot_not_gate_result",
+  "interpretation": "Frozen reference-blind pilot. Directional evidence only; full governed Multi-News validation, multiple NSGA-II seeds, and the second primary dataset are still required.",
+  "manifest_path": "configs/pilot_manifests/multinews_selector_pilot_v1.json",
+  "manifest_sha256": "b0562eb4fe33b59f460c47e7b2db0bf0a3d2778687695422027bf33ed1c31b2e",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "config_path": "configs/selector_comparison_multinews.yaml",
+  "config_file_sha256": "6477c68b2ca8a9f1cb2e142db61ed788c1c51bdacea0e2061fa20d0042d8534e",
+  "sample_size": 200,
+  "row_ids_sha256": "bda87bb144f1d2701bbe9de4f15e6c8d02f5eb36dfd35f5bec6bd938d69f75a5",
+  "matched_selector_inputs": true,
+  "selector_input_fingerprints_sha256": "1f6f8469561eeec62f721e63bedc0fd8105cc4094eca21e33aea0efeb512000c",
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20240806,
+    "confidence": 0.95,
+    "holm_family": "all non-reference method x ROUGE metric pilot comparisons"
+  },
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "1.26.4",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "sentence_transformers": "5.1.0",
+    "pymoo": "0.6.1.1"
+  },
+  "git": {
+    "commit": "0fc2be16d4c504e252c6cdcb0c1e30f5eb1a1a10",
+    "dirty": true
+  },
+  "dataset_preflight": {
+    "valid": true,
+    "policy_id": "multinews-validation-v1",
+    "policy_path": "configs/data_policies/multinews_validation_v1.json",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+    "analysis": "main",
+    "analysis_role": "primary_validation",
+    "input_path": "data\\processed\\multi_news_validation_canonical.jsonl",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "replacement_character_rows": 72,
+    "replacement_characters": 1042,
+    "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+    "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+  },
+  "results": {
+    "greedy": {
+      "label": "greedy",
+      "method": "greedy",
+      "seed": 2024,
+      "config_sha256": "9d15224a09b803b0c4ed60fdfde897cf0bcf11168db0e11364706c0bd1713acc",
+      "predictions_sha256": "2ec4e2027c31c26cc167504dc491d76499702a44194f5be54807527a6cdbddcd",
+      "time_seconds_cold_process_model_cache": 90.00407120003365,
+      "rouge": {
+        "rouge1": 0.406120473302359,
+        "rouge2": 0.11284298136108122,
+        "rougeLsum": 0.3685423794344821
+      },
+      "rows": 200,
+      "feasible_rows": 200,
+      "mean_selected_words": 242.835,
+      "median_selected_words": 246.0,
+      "mean_selected_sentences": 12.955,
+      "median_selected_sentences": 13.0
+    },
+    "mmr": {
+      "label": "mmr",
+      "method": "mmr",
+      "seed": 2024,
+      "config_sha256": "e3d53d7f04a6c13ed8fce107848b65f4d6faa6b3d3c0976f58d300e85d246363",
+      "predictions_sha256": "a0b9064131e64478545e3c7a95c1d01b6b72ff8e68ae916f01703b5598cd0584",
+      "time_seconds_cold_process_model_cache": 74.6075651999563,
+      "rouge": {
+        "rouge1": 0.42100175688521096,
+        "rouge2": 0.1275598074606865,
+        "rougeLsum": 0.376241936987186
+      },
+      "rows": 200,
+      "feasible_rows": 200,
+      "mean_selected_words": 245.91,
+      "median_selected_words": 248.0,
+      "mean_selected_sentences": 9.91,
+      "median_selected_sentences": 9.0
+    },
+    "nsga2_seed2024": {
+      "label": "nsga2_seed2024",
+      "method": "nsga2",
+      "seed": 2024,
+      "config_sha256": "7ca8a04befbaa283d8b6a9502ad9976e915c5d44b521db4eb5d3b3283f31f946",
+      "predictions_sha256": "ca5aeca36959f58d17499bda4f292a89621c412d442ce032d69ae4b9901e1f00",
+      "time_seconds_cold_process_model_cache": 411.70821399998385,
+      "rouge": {
+        "rouge1": 0.4052495305395924,
+        "rouge2": 0.11053826469542358,
+        "rougeLsum": 0.3698652812599638
+      },
+      "rows": 200,
+      "feasible_rows": 200,
+      "mean_selected_words": 238.33,
+      "median_selected_words": 242.0,
+      "mean_selected_sentences": 14.445,
+      "median_selected_sentences": 14.0
+    }
+  },
+  "paired_comparisons": {
+    "mmr_vs_greedy": {
+      "rouge1": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240806,
+        "confidence": 0.95,
+        "mean_difference": 0.014881283582852383,
+        "ci_lower": 0.006967481098361596,
+        "ci_upper": 0.02271861046050744,
+        "p_value_two_sided": 0.00039996000399960006,
+        "p_value_holm": 0.0023997600239976003
+      },
+      "rouge2": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240807,
+        "confidence": 0.95,
+        "mean_difference": 0.0147168260996053,
+        "ci_lower": 0.00523002410583046,
+        "ci_upper": 0.023708079208557907,
+        "p_value_two_sided": 0.001999800019998,
+        "p_value_holm": 0.00999900009999
+      },
+      "rougeLsum": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240808,
+        "confidence": 0.95,
+        "mean_difference": 0.007699557552703959,
+        "ci_lower": -8.655106662532046e-05,
+        "ci_upper": 0.0154073907453042,
+        "p_value_two_sided": 0.051994800519948,
+        "p_value_holm": 0.207979202079792
+      }
+    },
+    "nsga2_seed2024_vs_greedy": {
+      "rouge1": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240806,
+        "confidence": 0.95,
+        "mean_difference": -0.0008709427627664665,
+        "ci_lower": -0.005483527197390173,
+        "ci_upper": 0.003642303015291254,
+        "p_value_two_sided": 0.7039296070392961,
+        "p_value_holm": 1.0
+      },
+      "rouge2": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240807,
+        "confidence": 0.95,
+        "mean_difference": -0.002304716665657599,
+        "ci_lower": -0.00819847736386399,
+        "ci_upper": 0.003298425611728554,
+        "p_value_two_sided": 0.4273572642735726,
+        "p_value_holm": 1.0
+      },
+      "rougeLsum": {
+        "n_pairs": 200,
+        "n_resamples": 10000,
+        "seed": 20240808,
+        "confidence": 0.95,
+        "mean_difference": 0.0013229018254814129,
+        "ci_lower": -0.003280091389287108,
+        "ci_upper": 0.00585163429603572,
+        "p_value_two_sided": 0.5931406859314069,
+        "p_value_holm": 1.0
+      }
+    }
+  },
+  "runtime_note": "Each label clears the process-global encoder cache, so its total includes model construction/loading plus representation, routing, and selection. Operating-system file caches may still be warm. Stage-specific timing is not inferred from these totals."
+}

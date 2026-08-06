@@ -7,6 +7,11 @@
 > 因此只有 Greedy vs NSGA-II 可稱為嚴格相同-objective search isolation。
 > 完整語義與去留門檻見 `SELECTOR_COMPARISON_PROTOCOL.md`。
 
+> 2026-08-06 frozen 200-row matched pilot：SBERT-MMR 相對 Greedy 的 R-1／R-2
+> paired gain 經 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善且總時間約 4.6×。
+> 因此暫以 MMR 作 main selector、Greedy 作 reference、NSGA-II 作 comparator；
+> full validation 與 full-source MMR baseline 完成前不作最終刪除決策。
+
 > 狀態：**Target Architecture v1，尚未 freeze**  
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。

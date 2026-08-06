@@ -13,7 +13,10 @@
 - 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   現行測試為 **311 passed**。
-- 仍缺：執行 frozen selector pilot、full validation、PacSum、GovReport，以及最後的
+- frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
+  分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
+  總時間約為 Greedy `4.6×`。這是 diagnostic，不是 full-validation 結論。
+- 仍缺：full validation、五個 NSGA seeds、PacSum、GovReport，以及最後的
   NSGA-II retain/demote/remove 決策；test split 仍鎖定。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，

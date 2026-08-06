@@ -1,0 +1,13 @@
+{
+  "manifest_schema_version": "1.0",
+  "status": "frozen_before_remaining_seed_scores",
+  "purpose": "diagnostic_nsga2_pilot_stability_extension",
+  "selector_pilot_manifest": "configs/pilot_manifests/multinews_selector_pilot_v1.json",
+  "population_size": 64,
+  "generations": 80,
+  "all_reported_seeds": [7, 42, 2024, 2025, 3407],
+  "already_observed_before_this_extension": [2024],
+  "not_yet_observed_when_frozen": [7, 42, 2025, 3407],
+  "reporting_rule": "Report all five seeds; do not select the best seed.",
+  "interpretation": "Pilot stability extension only. Because seed 2024 was observed before the remaining seed set was frozen, this is not a preregistered formal multi-seed experiment."
+}

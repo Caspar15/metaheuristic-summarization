@@ -53,9 +53,11 @@ def _git_state(repo: Path) -> Dict[str, Any]:
         ).stdout.strip()
 
     try:
+        status = run("status", "--porcelain")
         return {
             "commit": run("rev-parse", "HEAD"),
-            "dirty": bool(run("status", "--porcelain")),
+            "dirty": bool(status),
+            "status_porcelain": status.splitlines(),
         }
     except (OSError, subprocess.CalledProcessError):
         return {"commit": None, "dirty": None}

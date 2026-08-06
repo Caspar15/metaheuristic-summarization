@@ -146,3 +146,36 @@ rank-and-fill；Greedy 在下限已滿足且沒有正的 shared-utility 邊際�
 NSGA-II 從可行 Pareto front 依固定 weighted-sum policy 選解。因此每個品質表
 必須同報 mean／median selected words 與 sentences。若某方法的 ROUGE 優勢伴隨
 明顯較長輸出，須再作 length-matched sensitivity，不能直接歸因於 selector 品質。
+
+## 8. Frozen 200-row pilot 結果（diagnostic）
+
+程式 commit：`0fc2be16d4c504e252c6cdcb0c1e30f5eb1a1a10`；三法皆
+200/200 feasible，逐列 selector-input fingerprints 完全相同。完整機器可讀 evidence：
+`docs/research/evidence/selector_comparison_pilot_v1_summary.json`（SHA-256
+`14c3fe7221f9a2096008d2c4df72bbd8fa6f78b135a6aa2ee5a482283a0f20c3`）。
+
+| selector | R-1 | R-2 | R-Lsum | words | sentences | total seconds |
+|---|---:|---:|---:|---:|---:|---:|
+| Greedy | 0.40612 | 0.11284 | 0.36854 | 242.84 | 12.96 | 90.0 |
+| SBERT-MMR | **0.42100** | **0.12756** | **0.37624** | 245.91 | 9.91 | 74.6 |
+| NSGA-II seed 2024 | 0.40525 | 0.11054 | 0.36987 | 238.33 | 14.45 | 411.7 |
+
+相對 Greedy，MMR 的 paired R-1 差為 `+0.01488`（95% CI
+`[+0.00697,+0.02272]`，Holm `p=0.0024`），R-2 為 `+0.01472`
+（`[+0.00523,+0.02371]`，Holm `p=0.0100`）；R-Lsum 為 `+0.00770`
+但 CI 輕微跨 0、Holm `p=0.2080`。NSGA-II 三指標皆未顯著優於 Greedy。
+
+目前架構判斷是 **MMR 升為 provisional main selector，Greedy 作 deterministic
+objective-search reference，NSGA-II 降為 comparator**。這不是最終去除 NSGA-II：
+pilot 僅一個 seed、200 rows；full validation 與多 seed 完成前不得寫成定案。
+此外，本實驗只證明 candidate pool 內 MMR 較好，尚未證明 proposed candidate
+router 優於 full-source SBERT+MMR；後者仍是下一個必要 baseline。
+
+Pilot 看過 seed 2024 後，為避免以單 seed 解讀 stochastic NSGA-II，另凍結
+`configs/pilot_manifests/selector_nsga_seed_extension_v1.json`，要求完整報告
+seeds `[7, 42, 2024, 2025, 3407]`、不得選最好 seed。因 seed 2024 已先被觀察，
+這只能稱 stability extension，不能冒充正式 preregistered multi-seed study。
+
+Evidence 的 `git.dirty=true` 來自工作區既有、未追蹤的 `oracle_canonical.py`；
+pilot 前後 `git diff` 均無 tracked source 變更，selection code 綁定上述 commit。
+該未追蹤檔不是 runner import dependency，但仍保留 dirty 標記而不竄改 provenance。

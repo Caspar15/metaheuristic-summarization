@@ -120,6 +120,11 @@ def _sentence_embeddings(
             add_special_tokens=True,
             padding=False,
             truncation=False,
+            # This call is only used to count pre-truncation tokens.  The
+            # Transformers warning about feeding >model_max_length tokens is
+            # misleading here because these IDs are never passed to the
+            # model; the second call below performs the actual truncation.
+            verbose=False,
         )
         token_rows = untruncated["input_ids"]
         lengths = [len(row) for row in token_rows]
