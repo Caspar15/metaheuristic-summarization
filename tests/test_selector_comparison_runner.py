@@ -4,6 +4,7 @@ import json
 import pytest
 
 from scripts.audit.freeze_selector_pilot import freeze_manifest
+from scripts.audit.aggregate_nsga_seed_stability import selection_stability
 from scripts.audit.run_selector_comparison import load_frozen_rows
 from src.eval.paired import holm_adjust, paired_bootstrap_difference
 
@@ -54,3 +55,17 @@ def test_paired_bootstrap_is_aligned_and_directional():
 def test_holm_adjust_is_monotone_in_sorted_order():
     adjusted = holm_adjust({"a": 0.01, "b": 0.03, "c": 0.02})
     assert adjusted == pytest.approx({"a": 0.03, "c": 0.04, "b": 0.04})
+
+
+def test_selection_stability_reports_pairwise_jaccard_and_exact_rate():
+    result = selection_stability(
+        {
+            "seed1": {"a": [1, 2], "b": [3]},
+            "seed2": {"a": [1, 2], "b": [3, 4]},
+            "seed3": {"a": [1, 2], "b": [4]},
+        }
+    )
+    assert result["all_seeds_identical_rate"] == pytest.approx(0.5)
+    # row a contributes three 1.0 values; row b contributes 0.5, 0.0, 0.5.
+    assert result["mean_pairwise_jaccard"] == pytest.approx(2 / 3)
+    assert result["max_unique_selection_sets_per_row"] == 3

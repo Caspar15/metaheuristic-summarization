@@ -262,3 +262,8 @@ Runner 先驗 full 5,621-row frozen policy，再只取 manifest IDs；逐方法�
 predictions、per-example ROUGE、平均字／句數，並強制檢查 candidate、salience、
 similarity、coverage fingerprints 完全一致。pilot 的單一 NSGA-II seed 只供方向
 判斷；正式結論仍須至少五個預先固定 seeds 與 full validation。
+
+NSGA-II 多 seed 完成後，以 `aggregate_nsga_seed_stability.py` 對同一 Greedy
+reference 做 10,000 次 paired bootstrap、15-test Holm correction，並計算每篇
+選句集合的 seed-pair Jaccard。它會再次驗證每個 seed 的 selector-input hashes；
+不可只把五個 corpus means 手動貼在一起後挑最高值。

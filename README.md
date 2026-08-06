@@ -12,12 +12,14 @@
   Multi-News validation 正式 run。
 - 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
-  現行測試為 **311 passed**。
+  現行測試為 **312 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
-  總時間約為 Greedy `4.6×`。這是 diagnostic，不是 full-validation 結論。
-- 仍缺：full validation、五個 NSGA seeds、PacSum、GovReport，以及最後的
-  NSGA-II retain/demote/remove 決策；test split 仍鎖定。
+  總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
+  Greedy、selection Jaccard 僅 `0.639`；因此 selector 已決定採 MMR，NSGA-II
+  降為 comparator。這是 diagnostic，不是 full-validation 結論。
+- 仍缺：full validation、full-source SBERT+MMR、PacSum、GovReport；test split
+  仍鎖定。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
@@ -35,7 +37,7 @@
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
 | Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 已在 frozen Multi-News validation 完成 5,621-row full-split rerun。PacSum、SBERT full run、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **311 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **312 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

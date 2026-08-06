@@ -8,7 +8,7 @@
       與官方 SentenceTransformer 的 centroid scores 最大差降至約 `6e-8`。
 - [x] 實作 deterministic MMR、`sbert_centroid`／`sbert_mmr` baseline、SBERT
       selector matrices、單次 encode reuse、matched-input fingerprints。
-- [x] 311 tests passed；真實 canonical Multi-News 3-row smoke 三方法輸入 hashes
+- [x] 312 tests passed；真實 canonical Multi-News 3-row smoke 三方法輸入 hashes
       完全一致，3/3 可行。這一輪無 ROUGE，只是 correctness/cost evidence。
 - [x] 在看 comparative ROUGE 前凍結 reference-blind 200-row pilot manifest
       （SHA-256 `b0562eb4...c31b2e`）；NSGA-II pilot 固定 64×80、seed 2024。
@@ -19,6 +19,12 @@
       `p=0.0100`）；R-Lsum `+0.00770` 但校正後不顯著。MMR 平均只多
       `3.08` words、少 `3.05` sentences。NSGA-II seed 2024 對 Greedy 三指標
       全不顯著、總時間 `411.7s vs 90.0s`。暫定 MMR 主線、NSGA-II comparator。
+- [x] NSGA-II pilot stability extension：完整報告 seeds
+      `[7,42,2024,2025,3407]`。五 seed 平均 R-1/R-2/R-Lsum
+      `0.40376/0.10970/0.36820`，全部低於 Greedy；seed 間 mean pairwise
+      selection Jaccard `0.639`，僅 `9.5%` rows 五 seed 完全相同。依 gate，
+      **selector 架構確定以 MMR 為主，NSGA-II 降為 comparator**；是否在 full
+      validation 保留 NSGA diagnostic，由成本與審稿敘事另決定，不再阻塞主線。
 - [ ] 跑 full Multi-News validation Greedy/MMR/NSGA-II、full-source SBERT baselines、
       paired bootstrap；再依規則決定 NSGA-II retain/demote/remove。
 - [ ] PacSum 與 GovReport 仍未完成；test split 仍不得執行。
@@ -295,7 +301,8 @@
 ### 3c. Validation 實驗
 
 - [ ] K、graph threshold τ、fusion weights、population/generation 的 sensitivity
-- [ ] Optimizer isolation：固定 features/candidates/budget，只換 Greedy / GRASP / NSGA-II
+- [~] Selector isolation：Greedy / MMR / NSGA-II 的 frozen 200-row + NSGA 五 seed
+      已完成並決定 MMR main；GRASP 若保留只作 optional comparator，不阻塞主線
 - [ ] Ablation：No-statistical / No-graph / No-PLM / No-provenance / No-routing
 - [ ] Route utility：各路 unique candidate recall、quality delta、latency 與 peak memory；無增量效果的 route 刪除
 - [ ] 原版 Multi-News main 與 frozen 5,549-row U+FFFD clean sensitivity 作 paired validation 分析；bad-retrieval-removed／Multi-News+ 是未排程的另一種 retrieval-contamination 研究，不得混稱
@@ -303,7 +310,7 @@
 **Gate 3** 🔴：
 - 在 validation 上，至少一個主 benchmark明顯勝過強 no-task-training baseline；另一個至少 non-inferior 或形成預先定義的 cost Pareto 優勢
 - candidate recall 與 lead-overlap 診斷可解釋，且至少一條非 lexical route 有可重現的獨立效益；不要求為了好看而機械式降低 lead overlap
-- NSGA-II 只有在 matched-condition 下提供穩定增益、Pareto/hypervolume 優勢或有用 operating point 才留在核心；否則移出標題與主方法
+- [x] NSGA-II 未在 matched pilot 提供穩定增益且選句不穩定，已移出標題與主方法；只作 comparator
 - data schema、budget semantics、objective matrix、route set 與 output policy 全部通過 `ARCHITECTURE.md` freeze gate
 - → 通過才 **freeze config**，解鎖 test
 
@@ -361,7 +368,8 @@
 - provides a statistically supported quality–cost trade-off
 - graph centrality acts as a structural complementary signal
 - 可審計的 candidate provenance（相對一般端到端 baseline 更直接，但不能宣稱 neural 方法做不到）
-- 顯式、可重現的多目標 trade-off 控制
+- 實證比較 deterministic MMR／Greedy 與 stochastic multi-objective search；
+  不把未帶來品質增益的 Pareto front 包裝成主貢獻
 - 以分句／稀疏圖／routing 避免單次全文 512-token 限制；仍須報 sentence encoder 截斷與實測 scaling
 
 ---
@@ -386,9 +394,9 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 289 local tests、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
-| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank 程式已接線；offline tokenizer hotfix 與 Multi-News TextRank／LexRank 正式重跑已完成。PacSum、SBERT+MMR、GovReport、paired significance 與 Gate 2 尚未完成 |
-| 3 方法開發 | `[ ]` | | 🔴 中途檢查點在這 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 312 local tests、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；Multi-News TextRank／LexRank 正式重跑已完成。PacSum、SBERT full run、GovReport、完整 paired matrix 與 Gate 2 尚未完成 |
+| 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
 | 6 投稿稽核 | `[ ]` | | |

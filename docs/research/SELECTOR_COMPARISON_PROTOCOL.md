@@ -165,9 +165,10 @@ NSGA-II 從可行 Pareto front 依固定 weighted-sum policy 選解。因此每�
 （`[+0.00523,+0.02371]`，Holm `p=0.0100`）；R-Lsum 為 `+0.00770`
 但 CI 輕微跨 0、Holm `p=0.2080`。NSGA-II 三指標皆未顯著優於 Greedy。
 
-目前架構判斷是 **MMR 升為 provisional main selector，Greedy 作 deterministic
-objective-search reference，NSGA-II 降為 comparator**。這不是最終去除 NSGA-II：
-pilot 僅一個 seed、200 rows；full validation 與多 seed 完成前不得寫成定案。
+僅看第一輪 seed 2024 時，架構判斷是 **MMR 升為 provisional main selector，
+Greedy 作 deterministic objective-search reference，NSGA-II 暫降 comparator**；
+當時尚不得以單 seed 寫成定案。下方五 seed stability extension 已完成這個
+pilot 層級的去留判斷。
 此外，本實驗只證明 candidate pool 內 MMR 較好，尚未證明 proposed candidate
 router 優於 full-source SBERT+MMR；後者仍是下一個必要 baseline。
 
@@ -179,3 +180,25 @@ seeds `[7, 42, 2024, 2025, 3407]`、不得選最好 seed。因 seed 2024 已先�
 Evidence 的 `git.dirty=true` 來自工作區既有、未追蹤的 `oracle_canonical.py`；
 pilot 前後 `git diff` 均無 tracked source 變更，selection code 綁定上述 commit。
 該未追蹤檔不是 runner import dependency，但仍保留 dirty 標記而不竄改 provenance。
+
+### 五 seed stability extension 結果
+
+完整 evidence：`docs/research/evidence/selector_comparison_nsga5_stability.json`
+（SHA-256 `9820826d17a4dfadfb80a3372b94bc8ff074edb3b74d8700e62bc5becfd42cad`）。
+
+| metric | NSGA-II 5-seed mean | SD | range | Greedy | MMR |
+|---|---:|---:|---:|---:|---:|
+| R-1 | 0.40376 | 0.00203 | 0.40125–0.40586 | 0.40612 | **0.42100** |
+| R-2 | 0.10970 | 0.00212 | 0.10670–0.11229 | 0.11284 | **0.12756** |
+| R-Lsum | 0.36820 | 0.00203 | 0.36606–0.37047 | 0.36854 | **0.37624** |
+
+五個 seed 的 mean pairwise selected-sentence Jaccard 為 `0.639`；只有
+`19/200 = 9.5%` 文件在五 seed 得到完全相同集合，平均每篇有 `4.425/5`
+種不同集合。沒有任何 seed 的 corpus R-1 或 R-2 超過 Greedy；15 個
+seed×metric vs Greedy comparisons 經 Holm 校正後均不顯著優於 Greedy。
+
+因此 selector gate 的決策更新為：**MMR 是 main selector；Greedy 是相同
+shared-objective 的 deterministic search reference；NSGA-II 是被否證的
+stochastic comparator，不再構成方法名稱或主貢獻。** 這個結論只處理 selector
+選擇；整個 proposed system 是否成立，仍取決於 MMR 對 full-source SBERT+MMR、
+PacSum 與兩個 primary datasets 的結果。

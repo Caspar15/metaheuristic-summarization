@@ -11,8 +11,11 @@ utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROU
 依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation
 2026-08-06 frozen 200-row matched pilot 已提供第一個方向：candidate-matched MMR
 在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
-因此暫以 MMR 為主線、NSGA-II 為 comparator。這不是正式定案，仍須 full validation、
-至少五個 NSGA seeds、full-source SBERT+MMR 與第二 primary dataset 才能決定。
+五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
+且選句 mean pairwise Jaccard 僅 0.639；selector 層因此確定以 MMR 為主線、
+Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成立：仍須
+full validation、full-source SBERT+MMR、PacSum 與第二 primary dataset 才能判斷
+candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果
@@ -530,14 +533,14 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
    依句數、文件數、section 數、廉價 lexical redundancy／topic dispersion、cheap lexical graph density 與預估 route cost 決定各 route 的 K，並允許在容易文件跳過 PLM。不可用必須先執行昂貴 route 才能得到的 route agreement 作事前決策；routing policy 只能在 validation 設計與凍結。
 
 5. Selector competition  
-   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。NSGA-II 只有在 quality-cost、hypervolume 或可控 trade-off 上穩定勝出才成為主方法，否則降為比較組。
+   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 與五 seed extension 已觸發去留規則：MMR 為 main、Greedy 為 reference、NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
 
-   Phase 1e 已完成工程前提：Greedy、GRASP、NSGA-II 現在共用同一 salience／facility coverage／redundancy evaluator 與 non-empty／min-max length constraints，final evaluation 與 NSGA-II Pareto front 會寫入 artifact。這只是 correctness，不代表 NSGA-II 已證明有效；MMR、exact small-instance gap 與 paired validation comparison 仍未完成。
+   Phase 1e 已完成工程前提：Greedy、GRASP、MMR、NSGA-II 共用 constraints 與 final evaluator；Greedy／NSGA-II 另嚴格共用同一 scalar objective，MMR 的 sequential rule 則明確分開標示。200-row paired selector comparison 與 NSGA 五 seed stability 已完成，證據不支持 NSGA-II；exact small-instance gap 只在仍需解釋 stochastic comparator 時補做，不再是 main architecture blocker。
 
    新 shared objective 的 3-row correctness smoke 也揭露：若 multi-sentence mean-salience 只有 max budget、沒有 lower length bound，deterministic greedy 三筆皆退化為單句（41–88 words）。因此 Multi-News MVP 暫以 requested 200–250 words 作 length-matched validation band；逐列 effective minimum 只能在完整來源於相同 upper constraints 下本身不可達時調降，且 requested/effective/source capacity/reason 全部保存。全文可達但 candidate pool 不可達時必須報錯，不能以第二次 clamp 掩蓋候選設計缺陷。此值與 objective form 仍須在 validation 凍結，不能依 test 表現選擇。這個結果再次說明「修正公式」不等於「效果自然會變好」。
 
-6. Explicit Pareto output policy  
-   不再把 Pareto front 最後任意 scalarize。預先固定 knee point、reference point 或使用者偏好；報整個 front 的 hypervolume 與穩定性。
+6. Pareto output policy（comparator only）
+   不再把 Pareto front 最後任意 scalarize。若最終稿仍報 NSGA-II comparator，須預先固定 knee point、reference point 或使用者偏好，並報 front 的穩定性；不得再將它升格為主方法。
 
    現行程式的 `weighted_sum_on_shared_objectives` 僅是 provisional engineering policy；必須在 validation 改為並凍結預先指定的 policy，否則不可作 test 或論文主結果。
 
@@ -561,7 +564,8 @@ Pilot 通過條件：
 - full method 在至少一個主要資料集明顯優於強 no-task-training baseline，另一個至少不劣或形成清楚的 cost Pareto 優勢。
 - graph 與 semantic route 至少有一個產生非零且可重現的 unique oracle-candidate recall；否則刪除無效 route。
 - adaptive router 相對 always-on full method 降低至少一項完整成本，且 quality loss 在預先定義的 non-inferiority margin 內。
-- NSGA-II 相對 deterministic selector 有穩定增益；否則從標題與主貢獻移除 meta-heuristic。
+- [已觸發] NSGA-II 相對 deterministic selector 沒有穩定增益，已從標題與主貢獻
+  移除 meta-heuristic；後續只作 comparator。
 
 若 pilot 全數失敗，停止以「新摘要方法」投稿。可改寫為嚴謹的 negative-result／empirical study，但必須有具普遍性的分析發現，不能只是報告本系統失敗。
 

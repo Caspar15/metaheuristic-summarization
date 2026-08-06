@@ -15,6 +15,11 @@
 > 部分為抽樣、且未做 paired significance test，標籤維持 diagnostic。
 > 少數分析（如 370/500 換行雜訊統計）尚未版本化，仍須重做。
 > 後續修正狀態以 §0.0、`ACTION_PLAN.md` 與目前測試結果為準；下方 legacy 敘述不會隨 working tree 改寫。
+> **2026-08-06 selector evidence**：200-row reference-blind matched pilot 與五 seed
+> NSGA-II stability extension 已完成。MMR 對 Greedy 的 R-1/R-2 paired gain 為
+> `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
+> Greedy、selection Jaccard 僅 `0.639`。selector 因此採 MMR，NSGA-II 降為
+> comparator；這仍未回答 full-source MMR／PacSum／兩 primary 的 system gate。
 
 ---
 
@@ -38,7 +43,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank 程式已加入；offline hotfix 與 Multi-News TextRank／LexRank final rerun 已完成，PacSum、SBERT+MMR、GovReport 與 paired significance 尚未完成，Gate 2 未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已加入；Multi-News TextRank／LexRank final rerun 已完成。PacSum、SBERT full run、GovReport 與完整 paired matrix 尚未完成，Gate 2 未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動,GovReport/CNN-DM 待做** |
@@ -461,12 +466,13 @@ imp = np.sum(self.importance[idx])      # 未正規化的總和
 
 **稽核結果 ✅**：以 `lead`, `LexRank`, `PacSum`, `BERTScore`, `bert_score` 等關鍵字全域搜尋 `src/`、`scripts/`、`tests/` —— **零命中**（唯一命中是 `position.py` 裡的變數名）。
 
-**目前狀態（2026-08-05）**：Lead、Random、TextRank／LexRank 程式皆已進 master，
+**目前狀態（2026-08-06）**：Lead、Random、TextRank／LexRank 與 full-source SBERT
+centroid／MMR 程式皆已接線，
 所以「目前 repo 零 baseline」已不再成立。Lead／Random 共用 canonical data-policy
 preflight 與 output upper-bound contract；TextRank／LexRank 包裝 pinned sumy。PR #15
-已移除 offline `punkt_tab` regression，Windows 289 tests 全過且 Linux CI 綠燈；兩者也已
+已移除 offline `punkt_tab` regression，Windows 312 tests 全過且 Linux CI 綠燈；兩者也已
 在 frozen Multi-News validation 以最終實作完成 5,621-row full-split rerun。PacSum、
-SBERT+MMR、GovReport 與 paired significance 仍未完成。因此 F-9 仍只能列「部分解除」，
+SBERT full run、PacSum、GovReport 與完整 paired matrix 仍未完成。因此 F-9 仍只能列「部分解除」，
 Gate 2 不能標成完成。
 
 **後果**：舊論文 Table 6 在 Multi-News 上報告的 Lead / TextRank / LexRank 數字，
@@ -1125,11 +1131,11 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**289 local tests 全過且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**312 local tests 全過且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
-contract 與 Lead／Random／TextRank／LexRank baseline 已接線；centrality offline hotfix 與
-Multi-News TextRank／LexRank final rerun 已完成。PacSum、SBERT+MMR、GovReport、paired
+contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
+Multi-News TextRank／LexRank final rerun 已完成。PacSum、SBERT full run、GovReport、paired
 significance、兩個 primary 的完整 baseline 矩陣與 proposed-method validation 仍未完成。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |

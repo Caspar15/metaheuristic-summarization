@@ -9,8 +9,14 @@
 
 > 2026-08-06 frozen 200-row matched pilot：SBERT-MMR 相對 Greedy 的 R-1／R-2
 > paired gain 經 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善且總時間約 4.6×。
-> 因此暫以 MMR 作 main selector、Greedy 作 reference、NSGA-II 作 comparator；
-> full validation 與 full-source MMR baseline 完成前不作最終刪除決策。
+> 因此單 seed 階段暫以 MMR 作 main selector、Greedy 作 reference、NSGA-II 作
+> comparator；其後五 seed 的 selector 決策見下一段。整個 proposed system 是否
+> 成立，仍須 full validation 與 full-source MMR baseline。
+
+> 五 seed extension 已進一步否證 NSGA-II：三個 ROUGE 的五 seed mean 均低於
+> Greedy，選句集合 mean pairwise Jaccard 僅 0.639。selector v1 因而固定為
+> **MMR main / Greedy reference / NSGA-II comparator**；後續不再替 NSGA-II
+> 擴張主架構，研究資源改用來驗證 candidate router 對 full-source MMR 的價值。
 
 > 狀態：**Target Architecture v1，尚未 freeze**  
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
@@ -25,7 +31,8 @@
 1. **完整輸入上的多路候選生成**：lexical、semantic、graph/structure 各自排名，不能先被共同 top-K 截斷。
 2. **provenance-aware candidate fusion**：保留每句來自哪一路、rank、校準分數與成本，不再只傳 index。
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
-4. **optimizer isolation**：同一 objective 與候選池下比較 deterministic selector 與 NSGA-II；NSGA-II 沒有獨立效益就退出核心架構與標題。
+4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；pilot 已
+   證實 MMR 較佳、NSGA-II 無獨立效益，因此主架構採 MMR，NSGA-II 退出核心與標題。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 
