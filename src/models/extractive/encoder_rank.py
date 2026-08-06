@@ -92,7 +92,14 @@ def _sentence_embeddings(
     batch_size: int = 16,
     max_model_tokens: int = 256,
 ) -> Tuple[Any, Dict[str, Any]]:
-    """Batch-encode all sentences and return embeddings plus truncation facts."""
+    """Batch-encode sentences using the checkpoint's SBERT pooling contract.
+
+    ``all-MiniLM-L6-v2`` is a SentenceTransformer checkpoint whose module
+    graph is Transformer -> attention-mask-aware mean Pooling -> Normalize.
+    Loading its Transformer backbone directly is equivalent only when both
+    post-processing steps are reproduced here.  Returning unit vectors also
+    lets downstream code use a dot product as an auditable cosine matrix.
+    """
 
     if batch_size < 1:
         raise ValueError("batch_size must be positive")
@@ -133,7 +140,9 @@ def _sentence_embeddings(
             attention = encoded["attention_mask"].unsqueeze(-1)
             summed = (last_hidden * attention).sum(dim=1)
             denominator = attention.sum(dim=1).clamp(min=1)
-            embeddings.append((summed / denominator).detach().cpu())
+            pooled = summed / denominator
+            pooled = pooled / pooled.norm(dim=1, keepdim=True).clamp(min=1e-12)
+            embeddings.append(pooled.detach().cpu())
 
     if not embeddings:
         return torch.empty((0, 0)), {
@@ -149,6 +158,9 @@ def _sentence_embeddings(
             "truncated_sentences": 0,
             "truncation_rate": 0.0,
             "device": str(resolved_device),
+            "pooling": "attention_mask_mean",
+            "normalize_embeddings": True,
+            "similarity": "normalized_dot_product_cosine",
         }
 
     config = getattr(model, "config", None)
@@ -171,6 +183,9 @@ def _sentence_embeddings(
         "truncated_sentences": truncated_sentences,
         "truncation_rate": truncated_sentences / len(sentences),
         "device": str(resolved_device),
+        "pooling": "attention_mask_mean",
+        "normalize_embeddings": True,
+        "similarity": "normalized_dot_product_cosine",
     }
     return torch.cat(embeddings, dim=0), metadata
 
@@ -182,6 +197,53 @@ def _cosine_scores_to_centroid(embeddings) -> List[float]:
     normalized = embeddings / (embeddings.norm(dim=1, keepdim=True) + 1e-12)
     normalized_centroid = centroid / (centroid.norm(dim=1, keepdim=True) + 1e-12)
     return (normalized * normalized_centroid).sum(dim=1).tolist()
+
+
+def encoder_document_embeddings(
+    sentences: List[str],
+    *,
+    model_name: str,
+    device: Optional[str] = None,
+    batch_size: int = 16,
+    max_model_tokens: int = 256,
+    revision: Optional[str] = None,
+) -> Tuple[Any, Dict[str, Any]]:
+    """Return normalized sentence embeddings and full model provenance."""
+
+    _ensure_imports()
+    token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN")
+    return _sentence_embeddings(
+        sentences,
+        model_name=model_name,
+        device=device,
+        token=token,
+        revision=revision,
+        batch_size=batch_size,
+        max_model_tokens=max_model_tokens,
+    )
+
+
+def centroid_scores_from_embeddings(embeddings) -> List[float]:
+    """Score normalized sentence embeddings against their normalized centroid."""
+
+    return _cosine_scores_to_centroid(embeddings)
+
+
+def cosine_matrix_from_embeddings(embeddings) -> "Any":
+    """Return a deterministic cosine matrix for L2-normalized embeddings."""
+
+    import numpy as np
+
+    values = (
+        embeddings.detach().cpu().numpy()
+        if hasattr(embeddings, "detach")
+        else np.asarray(embeddings)
+    )
+    if values.ndim != 2:
+        raise ValueError("sentence embeddings must be a two-dimensional matrix")
+    if not np.all(np.isfinite(values)):
+        raise ValueError("sentence embeddings contain non-finite values")
+    return np.asarray(values @ values.T, dtype=float)
 
 
 def encoder_route_scores(
@@ -208,15 +270,16 @@ def encoder_route_scores(
             },
             "truncated_sentences": 0,
             "truncation_rate": 0.0,
+            "pooling": "attention_mask_mean",
+            "normalize_embeddings": True,
+            "similarity": "normalized_dot_product_cosine",
         }
 
     _ensure_imports()
-    token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN")
-    embeddings, metadata = _sentence_embeddings(
+    embeddings, metadata = encoder_document_embeddings(
         sentences,
         model_name=model_name,
         device=device,
-        token=token,
         revision=revision,
         batch_size=batch_size,
         max_model_tokens=max_model_tokens,

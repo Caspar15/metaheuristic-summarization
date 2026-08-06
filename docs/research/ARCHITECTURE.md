@@ -1,5 +1,12 @@
 # 最終候選架構規格 —— Provenance-Aware Adaptive Extractive Summarization
 
+> 2026-08-06 implementation note：selector boundary 現已能固定同一 candidate
+> indices、SBERT semantic-raw salience、candidate×candidate similarity、
+> full-source×candidate coverage 與 constraints，只替換 Greedy、MMR、NSGA-II；
+> 每列保存四組輸入 SHA-256。MMR 的逐步公式不等於 shared scalar objective，
+> 因此只有 Greedy vs NSGA-II 可稱為嚴格相同-objective search isolation。
+> 完整語義與去留門檻見 `SELECTOR_COMPARISON_PROTOCOL.md`。
+
 > 狀態：**Target Architecture v1，尚未 freeze**  
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。

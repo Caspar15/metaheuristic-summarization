@@ -266,6 +266,76 @@ def test_semantic_route_requires_explicit_checkpoint():
         )
 
 
+def test_semantic_route_accepts_verified_precomputed_scores(monkeypatch):
+    records = two_document_records()
+
+    def must_not_encode(*args, **kwargs):
+        raise AssertionError("semantic route encoded a second time")
+
+    monkeypatch.setattr(
+        "src.pipeline.candidate_builder.encoder_route_scores", must_not_encode
+    )
+    revision = "a" * 40
+    candidates = build_candidate_records(
+        records,
+        base_scores=[0.0] * 4,
+        k=2,
+        sources=["semantic"],
+        route_config={
+            "semantic": {
+                "model_name": "sentence-transformers/fake",
+                "revision": revision,
+            }
+        },
+        precomputed_route_data={
+            "semantic": {
+                "values": [0.1, 0.9, 0.8, 0.2],
+                "metadata": {
+                    "model_name": "sentence-transformers/fake",
+                    "model_revision": revision,
+                    "pooling": "attention_mask_mean",
+                    "normalize_embeddings": True,
+                    "estimated_cost": {"encoded_sentences": 4},
+                },
+            }
+        },
+    )
+    assert [candidate["original_index"] for candidate in candidates] == [1, 2]
+    assert all(
+        candidate["route_scores"]["semantic"]["metadata"][
+            "normalize_embeddings"
+        ]
+        is True
+        for candidate in candidates
+    )
+
+
+def test_precomputed_semantic_revision_mismatch_fails_loudly():
+    records = two_document_records()
+    with pytest.raises(RuntimeError, match="revision does not match"):
+        build_candidate_records(
+            records,
+            base_scores=[0.0] * 4,
+            k=1,
+            sources=["semantic"],
+            route_config={
+                "semantic": {
+                    "model_name": "sentence-transformers/fake",
+                    "revision": "a" * 40,
+                }
+            },
+            precomputed_route_data={
+                "semantic": {
+                    "values": [0.1, 0.9, 0.8, 0.2],
+                    "metadata": {
+                        "model_name": "sentence-transformers/fake",
+                        "model_revision": "b" * 40,
+                    },
+                }
+            },
+        )
+
+
 def test_graph_route_defaults_to_bounded_sparse_knn():
     records = two_document_records()
     candidates = build_candidate_records(

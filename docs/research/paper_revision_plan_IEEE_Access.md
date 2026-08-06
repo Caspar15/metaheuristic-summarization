@@ -1,5 +1,16 @@
 # IEEE Access 全面重建計畫
 
+## 2026-08-06 selector-comparison update
+
+已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
+以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現
+`all-MiniLM-L6-v2` 的 mean pooling + Normalize，並以 SHA-256 證明三 selector
+收到相同候選與數值輸入。真實 Multi-News 3-row smoke 的 shared-objective 平均
+utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROUGE，
+只能證明 NSGA-II 不會因較昂貴就自然優於 Greedy，不能作品質結論。正式去留須
+依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation
+完成多 seed、paired significance 與成本比較後決定。
+
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果
 

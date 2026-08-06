@@ -1,5 +1,21 @@
 # Metaheuristic Extractive Summarization
 
+## 2026-08-06 selector-comparison checkpoint
+
+- 已新增同候選、同 SBERT salience/similarity/coverage、同 budget 的
+  `Greedy / candidate-matched SBERT-MMR / NSGA-II` selector interface；每列保存
+  matched-input SHA-256，詳見
+  [`docs/research/SELECTOR_COMPARISON_PROTOCOL.md`](docs/research/SELECTOR_COMPARISON_PROTOCOL.md)。
+- 已修正 pinned `all-MiniLM-L6-v2` 的 SentenceTransformer 契約：mean pooling 後
+  逐句 L2 normalization；新結果不可與舊 raw-centroid artifact 混稱。
+- 已接上 full-source `sbert_centroid`、`sbert_mmr` baseline，但尚未完成 5,621-row
+  Multi-News validation 正式 run。
+- 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
+  不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
+  現行測試為 **311 passed**。
+- 仍缺：執行 frozen selector pilot、full validation、PacSum、GovReport，以及最後的
+  NSGA-II retain/demote/remove 決策；test split 仍鎖定。
+
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
 
@@ -14,9 +30,9 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 程式已進 master；PR #15 已移除離線 tokenizer regression，Linux CI 綠燈，且 TextRank／LexRank 已在 frozen Multi-News validation 以最終實作完成 5,621-row full-split rerun。PacSum、sentence-encoder／MMR、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
+| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 已在 frozen Multi-News validation 完成 5,621-row full-split rerun。PacSum、SBERT full run、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **289 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **311 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

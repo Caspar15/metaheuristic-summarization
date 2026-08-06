@@ -6,6 +6,7 @@ import numpy as np
 
 from src.models.extractive.greedy import greedy_select
 from src.models.extractive.grasp import grasp_select
+from src.models.extractive.mmr import mmr_select
 from src.objectives.evaluator import objective_from_spec
 
 try:
@@ -58,14 +59,14 @@ def dispatch_optimizer(
     if not sub_sentences:
         return []
 
-    if method == "nsga2" and sub_sim is None:
+    if method in {"mmr", "nsga2"} and sub_sim is None:
         raise ValueError(
-            "NSGA-II requires a similarity matrix; refusing to fall back "
+            f"{method} requires a similarity matrix; refusing to fall back "
             "to greedy because that would change the declared method."
         )
 
     shared_evaluator = None
-    if method in {"greedy", "grasp", "nsga2"}:
+    if method in {"greedy", "grasp", "mmr", "nsga2"}:
         shared_evaluator = objective_from_spec(
             sub_sentences,
             sub_scores,
@@ -124,6 +125,20 @@ def dispatch_optimizer(
             ),
             min_words=min_words,
             require_nonempty=require_nonempty,
+            evaluator=shared_evaluator,
+            diagnostics=diagnostics,
+        )
+
+    if method == "mmr":
+        ocfg = cfg.get("optimizer", {})
+        return mmr_select(
+            sub_sentences,
+            sub_scores,
+            sub_sim,
+            max_tokens,
+            lambda_relevance=float(ocfg.get("lambda_relevance", 0.7)),
+            unit=unit,
+            max_sentences=max_sents,
             evaluator=shared_evaluator,
             diagnostics=diagnostics,
         )

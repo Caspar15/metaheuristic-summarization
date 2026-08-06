@@ -1,6 +1,7 @@
 """Integration tests for the full pipeline."""
 
 import pytest
+import torch
 
 from src.data.schemas import build_document_example
 import json
@@ -329,6 +330,92 @@ class TestCandidateBudgetContract:
         result = summarize_one(sample_doc, base_config)
         assert result["selected_indices"] == [0]
         assert captured == {"max_budget": 17, "unit": "words"}
+
+    def test_matched_selectors_receive_identical_fingerprinted_inputs(
+        self, sample_doc, base_config, monkeypatch
+    ):
+        pytest.importorskip("pymoo")
+        revision = "c9745ed1d9f207416be6d2e6f8de32d1f16199bf"
+        encode_calls = []
+
+        def fake_embeddings(sentences, **kwargs):
+            encode_calls.append(list(sentences))
+            values = torch.tensor(
+                [[1.0, float(index + 1)] for index in range(len(sentences))],
+                dtype=torch.float32,
+            )
+            values = values / values.norm(dim=1, keepdim=True)
+            return values, {
+                "model_name": kwargs["model_name"],
+                "model_revision": revision,
+                "pooling": "attention_mask_mean",
+                "normalize_embeddings": True,
+                "similarity": "normalized_dot_product_cosine",
+                "estimated_cost": {"encoded_sentences": len(sentences)},
+            }
+
+        monkeypatch.setattr(
+            "src.pipeline.select_sentences.encoder_document_embeddings",
+            fake_embeddings,
+        )
+        config = json.loads(json.dumps(base_config))
+        config.update(
+            {
+                "candidates": {
+                    "use": True,
+                    "mode": "hard",
+                    "sources": ["lexical", "semantic"],
+                },
+                "candidate_budget": {
+                    "route_top_k": 5,
+                    "min_per_route": 1,
+                    "total": 5,
+                },
+                "selector": {
+                    "salience_source": "semantic_raw",
+                    "similarity_source": "sbert",
+                },
+                "routes": {
+                    "semantic": {
+                        "model_name": "sentence-transformers/fake",
+                        "revision": revision,
+                    }
+                },
+                "objectives": {
+                    "importance_aggregation": "sum",
+                    "coverage_method": "max",
+                    "lambda_importance": 1.0,
+                    "lambda_coverage": 0.8,
+                    "lambda_redundancy": 0.7,
+                },
+                "optimizer": {
+                    "method": "greedy",
+                    "lambda_relevance": 0.7,
+                    "pop_size": 12,
+                    "n_gen": 6,
+                },
+                "seed": 2024,
+            }
+        )
+        results = {}
+        for method in ("greedy", "mmr", "nsga2"):
+            method_cfg = json.loads(json.dumps(config))
+            method_cfg["optimizer"]["method"] = method
+            results[method] = summarize_one(sample_doc, method_cfg)
+
+        fingerprints = {
+            method: result["selector_inputs"]
+            for method, result in results.items()
+        }
+        assert fingerprints["greedy"] == fingerprints["mmr"]
+        assert fingerprints["greedy"] == fingerprints["nsga2"]
+        assert all(
+            result["selector_inputs"]["representation"]["source"] == "sbert"
+            for result in results.values()
+        )
+        # Each independent method run performs one full-source encode; the
+        # candidate route must reuse it rather than causing a second encode.
+        assert len(encode_calls) == 3
 
 
 class TestPipelineEdgeCases:

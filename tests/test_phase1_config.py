@@ -83,3 +83,18 @@ def test_governed_experiment_cannot_omit_data_policy():
     del cfg["data_policy"]
     with pytest.raises(ValueError, match="require a data_policy"):
         validate_experiment_request(cfg, "validation")
+
+
+def test_selector_comparison_config_freezes_matched_sbert_inputs():
+    cfg = load_yaml(str(ROOT / "configs" / "selector_comparison_multinews.yaml"))
+    assert cfg["experiment"]["status"] == "validation_pilot_only"
+    assert cfg["compute_budget"]["enabled_routes"] == ["lexical", "semantic"]
+    assert cfg["selector"] == {
+        "salience_source": "semantic_raw",
+        "similarity_source": "sbert",
+    }
+    assert cfg["optimizer"]["method"] == "greedy"
+    assert cfg["optimizer"]["lambda_relevance"] == pytest.approx(0.7)
+    assert cfg["routes"]["semantic"]["revision"] == (
+        "c9745ed1d9f207416be6d2e6f8de32d1f16199bf"
+    )

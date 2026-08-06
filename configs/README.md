@@ -1,5 +1,17 @@
 # configs — 實驗設定
 
+## Selector comparison
+
+`selector_comparison_multinews.yaml` 是 validation-only matched-selector config。
+用同一檔案分別覆寫 `--optimizer greedy`、`--optimizer mmr`、
+`--optimizer nsga2`；不要複製三份後各自修改其他欄位。它固定 semantic-raw
+SBERT salience、SBERT similarity/coverage、候選池與 output budget。正式 full
+validation 前仍須依成本 preflight 凍結 NSGA-II population/generations。
+
+`pilot_manifests/multinews_selector_pilot_v1.json` 是在看 selector ROUGE 前
+凍結的 200-row reference-blind hash sample。它只供 pilot；正式 primary 仍是
+policy 所定義的全部 5,621 rows。不要重新抽樣或依 pilot 分數換 manifest。
+
 > ⚠️ 除 `phase1_mvp_multinews.yaml` 外，**其餘都是 legacy 設定。** 它們產生的結果全部是在 test set 上調參得到的（見
 > `docs/research/CODE_AUDIT_IEEE_Access.md` 的 P0-01），**不可用於新論文**。
 > 保留它們只為了重現 `runs/` 底下的既有 artifact。

@@ -1,5 +1,15 @@
 # 專案總索引
 
+## 最新 checkpoint（2026-08-06）
+
+`Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
+接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
+hash 全部相同；311 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
+baseline 亦已接入 shared baseline CLI。這只完成 correctness 與成本 smoke，尚未
+完成正式 Multi-News validation ROUGE、paired significance、PacSum 或 GovReport，
+因此 Gate 2／Gate 3 仍未通過。單一規格來源見
+[`SELECTOR_COMPARISON_PROTOCOL.md`](SELECTOR_COMPARISON_PROTOCOL.md)。
+
 抽取式摘要研究 —— ICT Express 拒稿後改投 **IEEE Access** 的修訂工作。
 
 - **ICACT**：已投稿，獲 outstanding paper award
@@ -22,8 +32,8 @@
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、canonical schema 與 frozen-policy preflight 已完成；published-protocol parity、GovReport 資料層、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **289 local tests 全過**；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
-| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank 程式已進 master；Multi-News Lead 與最終實作 TextRank／LexRank 的 5,621-row governed artifacts 已產出並驗證。PacSum、SBERT+MMR、GovReport、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
+| 測試 | ✅ **311 local tests 全過**；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已接線；Multi-News Lead 與最終實作 TextRank／LexRank 的 5,621-row governed artifacts 已產出並驗證。PacSum、SBERT full run、GovReport、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
 | 新 pipeline 的實測結果 | 🟡 **第一次 validation pilot 已完成（diagnostic）** —— 見 `CODE_AUDIT_IEEE_Access.md` **F-18/F-19**。`length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；是混合結果，未做 paired significance，不能宣稱全面勝出。`mean` 配置甚至低於 Random baseline |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | 🟡 Multi-News validation main/clean policy、fingerprints 與 manifests 已凍結；GovReport 與其餘 splits 尚未完成 |

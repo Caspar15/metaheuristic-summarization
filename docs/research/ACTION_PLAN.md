@@ -1,5 +1,23 @@
 # ACTION PLAN —— 到底要做什麼
 
+## 2026-08-06 selector milestone
+
+- [x] 寫定 `SELECTOR_COMPARISON_PROTOCOL.md`：區分 candidate-matched selector
+      swap 與 full-source strong baseline，並預先定義 NSGA-II 去留規則。
+- [x] 修正 SentenceTransformer mean-pooling + Normalize 契約；本地 pinned model
+      與官方 SentenceTransformer 的 centroid scores 最大差降至約 `6e-8`。
+- [x] 實作 deterministic MMR、`sbert_centroid`／`sbert_mmr` baseline、SBERT
+      selector matrices、單次 encode reuse、matched-input fingerprints。
+- [x] 311 tests passed；真實 canonical Multi-News 3-row smoke 三方法輸入 hashes
+      完全一致，3/3 可行。這一輪無 ROUGE，只是 correctness/cost evidence。
+- [x] 在看 comparative ROUGE 前凍結 reference-blind 200-row pilot manifest
+      （SHA-256 `b0562eb4...c31b2e`）；NSGA-II pilot 固定 64×80、seed 2024。
+- [~] 執行 200-row matched-selector pilot：全量 policy preflight、完整 predictions、
+      per-example ROUGE、10,000 次 paired bootstrap、Holm correction 與長度統計。
+- [ ] 跑 Multi-News validation Greedy/MMR/NSGA-II、full-source SBERT baselines、
+      paired bootstrap；再依規則決定 NSGA-II retain/demote/remove。
+- [ ] PacSum 與 GovReport 仍未完成；test split 仍不得執行。
+
 > 這是**唯一的執行清單**。研究標準以 `paper_revision_plan_IEEE_Access.md` 為準；程式稽核與策略評估的結論全部收斂到這裡。
 > 每天工作看這份就好，需要理由再回去翻對應的分析文件。
 >

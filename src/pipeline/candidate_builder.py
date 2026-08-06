@@ -76,6 +76,7 @@ def _score_route(
     sim_matrix,
     threshold: float,
     config: Mapping[str, Any],
+    precomputed: Optional[Mapping[str, Any]] = None,
 ) -> Tuple[List[float], RouteMetadata]:
     n = len(sentences)
     if route == "lexical":
@@ -156,14 +157,31 @@ def _score_route(
                 "semantic candidate route requires routes.semantic.model_name; "
                 "use an explicit sentence-similarity checkpoint"
             )
-        values, semantic_metadata = encoder_route_scores(
-            sentences,
-            model_name=model_name,
-            device=config.get("device"),
-            batch_size=int(config.get("batch_size", 16)),
-            max_model_tokens=int(config.get("max_model_tokens", 256)),
-            revision=config.get("revision"),
-        )
+        if precomputed is None:
+            values, semantic_metadata = encoder_route_scores(
+                sentences,
+                model_name=model_name,
+                device=config.get("device"),
+                batch_size=int(config.get("batch_size", 16)),
+                max_model_tokens=int(config.get("max_model_tokens", 256)),
+                revision=config.get("revision"),
+            )
+        else:
+            values = list(precomputed.get("values", []))
+            semantic_metadata = dict(precomputed.get("metadata", {}))
+            if semantic_metadata.get("model_name") != model_name:
+                raise ValueError(
+                    "precomputed semantic route model does not match "
+                    "routes.semantic.model_name"
+                )
+            configured_revision = config.get("revision")
+            if configured_revision is not None and str(
+                semantic_metadata.get("model_revision")
+            ) != str(configured_revision):
+                raise ValueError(
+                    "precomputed semantic route revision does not match "
+                    "routes.semantic.revision"
+                )
         metadata = {
             "route_type": "semantic_sentence_encoder",
             **semantic_metadata,
@@ -272,6 +290,7 @@ def build_candidate_pool(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Build route proposals, reservations, guards, and one capped final pool.
 
@@ -319,6 +338,7 @@ def build_candidate_pool(
         total_budget = min(total_budget, n)
     sentences = [record["text"] for record in sentence_records]
     configs = route_config or {}
+    precomputed_routes = precomputed_route_data or {}
 
     route_values: Dict[str, List[float]] = {}
     route_metadata: Dict[str, RouteMetadata] = {}
@@ -336,6 +356,7 @@ def build_candidate_pool(
                 sim_matrix,
                 threshold,
                 config,
+                precomputed_routes.get(route),
             )
         except Exception as exc:
             raise RuntimeError(f"candidate route {route!r} failed: {exc}") from exc
@@ -551,6 +572,7 @@ def build_candidate_records(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> List[Dict]:
     """Backward-compatible record-only view of :func:`build_candidate_pool`."""
 
@@ -566,6 +588,7 @@ def build_candidate_records(
         route_config=route_config,
         coverage_guard=coverage_guard,
         rrf_constant=rrf_constant,
+        precomputed_route_data=precomputed_route_data,
     )["records"]
 
 

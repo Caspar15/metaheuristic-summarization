@@ -234,3 +234,31 @@ python -m scripts.audit.paired_run_intersection \
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |
 | `random_baseline_min_words.py` | Random baseline `apply_min_words=False` 決策 | `src/baselines/random_baseline.py` 模組 docstring |
+
+---
+
+## Matched selector pilot（2026-08-06）
+
+先凍結 reference-blind manifest；凍結後才可跑品質比較：
+
+```bash
+python -m scripts.audit.freeze_selector_pilot \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --output configs/pilot_manifests/multinews_selector_pilot_v1.json \
+  --sample_size 200 \
+  --salt multinews-selector-pilot-v1
+
+python -m scripts.audit.run_selector_comparison \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --config configs/selector_comparison_multinews.yaml \
+  --manifest configs/pilot_manifests/multinews_selector_pilot_v1.json \
+  --output_dir runs/selector_pilot_v1 \
+  --methods greedy mmr nsga2 \
+  --nsga_seeds 2024 \
+  --bootstrap_resamples 10000
+```
+
+Runner 先驗 full 5,621-row frozen policy，再只取 manifest IDs；逐方法輸出完整
+predictions、per-example ROUGE、平均字／句數，並強制檢查 candidate、salience、
+similarity、coverage fingerprints 完全一致。pilot 的單一 NSGA-II seed 只供方向
+判斷；正式結論仍須至少五個預先固定 seeds 與 full validation。

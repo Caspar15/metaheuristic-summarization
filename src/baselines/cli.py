@@ -48,6 +48,10 @@ from tqdm import tqdm
 from src.baselines.centrality import summarize_one_lexrank, summarize_one_textrank
 from src.baselines.lead import ORDERINGS, summarize_one_lead
 from src.baselines.random_baseline import summarize_one_random
+from src.baselines.semantic import (
+    summarize_one_sbert_centroid,
+    summarize_one_sbert_mmr,
+)
 from src.data.policy import validate_dataset_policy_request
 from src.pipeline.select_sentences import (
     build_feasibility_report,
@@ -68,6 +72,8 @@ BASELINE_METHODS = {
     "random": summarize_one_random,
     "textrank": summarize_one_textrank,
     "lexrank": summarize_one_lexrank,
+    "sbert_centroid": summarize_one_sbert_centroid,
+    "sbert_mmr": summarize_one_sbert_mmr,
 }
 
 # Baselines whose select_fn needs an explicit --seed to be reproducible.
@@ -89,7 +95,13 @@ SEEDED_BASELINES = {"random"}
 # silently defaulting into whichever branch a stale complement happens to
 # fall into.
 ORDERED_BASELINES = {"lead"}
-UNORDERED_BASELINES = {"random", "textrank", "lexrank"}
+UNORDERED_BASELINES = {
+    "random",
+    "textrank",
+    "lexrank",
+    "sbert_centroid",
+    "sbert_mmr",
+}
 
 # A third, independent axis: does this baseline's summarize_one_* wrapper
 # pass apply_min_words=True to summarize_one_baseline (see contract.py)?
@@ -105,8 +117,14 @@ UNORDERED_BASELINES = {"random", "textrank", "lexrank"}
 # all four are ungoverned -- this axis exists for the first baseline that
 # breaks that pattern (e.g. a restart-until-feasible variant), not because
 # any current baseline needs it.
-GOVERNED_LENGTH_BASELINES: set = set()
-UNGOVERNED_LENGTH_BASELINES = {"lead", "random", "textrank", "lexrank"}
+GOVERNED_LENGTH_BASELINES = {"sbert_mmr"}
+UNGOVERNED_LENGTH_BASELINES = {
+    "lead",
+    "random",
+    "textrank",
+    "lexrank",
+    "sbert_centroid",
+}
 
 DEFAULT_ORDERING = "document_order"
 DEFAULT_FIRST_K = 3
