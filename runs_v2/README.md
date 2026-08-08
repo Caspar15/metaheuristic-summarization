@@ -64,4 +64,9 @@ total/guard cap，不能當 semantic-only ablation；原 S02 structural failure 
 `d1_greedy_sensitivity/govreport/dev/semantic_route/` 已完成原三案：S00 macro
 `0.407203`、selection `917.18 s`；S01 `0.349832`、`974.81 s`；S02 第一列 mandatory
 61 > cap 60，原 structural failure 保留。成功 runs 各 681 rows、dev-test/test 未讀。
-S01 接法在兩資料集均失敗，後續刪除；GovReport S02b 仍依既有 preregistration 待跑。
+S01 接法在兩資料集均失敗，後續刪除；GovReport S02b 依既有 preregistration 另跑。
+
+`d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/` 已在 commit
+`a338737` 後完成：681/681 feasible、pool mean/max `78.74/80`、macro `0.417862`、
+selection `1,106.27 s`，dev-test/test 未讀。它是目前 GovReport proposed 最高點估計，
+但仍是 capacity follow-up 而非 route 純 ablation；原 S02 failure 不被取代。

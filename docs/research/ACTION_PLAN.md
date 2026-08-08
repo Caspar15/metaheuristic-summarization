@@ -125,11 +125,14 @@
       已在 prereg commit 後完成：macro `0.328077`、pool mean/max `52.09/80`，點估計高於
       graph G02 `0.003772` 與 Lead `0.001786`，但 R-2 仍低 Lead `0.008336`。因容量與 guard
       同時改變，不能把差值全歸因 semantic；須等 GovReport、paired inference 與強 baseline。
-- [~] D1 GovReport semantic 原三案已嘗試：S00 macro `0.407203`，高 graph G02
+- [x] D1 GovReport semantic 原三案已嘗試：S00 macro `0.407203`，高 graph G02
       `0.002921`，但低 Random `0.001641`、全文 lexical L10 `0.008382`，selection 約
       graph G00 `15.15×`。S01 比 S00 低 `0.057371`；加上 Multi-News 負證據，已刪除
       semantic-direct selector 接法。S02 first-row mandatory 61 > cap 60 正確失敗；
-      GovReport S02b 尚待依既有 preregistration 執行，完成前不勾選整格。
+      GovReport S02b 已按既有 preregistration 完成，macro `0.417862`、pool max 80，
+      高全文 lexical L10 `0.002277`、graph G07 `0.003031` 與 Random `0.009018`，但成本
+      約 graph G00 `18.28×`。兩 primary S02b 均為目前 proposed 最高點估計；仍待 paired
+      inference、strong baseline 與 matched route ablation，未讀 dev-test/test。
 
 ## 2026-08-06 selector milestone
 

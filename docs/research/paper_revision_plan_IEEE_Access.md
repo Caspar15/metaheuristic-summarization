@@ -128,7 +128,12 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > GovReport semantic 原 family 也已完成：S00 macro `0.407203`，比 graph G02 高
 > `0.002921`，但仍低 Random `0.001641`、全文 lexical L10 `0.008382`，selection 約
 > graph G00 `15.15×`。S01 又比 S00 低 `0.057371`，因此 semantic-direct selector
-> 接法已有跨資料集刪除證據；整條 semantic route 仍等 GovReport S02b／paired evidence。
+> 接法已有跨資料集刪除證據；整條 semantic route 只因 S02b 正訊號暫留，仍需 paired
+> evidence 與 capacity-matched route ablation。
+> GovReport S02b 隨後得到 macro `0.417862`，高全文 lexical L10 `0.002277`、graph
+> G07 `0.003031` 與 Random `0.009018`。兩 primary 的 S02b 都是目前 proposed 最高
+> point estimate，支持繼續做 paired/matched ablation；但 GovReport 成本約 graph G00
+> `18.28×`，且尚未對 strong baseline，不能直接凍結成最終架構。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

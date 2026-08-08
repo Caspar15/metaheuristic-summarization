@@ -9,15 +9,15 @@
 - 27 個配置與兩資料集的 delta 已在任何 D1 分數前凍結於
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
 - 目前完成兩個 primary 的 **lexical/objective family**、**cheap-multiroute family**，
-  以及兩個 primary 的 semantic 原 family、Multi-News capacity-correct follow-up；
-  Multi-News 每個完整 run 為 3,935 rows、GovReport 為 681 rows。GovReport S02b、
-  強 baseline 與 paired inference 尚未完成，因此沒有配置可晉級，也尚未做 D1 的
+  以及兩個 primary 的 semantic 原 family 與 capacity-correct follow-up；Multi-News
+  每個完整 run 為 3,935 rows、GovReport 為 681 rows。強 baseline、matched route
+  ablation 與 paired inference 尚未完成，因此沒有配置可晉級，也尚未做 D1 的
   一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | **12/12 complete** | **2 success + 1 structural failure; capacity follow-up complete** |
-| GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | **2 success + 1 structural failure; capacity follow-up pending** |
+| GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | **2 success + 1 structural failure; capacity follow-up complete** |
 
 ## Multi-News lexical/objective 結果
 
@@ -237,6 +237,7 @@ coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
 | S00 | lexical + semantic、RRF selector | **0.407203** | 0.534512 / 0.187499 / 0.499599 | 917.18 |
 | S01 | 同候選，semantic raw + SBERT similarity selector | 0.349832 | 0.474428 / 0.135957 / 0.439112 | 974.81 |
 | S02 | lexical + semantic + graph | **failed** | first row mandatory 61 > cap 60 | — |
+| S02b | 三路、total 80、guard cap 20（獨立 follow-up） | **0.417862** | 0.545091 / 0.196227 / 0.512267 | 1,106.27 |
 
 - S00 相對 lexical L00 `+0.036818`、graph G00 `+0.003707`、graph G02 `+0.002921`，
   並高 Lead `0.007971`；但仍低 Random `0.001641`、全文 lexical L10 `0.008382`。
@@ -246,12 +247,15 @@ coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
 - S01 比 S00 低 `0.057371`；連同 Multi-News 的 `−0.022771`，semantic raw salience +
   SBERT similarity selector 已得到跨資料集一致負證據，依刪除條件不再保留。
 - 原 S02 failure 永久保留。GovReport S02b 已在任何 GovReport semantic 分數前預註冊，
-  下一步只執行該 capacity follow-up；不從本輪分數改其 total 80／guard cap 20。
+  並於 commit `a338737` 後按原值執行：681/681 feasible、pool mean/max `78.74/80`、
+  macro `0.417862`。它高 S00 `0.010659`、全文 lexical L10 `0.002277`、graph G07
+  `0.003031`、Random `0.009018`；但 selection 約 graph G00 的 `18.28×`。兩 primary
+  的 S02b 都是目前已跑 proposed 配置最高點估計，構成跨資料集正訊號；仍非
+  capacity-matched route ablation，也尚未對 strong baseline／paired significance。
 
 ## 還沒做
 
-1. GovReport S02b follow-up。
-2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
-3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
+1. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
+2. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
-4. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。

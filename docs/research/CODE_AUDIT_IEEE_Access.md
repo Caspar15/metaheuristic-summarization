@@ -1388,7 +1388,7 @@ G00 `133.75 s` 的 `10.37×`。S01 直接採 semantic raw salience + SBERT simil
 `0.299634`，比 S00 低 `0.022771`，該 selector 接法不保留。
 
 **決策邊界**：S00 尚不能單靠一個資料集觸發整條 semantic route 刪除，因 unique
-contribution 存在，且 S02b 雖為正訊號卻不是 semantic 純 ablation、GovReport S02b 未完成；
+contribution 存在，且兩-primary S02b 雖為正訊號卻不是 semantic 純 ablation；
 但它已排除「直接 semantic selector」並把 semantic 的舉證責任提高為跨資料集 quality
 gain 或明確 adaptive-routing 子群增益。
 沒有 paired inference、strong baselines 或 dev-test，不得 promotion。
@@ -1427,12 +1427,33 @@ candidates、8.43 unique selected，證明 route 不是空包裝，但現有受�
 
 S01 semantic raw salience + SBERT similarity macro `0.349832`，比 S00 低 `0.057371`；
 Multi-News 同接法也低 `0.022771`。因此依 §5.3 刪除的是這個 selector 接法，不再納入
-搜尋；整條 semantic candidate route 仍等待已預註冊的 GovReport S02b 與 paired evidence。
+搜尋；整條 semantic candidate route 因兩-primary S02b 正訊號暫留，但仍等待
+capacity-matched route ablation 與 paired evidence。
 
 **重現**：離線 pinned model 下執行
 `python -m scripts.audit.run_greedy_sensitivity --dataset govreport --family semantic_route`；
 主證據在 `runs_v2/d1_greedy_sensitivity/govreport/dev/semantic_route/`。family 為
 2 success + 1 structural failure；成功列共 1,362，dev-test/test 未讀。
+
+---
+
+### 🟡 F-40. Capacity-correct 三路配置在兩 primary 都是目前 proposed 最高點估計，但成本與歸因仍未過關
+
+**證據（2026-08-08）**：GovReport S02b macro `0.417862`，R-1/R-2/R-Lsum
+`0.545091/0.196227/0.512267`，681/681 feasible、pool mean/max `78.74/80`。它高 S00
+`0.010659`、全文 lexical L10 `0.002277`、graph G07 `0.003031` 與 Random `0.009018`；
+Multi-News S02b 也以 `0.328077` 高於該資料集目前 proposed 配置與 Lead 點估計。因此
+三路 capacity-correct design 已有跨資料集一致正向 point estimate，不應在 paired
+analysis 前直接刪除 graph 或 semantic route。
+
+**限制**：GovReport selection `1,106.27 s`，約 graph G00 的 `18.28×`；Multi-News 亦
+明顯昂貴。S02b 同時改 total cap 與 guard cap，仍不是單一路徑的 capacity-matched
+ablation。它尚未對 PacSum／SBERT+MMR 等 strong baselines，也沒有 paired bootstrap／
+多重比較校正，因此不構成 promotion 或 dev-test 授權。
+
+**重現**：`python -m scripts.audit.run_d1_three_route_followup --dataset govreport`；主證據在
+`runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/`，
+selected-indices SHA-256 `62987c3698e7adb0a0ba7d5d37c8795651347ffceb8909a4b9f8b5359a7f20d0`。
 
 ---
 
