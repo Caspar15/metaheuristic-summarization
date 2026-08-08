@@ -83,3 +83,7 @@ S02b 只移除 semantic 或 graph，其他 capacity/guard/selector contract 固�
 `0.403594`、A02 無 graph `0.406381`，S02b 分別高 `0.014268/0.011481`。兩個 runs
 各 681/681 feasible、pool max 80，dev-test/test 未讀；跨資料集 point estimate 同號，
 paired route decision 尚未完成。
+
+`d1_paired_analysis_v1/` 已在逐篇 scoring 前預註冊。它固定比較 S02b 對兩個 route
+removals 與 Lead／Random；各 family 先作 12-test Holm，再報 31-config 搜尋對應的
+186／372-opportunity selection-aware Bonferroni。runner 無 split CLI，只讀 frozen dev。

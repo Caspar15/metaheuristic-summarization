@@ -138,6 +138,9 @@
       semantic 或 graph。Multi-News 已完成：S02b 相對無 semantic `+0.003868`、相對無
       graph `+0.005358`；GovReport 分別 `+0.014268/+0.011481`，兩路在兩 primary 的
       point estimate 都正向。runner 無 split 參數；paired analysis 尚未完成，整格仍不勾選。
+- [~] D1 paired analysis 已在逐篇分數前預註冊：10,000 resamples，兩個 12-test Holm
+      families，另用 186／372 opportunities 的 selection-aware Bonferroni 防止 31-config
+      搜尋灌大顯著性。固定全 frozen-dev 分母；完成前不勾選、不讀 dev-test。
 
 ## 2026-08-06 selector milestone
 

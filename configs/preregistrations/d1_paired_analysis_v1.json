@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d1-paired-analysis-v1",
+  "registered_at_utc": "2026-08-08T14:21:57.1947042Z",
+  "implementation_parent_commit": "21502162033ebf8258e0c9605baf2a028d8549d1",
+  "registration_timing": "after aggregate D1/ablation scores, before per-example scoring or paired bootstrap outcomes",
+  "test_split_prohibited": true,
+  "dev_test_access": "none",
+  "partition": "dev",
+  "datasets": ["Multi-News", "GovReport"],
+  "metrics": ["rouge1", "rouge2", "rougeLsum"],
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20260808,
+    "confidence": 0.95
+  },
+  "comparisons": {
+    "route": [
+      {"system": "s02b", "reference": "without_semantic", "interpretation": "semantic marginal contribution"},
+      {"system": "s02b", "reference": "without_graph", "interpretation": "graph marginal contribution"}
+    ],
+    "cheap_baseline": [
+      {"system": "s02b", "reference": "lead", "interpretation": "interim Lead comparison"},
+      {"system": "s02b", "reference": "random", "interpretation": "interim Random comparison"}
+    ]
+  },
+  "multiplicity": {
+    "holm_route_family": "2 datasets x 2 route removals x 3 metrics = 12 observed tests",
+    "holm_cheap_baseline_family": "2 datasets x 2 baselines x 3 metrics = 12 observed tests",
+    "selection_aware_route_bonferroni_opportunities": 186,
+    "selection_aware_route_derivation": "31 searched configurations x 2 datasets x 3 metrics",
+    "selection_aware_baseline_bonferroni_opportunities": 372,
+    "selection_aware_baseline_derivation": "31 searched configurations x 2 datasets x 2 cheap baselines x 3 metrics"
+  },
+  "decision_rule": {
+    "direction": "system minus reference",
+    "strong_endpoint_win": "mean difference > 0, 95% CI lower > 0, Holm p < 0.05, and selection-aware Bonferroni p < 0.05",
+    "route_policy": "unique provenance alone is insufficient; route quality must be considered with cost and cross-dataset consistency",
+    "promotion": "these comparisons cannot promote to dev-test because PacSum, SBERT+MMR, TextRank/LexRank and greedy reference are not all present"
+  },
+  "denominator": "all frozen dev rows, including recorded infeasible rows; prediction ID set must exactly equal manifest membership",
+  "scores_observed_at_registration": true
+}
