@@ -2,7 +2,7 @@
   "evidence_schema_version": "1.0",
   "measured_at_utc": "2026-08-08T08:28:18.5534451Z",
   "audit": "pre_f30_greedy_quadratic_scaling_projection",
-  "implementation_status": "pre_optimization_interrupted_attempt",
+  "implementation_status": "pre_optimization_interrupted_attempt_corrected_after_file_close",
   "input": "data/processed/govreport_validation_canonical.jsonl",
   "manifest": "configs/validation_partitions/govreport_validation_dev_v1.json",
   "base_split": "validation",
@@ -18,12 +18,20 @@
     "ge_2000": 3
   },
   "anchor": {
-    "sentences": 2192,
+    "partial_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L10_no_candidate_prefilter/greedy/attempts/attempt_01_interrupted/predictions.jsonl.ug5jwiea.partial",
+    "partial_bytes": 7485234,
+    "processed_rows": 152,
+    "last_processed_id": "validation_crs_R44670",
     "observed_cpu_seconds_lower_bound": 639.46875,
-    "observation": "L10 atomic prediction file had not flushed beyond the first two ordered dev rows"
+    "observation": "while the writer was open Windows reported size 0; after process close the partial contained the exact first 152 frozen-dev rows"
   },
-  "sum_n_squared_ratio_to_anchor": 22.81973787395439,
-  "projected_cpu_hours_lower_bound": 4.053474792662576,
-  "interpretation": "complexity proxy for the interrupted pre-F-30 implementation; not a post-optimization runtime claim",
-  "reproduction": ".venv/Scripts/python.exe -m scripts.audit.greedy_scaling_projection --input data/processed/govreport_validation_canonical.jsonl --manifest configs/validation_partitions/govreport_validation_dev_v1.json --partition dev --anchor-sentences 2192 --anchor-cpu-seconds 639.46875"
+  "processed_n_squared_share": 0.2318268515993467,
+  "sum_n_squared_ratio_total_to_processed_prefix": 4.313564166968215,
+  "projected_cpu_hours_lower_bound": 0.7662193016377654,
+  "invalidated_prior_interpretation": {
+    "projected_cpu_hours_lower_bound": 4.053474792662576,
+    "reason": "open-file size=0 was incorrectly interpreted as only the first two rows having run"
+  },
+  "interpretation": "prefix-calibrated complexity proxy for the interrupted pre-F-30 implementation; not a post-optimization runtime claim",
+  "reproduction": ".venv/Scripts/python.exe -m scripts.audit.greedy_scaling_projection --input data/processed/govreport_validation_canonical.jsonl --manifest configs/validation_partitions/govreport_validation_dev_v1.json --partition dev --partial runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L10_no_candidate_prefilter/greedy/attempts/attempt_01_interrupted/predictions.jsonl.ug5jwiea.partial --anchor-cpu-seconds 639.46875"
 }

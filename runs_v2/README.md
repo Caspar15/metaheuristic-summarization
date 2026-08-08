@@ -23,3 +23,9 @@ candidate diagnostics schema v2 的 `selector_candidate_size_*` 才是 selector 
 搜尋空間；`provenance_candidate_size_mean` 是 candidate builder 產生的 records。關閉
 prefilter 時後者為 0、前者為全文，兩者不得混稱。研究解讀與未完成項目見
 `docs/research/D1_SENSITIVITY_STATUS.md`。
+
+`d1_greedy_sensitivity/govreport/dev/lexical_objective/` 亦已完成 12 個 final runs，
+每個 681 frozen-dev rows；另保留一筆 pre-F-30 L10 external interruption failure。
+L10 resume 使用 commit `4198025` 的 exact batched Greedy additions；舊 partial 的
+Windows size=0 誤判與更正見 F-31。GovReport 本 family 沒有讀 dev-test/test，不能因
+L10 dev point estimate 高於 Lead／Random 就提前晉級。

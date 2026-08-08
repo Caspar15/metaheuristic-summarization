@@ -1,0 +1,30 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T08:31:37.123855+00:00",
+  "status": "failed",
+  "failure_type": "external_runner_interruption",
+  "failure": "Incomplete atomic artifact recovered after external runner termination; no final predictions or method evidence existed.",
+  "test_split_accessed": false,
+  "dev_test_accessed": false,
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L10_no_candidate_prefilter",
+  "candidate_hash": "8cbca328d211f0da39f6f5deab23cd540c6f1117cd93e6441dc579d5511eaece",
+  "declared_delta": {
+    "candidates.use": false
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L10_no_candidate_prefilter/resolved_config.yaml",
+  "config_sha256": "6d538104e16cf4e65ac101420461340a650793f68eda983f8e07981d2fda3557",
+  "run_attempt": "attempt_01_interrupted",
+  "archived_run_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L10_no_candidate_prefilter/greedy/attempts/attempt_01_interrupted"
+}

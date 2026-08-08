@@ -8,14 +8,15 @@
   參數，且尚未讀取 dev-test 或 test。
 - 27 個配置與兩資料集的 delta 已在任何 D1 分數前凍結於
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
-- 目前只完成 **Multi-News × lexical/objective family**：12/12 configs、每個
-  3,935 rows。Multi-News 的 cheap-multiroute／semantic 與 GovReport 三個 family
-  都尚未完成，因此沒有配置可晉級，也尚未做一次性 dev-test。
+- 目前完成兩個 primary 的 **lexical/objective family**：各 12/12 configs，
+  Multi-News 每個 3,935 rows、GovReport 每個 681 rows。兩資料集的
+  cheap-multiroute／semantic 都尚未完成，因此沒有配置可晉級，也尚未做一次性
+  dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | pending | pending |
-| GovReport | **10/12 complete；L10 pre-fix attempt interrupted** | pending | pending |
+| GovReport | **12/12 complete** | pending | pending |
 
 ## Multi-News lexical/objective 結果
 
@@ -74,21 +75,56 @@
   所有 final evidence 均標示 `test_split_accessed=false`；study summary 另標示
   `dev_test_accessed=false`。
 
+## GovReport lexical/objective 結果
+
+同一 frozen 500–650-word contract、同一 Greedy selector、all-row macro
+`mean(R-1,R-2,R-Lsum)`：
+
+| ID | 單一變動 | Macro | Δ vs L00 | Feasible |
+|---|---|---:|---:|---:|
+| L10 | 不做 candidate prefilter（全文） | **0.415585** | **+0.045200** | 681/681 |
+| L07 | TF-ISF unigram → unigram+bigram | 0.383758 | +0.013373 | 681/681 |
+| L03 | coverage weight 0.8 → 1.6 | 0.379900 | +0.009515 | 681/681 |
+| L11 | 開啟 position coverage guard | 0.373002 | +0.002617 | 681/681 |
+| L09 | document-aware position weight 0 → 0.2 | 0.373001 | +0.002616 | 681/681 |
+| L06 | sublinear TF → linear TF | 0.372896 | +0.002510 | 681/681 |
+| L05 | 保留 stopwords | 0.372819 | +0.002434 | 681/681 |
+| L02 | importance weight 1.0 → 0.5 | 0.371373 | +0.000988 | 681/681 |
+| L00 | frozen base | 0.370385 | 0 | 681/681 |
+| L08 | feature fusion v1 → v2 | 0.370385 | 0 | 681/681 |
+| L04 | redundancy weight 0.7 → 1.4 | 0.362779 | −0.007606 | 681/681 |
+| L01 | length-normalized importance → mean | 0.332161 | −0.038224 | 681/681 |
+
+### 與便宜 baseline 的同協定脈絡
+
+- A1 frozen-dev Lead macro `0.399232`；Random `0.408844`。L10 的 macro 高
+  `+0.016352`／`+0.006741`，三項為 `0.541583/0.190097/0.515075`。
+- L10 對 Random 三項都較高；對 Lead 的 R-1／R-Lsum 較高，但 R-2 仍低
+  `0.003935`。這只是 dev point estimate；12 個 lexical 比較尚未做 paired bootstrap，
+  PacSum、SBERT+MMR、TextRank／LexRank 與 greedy reference 也未完成，不能稱為
+  significant win 或進入 dev-test。
+- L10 selector pool mean/p95/max 是 `318.52/698/2,889`，summary 平均 `649.07`
+  words。品質增益證實 top-40 candidate recall 是 GovReport 的主要瓶頸，但全文 dense
+  搜尋的成本仍排除它作最終架構；graph／semantic route 必須用受控 pool 回收增益。
+
+### F-30／F-31 執行與更正
+
+- pre-F-30 L10 attempt 在 `639.47 CPU s` 後中止並完整封存；關閉 writer 後確認 partial
+  已有 frozen ordered dev 的前 152 rows，不是先前依開啟中 size=0 誤判的兩列。
+- 依這 152-row prefix 的句數平方占比，舊實作全量 proxy 約 `0.766 CPU h`；原
+  `4.05 h` 推論已作廢。F-30 batched exact additions 完整 357 tests 通過。
+- post-F-30 L10 selection 實測 `817.84 s`，不是舊版完整 run 的直接配對，因此只能說
+  相對 prefix-calibrated projection 約 `3.37×`；不能寫成實測 speedup。
+- L00 selected-indices digest `8273f162...d7982` 與 A1 完全一致，但兩者都是 pre-F-30
+  artifacts。仍需另跑 reference-blind post-F-30 equivalence audit，才能勾完 F-30。
+- GovReport search log 保存 12 final successes 加 1 個 L10 interruption failure；全部
+  `dev_test_score=null`、`test_split_accessed=false`。
+
 ## 還沒做
 
 1. Multi-News cheap-multiroute 與 semantic family。
-2. GovReport 三個 family；不能把 Multi-News 排名外推。
+2. 兩資料集的 cheap-multiroute／semantic family；不能把 lexical 排名外推。
 3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
 5. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
-
-## GovReport lexical/objective 執行中註記
-
-- L00–L09 已各完成 681-row frozen dev evidence；尚未在 family 完成前讀取或排名分數。
-- L10 的 pre-F-30 實作在 2,192-sentence row 已耗至少 `639.47 CPU s`；依 dev source
-  sentence-count 平方 proxy，整個舊 run 下限約 `4.05 CPU h`。這次 attempt 已中止，
-  不視為品質結果，也沒有存取 reference、dev-test 或 test。
-- F-30 的等價 batched-addition 修正已通過 targeted 43／完整 357 tests；runner 接著會
-  以 `--resume` 封存 interrupted attempt 並只重跑 L10／L11。family 完成以前
-  不作 promotion 或跨資料集結論。

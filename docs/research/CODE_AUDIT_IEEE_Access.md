@@ -24,6 +24,10 @@
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
 > Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime
 > enforcement；GovReport 資料層詳見 F-22。兩者均未讀取 test split。
+> **2026-08-08 D1 lexical evidence**：兩 primary 的 12-config lexical/objective dev
+> family 已完成。Multi-News 全文候選仍輸 Lead；GovReport 全文候選 macro
+> `0.415585`，dev point estimate 高於 Lead／Random，但尚無強 baseline、paired
+> significance 或 dev-test。F-30/F-31 另記 exact Greedy 效能修正與錯誤 runtime 外推。
 
 ---
 
@@ -38,7 +42,7 @@
 
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
-| **F-0** | 系統未贏 Lead | 🔴 成立 | ⏳ **未量測** | 待 MVP 跑完 validation 才知道。**這是 go/no-go 的核心,尚未回答** |
+| **F-0** | 系統未贏 Lead | 🔴 成立 | 🟡 **dev 部分回答** | Multi-News lexical 全文仍輸 Lead；GovReport lexical 全文 dev point estimate 高於 Lead／Random。強 baseline、paired significance、graph／semantic 與 dev-test 未完成，go/no-go 尚未回答 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
 | F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
@@ -55,7 +59,7 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🔴 **F-0 尚未在新 pipeline 上回答** —— 修好一堆東西不等於贏過 Lead
+1. 🔴 **F-0 只在 lexical dev 部分回答** —— GovReport 有正訊號、Multi-News 仍輸 Lead；未對強 baseline／顯著性，不等於方法已勝出
 2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank final rerun 已完成；PacSum、SBERT+MMR、GovReport 與 paired significance 未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
@@ -1234,6 +1238,10 @@ paired bootstrap，也尚未跑 GovReport，不能宣稱顯著或跨資料集成
 
 ### ✅ F-30. Greedy 對每個候選重算兩次完整 coverage，GovReport 全文變體無法合理擴展
 
+> **數值更正（F-31）**：下段「第二個 row／4.05 CPU hours」是依 Windows 開啟中
+> partial size=0 所作的錯誤推論，已作廢；正確是 152-row prefix／約 0.766 CPU hours。
+> 保留原敘述是為了讓錯誤推論可稽核，不得引用其數值。
+
 **發現（2026-08-08，GovReport frozen dev、未看分數）**：L10 關閉 candidate
 prefilter 後，舊 `greedy_select()` 對每個 remaining candidate 先呼叫 `can_add()`，再呼叫
 `evaluate()` 取 utility；兩者都重建 `coverage_matrix[:, selected + candidate]`。在第二個
@@ -1255,6 +1263,38 @@ Greedy loop 的 selected indices；single-sentence structural guard 另有 pipel
 targeted **43 passed**、完整 **357 passed**。恢復後仍須以既有 L00 artifact 的逐篇
 selected-indices hash 驗證真實 pipeline 等價。被中止的 attempt 必須由 `--resume`
 封存，不得刪除。
+
+---
+
+### ✅ F-31. Windows 開啟中的 atomic partial size=0 不能當作 row progress
+
+**發現與更正（2026-08-08）**：F-30 觀察程序運行中 temp file size=0，誤判只完成
+前兩個 ordered rows，並以第二列 2,192 句作平方 anchor。程序關閉後同一 partial 為
+`7,485,234` bytes、152 個完整 JSONL rows，IDs 精確等於 frozen dev ordered prefix，
+最後一列是 `validation_crs_R44670`。因此原 `4.05 h` 外推無效。
+
+**正確重算**：152-row prefix 占全 dev `sum(N_sentences²)` 的 `0.231827`；以已觀察
+`639.47 CPU s` 校準，舊實作全量 proxy 約 `0.766 CPU h`。修正版 L10 實測 selection
+`817.84 s`；相對 proxy 約 `3.37×`，但分母不是完整實測 run，只能稱 projected speedup。
+`greedy_scaling_projection.py` 現直接讀 archived partial、驗證 ordered prefix，再計算
+比例；evidence 同時保留 invalidated prior interpretation。
+
+---
+
+### 🟡 F-32. GovReport top-40 lexical candidate pool 丟失大量可用內容，全文 dev 首次超過便宜 baseline
+
+**證據（D1 frozen dev 681 rows，2026-08-08）**：L00 top-40 macro `0.370385`；L10
+全文 macro `0.415585`，增加 `+0.045200`，R-1/R-2/R-Lsum 為
+`0.541583/0.190097/0.515075`。同協定 A1 Lead／Random macro 是
+`0.399232/0.408844`；L10 point estimate 分別高 `+0.016352/+0.006741`。L10 對
+Random 三項都高；對 Lead 仍在 R-2 低 `0.003935`。
+
+**限制與決策**：這是 12-config lexical family 的 dev screen，尚無 paired bootstrap、
+多重比較校正或強 baseline。全文 pool mean/p95/max `318.52/698/2,889`，selection
+`817.84 s`，不能作 final architecture。證據將「candidate recall」提升為 GovReport
+第一優先病因；下一步 graph／semantic 與 candidate-budget family 必須用受控 pool
+回收全文增益。未完成 PacSum、SBERT+MMR、greedy reference 與一次性 dev-test 前，
+不得宣稱方法勝出。
 
 ---
 
@@ -1434,7 +1474,7 @@ selected-indices hash 驗證真實 pipeline 等價。被中止的 attempt 必須
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**345 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**357 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與

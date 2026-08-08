@@ -1,0 +1,55 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L05_keep_stopwords",
+  "candidate_hash": "c7380367b71a83b21720b6bac32a199ed189d7c6a71ad8a38aa0913e9356d7b7",
+  "declared_delta": {
+    "features.tf_isf.use_stopwords": false
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L05_keep_stopwords/resolved_config.yaml",
+  "config_sha256": "62b8edc4c58cc521dfbf83959ba977c38e8f1cb9c659b14d63ab3383fac208a7",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5005848702197367,
+      "rouge2": 0.1540062390661909,
+      "rougeLsum": 0.4638650924576539
+    },
+    "macro_rouge": 0.3728187339145272,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 637.6314243759177,
+      "min": 574,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 40.0,
+    "selector_candidate_size_mean": 40.0,
+    "selector_candidate_size_p95": 40.0,
+    "selector_candidate_size_max": 40,
+    "provenance_candidate_size_mean": 40.0,
+    "route_agreement_mean": 1.0,
+    "unique_candidate_mean_by_route": {
+      "lexical": 40.0
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 16.320117474302496
+    }
+  }
+}

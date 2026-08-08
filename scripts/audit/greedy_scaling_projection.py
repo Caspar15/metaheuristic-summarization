@@ -27,7 +27,7 @@ def main() -> None:
     parser.add_argument("--input", required=True)
     parser.add_argument("--manifest", required=True)
     parser.add_argument("--partition", required=True, choices=("dev",))
-    parser.add_argument("--anchor-sentences", required=True, type=int)
+    parser.add_argument("--partial", required=True)
     parser.add_argument("--anchor-cpu-seconds", required=True, type=float)
     args = parser.parse_args()
 
@@ -39,26 +39,41 @@ def main() -> None:
     if manifest.get("base_split") != "validation":
         raise ValueError("scaling audit accepts validation manifests only")
     partition = manifest["partitions"][args.partition]
-    selected_ids = set(partition["selected_ids"])
+    ordered_ids = list(partition["selected_ids"])
+    selected_ids = set(ordered_ids)
 
-    counts: list[int] = []
+    counts_by_id: dict[str, int] = {}
     with input_path.open(encoding="utf-8") as handle:
         for line in handle:
             if not line.strip():
                 continue
             row = json.loads(line)
             if row.get("id") in selected_ids:
-                counts.append(_sentence_count(row))
-    if len(counts) != int(partition["rows"]):
+                counts_by_id[row["id"]] = _sentence_count(row)
+    if len(counts_by_id) != int(partition["rows"]):
         raise ValueError(
-            f"partition row mismatch: expected {partition['rows']}, got {len(counts)}"
+            f"partition row mismatch: expected {partition['rows']}, "
+            f"got {len(counts_by_id)}"
         )
-    if args.anchor_sentences <= 0 or args.anchor_cpu_seconds <= 0:
-        raise ValueError("anchor values must be positive")
+    counts = [counts_by_id[identifier] for identifier in ordered_ids]
 
-    ratio = sum(count * count for count in counts) / float(
-        args.anchor_sentences * args.anchor_sentences
-    )
+    partial_path = Path(args.partial)
+    partial_ids: list[str] = []
+    with partial_path.open(encoding="utf-8") as handle:
+        for line in handle:
+            if line.strip():
+                partial_ids.append(str(json.loads(line).get("id")))
+    if not partial_ids or len(partial_ids) >= len(ordered_ids):
+        raise ValueError("partial artifact must contain a nonempty strict prefix")
+    if partial_ids != ordered_ids[: len(partial_ids)]:
+        raise ValueError("partial artifact IDs are not the frozen dev ordered prefix")
+    if args.anchor_cpu_seconds <= 0:
+        raise ValueError("anchor CPU seconds must be positive")
+
+    processed_rows = len(partial_ids)
+    processed_n_squared = sum(count * count for count in counts[:processed_rows])
+    total_n_squared = sum(count * count for count in counts)
+    ratio = total_n_squared / float(processed_n_squared)
     report = {
         "audit": "pre_f30_greedy_quadratic_scaling_projection",
         "input": input_path.as_posix(),
@@ -75,16 +90,20 @@ def main() -> None:
             "ge_2000": sum(count >= 2000 for count in counts),
         },
         "anchor": {
-            "sentences": args.anchor_sentences,
+            "partial_path": partial_path.as_posix(),
+            "partial_bytes": partial_path.stat().st_size,
+            "processed_rows": processed_rows,
+            "last_processed_id": partial_ids[-1],
             "observed_cpu_seconds_lower_bound": args.anchor_cpu_seconds,
         },
-        "sum_n_squared_ratio_to_anchor": ratio,
+        "processed_n_squared_share": processed_n_squared / total_n_squared,
+        "sum_n_squared_ratio_total_to_processed_prefix": ratio,
         "projected_cpu_hours_lower_bound": ratio
         * args.anchor_cpu_seconds
         / 3600.0,
         "interpretation": (
-            "complexity proxy for the interrupted pre-F-30 implementation; "
-            "not a post-optimization runtime claim"
+            "prefix-calibrated complexity proxy for the interrupted pre-F-30 "
+            "implementation; not a post-optimization runtime claim"
         ),
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))

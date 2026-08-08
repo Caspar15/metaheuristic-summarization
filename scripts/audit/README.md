@@ -273,6 +273,8 @@ python -m scripts.audit.paired_run_intersection \
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |
 | `random_baseline_min_words.py` | Random baseline `apply_min_words=False` 決策 | `src/baselines/random_baseline.py` 模組 docstring |
+| `greedy_scaling_projection.py` | F-30/F-31 archived partial 的 prefix-calibrated 舊 Greedy 成本 proxy | `CODE_AUDIT_IEEE_Access.md` F-30/F-31 |
+| `verify_greedy_incremental_equivalence.py` | post-F-30 真實 GovReport L00 逐篇 selected-indices 等價 | `CODE_AUDIT_IEEE_Access.md` F-30 |
 
 ---
 

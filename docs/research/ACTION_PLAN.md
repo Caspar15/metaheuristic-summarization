@@ -95,9 +95,15 @@
       `35.95` 增至 `81.85`、最大 `3,318`，不是可接受的最終解。待兩資料集的 graph／
       semantic／candidate-budget family 判定能否用受控 pool 回收品質。
 - [~] F-30：GovReport L10 暴露 Greedy 對每個候選重算兩次 full-source facility
-      coverage；2,192-sentence row 的 pre-fix attempt 已耗至少 `639.47 CPU s`，全 dev
-      平方 proxy 下限約 `4.05 h`。已實作等價 batched additions，targeted 43／完整
-      357 tests 通過；待真實 selected-indices hash 對照與 `--resume` 完成後勾選。
+      coverage。pre-fix attempt `639.47 CPU s` 後封存 152-row prefix；更正後全 dev
+      平方 proxy 約 `0.766 h`（原 `4.05 h` 推論作廢，F-31）。已實作等價 batched
+      additions，targeted 43／完整 357 tests 通過；L10/L11 resume 完成，待 post-F-30
+      L00 selected-indices equivalence audit 後勾選。
+- [x] D1 GovReport lexical/objective family 已完成（12/12 configs、每個 681 frozen dev
+      rows；另保留 1 個 L10 interruption failure）。L10 全文候選 macro `0.415585`、
+      對 base `+0.045200`；dev point estimate 高於 Lead `0.399232` 與 Random `0.408844`，
+      但尚未對強 baseline、做 paired significance 或看 dev-test，不得晉級。完整表見
+      `D1_SENSITIVITY_STATUS.md`。
 
 ## 2026-08-06 selector milestone
 
@@ -358,13 +364,16 @@
 
 > 「不用 train」只表示 proposed method 不做 task-specific training；若日後納入需要訓練的比較系統，必須另列 training regime，不能混入 no-task-training 主表。
 
-- [ ] 🔴 **先在兩個 primary 跑 Lead** —— GovReport 與 Multi-News 都使用同 word budget；這是最便宜的 reality check，優先於一切
+- [~] **兩個 primary 的 Lead frozen-dev point estimate 已由 A1 同 pipeline 產生**；
+      Multi-News `0.326291`、GovReport `0.399232`。仍須收斂進 Gate 2 governed matrix、
+      paired significance 與共同 reporting artifact，未達完整 baseline DoD。
 - [~] 在兩個 primary 跑 TextRank、LexRank（✅ Multi-News final-implementation full split；
       ⬜ GovReport，待資料政策與成本 preflight 凍結後執行）
 - [ ] 在兩個 primary 跑 PacSum
 - [ ] 在兩個 primary 跑 Sentence-BERT centroid + MMR
-- [ ] 在兩個 primary 跑 Random（固定 seed）。2026-08-02：PR #11 仍在 review，
-      full-split feasibility 與 Windows fixture line-ending blocker 未解決，不得標完成或合併後直接跑正式結果
+- [~] 兩個 primary 的 Random frozen-dev point estimate 已由 A1 固定 seed 產生：
+      Multi-News `0.307098`、GovReport `0.408844`；仍須收斂進 Gate 2 governed matrix、
+      paired significance 與共同 reporting artifact。
 - [ ] 在兩個 primary 跑 exact extractive oracle（可行時）或明確標示的 greedy reference（不可稱 upper bound）
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
@@ -499,7 +508,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 345 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 357 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、exact batched Greedy additions、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
