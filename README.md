@@ -61,8 +61,9 @@
   兩 primary S02b 均為目前 proposed 最高點估計；仍缺 strong baseline／paired inference，
   本 screen 不看 dev-test。capacity-matched ablation 顯示 S02b 相對移除 semantic／graph：
   Multi-News `+0.003868/+0.005358`，GovReport `+0.014268/+0.011481`；兩路跨資料集
-  point estimate 都正向，但 multiplicity-corrected paired inference 未完成。F-30 Greedy
-  等價效能修正與 F-31 的
+  point estimate 都正向。預註冊 paired analysis 的 12/12 route endpoints 亦全部通過
+  Holm 與 186-opportunity correction，semantic/graph 暫留；但 Multi-News 對 Lead 的
+  R-2 顯著低 `0.008336`，強 baseline 尚未齊，不能晉級。F-30 Greedy 等價效能修正與 F-31 的
   錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 

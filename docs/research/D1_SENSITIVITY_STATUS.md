@@ -10,9 +10,9 @@
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
 - 目前完成兩個 primary 的 **lexical/objective family**、**cheap-multiroute family**，
   以及兩個 primary 的 semantic 原 family 與 capacity-correct follow-up；Multi-News
-  每個完整 run 為 3,935 rows、GovReport 為 681 rows。強 baseline、matched route
-  ablation 與 paired inference 尚未完成，因此沒有配置可晉級，也尚未做 D1 的
-  一次性 dev-test。
+  每個完整 run 為 3,935 rows、GovReport 為 681 rows。capacity-matched route
+  ablation 與事前註冊的 paired inference 已完成；強 baseline 尚未齊，因此沒有配置可晉級，
+  也尚未做 D1 的一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
@@ -39,8 +39,9 @@
 | L04 | redundancy weight 0.7 → 1.4 | 0.305827 | −0.004526 | 3,931/3,935 |
 | L01 | length-normalized importance → mean | 0.283376 | −0.026977 | 3,935/3,935 |
 
-這只是 OFAT 優先序，不是顯著性或 promotion 結論。27-config family 與兩資料集尚未
-完成，多重比較的 paired bootstrap 也尚未執行。
+這只是 OFAT 優先序，不是 promotion 結論。後續已完成 31-config、兩資料集的
+capacity-matched route ablation 與 paired bootstrap；完整結果與多重比較限制見本文件後段，
+但 strong baseline matrix 尚未完成。
 
 ### 與便宜 baseline 的同協定脈絡
 
@@ -250,8 +251,9 @@ coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
   並於 commit `a338737` 後按原值執行：681/681 feasible、pool mean/max `78.74/80`、
   macro `0.417862`。它高 S00 `0.010659`、全文 lexical L10 `0.002277`、graph G07
   `0.003031`、Random `0.009018`；但 selection 約 graph G00 的 `18.28×`。兩 primary
-  的 S02b 都是目前已跑 proposed 配置最高點估計，構成跨資料集正訊號；仍非
-  capacity-matched route ablation，也尚未對 strong baseline／paired significance。
+  的 S02b 都是目前已跑 proposed 配置最高點估計，構成跨資料集正訊號；後續
+  capacity-matched route ablation 與 paired route inference 已完成，但尚未對齊 strong
+  baseline matrix，故仍不能 promotion。
 
 ## Multi-News capacity-matched route ablation
 
@@ -288,9 +290,43 @@ guard cap 20、Greedy/RRF 與其餘設定，只移除一路：
   快約 `6.75×`，semantic 的品質增益要與成本／adaptive routing 一起判斷。
 - A02 與 S02b 耗時相近，顯示 sparse graph 的邊際計算成本小；但正式成本仍需重複測量。
 
+## 預註冊 paired analysis
+
+固定完整 frozen-dev 分母，逐篇重算同 evaluator ROUGE，10,000 bootstrap resamples。
+route family 是兩資料集 × 兩個 route removals × 三 metrics 共 12 tests，作 Holm；另以
+31 searched configs × 兩資料集 × 三 metrics = 186 opportunities 作 selection-aware
+Bonferroni。
+
+### Route 保留結果
+
+| Dataset | 比較 | R-1 Δ [95% CI] | R-2 Δ [95% CI] | R-Lsum Δ [95% CI] |
+|---|---|---|---|---|
+| Multi-News | S02b − 無 semantic | +0.003994 [0.003126, 0.004854] | +0.002704 [0.001717, 0.003675] | +0.004906 [0.004029, 0.005765] |
+| Multi-News | S02b − 無 graph | +0.005306 [0.004396, 0.006189] | +0.003687 [0.002616, 0.004773] | +0.007081 [0.006156, 0.008002] |
+| GovReport | S02b − 無 semantic | +0.015568 [0.013985, 0.017163] | +0.011961 [0.010019, 0.013865] | +0.015274 [0.013684, 0.016915] |
+| GovReport | S02b − 無 graph | +0.011538 [0.009863, 0.013193] | +0.010108 [0.007862, 0.012289] | +0.012796 [0.011054, 0.014556] |
+
+12/12 endpoints 的 raw bootstrap p 均為 `0.000200`、Holm `0.002400`、186-opportunity
+Bonferroni `0.037196`；全部通過預註冊 strong-endpoint rule。§5.3／§5.4 的直接刪除
+條件目前未觸發：semantic 與 graph 暫留。這不等於 always-on；semantic 的成本仍需
+adaptive quality-cost 判斷。
+
+### Lead／Random 只是 interim，不構成 Gate 2
+
+- Multi-News 對 Lead：R-1 `+0.005726`、R-Lsum `+0.007969` 的 CI 為正，但 R-2
+  **`−0.008336`**，95% CI `[−0.010951, −0.005706]`，是顯著缺口。
+- GovReport 對 Lead：R-1 `+0.030559`、R-Lsum `+0.023134` 為正；R-2 `+0.002196`
+  的 CI `[−0.005531, 0.009608]` 跨 0。
+- 對 Random，兩資料集三項 CI 都為正且 12-test Holm 通過；但預註冊 372-opportunity
+  correction 在 10,000 resamples 下的最小可得 corrected p 是 `0.074393`，所以
+  0/12 cheap-baseline endpoints 通過 strong rule。依「看到分數後不改顯著性方法」規則，
+  不事後增加 resamples；只記錄解析度限制。
+- PacSum／SBERT+MMR／TextRank／LexRank／greedy reference 尚未在兩 primary 同矩陣完成，
+  因此即使 route paired evidence 很強，仍不得進 dev-test。
+
 ## 還沒做
 
-1. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
-2. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
+1. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
+2. candidate recall/headroom、adaptive cost rule 與 selector Greedy/MMR/NSGA-II full-dev。
 3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。

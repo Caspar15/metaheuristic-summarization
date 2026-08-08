@@ -133,14 +133,17 @@
       高全文 lexical L10 `0.002277`、graph G07 `0.003031` 與 Random `0.009018`，但成本
       約 graph G00 `18.28×`。兩 primary S02b 均為目前 proposed 最高點估計；仍待 paired
       inference、strong baseline 與 matched route ablation，未讀 dev-test/test。
-- [~] 已在看過 S02b aggregate、但尚未跑 matched ablation 前，預註冊兩-primary
+- [x] 已在看過 S02b aggregate、但尚未跑 matched ablation 前，預註冊兩-primary
       capacity-matched route removal：固定 S02b total 80／guard cap 20，只分別移除
       semantic 或 graph。Multi-News 已完成：S02b 相對無 semantic `+0.003868`、相對無
       graph `+0.005358`；GovReport 分別 `+0.014268/+0.011481`，兩路在兩 primary 的
-      point estimate 都正向。runner 無 split 參數；paired analysis 尚未完成，整格仍不勾選。
-- [~] D1 paired analysis 已在逐篇分數前預註冊：10,000 resamples，兩個 12-test Holm
+      point estimate 都正向。runner 無 split 參數；paired route evidence 見下一項。
+- [x] D1 paired analysis 已在逐篇分數前預註冊並完成：10,000 resamples，兩個 12-test Holm
       families，另用 186／372 opportunities 的 selection-aware Bonferroni 防止 31-config
-      搜尋灌大顯著性。固定全 frozen-dev 分母；完成前不勾選、不讀 dev-test。
+      搜尋灌大顯著性。route 12/12 endpoints 的 CI 全正、Holm `0.002400`、selection
+      corrected `0.037196`，semantic/graph 刪除條件未觸發。cheap-baseline family 因
+      10k resamples 的最小 selection-corrected p=`0.074393` 無 endpoint 通過；不事後改
+      resamples。Multi-News 對 Lead 的 R-2 顯著低 `0.008336`，Gate 2／dev-test 仍未過。
 
 ## 2026-08-06 selector milestone
 

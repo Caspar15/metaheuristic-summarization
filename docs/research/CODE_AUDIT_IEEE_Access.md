@@ -42,7 +42,7 @@
 
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
-| **F-0** | 系統未贏 Lead | 🔴 成立 | 🟡 **dev 部分回答** | Multi-News lexical 全文仍輸 Lead；GovReport lexical 全文 dev point estimate 高於 Lead／Random。強 baseline、paired significance、graph／semantic 與 dev-test 未完成，go/no-go 尚未回答 |
+| **F-0** | 系統未贏 Lead | 🔴 成立 | 🟡 **dev 部分回答** | 三 route 配置在兩個 primary 對 Random 的三個 metric CI 皆為正；Multi-News 對 Lead 的 R-2 顯著落後，GovReport 對 Lead 的 R-2 CI 跨 0。graph／semantic route paired evidence 已完成，但強 baseline 與 dev-test 未完成，go/no-go 尚未回答 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
 | F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
@@ -59,8 +59,8 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🔴 **F-0 只在 lexical dev 部分回答** —— GovReport 有正訊號、Multi-News 仍輸 Lead；未對強 baseline／顯著性，不等於方法已勝出
-2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank final rerun 已完成；PacSum、SBERT+MMR、GovReport 與 paired significance 未完成，F-0 仍無法回答
+1. 🔴 **F-0 只在 dev 部分回答** —— route paired evidence 有正訊號，但 Multi-News 對 Lead 的 R-2 顯著落後；未對齊強 baseline，不等於方法已勝出
+2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank historical rerun 已完成；PacSum、partitioned SBERT+MMR、GovReport 方法 runs 與完整 Gate 2 paired matrix 未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -1492,6 +1492,38 @@ quality-cost rule 決定。尚未做 31-config multiplicity-corrected paired ana
 
 **重現**：`python -m scripts.audit.run_d1_capacity_matched_route_ablation --dataset govreport`；
 主證據在 `runs_v2/d1_capacity_matched_route_ablation/govreport/dev/`。
+
+---
+
+### ✅ F-43. Semantic 與 graph 的 capacity-matched 增量通過跨資料集 paired／selection correction
+
+**證據（2026-08-08，完整 frozen dev 分母）**：四個 route comparisons × 三 ROUGE
+metrics 共 12 endpoints，mean difference 與 95% CI 全為正。每項 raw p=`0.000200`、
+12-test Holm p=`0.002400`；再按 31 configs × 2 datasets × 3 metrics = 186 個搜尋機會
+Bonferroni 後為 `0.037196`，仍通過預註冊 strong-endpoint rule。Multi-News 的 semantic/
+graph macro 邊際 `+0.003868/+0.005358`；GovReport `+0.014268/+0.011481`。
+
+**決策**：§5.3／§5.4 的 semantic/graph 直接刪除條件目前未觸發；兩路保留到 selector
+與 strong-baseline gate。這只證明 quality 增量，不代表 semantic 值得 always-on；其
+GovReport 成本約使 A01→S02b 從 `163.77 s` 增至 `1,106.27 s`，仍需 adaptive cost rule。
+
+**重現**：`python -m scripts.audit.run_d1_paired_analysis`；主 evidence
+`runs_v2/d1_paired_analysis_v1/summary.json`，完整逐篇檔案以 SHA-256 記錄但不進 Git。
+
+---
+
+### 🟡 F-44. 10,000 bootstrap resamples 無法解析 372-opportunity baseline correction；不得事後改協定
+
+有限樣本修正使 10,000 resamples 的最小雙尾 p 為 `2/10001=0.00019998`；乘上預註冊
+372 個 baseline-selection opportunities 後，最小 corrected p=`0.074393`。因此即使
+S02b 對 Random 的六個 endpoints 都有正 CI，0/12 cheap-baseline endpoints 能通過
+selection-aware strong rule。這是解析度上限，不是「證明不顯著」。
+
+**處理**：遵守「看到分數後不得改顯著性方法」，不事後把 resamples 增至可過門檻的值，
+也不刪除 selection correction。cheap baseline 結果只作 interim；正式 Gate 2 以完整
+強 baseline matrix 與下一個事前凍結的 confirmatory protocol 處理。另有實質負結果：
+Multi-News 對 Lead 的 R-2 `−0.008336`，CI `[−0.010951,−0.005706]`；GovReport 對 Lead
+R-2 的 CI 跨 0，故目前本來就不符合跨 metrics 勝出。
 
 ---
 

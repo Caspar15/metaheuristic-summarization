@@ -139,6 +139,10 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > GovReport 同比較為 `+0.014268/+0.011481`，兩路跨資料集 point estimate 同號；
 > 但仍須 31-config multiplicity-corrected paired inference。GovReport 無 semantic 只需
 > `163.77 s`、完整 S02b `1,106.27 s`，semantic 必須另證明 quality-cost 值得 always-on。
+> 預註冊 paired analysis 進一步確認四個 route comparisons × 三 metrics 的 12/12 CI
+> 全正，Holm `0.002400`、31-config selection correction `0.037196`，所以 graph/semantic
+> 暫不刪除。然而 Multi-News 對 Lead 的 R-2 為 `−0.008336` 且 CI 全負；GovReport 對
+> Lead 的 R-2 CI 跨 0。這仍不是可投結果，必須完成 Gate 2 強 baseline 與 quality-cost gate。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

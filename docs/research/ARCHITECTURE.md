@@ -265,6 +265,12 @@ CandidateRecord
 - PageRank／centrality 只是一種 route score，不等於 coherence。
 - graph route 若與 semantic route 高度重複且沒有增量效果，刪除 graph route，而不是為了「三軌」硬留。
 
+> **D1 route gate（2026-08-08）**：在 S02b total 80／guard cap 20 下，兩-primary
+> capacity-matched ablation 與預註冊 paired analysis 已完成。semantic 與 graph 的 12 個
+> route endpoints 均有正 95% CI，12-test Holm p=`0.002400`，31-config selection-aware
+> correction p=`0.037196`；因此 §5.3／§5.4 的直接刪除條件目前未觸發。這不凍結
+> always-on policy：semantic 的高成本仍須 §5.5 adaptive allocator／strong-baseline gate。
+
 ### 5.5 Adaptive route budget allocator
 
 輸入只能是 inference-time 可得的廉價特徵：

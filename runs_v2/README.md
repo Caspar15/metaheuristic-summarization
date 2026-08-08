@@ -77,13 +77,17 @@ S02b 只移除 semantic 或 graph，其他 capacity/guard/selector contract 固�
 
 `d1_capacity_matched_route_ablation/multinews/dev/` 已完成：A01 無 semantic macro
 `0.324209`、A02 無 graph `0.322719`，S02b 分別高 `0.003868/0.005358`。兩個 runs
-各 3,935 rows、pool max 80，dev-test/test 未讀；paired route decision 尚未完成。
+各 3,935 rows、pool max 80，dev-test/test 未讀；後續 paired route analysis 已完成，結果見
+`d1_paired_analysis_v1/summary.json`。
 
 `d1_capacity_matched_route_ablation/govreport/dev/` 已完成：A01 無 semantic macro
 `0.403594`、A02 無 graph `0.406381`，S02b 分別高 `0.014268/0.011481`。兩個 runs
 各 681/681 feasible、pool max 80，dev-test/test 未讀；跨資料集 point estimate 同號，
-paired route decision 尚未完成。
+後續 paired route analysis 已完成，結果見 `d1_paired_analysis_v1/summary.json`。
 
-`d1_paired_analysis_v1/` 已在逐篇 scoring 前預註冊。它固定比較 S02b 對兩個 route
+`d1_paired_analysis_v1/` 已在逐篇 scoring 前預註冊並完成。它固定比較 S02b 對兩個 route
 removals 與 Lead／Random；各 family 先作 12-test Holm，再報 31-config 搜尋對應的
-186／372-opportunity selection-aware Bonferroni。runner 無 split CLI，只讀 frozen dev。
+186／372-opportunity selection-aware Bonferroni。route 12/12 endpoints 通過 strong rule；
+cheap-baseline 0/12，且 Multi-News 對 Lead R-2 顯著為負。10k resamples 對 372 correction
+的最小 corrected p=`0.074393`，不事後改協定。runner 無 split CLI，只讀 frozen dev。
+summary SHA-256 `4b63b59a7f6ddf96fa9698522909ebe363fa96ae2ca5c937357577bbdf877937`。
