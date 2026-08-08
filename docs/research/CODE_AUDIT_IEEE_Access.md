@@ -1788,7 +1788,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**388 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**392 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1893,8 +1893,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；加入 F-53 family verifier 後目前為
-**388 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55 後為
+**392 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -1941,7 +1941,8 @@ F-51 的 legacy PLM run 會明確計入 `disabled_or_legacy_candidate_count`，�
 .venv\Scripts\python.exe -m pytest tests/test_gate2_baseline_family_summary.py -q
 ```
 
-目標測試 `7 passed`；完整回歸 **388 passed**（2026-08-09）。test split 未讀。
+F-53 目標測試 `7 passed`；當時完整回歸 **388 passed**，目前為 **392 passed**
+（2026-08-09）。test split 未讀。
 
 ## F-54 — 兩 primary PLM baseline 完成後，S02b 仍未通過 strongest-baseline gate
 
@@ -1970,3 +1971,26 @@ dev-test/test 未讀。這項結果不等於 semantic route 應刪除：external
 
 - `runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/analysis_summary.json`
 - `runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/analysis_summary.json`
+
+## F-55 — 舊 greedy-reference CLI 無 frozen partition／evidence／resume 治理（已修正）
+
+**嚴重度：P0（資料邊界／研究 provenance）**
+
+`src.eval.oracle` 已修正 canonical schema、metric-specific search 與 fail-loud，但它的通用
+CLI 仍直接讀整個輸入 JSONL，提供 `--limit`，沒有 frozen-dev manifest／policy SHA 驗證、
+逐列 checkpoint、search log 或正式 evidence。直接拿它跑 Gate 2 會把「演算法 correctness」
+誤當成「研究流程 correctness」，也可能不小心量到完整 validation 而非 frozen dev。
+
+現新增 `scripts/audit/run_gate2_greedy_reference.py`，固定讀 commit `6a6eddf` 先凍結的
+`gate2-greedy-reference-v1`（SHA-256 `04235301...9f735`）。CLI 只有 dataset、target、
+workers 與 resume，沒有 split；input／manifest／length-policy SHA、selected-ID digest 與
+row count 全部 fail loud。R1／R2／Lsum 是 6 個獨立 configurations；process workers 只作
+文件級 execution parallelism，`executor.map` 與逐列 checkpoint 保持 frozen ID order。
+resume 必須匹配 exact prefix，外層中斷會另存 interruption evidence 並進 search log；任何
+schema/row exception 使整個 configuration fail，不會跳列。
+
+toy corpus exact-equivalence test 證明逐文件組裝與原 `greedy_reference_run(corpus)` 的
+selected indices／三 metric 完全相同；CLI boundary 與 checkpoint tampering 另有 regression。
+runner 自身 4 tests、與既有 greedy-reference 合併 11 tests 全過，完整回歸
+**392 passed**。正式 6 個 runs 尚未開始，故本條只代表
+runner 可以安全動工，不代表 headroom 已量得。dev-test/test 未讀。

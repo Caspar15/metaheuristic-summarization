@@ -344,3 +344,18 @@ CLI。它以既有 uncached SBERT-centroid artifact 為基準，先做 cold-popu
 3,935/3,935 warm-hit；兩次都必須逐篇 selected indices、summary、feasibility、
 representation hashes 與 ROUGE 完全一致。預註冊：
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`。
+
+## Gate 2 metric-specific greedy reference
+
+`run_gate2_greedy_reference.py` 沒有 split CLI，只能從兩 primary 的 frozen-dev manifest
+取列。R1／R2／Lsum 必須分開執行；逐文件可平行，但結果依 manifest 順序寫入
+`rows.jsonl`，每列 flush，外層中斷後以 `--resume` 驗 exact prefix 並保存 interruption
+evidence。它是 headroom／candidate-recall diagnostic，不是 baseline、oracle 或 upper bound。
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_gate2_greedy_reference `
+  --dataset multinews --target rouge1 --workers 4
+```
+
+預註冊：`configs/preregistrations/gate2_greedy_reference_v1.json`。不得用舊
+`src.eval.oracle --limit` CLI 產生正式 Gate 2 數字。

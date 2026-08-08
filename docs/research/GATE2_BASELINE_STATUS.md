@@ -51,7 +51,7 @@
   保留於 `attempt_01_interrupted/`，resume 後的 final run 另存，不覆寫失敗紀錄。
 - GovReport 23 個 runs 全部一次完成；兩 family 的成功／失敗歷史都已寫入 registry。
 - family 彙整器會驗 candidate count、每個 evidence 的 partition guards、結果完整性，且
-  CLI 沒有 partition 參數。目前加入 F-51～F-53 guards 後完整本地回歸為 **388 passed**。
+  CLI 沒有 partition 參數。目前加入 F-51～F-55 guards 後完整本地回歸為 **392 passed**。
 
 ### Multi-News frozen-dev 結果
 
