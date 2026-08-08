@@ -16,8 +16,14 @@
       漂移、輸入 SHA 不符、遺失 ID、重複 ID 都 fail loud。
 - [ ] GovReport 尚未取得，故 GovReport dev/dev-test manifest 尚未凍結；必須在任何
       GovReport optimization score 前完成。
-- [ ] A1 長度協定、A2 greedy-reference 修正、A3 GovReport 資料層、Gate 2 baseline
+- [~] A1 已完成 Multi-News reference-only 統計與預註冊，候選 runs 尚未執行；
+      A2 greedy-reference correctness 已完成；A3 GovReport 資料層、Gate 2 baseline
       矩陣與 dev search 尚未完成。**test split 仍為硬禁止；到 freeze 簽字前不執行。**
+- [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
+      median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
+      勝出與 Holm/tie 規則已在任何候選 system score 前預註冊於
+      `configs/preregistrations/a1_length_contract_v1.json`。GovReport 數值只可在其
+      data layer/partition 凍結後依同一 rule family 實例化，不能照抄 Multi-News。
 
 ## 2026-08-06 selector milestone
 
