@@ -25,6 +25,8 @@ A1_LEAD = {
     "govreport": REPO_ROOT
     / "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run",
 }
+EMBEDDING_CACHE_CONTRACT = "sbert_mean_pool_l2_npz_v1"
+PLM_DEPENDENCIES = ("torch", "transformers", "tokenizers", "sentence-transformers")
 
 
 def _utc_now() -> str:
@@ -111,6 +113,57 @@ def _prediction_diagnostics(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]
     }
 
 
+def _validate_embedding_cache_evidence(
+    evidence: Mapping[str, Any],
+) -> dict[str, Any] | None:
+    """Validate an enabled execution cache without treating it as a method input."""
+
+    optimization = evidence.get("execution_optimization") or {}
+    cache_declaration = optimization.get("embedding_cache") or {}
+    if not cache_declaration.get("enabled", False):
+        return None
+    if cache_declaration.get("scientific_config_unchanged") is not True:
+        raise ValueError("embedding cache does not prove scientific-config equivalence")
+    if cache_declaration.get("contract_version") != EMBEDDING_CACHE_CONTRACT:
+        raise ValueError("unexpected embedding-cache contract version")
+
+    summary = evidence.get("embedding_cache_summary")
+    if not isinstance(summary, Mapping):
+        raise ValueError("enabled embedding cache is missing its run summary")
+    rows = int(evidence["partition_rows"])
+    if int(summary.get("rows", -1)) != rows:
+        raise ValueError("embedding-cache row count differs from the frozen partition")
+    status_counts = summary.get("status_counts")
+    if not isinstance(status_counts, Mapping) or not status_counts:
+        raise ValueError("embedding-cache status counts are missing")
+    unknown_statuses = set(status_counts) - {"hit", "miss_written"}
+    if unknown_statuses:
+        raise ValueError(f"unexpected embedding-cache statuses: {sorted(unknown_statuses)}")
+    if sum(int(value) for value in status_counts.values()) != rows:
+        raise ValueError("embedding-cache status counts do not cover the partition")
+    if summary.get("contract_version") != EMBEDDING_CACHE_CONTRACT:
+        raise ValueError("embedding-cache summary contract differs from declaration")
+    key_digest = str(summary.get("ordered_row_cache_keys_sha256", ""))
+    if len(key_digest) != 64 or any(char not in "0123456789abcdef" for char in key_digest):
+        raise ValueError("embedding-cache ordered-key digest is not canonical SHA-256")
+
+    dependencies = evidence.get("dependency_versions") or {}
+    missing = [
+        name
+        for name in PLM_DEPENDENCIES
+        if not dependencies.get(name) or dependencies.get(name) == "not-installed"
+    ]
+    if missing:
+        raise ValueError(f"cached PLM evidence is missing dependencies: {missing}")
+    return {
+        "rows": rows,
+        "status_counts": {key: int(value) for key, value in status_counts.items()},
+        "contract_version": summary["contract_version"],
+        "ordered_row_cache_keys_sha256": key_digest,
+        "dependency_versions": {name: dependencies[name] for name in PLM_DEPENDENCIES},
+    }
+
+
 def summarize(dataset: str, family: str) -> dict[str, Any]:
     protocol = load_protocol()
     root = REPO_ROOT / "runs_v2/gate2_baseline_matrix_v1" / dataset / "dev" / family
@@ -124,6 +177,7 @@ def summarize(dataset: str, family: str) -> dict[str, Any]:
     if family_summary["partition"] != "dev":
         raise ValueError("Gate 2 family summary is not frozen dev")
 
+    cache_runs: list[dict[str, Any]] = []
     for candidate, result in family_summary["results"].items():
         if result.get("dev_test_accessed") is not False:
             raise ValueError(f"{candidate} does not prove dev-test non-access")
@@ -137,6 +191,36 @@ def summarize(dataset: str, family: str) -> dict[str, Any]:
             raise ValueError(f"{candidate} evidence accessed dev-test")
         if evidence.get("test_split_accessed") is not False:
             raise ValueError(f"{candidate} evidence accessed test")
+        cache_evidence = _validate_embedding_cache_evidence(evidence)
+        if cache_evidence is not None:
+            cache_runs.append({"candidate": candidate, **cache_evidence})
+
+    cache_status_counts: dict[str, int] = {}
+    for cache_run in cache_runs:
+        for status, count in cache_run["status_counts"].items():
+            cache_status_counts[status] = cache_status_counts.get(status, 0) + count
+    cache_diagnostics = {
+        "enabled_candidate_count": len(cache_runs),
+        "disabled_or_legacy_candidate_count": expected - len(cache_runs),
+        "status_counts": cache_status_counts,
+        "contract_versions": sorted(
+            {run["contract_version"] for run in cache_runs}
+        ),
+        "ordered_row_cache_key_digests": sorted(
+            {run["ordered_row_cache_keys_sha256"] for run in cache_runs}
+        ),
+        "dependency_version_sets": [
+            dict(items)
+            for items in sorted(
+                {tuple(sorted(run["dependency_versions"].items())) for run in cache_runs}
+            )
+        ],
+        "candidates": [run["candidate"] for run in cache_runs],
+        "interpretation": (
+            "Cache state is execution provenance only. Candidate hashes and "
+            "scientific configurations exclude the cache root and hit/miss state."
+        ),
+    }
 
     ranking = _rank_results(family_summary["results"])
     winner = ranking[0]
@@ -180,6 +264,7 @@ def summarize(dataset: str, family: str) -> dict[str, Any]:
         "winner_minus_frozen_lead_macro": winner["macro_rouge"] - lead_macro,
         "prediction_diagnostics": diagnostics,
         "selection_comparisons": comparisons,
+        "execution_cache_diagnostics": cache_diagnostics,
         "interpretation_guard": (
             "Ranking is descriptive frozen-dev evidence only. A score-degenerate "
             "PacSum endpoint is a canonical-order skip-tolerant control, not "

@@ -1914,3 +1914,28 @@ Transformers，run evidence 本身仍不完整。現已補記 `torch`、`transfo
 `tokenizers` 與 `sentence-transformers`（未安裝時明示 `not-installed`），並由 regression
 test 確認本 PLM 環境前三者存在。既有 evidence 保留原貌，不回填假 provenance；後續
 cached audit 與 PLM runs 使用新 schema 內容。
+
+## F-53 — Gate 2 family verifier 未驗證 execution-cache provenance（已修正）
+
+**嚴重度：P1（provenance／fail-loud）**
+
+`scripts/audit/summarize_gate2_baseline_family.py` 原先只驗證 candidate 數量、完成狀態、
+frozen-dev partition 與 dev-test/test 未讀，之後就直接排名。即使 PLM evidence 宣告啟用
+F-51 cache，family verifier 也沒有確認 cache summary 是否存在、列數與 partition 是否一致、
+hit/miss 是否涵蓋全部列、contract／ordered-key digest 是否有效，亦未確認 F-52 的 PLM
+runtime versions。這不代表既有分數已被證明錯誤，但會讓損壞或不完整的 provenance 通過
+family 層驗收。
+
+現已新增 fail-loud 驗證並把聚合診斷寫入 `analysis_summary.json`：只接受
+`sbert_mean_pool_l2_npz_v1`、`hit`／`miss_written`，狀態總數必須等於 frozen partition rows，
+ordered-key digest 必須是 canonical SHA-256；啟用 cache 的 run 亦必須記錄 Torch、
+Transformers、tokenizers 與 sentence-transformers 版本。未使用 cache 的 non-PLM 或早於
+F-51 的 legacy PLM run 會明確計入 `disabled_or_legacy_candidate_count`，不會偽造回填。
+
+重現：
+
+```powershell
+.venv\Scripts\python.exe -m pytest tests/test_gate2_baseline_family_summary.py -q
+```
+
+目標測試 `7 passed`；完整回歸 **388 passed**（2026-08-09）。test split 未讀。
