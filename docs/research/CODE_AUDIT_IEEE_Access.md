@@ -1131,6 +1131,38 @@ lexical-only cheap method，不提前否定 semantic/graph。證據位於
 
 ---
 
+### 🟠 F-25. `features.position` 以攤平後全域 index 計分，Multi-News 文件邊界不會重置
+
+**發現（2026-08-08，D1 分數前）**：`build_base_scores()` 只接收 `sentences`，v1/v2
+position 都用 `enumerate(sentences)`。canonical Multi-News 雖保存 `document_id` 與
+`document_position`，這條 feature path 完全沒讀；第二篇文件的第一句因此被當成前一篇
+之後的中段句，而不是新文件的 lead。若直接把目前為 0 的 position weight 打開，測到的
+不是論文宣稱的 document-aware weak prior。
+
+**處理**：D1 preregistration 已在任何新 score 前綁定 correctness precondition：新增
+`features.position.scope=document`，必須由 canonical sentence records 計算並在每個
+document 重置；請求 document scope 卻沒有 records 時 fail loud。以兩篇 toy document
+的 golden test 證明兩個 document starts 都為 1.0 後，才允許執行 position OFAT。
+
+**重現**：在修正前對 document sizes 2+2 呼叫 v1 position，輸出是全域
+`[1, 2/3, 1/3, 0]`；正確 document-linear 應為 `[1, 0, 1, 0]`。test split 未存取。
+
+---
+
+### 🟡 F-26. A1 單一路由使三個 candidate-budget/RRF 宣告值結構上不活躍
+
+**發現**：A1 base 只啟用 lexical route，`route_top_k=40`、`min_per_route=20`、
+`total=60`。proposal union 最多 40，因此 total 60 永遠不裁切；單一路由的 reservation
+也不改 top-40 membership；`1/(c+rank)` 對 rank 單調，所以 RRF constant 不改排序。
+這些值有被程式讀取，卻在該 context 無法改變輸出。
+
+**影響邊界**：A1 問的是 length contract，這不推翻其已凍結結果；但不能用 A1 run
+宣稱 candidate budget 已驗證，也不能做「動參數後無差」的假敏感度結論。D1 已預註冊
+在 lexical+graph 兩路、40/20/60 base 下分別移動 route top-K、reservation、total 與
+RRF constant。完整盤點在 `docs/research/evidence/d1_effective_tunable_inventory.json`。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

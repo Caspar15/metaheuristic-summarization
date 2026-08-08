@@ -68,6 +68,16 @@
       仍低於 Lead `0.394815` 與 Random `0.410382`（dev 同方向）；這是 objective/
       candidate salience 的 reality
       warning，不可由 length tuning 掩蓋。它不直接否定尚未加入的 semantic/graph route。
+- [x] D1 所有 canonical runtime knobs 已逐模組盤點為 19 組／90 個 dotted paths，
+      證據與驗證器分別在 `docs/research/evidence/d1_effective_tunable_inventory.json`、
+      `scripts/audit/effective_tunable_inventory.py`。27 個 dev-only Greedy screening configs
+      已在任何 D1 score 前預註冊；本階段不看 dev-test。
+- [~] F-25：現行 base-feature position 對 flattened sentence list 計分，Multi-News 文件
+      邊界不會重置；D1 已預註冊先補 `scope=document` correctness contract 與 golden test，
+      修好前不得跑 position variant。
+- [~] F-26：A1 lexical-only context 下 `min_per_route=20`、`total=60` 與 RRF constant
+      結構上不能改變候選 membership/rank；這不影響 A1 長度決選，但不能拿來排序候選
+      預算旋鈕。D1 會在 lexical+graph 的兩路 active context 各動一次。
 
 ## 2026-08-06 selector milestone
 

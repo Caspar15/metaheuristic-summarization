@@ -40,6 +40,10 @@
   no-floor 候選的 Holm-adjusted `p=0.000600`，292/292 可行。floor-bound lexical
   Greedy macro `0.375048` 仍低於 Lead `0.394815` 與 Random `0.410382`（F-24）；這只
   診斷 cheap method，semantic/graph 尚未評估。
+- D1 dev-only Greedy 敏感度研究已在任何新分數前預註冊：完整盤點 19 組／90 個
+  runtime config paths，分 lexical/objective、cheap multiroute、semantic 三個 family。
+  先修 document-aware position（F-25），再跑 27 configs × 兩 primary；本 screen 不看
+  dev-test。A1 單一路由下三個 budget/RRF knobs 其實不活躍，改在兩路 context 測（F-26）。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
