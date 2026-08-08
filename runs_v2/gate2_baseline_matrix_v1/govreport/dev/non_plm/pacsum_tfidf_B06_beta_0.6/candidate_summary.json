@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "pacsum_tfidf_B06_beta_0.6",
+  "method": "pacsum_tfidf",
+  "candidate_hash": "37305405f688c43a2e1bbc6ff4eb4d95c0ad122ba8d2728bfce3dfba8e5227e4",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_B06_beta_0.6/resolved_config.yaml",
+  "config_sha256": "77d1a172a99532dc8c6a9b426adb1ea1371b01dcdbfc34ff4acfaa2f0c4ca3f5",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5229479507846069,
+      "rouge2": 0.19926771833614246,
+      "rougeLsum": 0.49333928202623645
+    },
+    "macro_rouge": 0.40518498371566186,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 649.5491923641704,
+      "min": 641,
+      "max": 650
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

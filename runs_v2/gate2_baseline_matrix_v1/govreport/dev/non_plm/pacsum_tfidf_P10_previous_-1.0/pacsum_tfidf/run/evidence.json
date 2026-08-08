@@ -1,0 +1,83 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T17:24:46.529467+00:00",
+  "started_at_utc": "2026-08-08T17:23:08.086594+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "pacsum_tfidf",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "pacsum_tfidf",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\govreport\\dev\\non_plm\\pacsum_tfidf_P10_previous_-1.0\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\govreport\\dev\\non_plm\\pacsum_tfidf_P10_previous_-1.0\\pacsum_tfidf",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "97554bba7ecb64cf7b17b345333ace32293931a4",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P10_previous_-1.0/resolved_config.yaml",
+  "config_sha256": "44bc5bc49bd677adcd6a449be9dd7c33f2547adad23d4e8007c7d79fdc7b09fb",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_preflight_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+  "partition_preflight_sha256": "719b521d4c7567b238e95e79ac9de6bf5219dad00c720d9975dd1fbcd3e915d3",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P10_previous_-1.0/pacsum_tfidf/run/predictions.jsonl",
+  "predictions_sha256": "cac1b72ba97622eb39b3163164307aef7c573ad9f6e4c065f45c4839e8d9b70a",
+  "selected_indices_sha256": "0ac7a647a689982ab833fb29a10f0e3ef16ef97e5ff40cc65e0691f7ba096191",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5153340383529593,
+      "rouge2": 0.186425292936081,
+      "rougeLsum": 0.49234344646447215
+    },
+    "macro_rouge": 0.3980342592511708,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 647.8649045521292,
+      "min": 632,
+      "max": 650
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "non_plm",
+  "candidate": "pacsum_tfidf_P10_previous_-1.0",
+  "candidate_hash": "04086d9db002f7662e75e1afb8ca80c4366bc0ce25acd3834a071855189e586d",
+  "declared_variant": {
+    "id": "pacsum_tfidf_P10_previous_-1.0",
+    "method": "pacsum_tfidf",
+    "pacsum": {
+      "beta": 0.0,
+      "lambda_previous": -1.0,
+      "lambda_following": 0.0
+    }
+  },
+  "dev_test_accessed": false
+}

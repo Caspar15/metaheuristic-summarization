@@ -99,5 +99,11 @@ family winner 是非退化 `pacsum_tfidf_P08_previous_-0.8`，macro `0.331740`�
 在 3,935/3,935 rows 全部 score-degenerate，只能視為 canonical-order skip-tolerant control。
 P07 第一次外層中斷保留於 `attempt_01_interrupted/`，失敗與 final retry 都已寫入
 `search_log.jsonl`。`analysis_summary.json` 固定驗證 partition guards、ranking、退化率與
-相對 frozen Lead 的逐篇選句重疊。PLM、GovReport、greedy reference 與 paired inference
-尚未完成；dev-test/test 未讀。
+相對 frozen Lead 的逐篇選句重疊。PLM、greedy reference 與 paired inference尚未完成；dev-test/test 未讀。
+
+`gate2_baseline_matrix_v1/govreport/dev/non_plm/` 亦完成 23/23，無 failed attempt。
+winner 是 LexRank，R1/R2/Lsum `0.572517/0.241004/0.541340`、macro `0.451620`，比
+frozen Lead 高 `0.052388`、比 proposed S02b 高 `0.033758`；TextRank 亦比 S02b 高
+`0.013104`。LexRank 與 Lead 的 exact selected-indices match 為 0/681、mean Jaccard
+`0.059722`。GovReport beta=1 也在 681/681 rows 退化。PLM／greedy reference／paired
+inference 尚未完成，dev-test/test 未讀。

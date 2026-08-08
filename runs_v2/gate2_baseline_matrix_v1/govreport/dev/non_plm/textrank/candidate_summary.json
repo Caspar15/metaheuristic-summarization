@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "textrank",
+  "method": "textrank",
+  "candidate_hash": "381907b0309da167b0317a9b892991a8b9fc9a800ec479a7aa12b65671bb969c",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/textrank/resolved_config.yaml",
+  "config_sha256": "4858fbec1a79744abc67ae83d2316d1da747c0aaa8a3b410bbd692bc777200ac",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5524374382590861,
+      "rouge2": 0.22346557434868816,
+      "rougeLsum": 0.5169936613035351
+    },
+    "macro_rouge": 0.4309655579704364,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 649.7268722466961,
+      "min": 642,
+      "max": 650
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
