@@ -33,6 +33,10 @@
       IQR band 500–650、median cap 570、paper-mean cap 550、p75 cap 650；若 Holm 後
       無勝者，採最簡單的無下限 median-cap。見
       `configs/preregistrations/a1_length_contract_govreport_v1.json`。
+- [x] A1 執行器已在分數前版本化：由 frozen preregistration 產生 exact resolved config，
+      對 Lead／Random／lexical Greedy 寫逐 run evidence、prediction SHA、逐篇 selected-
+      indices digest、dependency versions、per-example ROUGE 與 `search_log.jsonl`；已完成
+      的 logical candidate 不可第二次觀察 dev-test。4 個 pure-function regression 通過。
 
 ## 2026-08-06 selector milestone
 
@@ -434,7 +438,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 328 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、兩 primary validation policy/preflight、partition enforcement、GovReport data layer 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 332 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1 runner 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |

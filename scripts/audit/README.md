@@ -161,6 +161,25 @@ Pool 與選中句子的字數分布（同一次全量重跑）：
 
 ---
 
+## `run_length_contract_study.py` — A1 長度協定選擇
+
+依兩份 frozen A1 preregistration，在 dev 或 dev-test 對四個 length protocols 執行
+Lead document-order、Random seed 3407、lexical-only length-normalized Greedy。每個
+protocol 會 materialize exact resolved config，三個 method 各產生 `evidence.json`、
+prediction SHA、selected-indices digest、dependency versions 與逐篇 ROUGE；候選層以
+每篇 3 methods × 3 metrics 的 macro mean 排名。所有成功與失敗都 append 至
+`runs_v2/search_log.jsonl`。
+
+```bash
+python -m scripts.audit.run_length_contract_study --dataset multinews --partition dev
+python -m scripts.audit.run_length_contract_study --dataset govreport --partition dev
+```
+
+只有 dev 全部完成後才允許 `--partition dev-test`。同一 logical candidate 已有完成的
+dev-test log 時，script 會拒絕第二次觀察。dev-test raw winner 必須對三個 alternatives
+的 paired bootstrap 95% CI 都為正且 Holm-adjusted p < .05；否則採預註冊 tie rule。
+script 沒有 test 選項。
+
 ## `length_matched_lead.py` — 長度括弧（F-18b）
 
 比系統多用字數就可能贏 R-1／R-Lsum，這正是稽核批評舊稿的那一點。句子粒度使精確等長不可能，所以**兩側都要報**：

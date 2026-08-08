@@ -246,7 +246,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 328 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff、兩 primary 的 frozen validation policy 與 dev/dev-test partition enforcement 已通過；GovReport validation 已由官方 archive 重建為 973 canonical rows。這仍只證明 correctness/data boundary；published-protocol parity、PacSum、partitioned baseline runs 與完整品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 332 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff、兩 primary 的 frozen validation policy 與 dev/dev-test partition enforcement 已通過；GovReport validation 已由官方 archive 重建為 973 canonical rows，A1 study runner 已版本化。這仍只證明 correctness/data boundary；published-protocol parity、PacSum、partitioned baseline runs 與完整品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -290,7 +290,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 328 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight 與 partition enforcement 已完成；GovReport data layer、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
+| Phase 1（correctness refactor） | canonical 主路徑的 332 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight 與 partition enforcement 已完成；GovReport data layer、A1 runner、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
 | Phase 2（baseline validation） | Multi-News Lead 與 final-implementation TextRank／LexRank 已完成 governed full-split run；下一步是 PacSum、SBERT+MMR、paired significance，並在 GovReport 重建後補齊同一矩陣。程式存在或單一資料集結果不等於 Gate 2 已完成 |
 | Phase 3（方法實驗） | **新增核心指標：候選池對 validated oracle／greedy reference 的 recall@K，以及選句位置分布**。先在 validation 建立可重現版本 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |

@@ -1239,7 +1239,7 @@ python -m scripts.audit.govreport_validation_audit \
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**328 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**332 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
