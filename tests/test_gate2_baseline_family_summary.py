@@ -3,11 +3,17 @@
 import pytest
 
 from scripts.audit.summarize_gate2_baseline_family import (
+    A1_LEAD,
     _compare_selections,
     _prediction_diagnostics,
     _rank_results,
     build_parser,
 )
+
+
+def test_a1_lead_paths_use_each_dataset_frozen_length_contract():
+    assert "legacy_floor_200_cap_250" in A1_LEAD["multinews"].as_posix()
+    assert "dev_iqr_band_500_650" in A1_LEAD["govreport"].as_posix()
 
 
 def test_ranking_uses_macro_then_candidate_id():

@@ -23,7 +23,7 @@ A1_LEAD = {
     "multinews": REPO_ROOT
     / "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/lead/run",
     "govreport": REPO_ROOT
-    / "runs_v2/a1_length_contract/govreport/dev/legacy_floor_200_cap_250/lead/run",
+    / "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run",
 }
 
 
