@@ -1388,7 +1388,7 @@ G00 `133.75 s` 的 `10.37×`。S01 直接採 semantic raw salience + SBERT simil
 `0.299634`，比 S00 低 `0.022771`，該 selector 接法不保留。
 
 **決策邊界**：S00 尚不能單靠一個資料集觸發整條 semantic route 刪除，因 unique
-contribution 存在，且 S02b 雖為正訊號卻不是 semantic 純 ablation、GovReport 仍未完成；
+contribution 存在，且 S02b 雖為正訊號卻不是 semantic 純 ablation、GovReport S02b 未完成；
 但它已排除「直接 semantic selector」並把 semantic 的舉證責任提高為跨資料集 quality
 gain 或明確 adaptive-routing 子群增益。
 沒有 paired inference、strong baselines 或 dev-test，不得 promotion。
@@ -1413,6 +1413,26 @@ cap；它不是 capacity-matched 的 semantic-only ablation，不能把全部提
 `runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/`，preregistration
 SHA-256 `2cac40b58c2d669ab0a2e5088f25afafbaaaa5c332460dad62e7bb9564e92743`，
 selected-indices SHA-256 `6ad798fc2b71fd5810e8d6ae1611d3ce668624d4c2c2d1844d940d6f15039d6c`。
+
+---
+
+### 🟡 F-39. GovReport semantic route 有獨立訊號但成本過高；semantic-direct selector 跨資料集刪除
+
+**證據（GovReport frozen dev 681 rows，2026-08-08）**：S00 lexical+semantic macro
+`0.407203`，R-1/R-2/R-Lsum `0.534512/0.187499/0.499599`。它相對 graph G02
+`+0.002921`，但仍低 Random `0.001641`、低全文 lexical L10 `0.008382`；selection
+`917.18 s`，約 graph G00 `60.53 s` 的 `15.15×`。semantic 平均有 26.17 unique
+candidates、8.43 unique selected，證明 route 不是空包裝，但現有受控池的品質／成本
+不足以支持預設全開。
+
+S01 semantic raw salience + SBERT similarity macro `0.349832`，比 S00 低 `0.057371`；
+Multi-News 同接法也低 `0.022771`。因此依 §5.3 刪除的是這個 selector 接法，不再納入
+搜尋；整條 semantic candidate route 仍等待已預註冊的 GovReport S02b 與 paired evidence。
+
+**重現**：離線 pinned model 下執行
+`python -m scripts.audit.run_greedy_sensitivity --dataset govreport --family semantic_route`；
+主證據在 `runs_v2/d1_greedy_sensitivity/govreport/dev/semantic_route/`。family 為
+2 success + 1 structural failure；成功列共 1,362，dev-test/test 未讀。
 
 ---
 

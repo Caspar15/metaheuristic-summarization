@@ -54,8 +54,10 @@
   feasible、pool max 60）。Multi-News semantic 原 family 有 2 success + 1 three-route
   capacity failure：S00 不勝 graph 且成本約 10.37×；預註冊 S02b follow-up 已完成，
   macro `0.328077` 首次高於 Lead 點估計，但它同時改 capacity/guard 且尚無 paired
-  significance，不能歸因 semantic 或晉級。GovReport semantic 未完成，本 screen 不看
-  dev-test。F-30 Greedy 等價效能修正與
+  significance，不能歸因 semantic 或晉級。GovReport semantic 原 family 亦完成：S00
+  macro `0.407203`，高 graph G02 但仍低 Random／全文 lexical 且成本約 graph G00
+  `15.15×`；S01 跨資料集失敗，該 selector 接法刪除。GovReport S02b 尚待執行，本
+  screen 不看 dev-test。F-30 Greedy 等價效能修正與
   F-31 的錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 

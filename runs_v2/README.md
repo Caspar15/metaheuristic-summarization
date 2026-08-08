@@ -60,3 +60,8 @@ reservations 加 document guard 為 mandatory 61 > cap 60，原 failure 保留�
 `73769c5` 後完成：3,935 rows、3,930 feasible、pool mean/max `52.09/80`、macro
 `0.328077`，dev-test/test 未讀。它高於 graph G02 與 Lead 的 dev 點估計，但同時變更
 total/guard cap，不能當 semantic-only ablation；原 S02 structural failure 仍永久保留。
+
+`d1_greedy_sensitivity/govreport/dev/semantic_route/` 已完成原三案：S00 macro
+`0.407203`、selection `917.18 s`；S01 `0.349832`、`974.81 s`；S02 第一列 mandatory
+61 > cap 60，原 structural failure 保留。成功 runs 各 681 rows、dev-test/test 未讀。
+S01 接法在兩資料集均失敗，後續刪除；GovReport S02b 仍依既有 preregistration 待跑。

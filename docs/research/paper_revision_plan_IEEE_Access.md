@@ -124,6 +124,11 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > Multi-News S02b 隨後完成：macro `0.328077`，相對 graph G02 `+0.003772`、Lead
 > `+0.001786`，pool mean/max `52.09/80`。這是首次受控池配置在該 dev 點估計高於 Lead，
 > 但 S02b 同時改 total/guard cap、R-2 仍落後，尚不能把提升歸因 semantic 或宣稱勝出。
+>
+> GovReport semantic 原 family 也已完成：S00 macro `0.407203`，比 graph G02 高
+> `0.002921`，但仍低 Random `0.001641`、全文 lexical L10 `0.008382`，selection 約
+> graph G00 `15.15×`。S01 又比 S00 低 `0.057371`，因此 semantic-direct selector
+> 接法已有跨資料集刪除證據；整條 semantic route 仍等 GovReport S02b／paired evidence。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

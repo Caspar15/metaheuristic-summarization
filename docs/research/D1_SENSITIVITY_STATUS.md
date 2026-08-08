@@ -9,14 +9,15 @@
 - 27 個配置與兩資料集的 delta 已在任何 D1 分數前凍結於
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
 - 目前完成兩個 primary 的 **lexical/objective family**、**cheap-multiroute family**，
-  以及 Multi-News semantic 原 family 與 capacity-correct follow-up；Multi-News 每個
-  完整 run 為 3,935 rows、GovReport 為 681 rows。GovReport semantic 尚未完成，
-  因此沒有配置可晉級，也尚未做 D1 的一次性 dev-test。
+  以及兩個 primary 的 semantic 原 family、Multi-News capacity-correct follow-up；
+  Multi-News 每個完整 run 為 3,935 rows、GovReport 為 681 rows。GovReport S02b、
+  強 baseline 與 paired inference 尚未完成，因此沒有配置可晉級，也尚未做 D1 的
+  一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | **12/12 complete** | **2 success + 1 structural failure; capacity follow-up complete** |
-| GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | pending |
+| GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | **2 success + 1 structural failure; capacity follow-up pending** |
 
 ## Multi-News lexical/objective 結果
 
@@ -226,9 +227,30 @@ reservations 77 > total cap 60 正確 fail loud。
   feasible、pool max 60、macro `0.404182`（對 G00 `+0.000685`）；只作 feasibility/
   diagnostic，不單獨 promotion。
 
+## GovReport semantic 結果
+
+原預註冊三案已全部嘗試：S00/S01 完成，S02 與 Multi-News 相同，因三路最低保留加
+coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
+
+| ID | 設計 | Macro | R-1/R-2/R-Lsum | selection seconds |
+|---|---|---:|---:|---:|
+| S00 | lexical + semantic、RRF selector | **0.407203** | 0.534512 / 0.187499 / 0.499599 | 917.18 |
+| S01 | 同候選，semantic raw + SBERT similarity selector | 0.349832 | 0.474428 / 0.135957 / 0.439112 | 974.81 |
+| S02 | lexical + semantic + graph | **failed** | first row mandatory 61 > cap 60 | — |
+
+- S00 相對 lexical L00 `+0.036818`、graph G00 `+0.003707`、graph G02 `+0.002921`，
+  並高 Lead `0.007971`；但仍低 Random `0.001641`、全文 lexical L10 `0.008382`。
+  semantic route 平均有 26.17 個 unique candidates、8.43 個 unique selected sentences，
+  不是重複訊號；但 selection 約 graph G00 的 `15.15×`，目前 quality/cost trade-off
+  不足以支持預設全開。
+- S01 比 S00 低 `0.057371`；連同 Multi-News 的 `−0.022771`，semantic raw salience +
+  SBERT similarity selector 已得到跨資料集一致負證據，依刪除條件不再保留。
+- 原 S02 failure 永久保留。GovReport S02b 已在任何 GovReport semantic 分數前預註冊，
+  下一步只執行該 capacity follow-up；不從本輪分數改其 total 80／guard cap 20。
+
 ## 還沒做
 
-1. GovReport semantic family與 S02b follow-up。
+1. GovReport S02b follow-up。
 2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
