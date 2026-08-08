@@ -1,0 +1,93 @@
+{
+  "experiment": {
+    "status": "validation_pilot_only",
+    "dataset": "GovReport"
+  },
+  "data_policy": {
+    "policy_path": "configs/data_policies/govreport_validation_v1.json",
+    "policy_sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e",
+    "analysis": "main"
+  },
+  "seed": 3407,
+  "features": {
+    "tf_isf": {
+      "version": "v2",
+      "use_stopwords": true,
+      "use_sublinear_tf": true,
+      "use_bigrams": false
+    },
+    "weights": {
+      "importance": 1.0,
+      "length": 0.0,
+      "position": 0.0,
+      "graph": 0.0,
+      "centrality": 0.0,
+      "novelty": 0.0
+    }
+  },
+  "representations": {
+    "use": true,
+    "method": "tfidf"
+  },
+  "compute_budget": {
+    "mode": "fixed",
+    "enabled_routes": [
+      "lexical"
+    ]
+  },
+  "candidate_budget": {
+    "route_top_k": 40,
+    "min_per_route": 20,
+    "total": 60
+  },
+  "candidates": {
+    "use": true,
+    "mode": "hard",
+    "rrf_constant": 60
+  },
+  "selector": {
+    "salience_source": "rrf_fusion",
+    "similarity_source": "pipeline_similarity"
+  },
+  "objectives": {
+    "importance_aggregation": "length_normalized",
+    "coverage_method": "max",
+    "lambda_importance": 1.0,
+    "lambda_coverage": 0.8,
+    "lambda_redundancy": 0.7
+  },
+  "routes": {
+    "lexical": {
+      "revision": "tf_isf_v2:smooth_nonnegative_sublinear_unigram"
+    }
+  },
+  "coverage_guard": {
+    "enabled": true,
+    "document": true,
+    "section": false,
+    "position": false
+  },
+  "optimizer": {
+    "method": "greedy"
+  },
+  "length_control": {
+    "unit": "words",
+    "require_nonempty": true,
+    "min_words": 0,
+    "max_words": 570
+  },
+  "experiment_partition": {
+    "manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+    "manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+    "name": "dev"
+  },
+  "study": {
+    "study_id": "a1-length-contract-govreport-v1",
+    "dataset_key": "govreport",
+    "candidate": "median_cap_570",
+    "candidate_hash": "a3e6c78c7344f079f8f6e5f510eb8238ce9d6496e632df7a05ee4b6d90ad2b52",
+    "partition": "dev",
+    "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+    "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49"
+  }
+}

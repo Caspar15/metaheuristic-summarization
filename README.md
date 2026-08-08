@@ -34,6 +34,9 @@
 - A1 Multi-News dev 已完成：legacy 200–250 cross-method macro `0.314581` 暫列第一，
   但尚未看 dev-test，不能 freeze。它相對 no-floor 250 的差距全由 Greedy 的輸出長度／
   trajectory 造成；且有 4/3,935 篇未達可行的 200-word floor（F-23）。
+- A1 GovReport dev 亦完成：IQR 500–650 暫列第一。no-floor Greedy 嚴重早停；floor
+  拉長後 macro `0.370385`，仍低於 Lead `0.399232` 與 Random `0.408844`（F-24）。
+  這只診斷 lexical-only cheap method，semantic/graph 尚未評估。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。

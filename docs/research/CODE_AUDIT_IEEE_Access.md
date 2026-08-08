@@ -1087,6 +1087,32 @@ selector stopping/feasibility mechanism，並報 infeasibility rate，不能只�
 config/prediction SHA、逐篇 selected-indices digest、dependency versions，search registry
 恰新增四筆，test split 未存取。
 
+**跨資料集補證**：GovReport dev 681 rows 的 no-floor Greedy 只輸出 165.6–184.5
+words，macro `0.175990–0.178859`；floor500-cap650 將它推至 638.4 words、
+`0.370385`。同一 stopping dependency 因 reference／budget 較長而被放大；所以若 A1
+最後保留 floor，必須承認它是方法行為的一部分，而非單純公平比較的外部上限。
+
+---
+
+### 🟡 F-24. GovReport dev 上，floor 修掉早停後的 lexical Greedy 仍輸給 Lead 與 Random
+
+**發現（A1 cheap-method scope）**：在 GovReport frozen dev 681 rows、500–650 words 下，
+lexical-only length-normalized Greedy 的 R-1/R-2/R-Lsum 為
+`0.497973/0.151940/0.461242`，macro `0.370385`；同長度協定的 Lead 為
+`0.514532/0.194032/0.489133`（macro `0.399232`），Random seed 3407 為
+`0.538113/0.181603/0.506816`（macro `0.408844`）。681/681 rows 均有輸出且 feasible，
+不是 denominator 或失敗列造成的差距。
+
+**解讀邊界**：這個 A1 Greedy 刻意只啟用 lexical route，用來便宜選 length contract；
+它不是 final semantic+graph system。因此不能寫成「整個方法已被 Random 擊敗」。但它已
+排除「只要換對長度，現行 lexical objective 就自然變強」：floor 修正 stopping 後，選句
+品質仍不足。後續 sensitivity scan 必須把 semantic/graph 的增量與 selector choice 分開，
+而不是把它們一次堆上後只報總分。
+
+**證據**：`runs_v2/a1_length_contract/govreport/dev/`，12/12 method evidence 完成、
+同一 input/partition digest、681 rows、test 未存取。此 finding 的狀態是 open reality
+warning；只有後續 route ablation／strong baseline matrix 能解除或升級為重新定位理由。
+
 ---
 
 ## Part 2 — 對研究主計畫的實證補充

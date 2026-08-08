@@ -46,6 +46,14 @@
 - [~] A1 新發現 F-23：floor-bearing Greedy 有 4/3,935 rows 在 source/candidate capacity
       都可達 250 時仍低於 effective minimum 200；目前依 F-17 完整記錄並以 all-row
       denominator 計分，未放寬或補句。是否可接受由預註冊 dev-test 與 freeze 決策處理。
+- [x] A1 GovReport dev 四候選 × 三方法已完整跑完（每個 681 rows，12/12 evidence，
+      test 未存取）。排名：IQR floor500-cap650 `0.392821` > p75 cap650 `0.328979` >
+      median cap570 `0.324044` > paper-mean cap550 `0.322049`。no-floor Greedy 僅
+      165.6–184.5 words／macro `0.175990–0.178859`；floor 使其到 638.4 words／
+      `0.370385`。四候選仍須一次 dev-test，尚未定案。
+- [~] F-24：即使 floor 拉長，GovReport lexical-only Greedy `0.370385` 仍低於 Lead
+      `0.399232` 與 Random `0.408844`；這是 objective/candidate salience 的 reality
+      warning，不可由 length tuning 掩蓋。它不直接否定尚未加入的 semantic/graph route。
 
 ## 2026-08-06 selector milestone
 

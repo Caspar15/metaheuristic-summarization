@@ -1,0 +1,75 @@
+{
+  "status": "completed",
+  "study_id": "a1-length-contract-govreport-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+  "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+  "candidate": "median_cap_570",
+  "candidate_hash": "a3e6c78c7344f079f8f6e5f510eb8238ce9d6496e632df7a05ee4b6d90ad2b52",
+  "length_contract": {
+    "min_words": 0,
+    "max_words": 570
+  },
+  "resolved_config_path": "runs_v2/a1_length_contract/govreport/dev/median_cap_570/resolved_config.yaml",
+  "resolved_config_sha256": "787d5ae983463d5f1953411adc54f96d752810aae2897c26d0c4dc903ef40760",
+  "methods": {
+    "lead": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 681,
+      "rouge": {
+        "rouge1": 0.5086832695600845,
+        "rouge2": 0.18914668479831784,
+        "rougeLsum": 0.48321169743735165
+      },
+      "macro_rouge": 0.3936805505985847,
+      "feasible_rows": 681,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 553.3641703377386,
+        "min": 367,
+        "max": 570
+      }
+    },
+    "random": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 681,
+      "rouge": {
+        "rouge1": 0.5305581034546463,
+        "rouge2": 0.17508139254819174,
+        "rougeLsum": 0.49866591741926936
+      },
+      "macro_rouge": 0.4014351378073691,
+      "feasible_rows": 681,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 569.5212922173274,
+        "min": 561,
+        "max": 570
+      }
+    },
+    "greedy": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 681,
+      "rouge": {
+        "rouge1": 0.23398488080974902,
+        "rouge2": 0.08492189003230048,
+        "rougeLsum": 0.2121398053749416
+      },
+      "macro_rouge": 0.1770155254056637,
+      "feasible_rows": 681,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 169.6049926578561,
+        "min": 1,
+        "max": 570
+      }
+    }
+  },
+  "cross_method_macro_rouge": 0.32404373793720576,
+  "per_example_sha256": "8385801eb3d66dd3055126598e65bad4d4d02030a5df6ea4d3b051d6262d2705"
+}
