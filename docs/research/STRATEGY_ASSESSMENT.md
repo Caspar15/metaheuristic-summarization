@@ -8,7 +8,7 @@
 > 2026-08-06 更新：frozen 200-row matched-selector pilot 顯示 MMR 在 R-1／R-2
 > 顯著優於 Greedy；NSGA-II 五 seed mean 均低於 Greedy且選句 Jaccard 0.639。
 > selector 路線因此改為 MMR main／Greedy reference／NSGA-II comparator。這只是
-> selector gate；是否值得投稿仍取決於 full-source MMR、PacSum 與兩 primary。
+> selector gate；Multi-News non-PLM P08 已勝 proposed S02b，是否值得投稿仍取決於 PLM、GovReport 與完整 paired gate。
 
 ---
 
@@ -246,7 +246,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | local tests、PR #15 Linux CI、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff、document-aware position、兩 primary 的 frozen validation policy 與 dev/dev-test partition enforcement 已通過；GovReport validation 已由官方 archive 重建為 973 canonical rows，A1/D1 study runners 已版本化。D1 兩 primary screens、capacity follow-up、route ablation 與 paired inference 已有 dev evidence；PacSum clean-room adaptations 已接線，但 published-protocol parity、partitioned baseline runs 與完整品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 375 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1 runners 已通過。D1 route evidence完成，Multi-News non-PLM 23/23 完成；published-protocol parity、PLM、GovReport 與完整 paired baseline matrix 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -290,8 +290,8 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 370 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight、partition enforcement 與 exact batched Greedy additions 已完成；GovReport data layer、A1/D1 runners、matched selector pilot、NSGA seed stability、PacSum adaptations 與 Gate 2 dev-only runner 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy 仍未完成；CNN/DM 是 Gate 3 後 optional |
-| Phase 2（baseline validation） | Multi-News Lead 與 final-implementation TextRank／LexRank 已完成 governed full-split run；下一步是 PacSum、SBERT+MMR、paired significance，並在 GovReport 重建後補齊同一矩陣。程式存在或單一資料集結果不等於 Gate 2 已完成 |
+| Phase 1（correctness refactor） | canonical 主路徑的 375 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight、partition enforcement 與 exact batched Greedy additions 已完成；GovReport data layer、A1/D1 runners、matched selector pilot、NSGA seed stability、PacSum adaptations 與 Gate 2 dev-only runner 已完成。published-protocol parity、完整 baseline 與 validation-frozen output policy 仍未完成；CNN/DM 是 Gate 3 後 optional |
+| Phase 2（baseline validation） | Multi-News frozen-dev non-PLM 23/23 已完成；PacSum TF-IDF P08 macro `0.331740` 高 proposed S02b `0.003663`，所以方法目前未過 strongest-completed-baseline gate。下一步是 GovReport non-PLM、兩資料集 PLM、greedy reference 與 paired inference；單一 family 不等於 Gate 2 完成 |
 | Phase 3（方法實驗） | screens、matched route ablations 與 paired inference 已完成。12/12 route endpoints 通過 Holm p=`0.002400` 與 186-opportunity p=`0.037196`，semantic/graph 暫留；semantic-direct selector 刪除。Multi-News 對 Lead R-2 仍顯著落後，且 strong baseline／**候選池對 greedy reference 的 recall@K** 未完成，故不能 promotion |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
@@ -314,4 +314,4 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
-**最後一句實話**：這個專案的核心概念（zero-training、可解釋 provenance、多目標成本控制）是有價值的，ICACT 的獎不是白拿的。legacy 系統實際上接近一個包裝得很複雜的 Lead baseline；新 canonical pipeline 已修掉多個工程缺陷，兩個 lexical D1 cell 也把候選召回定位成主要病因。GovReport 全文 variant 的 dev point estimate 已高於便宜 baseline，是第一個正訊號，但它成本過高且未對強 baseline／顯著性，還不是可投稿結果。下一步仍是完成兩 primary 的 graph／semantic 與強 baseline，讓刪除條件決定架構。
+**最後一句實話**：這個專案的核心概念（zero-training、可解釋 provenance、多目標成本控制）仍有價值，但最新證據更嚴格：Multi-News 的 proposed S02b 已輸給非退化 PacSum TF-IDF P08（macro `−0.003663`），目前不能宣稱方法勝出。semantic／graph 的 matched 增量已成立，問題轉成 selector／salience 如何把增量轉成對 strongest baseline 的優勢。下一步完成 GovReport non-PLM、兩資料集 PLM 與 paired inference，再決定是否優化或重新定位。

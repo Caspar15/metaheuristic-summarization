@@ -1,0 +1,31 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T16:05:27.774831+00:00",
+  "status": "failed",
+  "failure_type": "external_runner_interruption",
+  "failure": "Incomplete run preserved before an explicit --resume retry.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "archived_run_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/pacsum_tfidf/attempts/attempt_01_interrupted",
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "non_plm",
+  "candidate": "pacsum_tfidf_P07_previous_-0.7",
+  "candidate_hash": "fbbdbd0be97bd6f353cf30a6be4c62b65c63dce834ba638c4a1bedb781011a24",
+  "declared_variant": {
+    "id": "pacsum_tfidf_P07_previous_-0.7",
+    "method": "pacsum_tfidf",
+    "pacsum": {
+      "beta": 0.0,
+      "lambda_previous": -0.7,
+      "lambda_following": 0.30000000000000004
+    }
+  }
+}

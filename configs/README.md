@@ -151,3 +151,10 @@ python -m src.pipeline.select_sentences \
 > ℹ️ `pop_size` / `n_gen` / `seed` 過去**未被程式讀取**（實際一律跑 100/100），
 > 已在 `optimizer_dispatch.py` 修好。因此 legacy run 的 config_used.json
 > 不代表當時真正生效的參數。
+
+## Gate 2 baseline 搜尋
+
+`preregistrations/gate2_baseline_matrix_v1.json` 在正式 baseline 分數前凍結每個 primary
+的 non-PLM 23／PLM 27 candidates、dev-only selection score 與禁止 dev-test/test 的規則。
+截至 2026-08-09 只有 Multi-News non-PLM family 完成；不得因單一 family winner 改寫
+候選空間或提前讀 dev-test。

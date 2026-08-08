@@ -4,12 +4,12 @@
 
 `Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
 接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
-hash 全部相同；加入兩 primary partition／greedy-reference／GovReport data-layer／A1/D1 runners／D1 inventory／document-aware position與 F-30 regression 後 357 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
+hash 全部相同；加入兩 primary partition／greedy-reference／GovReport data-layer／A1/D1 runners／D1 inventory／document-aware position與 Gate 2 audits 後 375 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
 baseline 亦已接入 shared baseline CLI。凍結的 200-row matched pilot 顯示 MMR
 相對 Greedy 的 R-1／R-2 分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；
 NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`；selector
 決策因此固定為 MMR main／Greedy reference／NSGA-II comparator。這仍是 diagnostic，
-尚未完成 full-source MMR、PacSum 或兩 primary Gate 2，
+Multi-News frozen-dev non-PLM 23/23 已完成，但尚未完成 PLM、GovReport 或兩 primary Gate 2，
 因此 Gate 2／Gate 3 仍未通過。單一規格來源見
 [`SELECTOR_COMPARISON_PROTOCOL.md`](SELECTOR_COMPARISON_PROTOCOL.md)。
 
@@ -35,8 +35,8 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、兩 primary canonical/frozen-policy/dev-partition 已完成；published-protocol parity、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **370 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
-| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR、clean-room PacSum TF-IDF／SBERT 程式已接線；既有 Multi-News full-validation artifacts 只能作 historical diagnostics。partitioned PacSum／SBERT runs、GovReport 方法 runs、完整 paired matrix 與正式兩-primary矩陣未完成，**Gate 2 未過** |
+| 測試 | ✅ **375 local tests 全過**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| **baseline** | 🟡 **Phase 2 進行中** —— Multi-News frozen-dev non-PLM 23/23 完成；P08 macro `0.331740` 是非退化最佳，比 Lead 高 `0.005449`、比 proposed S02b 高 `0.003663`。PLM、GovReport、greedy reference、paired inference 未完成，**Gate 2 未過**；見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
@@ -74,6 +74,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | `CLAUDE.md` | AI 協作規則、已驗證事實、程式硬規則 | AI agent 開工前必讀 |
 | `paper_revision_plan_IEEE_Access.md` | 研究流程治理、10 個 P0、投稿合規、新架構設計 | 需要「為什麼要這樣做」的完整論證 |
 | `CODE_AUDIT_IEEE_Access.md` | 已驗證的程式缺陷 + 實測數字 + 已套用的修正 | 需要證據、需要引用數字 |
+| `GATE2_BASELINE_STATUS.md` | 最新 baseline family 分數、證據與未完成項目 | 追 Gate 2 進度時 |
 | `STRATEGY_ASSESSMENT.md` | 可行性評估、病因診斷、資料集選擇、兩份計畫對照 | 需要判斷「還有沒有救、主場選哪裡」 |
 | `REPO_CLEANUP.md` | 專案整理 | Phase 0 |
 

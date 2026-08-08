@@ -24,7 +24,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行測試為 **357 passed**。
+  現行完整測試為 **375 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -81,10 +81,10 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR，以及 clean-room `pacsum_tfidf`／`pacsum_sbert` 已接線；TextRank／LexRank 的舊 Multi-News full-validation rerun 只能算 historical diagnostic。partitioned PacSum／SBERT runs、GovReport 方法 runs、完整 paired matrix 與兩個 primary 的 Gate 2 仍未完成 |
-| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在任何正式 baseline 分數前預註冊：每資料集 non-PLM 23、PLM 27 個新 candidates，只能讀 frozen dev；dev-test/test 皆無 runner 路徑 |
+| Baseline | 🟡 **Phase 2 進行中** —— Multi-News frozen-dev non-PLM 23/23 已完成；最佳非退化 PacSum TF-IDF P08 macro `0.331740`，高 Lead `0.005449`，也高 proposed S02b `0.003663`。PLM family、GovReport、greedy reference、paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
+| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。runner／family verifier 只讀 frozen dev；一次 P07 中斷與 final retry 均已保存，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **370 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **375 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 
@@ -101,6 +101,7 @@
 | [`ARCHITECTURE.md`](docs/research/ARCHITECTURE.md) | Target Architecture v1、schema、模組介面、freeze gate |
 | [`paper_revision_plan_IEEE_Access.md`](docs/research/paper_revision_plan_IEEE_Access.md) | 研究流程治理、10 個 P0、投稿合規 |
 | [`CODE_AUDIT_IEEE_Access.md`](docs/research/CODE_AUDIT_IEEE_Access.md) | 已驗證的程式缺陷 + 實測數字 |
+| [`GATE2_BASELINE_STATUS.md`](docs/research/GATE2_BASELINE_STATUS.md) | 最新 baseline family 分數、證據與未完成項目 |
 | [`STRATEGY_ASSESSMENT.md`](docs/research/STRATEGY_ASSESSMENT.md) | 可行性評估、病因診斷、資料集選擇 |
 | [`REPO_CLEANUP.md`](docs/research/REPO_CLEANUP.md) | 專案整理計畫 |
 

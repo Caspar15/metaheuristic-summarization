@@ -1,0 +1,640 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T16:13:36.784019+00:00",
+  "status": "completed",
+  "study_id": "gate2-baseline-matrix-v1",
+  "implementation_commit": "c049221f40919320b0e28ce2b50fbcc96f488181",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "family": "non_plm",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "candidate_count": 23,
+  "completed_count": 23,
+  "failed_count": 0,
+  "results": {
+    "textrank": {
+      "status": "completed",
+      "candidate": "textrank",
+      "method": "textrank",
+      "candidate_hash": "4d4145968ab835990380d350bf4914acac66b8236846a1cedee3cbd91022ca9b",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/textrank/resolved_config.yaml",
+      "config_sha256": "2424c62a9a5bd5bd56429d5245f530c5cf45d381bab3b88383d8515b71573fca",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4151922764991816,
+          "rouge2": 0.13021830031720527,
+          "rougeLsum": 0.3698764871453121
+        },
+        "macro_rouge": 0.305095687987233,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.53163913595935,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "lexrank": {
+      "status": "completed",
+      "candidate": "lexrank",
+      "method": "lexrank",
+      "candidate_hash": "cb6efa0e4ff23a9d23466025fa5db9eabe27987b59357c9259bc72f6a8ed0f0f",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/resolved_config.yaml",
+      "config_sha256": "b12ac5ba46b1766da24b97ce3f2540f2c517e65486a3ebd0c55b8510ff2aaf48",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4317264223765229,
+          "rouge2": 0.13714661646397844,
+          "rougeLsum": 0.3906334133457057
+        },
+        "macro_rouge": 0.319835484062069,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.21880559085133,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B00_default": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B00_default",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "aa9e9a86de79c2c65d24fa763ffa7edac90c2aa952d3999a0ede57370fc4ce9d",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B00_default/resolved_config.yaml",
+      "config_sha256": "a22e79a2da48667e009da7f5aab5ef9699429f6444f8f5b4f226aedde38c1759",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43079953415511,
+          "rouge2": 0.14165073195173308,
+          "rougeLsum": 0.38506455409426743
+        },
+        "macro_rouge": 0.31917160673370354,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.60660736975856,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B01_beta_0.1": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B01_beta_0.1",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "7dc49b93de5b97a6dbe611ee2c39296d27b41fc636d6766fc9980fa1d4e3db72",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B01_beta_0.1/resolved_config.yaml",
+      "config_sha256": "0ed98f717483fa8b72e478608e9bf90cf0d5f39bf232523dd39fcd2c027e190f",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.42423728036125863,
+          "rouge2": 0.13885321787652402,
+          "rougeLsum": 0.37848251272925587
+        },
+        "macro_rouge": 0.3138576703223462,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.59059720457432,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B02_beta_0.2": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B02_beta_0.2",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "19e0f0641586725c034e0bc933a771a1e98914ce16e17e4719795b9d08c08cb6",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B02_beta_0.2/resolved_config.yaml",
+      "config_sha256": "393a69c2cffcd5bb8884bcdfc202ee24cd62162e70f9320a8bb6f31ef0e899dd",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.42153825879386797,
+          "rouge2": 0.13870816899486496,
+          "rougeLsum": 0.37684453380452126
+        },
+        "macro_rouge": 0.31236365386441806,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.45031766200762,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B03_beta_0.3": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B03_beta_0.3",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "a09794e4452550d302a884818ce41d78f96e8f9e3ee26c3914be46da1f1a8045",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B03_beta_0.3/resolved_config.yaml",
+      "config_sha256": "86689b590af5d7c88d0f6026ccac0ca6c1dd4cf8140bbdef96794ddb53fe6c70",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4204040477464151,
+          "rouge2": 0.13878730161619007,
+          "rougeLsum": 0.3764647190714036
+        },
+        "macro_rouge": 0.31188535614466956,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.39415501905972,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B04_beta_0.4": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B04_beta_0.4",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "b04288f46dae027735378deb1b6b1f8fa0cce00a92aae974e254917f401199e1",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B04_beta_0.4/resolved_config.yaml",
+      "config_sha256": "b891e00cdeca6cc1b4fd4d4c828ccd50f3acfff60d2c78641f7c380d776bc311",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.42108191184115884,
+          "rouge2": 0.13893015130640768,
+          "rougeLsum": 0.3777946249515627
+        },
+        "macro_rouge": 0.3126022293663764,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.33697585768743,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B05_beta_0.5": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B05_beta_0.5",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "1d688854047cf33ed65d60c96c2556b3f5f8105724160bec10ed71e76b075af8",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B05_beta_0.5/resolved_config.yaml",
+      "config_sha256": "1cd031fd494c3a3f3020a994c4ad60041f673d8ba02d04de74d80ca1fc2a1b8e",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4229576329909763,
+          "rouge2": 0.14000843637158644,
+          "rougeLsum": 0.3804879289439982
+        },
+        "macro_rouge": 0.31448466610218695,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.26149936467598,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B06_beta_0.6": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B06_beta_0.6",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "89ca46997fde75c856cc5cc03ada5db2769ec776f339a6a85c072246a3b2e527",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B06_beta_0.6/resolved_config.yaml",
+      "config_sha256": "40f00d75d6f193fb523bc35ffe7f46db8a7e79e2611e7059207147ac9892cbea",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.42592667042061727,
+          "rouge2": 0.14150888171260845,
+          "rougeLsum": 0.38407292596714293
+        },
+        "macro_rouge": 0.3171694927001229,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.2355781448539,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B07_beta_0.7": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B07_beta_0.7",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "bd6d220d414c807262dc0b41d2dd7105c7d5c67855d5c17c653753f7307120f8",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B07_beta_0.7/resolved_config.yaml",
+      "config_sha256": "863232997c48d850b2e5618141a77a6f106ead2dd9adda940b07fe3c05bda806",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4285272445130942,
+          "rouge2": 0.14288372706423416,
+          "rougeLsum": 0.3872250389822053
+        },
+        "macro_rouge": 0.3195453368531779,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.17916137229986,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B08_beta_0.8": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B08_beta_0.8",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "03307345c731b436139dab23a94bd76e3a07f79222878e873481f383f019e4b6",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B08_beta_0.8/resolved_config.yaml",
+      "config_sha256": "62b1d32c05b81098ecefb967421a1769ebf80bc0ddca60dcfdec16fb5838560d",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.431465802465794,
+          "rouge2": 0.14510168490735892,
+          "rougeLsum": 0.3905781544993332
+        },
+        "macro_rouge": 0.32238188062416206,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.15705209656926,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B09_beta_0.9": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B09_beta_0.9",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "29023ab1a3cd6d9be55aaad96b80903ed315845c702fcabad15f9b2441cb8b86",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B09_beta_0.9/resolved_config.yaml",
+      "config_sha256": "bd968f6a6842f75ac8069c0d48a2c239af71fe056bb041de4a84b3e441ef9a42",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4338951099157385,
+          "rouge2": 0.1474808492971842,
+          "rougeLsum": 0.3937976111836497
+        },
+        "macro_rouge": 0.3250578567988574,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.09097839898348,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_B10_beta_1.0": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_B10_beta_1.0",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "0ccee5d80f125e0a59d54786ccb14f13ceed52f3eb69cd089418ef94bd651802",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B10_beta_1.0/resolved_config.yaml",
+      "config_sha256": "b958717c1917051a6bfe021d843f58bd67bfebd1ad31dc0eeb63938a4bd61681",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4369594368788643,
+          "rouge2": 0.14894764139744704,
+          "rougeLsum": 0.39859437517698854
+        },
+        "macro_rouge": 0.32816715115109996,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.03710292249048,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P01_previous_-0.1": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P01_previous_-0.1",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "faca1c8ce0950c2cd9bb5dbc9f4ddf89f98a9e5dc67d7331fdd762dd7e7d6294",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P01_previous_-0.1/resolved_config.yaml",
+      "config_sha256": "f9da9111a7b306b57969abe9078cdb233218d5241ff13ad6bba75301b95897c7",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4317555806661716,
+          "rouge2": 0.1425895529173675,
+          "rougeLsum": 0.38648973683462357
+        },
+        "macro_rouge": 0.3202782901393875,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.49682337992377,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P02_previous_-0.2": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P02_previous_-0.2",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "1f49c3e9711bb50a514c1155a6fbb0d852ec1fbae66b1103bc78030c694bfc0a",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P02_previous_-0.2/resolved_config.yaml",
+      "config_sha256": "404600149b23f61827ab8378bd1c056e48461fdd66c2f4f689f81fbb31163ba7",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4331510893412131,
+          "rouge2": 0.14373725876074464,
+          "rougeLsum": 0.3881768932925163
+        },
+        "macro_rouge": 0.321688413798158,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.40864040660736,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P03_previous_-0.3": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P03_previous_-0.3",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "b705640198f4135e1b5c18f4d86411019059f3dcbe1dcafe5923ff722fc37be0",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P03_previous_-0.3/resolved_config.yaml",
+      "config_sha256": "927a8d0b979a2193645794dbafb954fabae821a7def1ac1eace4503f57dc116a",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4343331771322123,
+          "rouge2": 0.14449738452741454,
+          "rougeLsum": 0.3897493405738554
+        },
+        "macro_rouge": 0.32285996741116074,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.2841168996188,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P04_previous_-0.4": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P04_previous_-0.4",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "7fb621b76f8ed00c0c3b405a4e6652b9a30e8ffd1736d020e33a797d5457f621",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P04_previous_-0.4/resolved_config.yaml",
+      "config_sha256": "555aaa790d91d614e871af67fb50395cb1bbcc9f5c8b682b07bc10ec6139366c",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.436399426516245,
+          "rouge2": 0.1461291560289291,
+          "rougeLsum": 0.39217812425832854
+        },
+        "macro_rouge": 0.32490223560116754,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.15019059720458,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P05_previous_-0.5": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P05_previous_-0.5",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "e93d0144c66c577ae62c55c785911bf94b60d2e68f52d6e5724007f2eea7c523",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P05_previous_-0.5/resolved_config.yaml",
+      "config_sha256": "3efe73fce3f2f9f9124f0f39beeacdeae9b1d5e7ff81035510c21ab96ef23962",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4386315630218407,
+          "rouge2": 0.14773843544488013,
+          "rougeLsum": 0.3950388082897973
+        },
+        "macro_rouge": 0.32713626891883935,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.00965692503178,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P06_previous_-0.6": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P06_previous_-0.6",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "c639b1dad2101d552dc03840391bf4295b2f66c22d0032171e55dbe7aa6f4a28",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P06_previous_-0.6/resolved_config.yaml",
+      "config_sha256": "589477e0f0ba12f25cdf3d063e81b6e2eaaf7b7eaa54856cc1c906de1fe87168",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.44073498920970455,
+          "rouge2": 0.14902514795797353,
+          "rougeLsum": 0.3977024599722607
+        },
+        "macro_rouge": 0.3291541990466463,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.8833545108005,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P07_previous_-0.7": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P07_previous_-0.7",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "fbbdbd0be97bd6f353cf30a6be4c62b65c63dce834ba638c4a1bedb781011a24",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/resolved_config.yaml",
+      "config_sha256": "35cbfd9cc38c6f05b2d5ed1e5950e9955b8449f0d9d709476db15e33fd26b330",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.44233498317232317,
+          "rouge2": 0.14994354196094448,
+          "rougeLsum": 0.4002356613365656
+        },
+        "macro_rouge": 0.3308380621566111,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.66429479034306,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P08_previous_-0.8": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P08_previous_-0.8",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "58834de6541d3511b1035af3e4690dd8476eb9f6e7a6cbb19a1fe3497023f2c0",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/resolved_config.yaml",
+      "config_sha256": "f4d673ec329c7ef8ae3103d2e86113bbaab34a3c8621d155e27e4fda3fb64212",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4428621726766355,
+          "rouge2": 0.15006421165373757,
+          "rougeLsum": 0.40229332659224587
+        },
+        "macro_rouge": 0.331739903640873,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.23837357052096,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P09_previous_-0.9": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P09_previous_-0.9",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "f7226f91fa5ef2192966138b0eed9209bb1b2ead7ea8b820c102f07786a741b6",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P09_previous_-0.9/resolved_config.yaml",
+      "config_sha256": "7dda351f90c1c36a4cef71a3ff8605d34ebb279adc674873f44ca885e1c63c6f",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43984070056204916,
+          "rouge2": 0.14731929292695592,
+          "rougeLsum": 0.4015602741747322
+        },
+        "macro_rouge": 0.32957342255457905,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.68233799237612,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_tfidf_P10_previous_-1.0": {
+      "status": "completed",
+      "candidate": "pacsum_tfidf_P10_previous_-1.0",
+      "method": "pacsum_tfidf",
+      "candidate_hash": "c73aa393874050e07ef62435189febb68bf72dd5cfa61fa3041962808262e72d",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P10_previous_-1.0/resolved_config.yaml",
+      "config_sha256": "1d18f563912e5eb17a7a289368948cb5f0575d059e78d5b65b6c6e5d3c3d54de",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4305427454913832,
+          "rouge2": 0.14022679313238592,
+          "rougeLsum": 0.3957223125120705
+        },
+        "macro_rouge": 0.3221639503786132,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.15044472681066,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

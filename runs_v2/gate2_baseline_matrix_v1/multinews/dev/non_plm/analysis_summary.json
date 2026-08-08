@@ -1,0 +1,296 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T16:21:04.210014+00:00",
+  "study_id": "gate2-baseline-matrix-v1-family-analysis",
+  "implementation_commit": "64dc917ad43f9b1109c3e9551038e2bdedec7aef",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "family": "non_plm",
+  "candidate_count": 23,
+  "family_summary_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/family_summary.json",
+  "family_summary_sha256": "20f4785c721a1fe392ce137dbb21a0193c9eff707961185e9025c3cddce787c5",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "winner": {
+    "candidate": "pacsum_tfidf_P08_previous_-0.8",
+    "method": "pacsum_tfidf",
+    "macro_rouge": 0.331739903640873,
+    "rouge": {
+      "rouge1": 0.4428621726766355,
+      "rouge2": 0.15006421165373757,
+      "rougeLsum": 0.40229332659224587
+    }
+  },
+  "ranking": [
+    {
+      "candidate": "pacsum_tfidf_P08_previous_-0.8",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.331739903640873,
+      "rouge": {
+        "rouge1": 0.4428621726766355,
+        "rouge2": 0.15006421165373757,
+        "rougeLsum": 0.40229332659224587
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P07_previous_-0.7",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3308380621566111,
+      "rouge": {
+        "rouge1": 0.44233498317232317,
+        "rouge2": 0.14994354196094448,
+        "rougeLsum": 0.4002356613365656
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P09_previous_-0.9",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32957342255457905,
+      "rouge": {
+        "rouge1": 0.43984070056204916,
+        "rouge2": 0.14731929292695592,
+        "rougeLsum": 0.4015602741747322
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P06_previous_-0.6",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3291541990466463,
+      "rouge": {
+        "rouge1": 0.44073498920970455,
+        "rouge2": 0.14902514795797353,
+        "rougeLsum": 0.3977024599722607
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B10_beta_1.0",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32816715115109996,
+      "rouge": {
+        "rouge1": 0.4369594368788643,
+        "rouge2": 0.14894764139744704,
+        "rougeLsum": 0.39859437517698854
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P05_previous_-0.5",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32713626891883935,
+      "rouge": {
+        "rouge1": 0.4386315630218407,
+        "rouge2": 0.14773843544488013,
+        "rougeLsum": 0.3950388082897973
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B09_beta_0.9",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3250578567988574,
+      "rouge": {
+        "rouge1": 0.4338951099157385,
+        "rouge2": 0.1474808492971842,
+        "rougeLsum": 0.3937976111836497
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P04_previous_-0.4",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32490223560116754,
+      "rouge": {
+        "rouge1": 0.436399426516245,
+        "rouge2": 0.1461291560289291,
+        "rougeLsum": 0.39217812425832854
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P03_previous_-0.3",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32285996741116074,
+      "rouge": {
+        "rouge1": 0.4343331771322123,
+        "rouge2": 0.14449738452741454,
+        "rougeLsum": 0.3897493405738554
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B08_beta_0.8",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.32238188062416206,
+      "rouge": {
+        "rouge1": 0.431465802465794,
+        "rouge2": 0.14510168490735892,
+        "rougeLsum": 0.3905781544993332
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P10_previous_-1.0",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3221639503786132,
+      "rouge": {
+        "rouge1": 0.4305427454913832,
+        "rouge2": 0.14022679313238592,
+        "rougeLsum": 0.3957223125120705
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P02_previous_-0.2",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.321688413798158,
+      "rouge": {
+        "rouge1": 0.4331510893412131,
+        "rouge2": 0.14373725876074464,
+        "rougeLsum": 0.3881768932925163
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P01_previous_-0.1",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3202782901393875,
+      "rouge": {
+        "rouge1": 0.4317555806661716,
+        "rouge2": 0.1425895529173675,
+        "rougeLsum": 0.38648973683462357
+      }
+    },
+    {
+      "candidate": "lexrank",
+      "method": "lexrank",
+      "macro_rouge": 0.319835484062069,
+      "rouge": {
+        "rouge1": 0.4317264223765229,
+        "rouge2": 0.13714661646397844,
+        "rougeLsum": 0.3906334133457057
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B07_beta_0.7",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3195453368531779,
+      "rouge": {
+        "rouge1": 0.4285272445130942,
+        "rouge2": 0.14288372706423416,
+        "rougeLsum": 0.3872250389822053
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B00_default",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.31917160673370354,
+      "rouge": {
+        "rouge1": 0.43079953415511,
+        "rouge2": 0.14165073195173308,
+        "rougeLsum": 0.38506455409426743
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B06_beta_0.6",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3171694927001229,
+      "rouge": {
+        "rouge1": 0.42592667042061727,
+        "rouge2": 0.14150888171260845,
+        "rougeLsum": 0.38407292596714293
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B05_beta_0.5",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.31448466610218695,
+      "rouge": {
+        "rouge1": 0.4229576329909763,
+        "rouge2": 0.14000843637158644,
+        "rougeLsum": 0.3804879289439982
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B01_beta_0.1",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3138576703223462,
+      "rouge": {
+        "rouge1": 0.42423728036125863,
+        "rouge2": 0.13885321787652402,
+        "rougeLsum": 0.37848251272925587
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B04_beta_0.4",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3126022293663764,
+      "rouge": {
+        "rouge1": 0.42108191184115884,
+        "rouge2": 0.13893015130640768,
+        "rougeLsum": 0.3777946249515627
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B02_beta_0.2",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.31236365386441806,
+      "rouge": {
+        "rouge1": 0.42153825879386797,
+        "rouge2": 0.13870816899486496,
+        "rougeLsum": 0.37684453380452126
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B03_beta_0.3",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.31188535614466956,
+      "rouge": {
+        "rouge1": 0.4204040477464151,
+        "rouge2": 0.13878730161619007,
+        "rougeLsum": 0.3764647190714036
+      }
+    },
+    {
+      "candidate": "textrank",
+      "method": "textrank",
+      "macro_rouge": 0.305095687987233,
+      "rouge": {
+        "rouge1": 0.4151922764991816,
+        "rouge2": 0.13021830031720527,
+        "rougeLsum": 0.3698764871453121
+      }
+    }
+  ],
+  "frozen_lead": {
+    "macro_rouge": 0.32629087659292944,
+    "rouge": {
+      "rouge1": 0.43503283092084166,
+      "rouge2": 0.148138832947838,
+      "rougeLsum": 0.39570096591010867
+    }
+  },
+  "winner_minus_frozen_lead_macro": 0.005449027047943589,
+  "prediction_diagnostics": {
+    "pacsum_tfidf_P08_previous_-0.8": {
+      "rows": 3935,
+      "score_degenerate_rows": 1,
+      "score_degenerate_rate": 0.00025412960609911054,
+      "predictions_sha256": "9f2e174dd06c485415611f0e46e20bfd321c8e926e2290c19a60b79da6923c8d"
+    },
+    "pacsum_tfidf_B10_beta_1.0": {
+      "rows": 3935,
+      "score_degenerate_rows": 3935,
+      "score_degenerate_rate": 1.0,
+      "predictions_sha256": "3e55576cb5d1ccecc24b63e00668c2464b4275d0cb9e3df1b0ef88a3906a5e3c"
+    }
+  },
+  "selection_comparisons": {
+    "pacsum_tfidf_P08_previous_-0.8_vs_frozen_lead": {
+      "rows": 3935,
+      "exact_selected_indices_rows": 166,
+      "exact_selected_indices_rate": 0.04218551461245235,
+      "mean_selected_indices_jaccard": 0.6177147945762641
+    },
+    "pacsum_tfidf_B10_beta_1.0_vs_frozen_lead": {
+      "rows": 3935,
+      "exact_selected_indices_rows": 685,
+      "exact_selected_indices_rate": 0.17407878017789072,
+      "mean_selected_indices_jaccard": 0.8601036324364144
+    }
+  },
+  "interpretation_guard": "Ranking is descriptive frozen-dev evidence only. A score-degenerate PacSum endpoint is a canonical-order skip-tolerant control, not evidence that directed centrality contributes. No candidate is promoted until both families and both primary datasets are complete.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

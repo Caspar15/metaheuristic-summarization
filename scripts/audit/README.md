@@ -10,6 +10,11 @@
 `run_gate2_baseline_matrix.py` 執行預註冊的兩-primary Gate 2 baseline 搜尋。它沒有 split
 參數，只能讀 frozen dev manifest；`non_plm` 展開 23 個 candidates，`plm` 展開 27 個。
 每次成功或失敗都寫 evidence 與 `runs_v2/search_log.jsonl`，不得用它讀 dev-test/test。
+
+`summarize_gate2_baseline_family.py` 只讀上述 frozen-dev family，驗證 candidate/evidence
+完整性、partition guards、排名與 PacSum 退化端點，輸出 `analysis_summary.json`；它同樣沒有
+partition CLI，不得用來讀 dev-test/test。
+
 > 正式結果必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程。
 
 > 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；

@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "lexrank",
+  "method": "lexrank",
+  "candidate_hash": "cb6efa0e4ff23a9d23466025fa5db9eabe27987b59357c9259bc72f6a8ed0f0f",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/resolved_config.yaml",
+  "config_sha256": "b12ac5ba46b1766da24b97ce3f2540f2c517e65486a3ebd0c55b8510ff2aaf48",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4317264223765229,
+      "rouge2": 0.13714661646397844,
+      "rougeLsum": 0.3906334133457057
+    },
+    "macro_rouge": 0.319835484062069,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.21880559085133,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

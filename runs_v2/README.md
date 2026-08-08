@@ -91,3 +91,13 @@ removals 與 Lead／Random；各 family 先作 12-test Holm，再報 31-config �
 cheap-baseline 0/12，且 Multi-News 對 Lead R-2 顯著為負。10k resamples 對 372 correction
 的最小 corrected p=`0.074393`，不事後改協定。runner 無 split CLI，只讀 frozen dev。
 summary SHA-256 `4b63b59a7f6ddf96fa9698522909ebe363fa96ae2ca5c937357577bbdf877937`。
+
+## Gate 2 baseline matrix 狀態（2026-08-09）
+
+`gate2_baseline_matrix_v1/multinews/dev/non_plm/` 已完成事前註冊的 23/23 candidates。
+family winner 是非退化 `pacsum_tfidf_P08_previous_-0.8`，macro `0.331740`；beta=1.0
+在 3,935/3,935 rows 全部 score-degenerate，只能視為 canonical-order skip-tolerant control。
+P07 第一次外層中斷保留於 `attempt_01_interrupted/`，失敗與 final retry 都已寫入
+`search_log.jsonl`。`analysis_summary.json` 固定驗證 partition guards、ranking、退化率與
+相對 frozen Lead 的逐篇選句重疊。PLM、GovReport、greedy reference 與 paired inference
+尚未完成；dev-test/test 未讀。

@@ -13,8 +13,9 @@ utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROU
 在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
 五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
 且選句 mean pairwise Jaccard 僅 0.639；selector 層因此確定以 MMR 為主線、
-Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成立：仍須
-full validation、full-source SBERT+MMR、PacSum 與第二 primary dataset 才能判斷
+Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成立：Multi-News
+frozen-dev non-PLM 23/23 已完成，且 PacSum TF-IDF P08 macro 比 proposed S02b 高
+`0.003663`；仍須完成 PLM、GovReport、greedy reference 與完整 paired matrix才能判斷
 candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
@@ -85,10 +86,10 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **Baseline Gate 2 尚未通過** —— Lead、Random、TextRank／LexRank 程式已進
-   master；PR #15 centrality offline tokenizer hotfix、Linux CI 與 Multi-News 5,621-row
-   TextRank／LexRank final-implementation rerun 已完成。但 PacSum、SBERT+MMR、
-   GovReport 方法 runs、paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
+1. 🔴 **Baseline Gate 2 尚未通過** —— Multi-News frozen-dev non-PLM 23/23 已完成；
+   非退化 PacSum TF-IDF P08 macro `0.331740`，比 proposed S02b 高 `0.003663`，所以
+   目前方法沒有勝過 strongest completed baseline。PLM、GovReport、greedy reference、
+   paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
    單一資料集實測不能替代完整 Gate 2，見 §9 Go/No-Go
 2. 🔴 **第二個 primary 的資料層與 lexical D1 已建立，但證據矩陣仍不完整**；GovReport
    canonical validation／dev／dev-test 已凍結，A1 與 12-config lexical/objective dev

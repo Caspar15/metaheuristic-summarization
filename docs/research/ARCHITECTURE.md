@@ -337,10 +337,10 @@ Phase 1e 已實作此工程契約：coverage 明確使用 `full source sentences
 > shared objective 支援；Phase 2 的外部對照則已有 PR #10 Lead baseline contract／CLI。
 > 兩者角色不同，不能把方法內 greedy 當成 Lead。Lead、Random、TextRank／LexRank、
 > full-source SBERT centroid／MMR 與 clean-room PacSum TF-IDF／SBERT
-> 程式已進 master；TextRank／LexRank 的 offline tokenizer hotfix 已由 PR #15 合併，
-> 且 frozen Multi-News validation 的 final-implementation full-split rerun 已完成。PacSum
+> 程式已進 master；Multi-News frozen-dev non-PLM 23/23 已完成，最佳非退化 PacSum
+> TF-IDF P08 macro `0.331740`，高 proposed S02b `0.003663`。PacSum
 > 上游 repo／checkpoint 因缺授權與 digest 不直接 vendoring（F-45），改以論文公式實作並強制
-> 標示 protocol adaptation。partitioned PacSum／sentence-encoder／MMR、GovReport、paired
+> 標示 protocol adaptation。PLM family、GovReport、greedy reference、paired
 > significance 及兩個 primary 的完整 baseline
 > 矩陣仍未完成。
 
