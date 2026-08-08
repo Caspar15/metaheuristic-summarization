@@ -1152,7 +1152,8 @@ document 重置；請求 document scope 卻沒有 records 時 fail loud。以兩
 `scope=document` 才使用它，既有 global configs 保持不變。position candidate route 亦
 共用此實作。兩文件 v1/v2 golden、缺 provenance／不連續位置 fail-loud、10-document
 snapshot 與當時完整 **338 tests passed**（2026-08-08）；加入 D1 governed runner 後為
-**343 tests passed**。D1 分數仍未執行。
+**343 tests passed**。D1 Multi-News lexical family 完成與 resume/diagnostics regression
+後為 **345 tests passed**；該 family 的分數見 F-29。
 
 ---
 
@@ -1167,6 +1168,67 @@ snapshot 與當時完整 **338 tests passed**（2026-08-08）；加入 D1 govern
 宣稱 candidate budget 已驗證，也不能做「動參數後無差」的假敏感度結論。D1 已預註冊
 在 lexical+graph 兩路、40/20/60 base 下分別移動 route top-K、reservation、total 與
 RRF constant。完整盤點在 `docs/research/evidence/d1_effective_tunable_inventory.json`。
+
+---
+
+### ✅ F-27. D1 family 只在最後寫 search log，外部 timeout 會留下不可恢復的半套研究
+
+**發現（2026-08-08）**：原 `run_greedy_sensitivity.py` 連續跑完整 family，等所有
+candidate 結束後才一次寫 `search_log.jsonl`。Multi-News lexical family 執行到第 12
+個 L11 時，外層 job 達 60-minute hard timeout；L00–L10 已有完整 evidence，卻沒有任何
+search-log record，L11 只剩 atomic `.partial`，而 runner 因 output root 已存在而拒絕重開。
+
+**風險**：完成結果可能因 orchestrator timeout 在 registry 中「不存在」；人工刪掉
+output 後重跑又會消滅失敗成本與形成第二次不受控觀察。這違反「失敗也要記錄」與每階段
+可交接要求，雖然本次仍只有 frozen dev，沒有碰 dev-test/test。
+
+**修正**：每個 candidate 完成即以 logical hash 去重寫 log；新增 `--resume`，逐一驗證
+resolved config、candidate hash 與 evidence。完整 candidate 只載入，不重跑；不完整
+`run` 搬到 `greedy/attempts/attempt_NN_interrupted/`，寫 interruption evidence 與 failed
+search-log row，再只重跑缺少者。原 L11 failure 與成功重試都保留，最終是 12 final
+success + 1 interruption failure。
+
+**驗收**：partial preservation／evidence tests 與完整 regression **345 passed**；
+`c1b2662` 版本化恢復行為。test 與 dev-test 均未存取。
+
+---
+
+### ✅ F-28. `candidates.use=false` 時 diagnostics 把全文 selector pool 誤報成 0
+
+**發現（2026-08-08，分數後、解讀前）**：舊 `_candidate_diagnostics()` 只讀
+`candidate_pool.actual_size`。關閉 candidate builder 時 provenance records 按 contract
+為空、該欄為 0，但 `selector_inputs.candidate_count` 實際是全文；因此 L10 初始 summary
+把最昂貴的全文搜尋誤報為 candidate size 0。ROUGE、selected indices 與 selection
+artifact 沒受影響，錯的是 audit 層的成本欄。
+
+**修正**：diagnostics schema v2 以 `selector_inputs.candidate_count` 報 actual selector
+mean/p95/max，另保留 `provenance_candidate_size_mean`；無 route records 時 agreement
+改為 `null`（not applicable），不再假裝 0 agreement。完成 artifacts 以 `--resume`
+重新讀 predictions 刷新 diagnostics，不重跑選句或評分。
+
+**驗收**：L00 actual/provenance mean 都是 `35.9535`；L10 actual mean `81.8513`、p95
+`210.3`、max `3,318`，provenance mean 才是 0。新增回歸測試釘住 80-sentence full
+source／0 provenance 的案例；完整 **345 tests passed**。
+
+---
+
+### 🟡 F-29. Multi-News top-40 lexical prefilter 是品質瓶頸，但全文搜尋不是可接受解法
+
+**證據（D1 frozen dev 3,935 rows，2026-08-08）**：在同一 200–250-word contract 與
+Greedy selector 下，L00 base macro `0.310353`；唯一關掉 candidate prefilter 的 L10
+為 `0.320912`，三項 `0.431657/0.135168/0.395911`，相對 base macro `+0.010559`，是
+12 個 lexical/objective OFAT 中最大正增益。其次為 coverage weight 加倍
+`+0.006216` 與 document-aware position `+0.002568`。
+
+**限制**：同協定 Lead macro 是 `0.326291`，L10 仍低 `0.005379`，特別是 R-2
+`0.135168 < 0.148139`。L10 的 selector pool 平均由 `35.95` 增至 `81.85`、最大
+`3,318`，wall time `1,138.5 s` vs base `234.3 s`（約 `4.86×`）。這一 family 尚未做
+paired bootstrap，也尚未跑 GovReport，不能宣稱顯著或跨資料集成立。
+
+**決策**：保留「候選召回不足」為優先病因，但不採全文 Greedy 作 final architecture。
+依預註冊順序繼續 graph／semantic 與兩路 budget family，判斷能否用受控候選池回收品質；
+正式 greedy-reference recall@K 完成前不計 headroom capture。完整狀態見
+`D1_SENSITIVITY_STATUS.md`。
 
 ---
 
@@ -1346,7 +1408,7 @@ RRF constant。完整盤點在 `docs/research/evidence/d1_effective_tunable_inve
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**343 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**345 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與

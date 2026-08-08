@@ -246,7 +246,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 343 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff、document-aware position、兩 primary 的 frozen validation policy 與 dev/dev-test partition enforcement 已通過；GovReport validation 已由官方 archive 重建為 973 canonical rows，A1/D1 study runners 已版本化。這仍只證明 correctness/data boundary；published-protocol parity、PacSum、partitioned baseline runs 與完整品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 345 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff、document-aware position、兩 primary 的 frozen validation policy 與 dev/dev-test partition enforcement 已通過；GovReport validation 已由官方 archive 重建為 973 canonical rows，A1/D1 study runners 已版本化。D1 Multi-News lexical family 已有 dev evidence，但其餘五格與 Gate 2 尚缺；published-protocol parity、PacSum、partitioned baseline runs 與完整品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -290,9 +290,9 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 343 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight 與 partition enforcement 已完成；GovReport data layer、A1/D1 runners、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
+| Phase 1（correctness refactor） | canonical 主路徑的 345 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight 與 partition enforcement 已完成；GovReport data layer、A1/D1 runners、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
 | Phase 2（baseline validation） | Multi-News Lead 與 final-implementation TextRank／LexRank 已完成 governed full-split run；下一步是 PacSum、SBERT+MMR、paired significance，並在 GovReport 重建後補齊同一矩陣。程式存在或單一資料集結果不等於 Gate 2 已完成 |
-| Phase 3（方法實驗） | **新增核心指標：候選池對 validated oracle／greedy reference 的 recall@K，以及選句位置分布**。先在 validation 建立可重現版本 |
+| Phase 3（方法實驗） | D1 Multi-News lexical/objective 12/12 已完成：全文候選對 base macro `+0.010559`，但仍輸 Lead 且約慢 `4.86×`，顯示 candidate recall 是優先病因、全文搜尋不是答案。其餘五個 dataset×family cells、paired inference 與 **候選池對 greedy reference 的 recall@K** 仍待完成 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 
@@ -314,4 +314,4 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
-**最後一句實話**：這個專案的核心概念（zero-training、可解釋 provenance、多目標成本控制）是有價值的，ICACT 的獎不是白拿的。legacy 系統實際上接近一個包裝得很複雜的 Lead baseline；新 canonical pipeline 已修掉多個造成此現象的工程缺陷，但尚無 validation 品質結果，不能先假定已經擺脫 lead bias。下一步仍是用同 split、同 budget 的 Lead 與強 baseline 直接驗證。
+**最後一句實話**：這個專案的核心概念（zero-training、可解釋 provenance、多目標成本控制）是有價值的，ICACT 的獎不是白拿的。legacy 系統實際上接近一個包裝得很複雜的 Lead baseline；新 canonical pipeline 已修掉多個工程缺陷，現在也有第一格 D1 dev 品質證據，但最佳 lexical variant 仍輸同協定 Lead。不能先假定 graph／semantic 會救回差距；下一步仍是完成兩 primary 的強 baseline 與其餘 D1 family，讓刪除條件決定架構。

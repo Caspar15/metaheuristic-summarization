@@ -90,15 +90,18 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
    TextRank／LexRank final-implementation rerun 已完成。但 PacSum、SBERT+MMR、
    GovReport 方法 runs、paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
    單一資料集實測不能替代完整 Gate 2，見 §9 Go/No-Go
-2. 🔴 **第二個 primary 的資料層已建立，但方法證據尚未建立**；GovReport canonical validation／dev／dev-test 已凍結，Gate 2 runs 仍為零
+2. 🔴 **第二個 primary 的資料層已建立，但證據矩陣仍近乎空白**；GovReport canonical
+   validation／dev／dev-test 已凍結，且 A1 cheap methods 已完成；D1／Gate 2 方法 runs
+   仍為零，不能把 Multi-News 的旋鈕排序外推到 GovReport
 3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
 4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張
 5. 🟡 P0-01 的 legacy artifact 永久作廢（不是待修，是既成事實）
 6. 🟡 P0-06 的 published-protocol parity、P0-09 的正式計時，以及 validation-frozen Pareto/output policy
 
 > ⚠️ **「P0 修好」不等於「可以投稿」。** §9 的 Go 條件要求相對強 baseline 有一致正向效果，
-> 而目前只有 Lead 程式存在、沒有兩個 primary 的 governed baseline 結果，因此 F-0
->（系統是否勝過 Lead）**在新 pipeline 上仍未被回答**。
+> D1 Multi-News lexical/objective 的第一格結果顯示：最佳全文候選 macro `0.320912`
+> 仍低於同協定 Lead `0.326291`，所以「純 lexical 改旋鈕」暫時沒有回答 F-0；graph／
+> semantic 與兩個 primary 的 governed strong-baseline 結果仍缺，不能提前下最終結論。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

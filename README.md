@@ -23,7 +23,8 @@
 - 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
-  D1 inventory、document-aware position 與 governed runner regression 後，現行測試為 **343 passed**。
+  D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
+  現行測試為 **345 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -43,9 +44,10 @@
   診斷 cheap method，semantic/graph 尚未評估。
 - D1 dev-only Greedy 敏感度研究已在任何新分數前預註冊：完整盤點 19 組／90 個
   runtime config paths，分 lexical/objective、cheap multiroute、semantic 三個 family。
-  document-aware position correctness 已修復（F-25），governed family runner 已版本化；
-  下一步跑 27 configs × 兩 primary；本 screen 不看
-  dev-test。A1 單一路由下三個 budget/RRF knobs 其實不活躍，改在兩路 context 測（F-26）。
+  document-aware position correctness 已修復（F-25），governed family runner 已版本化。
+  Multi-News lexical/objective 12/12 已完成：全文候選相對 base macro `+0.010559`，但
+  仍低於 Lead 且約慢 `4.86×`；其餘五個 dataset×family cells 尚未完成，本 screen
+  不看 dev-test。詳見 [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
@@ -63,7 +65,7 @@
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
 | Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 的舊 Multi-News full-validation rerun 只能算 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **343 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **345 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

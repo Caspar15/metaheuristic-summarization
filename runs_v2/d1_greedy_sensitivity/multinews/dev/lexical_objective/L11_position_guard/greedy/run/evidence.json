@@ -1,0 +1,93 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T07:42:24.040448+00:00",
+  "started_at_utc": "2026-08-08T07:38:25.574599+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "greedy",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.pipeline.select_sentences",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\lexical_objective\\L11_position_guard\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\lexical_objective\\L11_position_guard\\greedy",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "e49819188829bceed78e01309058edd71e5b0ca7",
+  "config_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/lexical_objective/L11_position_guard/resolved_config.yaml",
+  "config_sha256": "da8afd6a69c70e458e25809f618617d62a7319d6a31a4c0a1d9c51b4fc718df6",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/lexical_objective/L11_position_guard/greedy/run/predictions.jsonl",
+  "predictions_sha256": "275e7fab01b8f5678ae38fdc7078a2520ef1ebceb3284a6e83d4497eebc2aff7",
+  "selected_indices_sha256": "90d47d65071498a1fe5f1982c952d733c628c472daaebe16632f9ff7eb0864ef",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42371565427263425,
+      "rouge2": 0.1276527328432424,
+      "rougeLsum": 0.38169775783568777
+    },
+    "macro_rouge": 0.31102204831718816,
+    "feasible_rows": 3931,
+    "infeasible_rows": 4,
+    "summary_words": {
+      "mean": 242.81346886912326,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L11_position_guard",
+  "candidate_hash": "d5acd23b2c17fe4e78ecd28fd9c485238a5800763bc97d9df34f6a634010080d",
+  "declared_delta": {
+    "coverage_guard.position": true
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 36.69606099110546,
+    "selector_candidate_size_mean": 36.69606099110546,
+    "selector_candidate_size_p95": 43.0,
+    "selector_candidate_size_max": 50,
+    "provenance_candidate_size_mean": 36.69606099110546,
+    "route_agreement_mean": 0.9815786245288626,
+    "unique_candidate_mean_by_route": {
+      "lexical": 35.91156289707751
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 10.55451080050826
+    }
+  },
+  "candidate_diagnostics_implementation_commit": "c1b266209f9492f68fe6b292d8c6b56fbb24040d"
+}

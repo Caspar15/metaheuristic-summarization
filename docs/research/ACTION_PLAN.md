@@ -82,6 +82,18 @@
 - [~] F-26：A1 lexical-only context 下 `min_per_route=20`、`total=60` 與 RRF constant
       結構上不能改變候選 membership/rank；這不影響 A1 長度決選，但不能拿來排序候選
       預算旋鈕。D1 會在 lexical+graph 的兩路 active context 各動一次。
+- [x] D1 Multi-News lexical/objective family 已完成（12/12 configs、每個 3,935 frozen
+      dev rows；dev-test/test 未存取）。L10 全文候選 macro `0.320912`、相對 base
+      `+0.010559` 居首；coverage 加倍 `+0.006216`、document position `+0.002568`。
+      但 L10 仍低於同協定 Lead macro `0.326291`，且約為 base wall time `4.86×`，不能
+      晉級或宣稱優勢。完整表見 `D1_SENSITIVITY_STATUS.md`。
+- [x] F-27/F-28 已修：D1 runner 現可驗證式 `--resume`，外部 timeout 的 partial 與
+      failure attempt 會保留；diagnostics v2 分開 actual selector pool 與 provenance
+      pool。L11 首次 attempt 因外層 60-minute timeout 失敗、重試成功，search log 保留
+      **12 success + 1 failure**。完整 regression **345 tests passed**。
+- [~] F-29：取消 top-40 prefilter 是目前最大正向 OFAT，但 selector pool 由平均
+      `35.95` 增至 `81.85`、最大 `3,318`，不是可接受的最終解。待兩資料集的 graph／
+      semantic／candidate-budget family 判定能否用受控 pool 回收品質。
 
 ## 2026-08-06 selector milestone
 
@@ -483,7 +495,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 343 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 345 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
