@@ -2,6 +2,14 @@
 
 ## 2026-08-06 selector-comparison update
 
+> **2026-08-09 governed headroom update**：Multi-News frozen-dev 的三個 metric-specific
+> greedy references 已完成。S02b 對 Lead→greedy headroom 的 R1/R2/Lsum capture 為
+> `3.57%/−4.23%/4.89%`，平均僅 `1.41%`；strongest P08 平均 `3.30%`。
+> S02b union-cap-80 recall 約 82–86%，final-selection recall 僅約 30%，因此現階段優先
+> 修 selector/salience，而不是擴大候選模組。graph top-40 三項 recall 均最高、semantic
+> 第二且都有 exclusive hits，兩 route 暫不刪；GovReport greedy/reference analysis 尚未完成，
+> Gate 2 仍未通過。
+
 已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
 以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現
 `all-MiniLM-L6-v2` 的 mean pooling + Normalize，並以 SHA-256 證明三 selector

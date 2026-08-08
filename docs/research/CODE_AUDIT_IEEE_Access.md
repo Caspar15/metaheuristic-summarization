@@ -1788,7 +1788,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**394 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**397 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1893,8 +1893,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55/F-56 後為
-**394 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-59 後為
+**397 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2013,7 +2013,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-**394 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **397 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2052,5 +2052,31 @@ membership recall」錯稱完整 route recall@40，系統性低估各 route prop
 仍讀 selected indices。v2 明記 `overlap_scores_accessed_before_correction=false`。
 
 分析器另驗每列 route top-K=40、total cap=80、actual size、三 route 完整性與 frozen ID
-alignment；headroom/recall 三個 golden tests 通過。正式 overlap 尚未執行，dev-test/test
-未讀。
+alignment；headroom/recall 三個 golden tests 通過。本條完成時正式 overlap 尚未執行；
+其後結果見 F-59。dev-test/test 未讀。
+
+## F-59 — Multi-News 候選池覆蓋尚可，但 selector 只保留約三成 greedy selections
+
+**嚴重度：P0（方法瓶頸／promotion gate）**
+
+依 F-58 v2 protocol 首次計算 3,935-row frozen-dev overlap。S02b union-cap-80 對
+R1/R2/Lsum greedy selections 的 micro recall 分別 `0.858871/0.819072/0.843863`；
+final selected set 則只有 `0.300666/0.296301/0.308456`。union 仍漏 14–18%，但從 union
+到 final selection 的損失遠大於 route candidate generation，故目前主要瓶頸是
+selector/salience/objective，而不是「再加一條 route」。
+
+route-top-40 的 micro recall 中 graph 三項均最高（`0.736992/0.678234/0.721767`），
+semantic 第二（`0.719397/0.661846/0.701237`），lexical 第三；graph exclusive hits 亦為
+`1,729/2,297/2,048`，semantic 為 `1,276/1,651/1,420`。因此 semantic/graph 的候選
+效用刪除條件未觸發，但 semantic always-on 的高成本仍待 GovReport 與 adaptive rule 決定。
+
+metric-specific headroom 結果更嚴格：S02b 的 R1/R2/Lsum capture 為
+`3.573%/−4.229%/4.892%`，平均 `1.412%`；P08 為
+`4.886%/0.977%/4.047%`，平均 `3.303%`。S02b R2 不只沒有吃到 headroom，還低於
+Lead。舊約 2.4% 估計不再作現行結論。
+
+證據：`runs_v2/gate2_greedy_reference_v1/multinews/dev/analysis/analysis.json`
+（SHA-256 `921363be...bb027`）與 `evidence.json`；輸入 SHA、3,935-row ID alignment、
+route top-K/cap 與三 greedy evidence 全部 fail-loud 驗證。完整回歸 **397 passed**。
+這是 reference-aware diagnosis，不可拿 reference 特徵進實際 selector；GovReport 尚未完成，
+dev-test/test 未讀。

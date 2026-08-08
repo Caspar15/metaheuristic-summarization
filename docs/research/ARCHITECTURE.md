@@ -278,6 +278,14 @@ CandidateRecord
 
 ### 5.5 Adaptive route budget allocator
 
+> **F-59 route/candidate gate（Multi-News frozen dev）**：S02b union-cap-80 對
+> metric-specific greedy selections 的 micro recall 為 R1/R2/Lsum
+> `85.89%/81.91%/84.39%`，final-selection recall 只有
+> `30.07%/29.63%/30.85%`。graph route-top-40 三項 recall 均最高，semantic 第二，
+> 且都有 exclusive greedy hits；因此 §5.3/§5.4 的刪除條件暫未觸發。這不支持繼續
+> 無限制擴 pool：主要下一步是固定 candidate evidence 下比較 Greedy/MMR/NSGA-II 並修
+> selector/salience。GovReport 尚未量，adaptive always-on 決策仍未凍結。
+
 輸入只能是 inference-time 可得的廉價特徵：
 
 - 句數、文件數、section 數。

@@ -1,0 +1,21 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T23:10:42.543685+00:00",
+  "status": "completed",
+  "study_id": "gate2-greedy-reference-analysis-v2",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "rows": 3935,
+  "analysis_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/analysis/analysis.json",
+  "analysis_sha256": "921363becc71c3f1c643d0910a8faf5a6e210044500a146619713c77d82bb027",
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_analysis_v2.json",
+  "preregistration_sha256": "ef45c0562a29569709d2e7700da0f5570fe8c39b06ddb9b87166ca7fc66a3e39",
+  "input_sha256": {
+    "proposed_predictions": "a39b5dbcfdde0553889efefe9de1069f30f836cb754ba5166d16087d5308e38e",
+    "proposed_per_example": "1e52be52eab75ef2d7520a1a40f2e5bc346ecfd9dc7ef4e4293881c89b2bd831",
+    "strongest_baseline_per_example": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e",
+    "lead_metrics": "48a8377eb6e35b142694aafb6956c73d5f774b15ba881d92c00740ff7e208829"
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

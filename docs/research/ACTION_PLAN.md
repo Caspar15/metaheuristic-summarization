@@ -433,7 +433,7 @@
       primary × R1/R2/Lsum 各自最佳化共 6 configs，只讀 frozen dev；max_words 採 A1
       凍結上限，reference-aware diagnostic 不強迫填 floor，因無正增益自然停止並報實際長度。
 - [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport 0/3；總計
-      3/6。headroom 與 candidate recall 尚未完成
+      3/6。Multi-News headroom/candidate recall 已完成；GovReport 尚未完成
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
       evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 3/6。
@@ -441,7 +441,12 @@
       route membership 誤標為完整 top-40，尚未計分即由 v2 明確 supersede：
       `gate2_greedy_reference_analysis_v2.json`（SHA-256 `ef45c056...a3e39`）；定義
       union-cap-80、route-top-40、final-selection 的 micro/macro recall、空集合處理與
-      `(system−Lead)/(greedy−Lead)`。分析尚未執行。
+      `(system−Lead)/(greedy−Lead)`。Multi-News 已執行，GovReport 待 3 targets 完成。
+- [x] Multi-News v2 analysis：S02b 三 metric mean headroom capture `1.41%`，P08
+      `3.30%`；S02b R-2 capture `−4.23%`。union-cap-80 micro recall 為
+      `85.89%/81.91%/84.39%`，final-selection 只有 `30.07%/29.63%/30.85%`；
+      selector/salience 是主要瓶頸。graph route-top-40 三 target recall 均最高，semantic
+      第二且有 exclusive hits，故兩 route 暫不觸發刪除。
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
 
@@ -579,7 +584,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 394 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-56 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 397 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-59 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成，且 proposed S02b 仍輸 strongest completed baseline；greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
@@ -592,7 +597,7 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-53/F-55/F-56 為 **394 passed**。
+      F-51 當時 **386 passed**；目前含 F-53/F-55～F-59 為 **397 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、

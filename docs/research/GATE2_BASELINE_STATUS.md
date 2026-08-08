@@ -51,7 +51,7 @@
   保留於 `attempt_01_interrupted/`，resume 後的 final run 另存，不覆寫失敗紀錄。
 - GovReport 23 個 runs 全部一次完成；兩 family 的成功／失敗歷史都已寫入 registry。
 - family 彙整器會驗 candidate count、每個 evidence 的 partition guards、結果完整性，且
-  CLI 沒有 partition 參數。目前加入 F-51～F-56 guards 後完整本地回歸為 **394 passed**。
+  CLI 沒有 partition 參數。目前加入 F-51～F-59 guards 後完整本地回歸為 **397 passed**。
 - greedy-reference Multi-News R1 首次 Windows sandbox attempt 在 0 rows 失敗；之後外層
   terminate 未帶走子程序，造成雙 writer。F-56 已封存 295-row 污染檔、只保留驗證過的
   270-row exact prefix，並加入 OS-level single-writer lock；事故修復當時正式結果為
@@ -64,7 +64,22 @@ reference，不是 exact upper bound。R1 target 得 `0.595288`、平均 `213.29
 target 得 `0.345229`、平均 `170.51` words；Lsum target 得 `0.558596`、平均 `212.66`
 words。Lsum 16-worker invocation 為 `2,531.55 s`，極端長文件造成明顯 tail cost。
 三 target 的 dev-test/test guards 皆為 false。GovReport 0/3 尚未開始，因此總進度 3/6；
-headroom/candidate recall 已預註冊但尚未計算，不能把本段當成 Gate 2 完成。
+Multi-News headroom/candidate recall 已依 v2 預註冊完成；GovReport 未完成，不能把本段
+當成 Gate 2 完成。
+
+### Multi-News headroom 與 candidate recall
+
+以各 metric 自己的 greedy reference 算 `(system−Lead)/(greedy−Lead)`：S02b 的 R1/R2/
+Lsum capture 為 `3.57%/−4.23%/4.89%`，三項平均 **`1.41%`**；P08 為
+`4.89%/0.98%/4.05%`，平均 **`3.30%`**。所以舊「目前方法約吃到 2.4%」不再採用；
+新 governed dev evidence 顯示 S02b 更低，且 R2 退到 Lead 以下。
+
+S02b union-cap-80 對 R1/R2/Lsum greedy selections 的 micro recall 為
+`85.89%/81.91%/84.39%`，但 final-selection recall 只有
+`30.07%/29.63%/30.85%`。候選池仍漏約 14–18%，但最大損失發生在 selector/salience。
+route-top-40 中 graph 三項均最高（`73.70%/67.82%/72.18%`），semantic 第二，且兩者
+都有 exclusive hits；目前不依 §5.3/§5.4 刪除 semantic/graph。這是 reference-aware
+diagnostic，不等於可用 reference 調 selector，也不構成 significance。
 
 ### Multi-News frozen-dev 結果
 

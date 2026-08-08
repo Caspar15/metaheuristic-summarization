@@ -49,8 +49,9 @@ capacity-matched route ablation 與 paired bootstrap；完整結果與多重比�
 - L10 全文搜尋雖比 L00 與 Random 高，仍比 Lead 低 `0.005379`。它的 R-1/R-2/
   R-Lsum 是 `0.431657/0.135168/0.395911`；Lead 是
   `0.435033/0.148139/0.395701`。也就是 R-Lsum 僅微高，R-2 明顯不足。
-- 因正式 greedy reference 尚未跑完，本階段不能計算 headroom capture；不得用
-  「贏 Lead 幾分」取代 headroom 指標。
+- Multi-News 正式 metric-specific greedy reference 與 v2 analysis 已完成：S02b/P08
+  平均 headroom capture `1.41%/3.30%`；S02b R2 為 `−4.23%`。GovReport 尚未完成，
+  因此不能把單一 primary 結論外推，也不得用「贏 Lead 幾分」取代 headroom。
 
 ### 品質與成本一起解讀
 
@@ -321,7 +322,8 @@ adaptive quality-cost 判斷。
   correction 在 10,000 resamples 下的最小可得 corrected p 是 `0.074393`，所以
   0/12 cheap-baseline endpoints 通過 strong rule。依「看到分數後不改顯著性方法」規則，
   不事後增加 resamples；只記錄解析度限制。
-- PacSum／SBERT+MMR／TextRank／LexRank／greedy reference 尚未在兩 primary 同矩陣完成，
+- PacSum／SBERT+MMR／TextRank／LexRank 已在兩 primary 完成；greedy reference 目前只有
+  Multi-News 3/3、GovReport 0/3，
   因此即使 route paired evidence 很強，仍不得進 dev-test。
 
 ## 還沒做
