@@ -9,8 +9,8 @@
 > 顯著優於 Greedy；NSGA-II 五 seed mean 均低於 Greedy且選句 Jaccard 0.639。
 > selector 路線因此改為 MMR main／Greedy reference／NSGA-II comparator。這只是
 > selector gate；兩 primary 的 strongest non-PLM baseline 都已勝 proposed S02b。Multi-News
-> PLM 27/27 之後最強仍是 non-PLM PacSum P08；是否值得投稿仍取決於 GovReport PLM、
-> dev 優化與完整 paired gate。
+> PLM 27/27 之後最強仍是 non-PLM PacSum P08；GovReport PLM winner MMR λ=0.9 只高
+> LexRank `0.001148`、卻高 S02b `0.034906`。是否值得投稿仍取決於 dev 優化與完整 paired gate。
 
 ---
 
@@ -248,7 +248,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 388 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1 runners 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 完成；F-51 exact cache audit 與 F-53 provenance verifier 通過；published-protocol parity、GovReport PLM 與完整 paired baseline matrix 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 388 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1 runners 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27 完成；F-51 exact cache audit 與 F-53 provenance verifier 通過；published-protocol parity 與完整 paired baseline matrix 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -293,7 +293,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | 插入位置 | 新增項目 |
 |---|---|
 | Phase 1（correctness refactor） | canonical 主路徑的 388 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-53 guards 已完成；published-protocol parity、完整 baseline 與 validation-frozen output policy仍未完成 |
-| Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成；Multi-News P08 高 PLM winner `0.000282`、高 S02b `0.003663`，GovReport LexRank 高 S02b `0.033758`。下一步是 GovReport PLM、greedy reference 與 paired inference；目前方法未過 strongest-completed-baseline gate |
+| Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成；Multi-News P08 高 S02b `0.003663`，GovReport MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。下一步是 greedy reference 與 paired inference；目前方法未過 strongest-completed-baseline gate |
 | Phase 3（方法實驗） | screens、matched route ablations 與 paired inference 已完成。12/12 route endpoints 通過 Holm p=`0.002400` 與 186-opportunity p=`0.037196`，semantic/graph 暫留；semantic-direct selector 刪除。Multi-News 對 Lead R-2 仍顯著落後，且 strong baseline／**候選池對 greedy reference 的 recall@K** 未完成，故不能 promotion |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
@@ -316,4 +316,4 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
-**最後一句實話**：核心概念仍有價值，但最新證據更嚴格：S02b 在 Multi-News 輸 P08 `0.003663`，在 GovReport 輸 LexRank `0.033758`、TextRank `0.013104`。Multi-News PLM winner 也沒有超過 P08；最佳 full-source SBERT-MMR 反而低 S02b `0.005496`。semantic／graph matched 增量雖成立，整體方法目前仍弱於簡單強 baseline。先完成 GovReport PLM/greedy-reference matrix，再在 dev 優化 selector/salience；若搜尋空間掃完仍無顯著優勢，就應依停止條件重新定位，不能直接投稿。
+**最後一句實話**：核心概念仍有價值，但最新證據更嚴格：S02b 在 Multi-News 輸 P08 `0.003663`，在 GovReport 輸 MMR λ=0.9 `0.034906`。Multi-News PLM winner 沒有超過 P08；最佳 full-source SBERT-MMR 低 S02b `0.005496`，但在 GovReport 卻成為目前 point winner。semantic／graph matched 增量雖成立，整體方法仍弱於 strongest baseline。先完成 greedy-reference／paired matrix，再在 dev 優化 selector/salience；若搜尋空間掃完仍無顯著優勢，就應依停止條件重新定位，不能直接投稿。

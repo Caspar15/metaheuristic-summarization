@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "sbert_mmr_lambda_0.9",
+  "method": "sbert_mmr",
+  "candidate_hash": "e72aeb8668a80b4f9552b8bd5f8a3cb4979c2bf5a758acee06c759e5192ad433",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/resolved_config.yaml",
+  "config_sha256": "67fbc0dfb80ecdbe01d7b619dab400f27938d7f4459b15206ba6d9371bb86562",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5750095558521071,
+      "rouge2": 0.24157636022637521,
+      "rougeLsum": 0.5417184342480911
+    },
+    "macro_rouge": 0.4527681167755245,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 649.6505139500734,
+      "min": 642,
+      "max": 650
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

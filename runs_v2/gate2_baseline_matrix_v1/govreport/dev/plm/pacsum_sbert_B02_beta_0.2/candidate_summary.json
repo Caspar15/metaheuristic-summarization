@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "pacsum_sbert_B02_beta_0.2",
+  "method": "pacsum_sbert",
+  "candidate_hash": "b05c2e2551f15dec5901de0cbf8af9dd5682358330816fc2e3b81c0354781d3c",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B02_beta_0.2/resolved_config.yaml",
+  "config_sha256": "d549e0803957067cc1b5c384b9a54b710d91e4fd19f9e9e82650a7c45cf04fd4",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5639320870812636,
+      "rouge2": 0.2343086359287342,
+      "rougeLsum": 0.5343275130311552
+    },
+    "macro_rouge": 0.4441894120137177,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 649.6226138032306,
+      "min": 638,
+      "max": 650
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

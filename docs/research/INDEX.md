@@ -9,7 +9,7 @@ baseline 亦已接入 shared baseline CLI。凍結的 200-row matched pilot 顯�
 相對 Greedy 的 R-1／R-2 分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；
 NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`；selector
 決策因此固定為 MMR main／Greedy reference／NSGA-II comparator。這仍是 diagnostic，
-兩 primary frozen-dev non-PLM 各 23/23、Multi-News PLM 27/27 已完成，但 GovReport PLM 與完整 Gate 2 尚未完成，
+兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27 已完成，但 greedy reference 與完整 Gate 2 尚未完成，
 因此 Gate 2／Gate 3 仍未通過。單一規格來源見
 [`SELECTOR_COMPARISON_PROTOCOL.md`](SELECTOR_COMPARISON_PROTOCOL.md)。
 
@@ -36,7 +36,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、兩 primary canonical/frozen-policy/dev-partition 已完成；published-protocol parity、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
 | 測試 | ✅ **388 local tests 全過**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
-| **baseline** | 🟡 **Phase 2 進行中** —— 兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 完成；Multi-News P08 仍比 PLM winner 高 `0.000282`、比 S02b 高 `0.003663`，GovReport LexRank 高 S02b `0.033758`。GovReport PLM、greedy reference、paired inference 未完成，**Gate 2 未過**；見 `GATE2_BASELINE_STATUS.md` |
+| **baseline** | 🟡 **Phase 2 進行中** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27 完成。Multi-News P08 比 S02b 高 `0.003663`；GovReport MMR λ=0.9 比 LexRank `0.001148`、比 S02b `0.034906`，尚未 paired。greedy reference、paired inference 未完成，**Gate 2 未過**；見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
@@ -170,3 +170,8 @@ non-PLM PacSum P08 低 `0.000282`；最佳 full-source SBERT-MMR λ=0.7（`0.322
 S02b `0.005496`。execution-only cache 已通過 3,935-row cold/warm exact audit，F-53 verifier
 另驗 25 個 cached runs 共 98,375 hits、contract/digest/dependencies。dev-test/test 未讀。
 詳見 `GATE2_BASELINE_STATUS.md` 與 F-51～F-53 evidence。
+
+GovReport PLM 亦已完成 27/27。winner 是 full-source SBERT-MMR λ=0.9（macro
+`0.452768`），只高 LexRank `0.001148`、高 S02b `0.034906`；前一差距未做 paired
+inference，不能宣稱顯著勝出。27 runs 的 18,387 row accesses 全數通過 F-53，
+dev-test/test 未讀。

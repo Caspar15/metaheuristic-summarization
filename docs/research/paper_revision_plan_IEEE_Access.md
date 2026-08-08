@@ -17,7 +17,8 @@ Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成�
 frozen-dev non-PLM 23/23 與 PLM 27/27 已完成；PacSum TF-IDF P08 macro 仍比
 PLM winner 高 `0.000282`、比 proposed S02b 高 `0.003663`，而最佳 full-source
 SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍須完成
-GovReport PLM、greedy reference 與完整 paired matrix才能判斷
+GovReport PLM 亦已完成：MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`，
+但前一差距尚未 paired。仍須完成 greedy reference 與完整 paired matrix才能判斷
 candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
@@ -92,9 +93,9 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 **目前真正還擋著投稿的**：
 
 1. 🔴 **Baseline Gate 2 尚未通過** —— 兩 primary frozen-dev non-PLM 各 23/23、
-   Multi-News PLM 27/27 已完成；Multi-News P08 比 proposed S02b 高 `0.003663`，
-   GovReport LexRank 高 `0.033758`，所以目前方法沒有勝過 strongest completed baseline。
-   GovReport PLM、greedy reference、paired significance 及完整 baseline 矩陣仍缺。程式基礎與
+   PLM 各 27/27 已完成；Multi-News P08 比 proposed S02b 高 `0.003663`，
+   GovReport MMR λ=0.9 高 `0.034906`，所以目前方法沒有勝過 strongest completed baseline。
+   greedy reference、paired significance 及完整 baseline 矩陣仍缺。程式基礎與
    單一資料集實測不能替代完整 Gate 2，見 §9 Go/No-Go
 2. 🔴 **第二個 primary 的資料層與 lexical D1 已建立，但證據矩陣仍不完整**；GovReport
    canonical validation／dev／dev-test 已凍結，A1 與 12-config lexical/objective dev

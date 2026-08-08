@@ -1,0 +1,101 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T20:53:53.524654+00:00",
+  "started_at_utc": "2026-08-08T20:50:30.347146+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "sbert_mmr",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "sbert_mmr",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\govreport\\dev\\plm\\sbert_mmr_lambda_0.9\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\govreport\\dev\\plm\\sbert_mmr_lambda_0.9\\sbert_mmr",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "2a86dec75154a40c4305eedbfb60557a82d4b77e",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/resolved_config.yaml",
+  "config_sha256": "67fbc0dfb80ecdbe01d7b619dab400f27938d7f4459b15206ba6d9371bb86562",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_preflight_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+  "partition_preflight_sha256": "719b521d4c7567b238e95e79ac9de6bf5219dad00c720d9975dd1fbcd3e915d3",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/predictions.jsonl",
+  "predictions_sha256": "7a39388eba1b75753ae3fe59da39a9ce290fd77d07d78590dfb44bcd3e85611e",
+  "selected_indices_sha256": "553addd3cb2fb7044ae3c6e3e8936ba34c1fa59a9701a56099c777a9a2c39424",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5750095558521071,
+      "rouge2": 0.24157636022637521,
+      "rougeLsum": 0.5417184342480911
+    },
+    "macro_rouge": 0.4527681167755245,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 649.6505139500734,
+      "min": 642,
+      "max": 650
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "plm",
+  "candidate": "sbert_mmr_lambda_0.9",
+  "candidate_hash": "e72aeb8668a80b4f9552b8bd5f8a3cb4979c2bf5a758acee06c759e5192ad433",
+  "declared_variant": {
+    "id": "sbert_mmr_lambda_0.9",
+    "method": "sbert_mmr",
+    "sbert_mmr": {
+      "lambda_relevance": 0.9
+    }
+  },
+  "dev_test_accessed": false,
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+      "contract_version": "sbert_mean_pool_l2_npz_v1",
+      "scientific_config_unchanged": true
+    }
+  },
+  "embedding_cache_summary": {
+    "rows": 681,
+    "status_counts": {
+      "hit": 681
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "5417fdd797e4cc4808cfa48988e8f55589121375c3f939d2301b73ad3edd313a"
+  }
+}

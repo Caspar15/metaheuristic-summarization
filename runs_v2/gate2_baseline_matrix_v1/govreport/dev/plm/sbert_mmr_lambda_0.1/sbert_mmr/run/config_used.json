@@ -1,0 +1,145 @@
+{
+  "experiment": {
+    "status": "validation_pilot_only",
+    "dataset": "GovReport"
+  },
+  "data_policy": {
+    "policy_path": "configs/data_policies/govreport_validation_v1.json",
+    "policy_sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e",
+    "analysis": "main"
+  },
+  "seed": 3407,
+  "features": {
+    "tf_isf": {
+      "version": "v2",
+      "use_stopwords": true,
+      "use_sublinear_tf": true,
+      "use_bigrams": false
+    },
+    "position": {
+      "scope": "document",
+      "version": "v2",
+      "method": "inverse",
+      "decay": 0.1
+    },
+    "fusion": {
+      "version": "v1",
+      "interactions": []
+    },
+    "weights": {
+      "importance": 1.0,
+      "length": 0.0,
+      "position": 0.0,
+      "graph": 0.0,
+      "centrality": 0.0,
+      "novelty": 0.0
+    }
+  },
+  "representations": {
+    "use": true,
+    "method": "tfidf"
+  },
+  "compute_budget": {
+    "mode": "fixed",
+    "enabled_routes": [
+      "lexical"
+    ]
+  },
+  "candidate_budget": {
+    "route_top_k": 40,
+    "min_per_route": 20,
+    "total": 60
+  },
+  "candidates": {
+    "use": true,
+    "mode": "hard",
+    "soft_boost": 1.05,
+    "rrf_constant": 60
+  },
+  "selector": {
+    "salience_source": "rrf_fusion",
+    "similarity_source": "pipeline_similarity"
+  },
+  "objectives": {
+    "importance_aggregation": "length_normalized",
+    "coverage_method": "max",
+    "lambda_importance": 1.0,
+    "lambda_coverage": 0.8,
+    "lambda_redundancy": 0.7
+  },
+  "routes": {
+    "lexical": {
+      "revision": "tf_isf_v2:smooth_nonnegative_sublinear_unigram"
+    },
+    "tfidf_centroid": {
+      "sublinear_tf": true,
+      "ngram_range": [
+        1,
+        2
+      ]
+    },
+    "graph": {
+      "implementation": "sparse_knn",
+      "n_neighbors": 8,
+      "min_similarity": 0.05,
+      "alpha": 0.85,
+      "max_iter": 100,
+      "tol": 1e-06
+    },
+    "semantic": {
+      "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+      "device": "cpu",
+      "batch_size": 32,
+      "max_model_tokens": 256
+    }
+  },
+  "coverage_guard": {
+    "enabled": true,
+    "document": true,
+    "section": false,
+    "position": false
+  },
+  "optimizer": {
+    "method": "greedy"
+  },
+  "length_control": {
+    "unit": "words",
+    "min_words": 500,
+    "max_words": 650,
+    "require_nonempty": true
+  },
+  "experiment_partition": {
+    "manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+    "manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+    "name": "dev"
+  },
+  "baselines": {
+    "pacsum": {
+      "beta": 0.0,
+      "lambda_previous": 0.0,
+      "lambda_following": 1.0,
+      "tfidf": {
+        "lowercase": true,
+        "sublinear_tf": false,
+        "ngram_range": [
+          1,
+          1
+        ],
+        "stop_words": null
+      }
+    },
+    "sbert_mmr": {
+      "lambda_relevance": 0.1
+    }
+  },
+  "study": {
+    "study_id": "gate2-baseline-matrix-v1",
+    "family": "plm",
+    "candidate": "sbert_mmr_lambda_0.1",
+    "candidate_hash": "e3dc14fea93384f6d01e2b0bd22a32c8a69a52304d9ef7c720b6febcff5a4a40",
+    "partition": "dev",
+    "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+    "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd"
+  }
+}

@@ -33,7 +33,8 @@
 - A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；study runner 已
   版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。兩個 primary 的
   唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 與 Multi-News PLM
-  已完成，GovReport PLM、greedy reference 與正式方法 paired comparison 仍缺；test split 仍鎖定。
+  已完成；GovReport PLM 隨後也完成，現只缺 greedy reference 與正式方法 paired
+  comparison 等 Gate 2 收尾；test split 仍鎖定。
 - A1 Multi-News 已依預註冊規則選定 200–250 words：dev-test cross-method macro
   `0.310382`，相對 max-only250／median220／p75-cap260 的 paired-bootstrap 95% CI
   全為正，三個 Holm-adjusted `p=0.000600`。這個勝負主要來自 Greedy stopping，不能
@@ -81,8 +82,8 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成。Multi-News 最強仍為 TF-IDF PacSum P08，比 PLM winner 高 `0.000282`、比 S02b 高 `0.003663`；GovReport LexRank 比 S02b 高 `0.033758`。GovReport PLM、greedy reference、paired matrix尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
-| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。Multi-News PLM 已 27/27；F-51 exact cache audit 與 F-53 family provenance verifier 通過。runner 只讀 frozen dev，dev-test/test 皆未讀 |
+| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 23/23、PLM 27/27 均完成。Multi-News 最強 P08 比 S02b 高 `0.003663`；GovReport MMR λ=0.9 比 LexRank `0.001148`、比 S02b `0.034906`，前一小差距尚未 paired。greedy reference、paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
+| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
 | 測試 | ✅ **388 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 

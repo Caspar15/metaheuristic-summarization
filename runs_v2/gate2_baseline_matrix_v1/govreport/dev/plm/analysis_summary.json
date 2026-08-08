@@ -1,0 +1,376 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:25:38.499296+00:00",
+  "study_id": "gate2-baseline-matrix-v1-family-analysis",
+  "implementation_commit": "2a86dec75154a40c4305eedbfb60557a82d4b77e",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "family": "plm",
+  "candidate_count": 27,
+  "family_summary_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/family_summary.json",
+  "family_summary_sha256": "5fe3be0491755fe8b382cc58fc8bf227d12f35077b5e997f7f2468ee9794da13",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "winner": {
+    "candidate": "sbert_mmr_lambda_0.9",
+    "method": "sbert_mmr",
+    "macro_rouge": 0.4527681167755245,
+    "rouge": {
+      "rouge1": 0.5750095558521071,
+      "rouge2": 0.24157636022637521,
+      "rougeLsum": 0.5417184342480911
+    }
+  },
+  "ranking": [
+    {
+      "candidate": "sbert_mmr_lambda_0.9",
+      "method": "sbert_mmr",
+      "macro_rouge": 0.4527681167755245,
+      "rouge": {
+        "rouge1": 0.5750095558521071,
+        "rouge2": 0.24157636022637521,
+        "rougeLsum": 0.5417184342480911
+      }
+    },
+    {
+      "candidate": "sbert_centroid",
+      "method": "sbert_centroid",
+      "macro_rouge": 0.45144129481228773,
+      "rouge": {
+        "rouge1": 0.5729608378976003,
+        "rouge2": 0.2417493997481238,
+        "rougeLsum": 0.539613646791139
+      }
+    },
+    {
+      "candidate": "sbert_mmr_lambda_0.7",
+      "method": "sbert_mmr",
+      "macro_rouge": 0.45126196522301676,
+      "rouge": {
+        "rouge1": 0.5768539495053653,
+        "rouge2": 0.2346123443848607,
+        "rougeLsum": 0.5423196017788243
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B05_beta_0.5",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4510989590793666,
+      "rouge": {
+        "rouge1": 0.570588623142746,
+        "rouge2": 0.2426131861404014,
+        "rougeLsum": 0.5400950679549524
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B06_beta_0.6",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.44981520515848444,
+      "rouge": {
+        "rouge1": 0.5679271810003393,
+        "rouge2": 0.24386762361128822,
+        "rougeLsum": 0.5376508108638257
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B04_beta_0.4",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4491591667912183,
+      "rouge": {
+        "rouge1": 0.569290762294845,
+        "rouge2": 0.23958938847803118,
+        "rougeLsum": 0.5385973496007789
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B07_beta_0.7",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.44684604956248136,
+      "rouge": {
+        "rouge1": 0.563698710858534,
+        "rouge2": 0.24276055775738048,
+        "rougeLsum": 0.5340788800715296
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B03_beta_0.3",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.44644611974114473,
+      "rouge": {
+        "rouge1": 0.5666565873657521,
+        "rouge2": 0.2364972131797885,
+        "rougeLsum": 0.5361845586778938
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B02_beta_0.2",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4441894120137177,
+      "rouge": {
+        "rouge1": 0.5639320870812636,
+        "rouge2": 0.2343086359287342,
+        "rougeLsum": 0.5343275130311552
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B01_beta_0.1",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.44042663249287034,
+      "rouge": {
+        "rouge1": 0.5596463986755945,
+        "rouge2": 0.23091270480597448,
+        "rougeLsum": 0.5307207939970422
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B08_beta_0.8",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4383388547219937,
+      "rouge": {
+        "rouge1": 0.5552127814394445,
+        "rouge2": 0.2337652891859683,
+        "rougeLsum": 0.5260384935405681
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B00_default",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4370071442663845,
+      "rouge": {
+        "rouge1": 0.5560288209613569,
+        "rouge2": 0.22764345199388467,
+        "rougeLsum": 0.5273491598439118
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P01_previous_-0.1",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.43548669640059195,
+      "rouge": {
+        "rouge1": 0.5543161617715834,
+        "rouge2": 0.22633680465865452,
+        "rougeLsum": 0.525807122771538
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P02_previous_-0.2",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.43381665535410385,
+      "rouge": {
+        "rouge1": 0.5525785768933013,
+        "rouge2": 0.2247821267835981,
+        "rougeLsum": 0.5240892623854122
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P03_previous_-0.3",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.43216262999949,
+      "rouge": {
+        "rouge1": 0.5507048214441165,
+        "rouge2": 0.22324277017429833,
+        "rougeLsum": 0.5225402983800551
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P04_previous_-0.4",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.42892832777663736,
+      "rouge": {
+        "rouge1": 0.5474182798897955,
+        "rouge2": 0.21976411369373136,
+        "rougeLsum": 0.5196025897463853
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P05_previous_-0.5",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4260219170387076,
+      "rouge": {
+        "rouge1": 0.5442840451609402,
+        "rouge2": 0.21708687672091923,
+        "rougeLsum": 0.5166948292342636
+      }
+    },
+    {
+      "candidate": "sbert_mmr_lambda_0.5",
+      "method": "sbert_mmr",
+      "macro_rouge": 0.42380301172261675,
+      "rouge": {
+        "rouge1": 0.5541735866757759,
+        "rouge2": 0.1966092512925773,
+        "rougeLsum": 0.520626197199497
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P06_previous_-0.6",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.42258662174578426,
+      "rouge": {
+        "rouge1": 0.5405519042998254,
+        "rouge2": 0.21387033001467468,
+        "rougeLsum": 0.5133376309228526
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P07_previous_-0.7",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4176704243101422,
+      "rouge": {
+        "rouge1": 0.5354629688683649,
+        "rouge2": 0.20889808890308767,
+        "rougeLsum": 0.5086502151589739
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B09_beta_0.9",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.41343903141774674,
+      "rouge": {
+        "rouge1": 0.5294389806030385,
+        "rouge2": 0.20815925338386795,
+        "rougeLsum": 0.5027188602663337
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P08_previous_-0.8",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.41242872683649456,
+      "rouge": {
+        "rouge1": 0.529402901668104,
+        "rouge2": 0.2044150379937261,
+        "rougeLsum": 0.5034682408476536
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P09_previous_-0.9",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.40568561320899826,
+      "rouge": {
+        "rouge1": 0.52210845762216,
+        "rouge2": 0.19812932944110304,
+        "rougeLsum": 0.49681905256373166
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_B10_beta_1.0",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.40062075263285246,
+      "rouge": {
+        "rouge1": 0.5159922803450571,
+        "rouge2": 0.19487626303133804,
+        "rougeLsum": 0.49099371452216234
+      }
+    },
+    {
+      "candidate": "pacsum_sbert_P10_previous_-1.0",
+      "method": "pacsum_sbert",
+      "macro_rouge": 0.4000074103220809,
+      "rouge": {
+        "rouge1": 0.5161191325974424,
+        "rouge2": 0.19241887259067864,
+        "rougeLsum": 0.4914842257781217
+      }
+    },
+    {
+      "candidate": "sbert_mmr_lambda_0.3",
+      "method": "sbert_mmr",
+      "macro_rouge": 0.3651802574833081,
+      "rouge": {
+        "rouge1": 0.4923838512868519,
+        "rouge2": 0.13957310394712572,
+        "rougeLsum": 0.4635838172159468
+      }
+    },
+    {
+      "candidate": "sbert_mmr_lambda_0.1",
+      "method": "sbert_mmr",
+      "macro_rouge": 0.350240662706629,
+      "rouge": {
+        "rouge1": 0.474933927199239,
+        "rouge2": 0.1282668711710404,
+        "rougeLsum": 0.44752118974960764
+      }
+    }
+  ],
+  "frozen_lead": {
+    "macro_rouge": 0.39923244134613456,
+    "rouge": {
+      "rouge1": 0.514532126840121,
+      "rouge2": 0.1940318738091236,
+      "rougeLsum": 0.48913332338915916
+    }
+  },
+  "winner_minus_frozen_lead_macro": 0.05353567542938992,
+  "prediction_diagnostics": {
+    "sbert_mmr_lambda_0.9": {
+      "rows": 681,
+      "score_degenerate_rows": 0,
+      "score_degenerate_rate": 0.0,
+      "predictions_sha256": "7a39388eba1b75753ae3fe59da39a9ce290fd77d07d78590dfb44bcd3e85611e"
+    }
+  },
+  "selection_comparisons": {
+    "sbert_mmr_lambda_0.9_vs_frozen_lead": {
+      "rows": 681,
+      "exact_selected_indices_rows": 0,
+      "exact_selected_indices_rate": 0.0,
+      "mean_selected_indices_jaccard": 0.06189288318538482
+    }
+  },
+  "execution_cache_diagnostics": {
+    "enabled_candidate_count": 27,
+    "disabled_or_legacy_candidate_count": 0,
+    "status_counts": {
+      "miss_written": 680,
+      "hit": 17707
+    },
+    "contract_versions": [
+      "sbert_mean_pool_l2_npz_v1"
+    ],
+    "ordered_row_cache_key_digests": [
+      "5417fdd797e4cc4808cfa48988e8f55589121375c3f939d2301b73ad3edd313a"
+    ],
+    "dependency_version_sets": [
+      {
+        "sentence-transformers": "5.1.0",
+        "tokenizers": "0.22.0",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0"
+      }
+    ],
+    "candidates": [
+      "sbert_centroid",
+      "sbert_mmr_lambda_0.1",
+      "sbert_mmr_lambda_0.3",
+      "sbert_mmr_lambda_0.5",
+      "sbert_mmr_lambda_0.7",
+      "sbert_mmr_lambda_0.9",
+      "pacsum_sbert_B00_default",
+      "pacsum_sbert_B01_beta_0.1",
+      "pacsum_sbert_B02_beta_0.2",
+      "pacsum_sbert_B03_beta_0.3",
+      "pacsum_sbert_B04_beta_0.4",
+      "pacsum_sbert_B05_beta_0.5",
+      "pacsum_sbert_B06_beta_0.6",
+      "pacsum_sbert_B07_beta_0.7",
+      "pacsum_sbert_B08_beta_0.8",
+      "pacsum_sbert_B09_beta_0.9",
+      "pacsum_sbert_B10_beta_1.0",
+      "pacsum_sbert_P01_previous_-0.1",
+      "pacsum_sbert_P02_previous_-0.2",
+      "pacsum_sbert_P03_previous_-0.3",
+      "pacsum_sbert_P04_previous_-0.4",
+      "pacsum_sbert_P05_previous_-0.5",
+      "pacsum_sbert_P06_previous_-0.6",
+      "pacsum_sbert_P07_previous_-0.7",
+      "pacsum_sbert_P08_previous_-0.8",
+      "pacsum_sbert_P09_previous_-0.9",
+      "pacsum_sbert_P10_previous_-1.0"
+    ],
+    "interpretation": "Cache state is execution provenance only. Candidate hashes and scientific configurations exclude the cache root and hit/miss state."
+  },
+  "interpretation_guard": "Ranking is descriptive frozen-dev evidence only. A score-degenerate PacSum endpoint is a canonical-order skip-tolerant control, not evidence that directed centrality contributes. No candidate is promoted until both families and both primary datasets are complete.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

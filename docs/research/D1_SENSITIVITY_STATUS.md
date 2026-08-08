@@ -169,7 +169,7 @@ capacity-matched route ablation 與 paired bootstrap；完整結果與多重比�
   `+0.016352`／`+0.006741`，三項為 `0.541583/0.190097/0.515075`。
 - L10 對 Random 三項都較高；對 Lead 的 R-1／R-Lsum 較高，但 R-2 仍低
   `0.003935`。這只是 dev point estimate；12 個 lexical 比較尚未做 paired bootstrap。
-  兩 primary non-PLM 與 Multi-News PLM 已完成，但 GovReport PLM 與 greedy reference 未完成，不能稱為
+  兩 primary non-PLM／PLM 已完成，但 greedy reference 未完成，不能稱為
   significant win 或進入 dev-test。
 - L10 selector pool mean/p95/max 是 `318.52/698/2,889`，summary 平均 `649.07`
   words。品質增益證實 top-40 candidate recall 是 GovReport 的主要瓶頸，但全文 dense
@@ -326,9 +326,9 @@ adaptive quality-cost 判斷。
 
 ## 還沒做
 
-1. Gate 2：兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成；Multi-News P08
+1. Gate 2：兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成；Multi-News P08
    高 PLM winner `0.000282`、高 S02b `0.003663`，GovReport LexRank 高 `0.033758`。
-   接著完成 GovReport PLM、Lead、Random 與
+   GovReport MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。接著完成 Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
 2. candidate recall/headroom、adaptive cost rule 與 selector Greedy/MMR/NSGA-II full-dev。
 3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。

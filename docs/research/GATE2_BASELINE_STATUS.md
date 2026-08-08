@@ -1,5 +1,23 @@
 # Gate 2 baseline 狀態報告
 
+## 2026-08-09 checkpoint：GovReport PLM 27/27 完成
+
+- 事前註冊的 GovReport PLM family 已完成 **27/27**，final failure 0。第一次外層命令
+  完成 22 個 candidate 後中斷；PacSum-SBERT P06 partial 已依 F-48 封存並登錄 failed
+  attempt，resume 後 P06～P10 全部完成。
+- family winner 是 full-source SBERT-MMR λ=`0.9`：R-1/R-2/R-Lsum
+  `0.575010/0.241576/0.541718`，macro `0.452768`。它在三項 point estimate 都高於
+  non-PLM LexRank，macro 只高 `0.001148`；尚未 paired bootstrap，不能宣稱顯著勝出。
+- SBERT centroid macro `0.451441`，只低 LexRank `0.000179`；最佳 PacSum-SBERT
+  beta=`0.5` macro `0.451099`。這表示 GovReport 的 full-source semantic ranking 很強，
+  但目前多種強 baseline 彼此非常接近，必須以逐篇 paired inference 決定 finalist。
+- winner 比 proposed S02b macro 高 `0.034906`，三項都較高；因此 S02b 目前仍未通過
+  strongest-completed-baseline gate。這不直接觸發 semantic route 刪除，因為 full-source
+  external baseline 與方法內 capacity-matched route ablation 回答不同問題。
+- F-53 驗證 27×681=`18,387` row accesses：680 個 unique cold `miss_written`、17,707 hits。
+  第一個 run 內有一筆內容 key 重複而直接命中，所有 run 仍各覆蓋 681 rows；contract、
+  ordered-key digest 與 PLM dependencies 一致。dev-test/test 未讀。
+
 ## 2026-08-09 checkpoint：Multi-News PLM 27/27 完成
 
 - 事前註冊的 Multi-News PLM family 已完成 **27/27**：SBERT centroid 1、full-source
@@ -17,8 +35,8 @@
 - F-51 cache 的全量 exact audit 先於 cached rerun 完成。後續 25 個 run 共驗得
   98,375 hits、相同 ordered-key digest 與完整 PLM dependency versions；最初兩個 uncached
   run 明列 legacy。F-53 family verifier 對列數、狀態、contract、digest 與版本 fail loud。
-- 本 checkpoint 沒有讀 dev-test 或 test，也沒有依中途分數刪減網格。Gate 2 仍未通過：
-  GovReport PLM、兩 primary greedy reference 與完整 paired inference 尚未完成。
+- 本 checkpoint 沒有讀 dev-test 或 test，也沒有依中途分數刪減網格。兩資料集 PLM
+  現均已完成；Gate 2 仍未通過，因兩 primary greedy reference 與完整 paired inference 尚未完成。
 
 ## 2026-08-09 checkpoint：兩 primary non-PLM frozen-dev 完成
 
@@ -80,7 +98,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
   它不是 directed centrality 有效的證據；P08 才是本 family 的非退化 dev winner。
 - P08 仍有 1/3,935 row score-degenerate。它與 frozen Lead 只有 166/3,935 rows 的
   `selected_indices` 完全相同，平均 selection Jaccard `0.617715`，並非單純複製 Lead。
-- 目前只有 point estimates。Multi-News PLM 已完成；尚未完成 GovReport PLM、greedy reference、
+- 目前只有 point estimates。兩 primary PLM 已完成；尚未完成 greedy reference、
   Multi-News clean sensitivity、完整 paired bootstrap／selection correction，因此
   **Gate 2 仍未通過，也不讀 dev-test**。
 
@@ -93,17 +111,18 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - GovReport 解讀：`runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/analysis_summary.json`
 - Multi-News PLM family：`runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/family_summary.json`
 - Multi-News PLM 解讀：`runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/analysis_summary.json`
+- GovReport PLM family：`runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/family_summary.json`
+- GovReport PLM 解讀：`runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/analysis_summary.json`
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
 ### 尚未完成（下一步）
 
-1. 跑完 GovReport PLM 27 candidates；不得把 Multi-News 的 candidate 排名或最優參數
-   套到 GovReport，也不得刪減其預註冊網格。
-2. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
-3. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較。
-4. 針對 Multi-News 仍輸 strongest completed baseline、GovReport 仍輸 strongest non-PLM
+1. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
+2. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較；
+   GovReport MMR 與 LexRank 的 `0.001148` 差距在推論前只能稱 point estimate。
+3. 針對 Multi-News 仍輸 strongest completed baseline、GovReport 仍輸 strongest completed
    baseline 的現況，在 dev 做已預註冊的 selector／salience
    搜尋；若搜尋空間耗盡仍無顯著優勢，依停止條件寫重新定位建議。
-5. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
+4. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
    test 仍鎖定至 freeze 簽字。
