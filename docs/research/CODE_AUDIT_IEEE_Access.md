@@ -1232,6 +1232,32 @@ paired bootstrap，也尚未跑 GovReport，不能宣稱顯著或跨資料集成
 
 ---
 
+### ✅ F-30. Greedy 對每個候選重算兩次完整 coverage，GovReport 全文變體無法合理擴展
+
+**發現（2026-08-08，GovReport frozen dev、未看分數）**：L10 關閉 candidate
+prefilter 後，舊 `greedy_select()` 對每個 remaining candidate 先呼叫 `can_add()`，再呼叫
+`evaluate()` 取 utility；兩者都重建 `coverage_matrix[:, selected + candidate]`。在第二個
+ordered dev row（2,192 句）已消耗至少 `639.47` CPU seconds，atomic predictions 尚未
+flush。以舊實作的句數平方 proxy 對 681-row dev 外推，下限約 `4.05 CPU hours`；這不是
+分數，也沒有讀 reference、dev-test 或 test。量測腳本與 evidence 分別是
+`scripts/audit/greedy_scaling_projection.py` 與
+`docs/research/evidence/f30_greedy_scaling_projection.json`。
+
+**修正**：`SelectionObjective.evaluate_additions()` 現在一次計算 selected subset 的
+row-wise coverage maxima，再逐候選精確形成完整 `SelectionEvaluation`；salience、
+redundancy、constraints、停止條件與 lower-bound 行為未改。Greedy 改用已計算的 extension
+判斷 upper bounds，不再透過 `can_add()` 對同一 extension 重算一次。
+
+**驗收門檻**：單元測試把 batched extension 與原 `evaluate(selected+[candidate])` 在
+3 種 importance aggregation、3 種 coverage method、rectangular full-source coverage
+及負相似值逐欄精確對照；另以 40 組 deterministic random problems 對照 pre-F-30 完整
+Greedy loop 的 selected indices；single-sentence structural guard 另有 pipeline regression。
+targeted **43 passed**、完整 **357 passed**。恢復後仍須以既有 L00 artifact 的逐篇
+selected-indices hash 驗證真實 pipeline 等價。被中止的 attempt 必須由 `--resume`
+封存，不得刪除。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

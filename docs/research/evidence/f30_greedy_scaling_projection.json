@@ -1,0 +1,29 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T08:28:18.5534451Z",
+  "audit": "pre_f30_greedy_quadratic_scaling_projection",
+  "implementation_status": "pre_optimization_interrupted_attempt",
+  "input": "data/processed/govreport_validation_canonical.jsonl",
+  "manifest": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "base_split": "validation",
+  "partition": "dev",
+  "rows": 681,
+  "references_read": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "sentence_counts": {
+    "mean": 318.51835535976505,
+    "max": 2889,
+    "ge_1000": 10,
+    "ge_2000": 3
+  },
+  "anchor": {
+    "sentences": 2192,
+    "observed_cpu_seconds_lower_bound": 639.46875,
+    "observation": "L10 atomic prediction file had not flushed beyond the first two ordered dev rows"
+  },
+  "sum_n_squared_ratio_to_anchor": 22.81973787395439,
+  "projected_cpu_hours_lower_bound": 4.053474792662576,
+  "interpretation": "complexity proxy for the interrupted pre-F-30 implementation; not a post-optimization runtime claim",
+  "reproduction": ".venv/Scripts/python.exe -m scripts.audit.greedy_scaling_projection --input data/processed/govreport_validation_canonical.jsonl --manifest configs/validation_partitions/govreport_validation_dev_v1.json --partition dev --anchor-sentences 2192 --anchor-cpu-seconds 639.46875"
+}

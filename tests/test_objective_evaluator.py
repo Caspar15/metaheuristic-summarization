@@ -160,6 +160,77 @@ def test_facility_coverage_can_use_full_source_universe():
     assert result.coverage_universe_size == 4
 
 
+@pytest.mark.parametrize("importance_aggregation", ["sum", "mean", "length_normalized"])
+@pytest.mark.parametrize("coverage_method", ["max", "set", "diversity"])
+def test_batched_additions_are_exactly_the_same_objective_extensions(
+    importance_aggregation, coverage_method
+):
+    sentences = ["alpha beta", "gamma", "delta epsilon zeta", "eta theta"]
+    similarity = np.array(
+        [
+            [1.0, 0.2, 0.4, 0.1],
+            [0.2, 1.0, 0.5, 0.3],
+            [0.4, 0.5, 1.0, 0.6],
+            [0.1, 0.3, 0.6, 1.0],
+        ]
+    )
+    coverage = np.array(
+        [
+            [0.8, -0.2, 0.4, 0.1],
+            [0.2, 0.9, 0.5, 0.3],
+            [0.7, 0.1, 0.6, 0.2],
+            [0.4, 0.3, 0.8, 0.5],
+            [0.1, 0.6, 0.2, 0.9],
+        ]
+    )
+    evaluator = SelectionObjective(
+        sentences,
+        [0.9, 0.6, 0.3, 0.5],
+        similarity,
+        coverage_matrix=coverage,
+        importance_aggregation=importance_aggregation,
+        coverage_method=coverage_method,
+        weights=ObjectiveWeights(1.0, 0.8, 0.7),
+        constraints=SelectionConstraints(
+            length_unit="words",
+            max_length=5,
+            min_words=3,
+            max_sentences=3,
+            require_nonempty=True,
+        ),
+    )
+
+    for selected, candidates in [([], [0, 1, 2, 3]), ([1], [0, 2, 3])]:
+        batched = evaluator.evaluate_additions(selected, candidates)
+        for candidate in candidates:
+            expected = evaluator.evaluate(selected + [candidate])
+            actual = batched[candidate]
+            assert actual.selected_indices == expected.selected_indices
+            assert actual.salience == pytest.approx(expected.salience, abs=0.0)
+            assert actual.facility_coverage == pytest.approx(
+                expected.facility_coverage, abs=0.0
+            )
+            assert actual.redundancy == pytest.approx(expected.redundancy, abs=0.0)
+            assert actual.scalar_utility == pytest.approx(
+                expected.scalar_utility, abs=0.0
+            )
+            assert actual.selected_words == expected.selected_words
+            assert actual.selected_sentences == expected.selected_sentences
+            assert actual.coverage_universe_size == expected.coverage_universe_size
+            assert actual.feasible == expected.feasible
+            assert actual.violations == expected.violations
+
+
+def test_batched_additions_fail_loud_on_invalid_candidate_sets():
+    evaluator = _golden_evaluator()
+    with pytest.raises(ValueError, match="unique"):
+        evaluator.evaluate_additions([], [0, 0])
+    with pytest.raises(ValueError, match="already selected"):
+        evaluator.evaluate_additions([0], [0])
+    with pytest.raises(IndexError, match="outside"):
+        evaluator.evaluate_additions([], [3])
+
+
 def test_empty_and_too_short_subsets_are_explicitly_infeasible():
     evaluator = _golden_evaluator()
     empty = evaluator.evaluate([])

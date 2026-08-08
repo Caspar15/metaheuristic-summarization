@@ -94,6 +94,10 @@
 - [~] F-29：取消 top-40 prefilter 是目前最大正向 OFAT，但 selector pool 由平均
       `35.95` 增至 `81.85`、最大 `3,318`，不是可接受的最終解。待兩資料集的 graph／
       semantic／candidate-budget family 判定能否用受控 pool 回收品質。
+- [~] F-30：GovReport L10 暴露 Greedy 對每個候選重算兩次 full-source facility
+      coverage；2,192-sentence row 的 pre-fix attempt 已耗至少 `639.47 CPU s`，全 dev
+      平方 proxy 下限約 `4.05 h`。已實作等價 batched additions，targeted 43／完整
+      357 tests 通過；待真實 selected-indices hash 對照與 `--resume` 完成後勾選。
 
 ## 2026-08-06 selector milestone
 

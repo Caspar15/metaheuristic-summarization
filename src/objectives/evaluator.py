@@ -437,6 +437,90 @@ class SelectionObjective:
             violations=violations,
         )
 
+    def evaluate_additions(
+        self, indices: Iterable[int], candidates: Iterable[int]
+    ) -> dict[int, SelectionEvaluation]:
+        """Evaluate every one-item extension without recomputing shared coverage.
+
+        This is an exact batched form of ``evaluate(selected + [candidate])``.
+        Facility coverage is the expensive term for long documents: the old
+        greedy loop rebuilt ``coverage_matrix[:, selected + candidate]`` and
+        recomputed its row maxima separately for every candidate.  Once a
+        subset is fixed, its row-wise maxima are shared by all one-item
+        extensions, so computing them once changes cost but not the declared
+        objective, constraints, or tie-breaking values.
+
+        The method intentionally returns full ``SelectionEvaluation`` objects
+        and uses the same component helpers as ``evaluate``.  Optimizers must
+        not grow a second, approximate objective implementation merely to be
+        fast.
+        """
+
+        selected = self._indices(indices)
+        candidate_values = [int(candidate) for candidate in candidates]
+        if len(candidate_values) != len(set(candidate_values)):
+            raise ValueError("candidate additions must be unique")
+        selected_set = set(selected.tolist())
+        n = len(self.sentences)
+        for candidate in candidate_values:
+            if candidate < 0 or candidate >= n:
+                raise IndexError("candidate addition is outside the candidate set")
+            if candidate in selected_set:
+                raise ValueError("candidate addition is already selected")
+
+        selected_words = sum(count_tokens(self.sentences[i]) for i in selected)
+        current_coverage = None
+        if self.coverage_matrix is not None and selected.size:
+            current_coverage = np.max(self.coverage_matrix[:, selected], axis=1)
+
+        evaluations: dict[int, SelectionEvaluation] = {}
+        for candidate in candidate_values:
+            extended = np.sort(np.append(selected, candidate)).astype(int)
+            salience = self._salience(extended)
+            redundancy = self._redundancy(extended)
+            if self.coverage_matrix is None:
+                coverage = 0.0
+            elif current_coverage is None:
+                coverage = float(np.mean(self.coverage_matrix[:, candidate]))
+            else:
+                coverage = float(
+                    np.mean(
+                        np.maximum(
+                            current_coverage,
+                            self.coverage_matrix[:, candidate],
+                        )
+                    )
+                )
+            if self.coverage_method == "diversity":
+                coverage -= 0.3 * redundancy
+
+            extension_words = selected_words + count_tokens(
+                self.sentences[candidate]
+            )
+            violations = self._violations(extension_words, int(extended.size))
+            utility = (
+                self.weights.salience * salience
+                + self.weights.facility_coverage * coverage
+                - self.weights.redundancy * redundancy
+            )
+            evaluations[candidate] = SelectionEvaluation(
+                selected_indices=extended.tolist(),
+                salience=salience,
+                facility_coverage=coverage,
+                redundancy=redundancy,
+                scalar_utility=float(utility),
+                selected_words=extension_words,
+                selected_sentences=int(extended.size),
+                coverage_universe_size=(
+                    0
+                    if self.coverage_matrix is None
+                    else self.coverage_matrix.shape[0]
+                ),
+                feasible=all(value <= 0 for value in violations.values()),
+                violations=violations,
+            )
+        return evaluations
+
     def can_add(self, indices: Iterable[int], candidate: int) -> bool:
         selected = list(indices)
         if candidate in selected:

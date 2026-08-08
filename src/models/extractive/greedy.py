@@ -9,6 +9,7 @@ from src.objectives.evaluator import (
     SelectionConstraints,
     SelectionObjective,
 )
+from src.utils.tokenizer import count_tokens
 
 
 def greedy_select(
@@ -68,11 +69,40 @@ def greedy_select(
     while remaining:
         current = evaluator.evaluate(selected)
         ranked: list[tuple[float, int]] = []
-        for candidate in sorted(remaining):
-            if not evaluator.can_add(selected, candidate):
+        constraints = evaluator.constraints
+        eligible = sorted(remaining)
+        # Preserve can_add()'s cheap structural guards before asking the
+        # objective to form extensions.  This is required for single-item
+        # objectives: a second item is structurally inadmissible and must be
+        # skipped before single-item salience is evaluated.
+        if (
+            constraints.max_sentences is not None
+            and len(selected) + 1 > constraints.max_sentences
+        ):
+            eligible = []
+        if constraints.max_length is not None:
+            if constraints.length_unit.lower() == "sentences":
+                if len(selected) + 1 > constraints.max_length:
+                    eligible = []
+            else:
+                eligible = [
+                    candidate
+                    for candidate in eligible
+                    if current.selected_words + count_tokens(sentences[candidate])
+                    <= constraints.max_length
+                ]
+        additions = evaluator.evaluate_additions(selected, eligible)
+        for candidate, evaluation in additions.items():
+            # Lower bounds may be violated during construction.  This is the
+            # same upper-bound predicate as SelectionObjective.can_add(), but
+            # uses the already-computed extension instead of evaluating it a
+            # second time.
+            if (
+                evaluation.violations["max_length"] > 0
+                or evaluation.violations["max_sentences"] > 0
+            ):
                 continue
-            value = evaluator.evaluate(selected + [candidate]).scalar_utility
-            ranked.append((value, candidate))
+            ranked.append((evaluation.scalar_utility, candidate))
         if not ranked:
             break
         # Stable scientific tie-break: lower candidate index wins.

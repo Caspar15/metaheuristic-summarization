@@ -15,7 +15,7 @@
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | pending | pending |
-| GovReport | pending | pending | pending |
+| GovReport | **10/12 complete；L10 pre-fix attempt interrupted** | pending | pending |
 
 ## Multi-News lexical/objective 結果
 
@@ -82,3 +82,13 @@
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
 5. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+
+## GovReport lexical/objective 執行中註記
+
+- L00–L09 已各完成 681-row frozen dev evidence；尚未在 family 完成前讀取或排名分數。
+- L10 的 pre-F-30 實作在 2,192-sentence row 已耗至少 `639.47 CPU s`；依 dev source
+  sentence-count 平方 proxy，整個舊 run 下限約 `4.05 CPU h`。這次 attempt 已中止，
+  不視為品質結果，也沒有存取 reference、dev-test 或 test。
+- F-30 的等價 batched-addition 修正已通過 targeted 43／完整 357 tests；runner 接著會
+  以 `--resume` 封存 interrupted attempt 並只重跑 L10／L11。family 完成以前
+  不作 promotion 或跨資料集結論。

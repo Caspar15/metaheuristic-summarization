@@ -56,6 +56,75 @@ class TestGreedy:
         result = greedy_select(sents, scores, sim, 50)
         assert result == sorted(result)
 
+    @staticmethod
+    def _reference_select(evaluator):
+        """The pre-optimization loop, retained only as a regression oracle."""
+        selected = []
+        remaining = set(range(len(evaluator.sentences)))
+        while remaining:
+            current = evaluator.evaluate(selected)
+            ranked = []
+            for candidate in sorted(remaining):
+                if evaluator.can_add(selected, candidate):
+                    ranked.append(
+                        (
+                            evaluator.evaluate(
+                                selected + [candidate]
+                            ).scalar_utility,
+                            candidate,
+                        )
+                    )
+            if not ranked:
+                break
+            value, candidate = max(ranked, key=lambda item: (item[0], -item[1]))
+            if (
+                selected
+                and current.feasible
+                and value <= current.scalar_utility + 1e-12
+            ):
+                break
+            selected.append(candidate)
+            remaining.remove(candidate)
+        evaluator.assert_feasible(selected)
+        return sorted(selected)
+
+    @pytest.mark.parametrize("importance_aggregation", ["mean", "length_normalized"])
+    def test_batched_search_matches_pre_optimization_loop(
+        self, importance_aggregation
+    ):
+        for seed in range(20):
+            rng = np.random.RandomState(seed)
+            n = 12
+            sentences = ["word " * int(rng.randint(1, 6)) for _ in range(n)]
+            similarities = rng.uniform(-0.2, 1.0, size=(n, n))
+            similarities = (similarities + similarities.T) / 2.0
+            np.fill_diagonal(similarities, 1.0)
+            coverage = rng.uniform(-0.2, 1.0, size=(17, n))
+            evaluator = SelectionObjective(
+                sentences,
+                rng.uniform(0.0, 1.0, size=n),
+                similarities,
+                coverage_matrix=coverage,
+                importance_aggregation=importance_aggregation,
+                coverage_method="max",
+                weights=ObjectiveWeights(1.0, 0.8, 0.7),
+                constraints=SelectionConstraints(
+                    length_unit="words",
+                    min_words=8,
+                    max_length=20,
+                    require_nonempty=True,
+                ),
+            )
+            expected = self._reference_select(evaluator)
+            actual = greedy_select(
+                evaluator.sentences,
+                evaluator.importance.tolist(),
+                evaluator.similarity_matrix,
+                20,
+                evaluator=evaluator,
+            )
+            assert actual == expected
+
 
 class TestGrasp:
     def test_empty(self):
