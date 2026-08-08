@@ -1119,6 +1119,16 @@ lexical-only length-normalized Greedy 的 R-1/R-2/R-Lsum 為
 同一 input/partition digest、681 rows、test 未存取。此 finding 的狀態是 open reality
 warning；只有後續 route ablation／strong baseline matrix 能解除或升級為重新定位理由。
 
+**一次性 dev-test 補證（292 rows，2026-08-08）**：500–650 仍以 cross-method macro
+`0.393415` 勝出；相對三個 no-floor caps 的 paired difference 為 `+0.060642` 至
+`+0.067218`，95% CI 全為正，三個 Holm-adjusted `p=0.000600`，292/292 feasible。
+它的 dev→dev-test 差只有 `+0.000595`，未見 development overfit。可是同一 frozen
+contract 下 lexical Greedy 的 R-1/R-2/R-Lsum 為
+`0.503256/0.154923/0.466966`（macro `0.375048`），仍低於 Lead macro `0.394815` 與
+Random `0.410382`。因此 F-24 不但未解除，還由一次性 holdout 確認；範圍仍限 A1
+lexical-only cheap method，不提前否定 semantic/graph。證據位於
+`runs_v2/a1_length_contract/govreport/dev-test/`，12/12 evidence，test 未存取且不得重跑。
+
 ---
 
 ## Part 2 — 對研究主計畫的實證補充

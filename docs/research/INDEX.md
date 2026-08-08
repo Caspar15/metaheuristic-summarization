@@ -41,7 +41,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |
-| A1 長度協定 | 🟡 Multi-News 唯一一次 dev-test 已依預註冊 Holm 規則選定 200–250 words（cross-method macro `0.310382`；對三案 adjusted `p=0.000600`）；Greedy 有 3/1,686 floor shortfalls，完整保留計分（F-23）。GovReport dev 的 floor-bearing protocol 暫列第一但 lexical Greedy 仍輸 Lead/Random（F-24）；其一次性 dev-test 尚未觀察 |
+| A1 長度協定 | ✅ 兩 primary 的唯一一次 dev-test 已完成：Multi-News 凍結 200–250 words（macro `0.310382`），GovReport 凍結 500–650（`0.393415`）；兩者對三案的 Holm-adjusted `p=0.000600`。Multi-News Greedy 3/1,686 floor shortfalls 完整保留（F-23）；GovReport floor-bound lexical Greedy 仍輸 Lead/Random（F-24） |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
 > validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。

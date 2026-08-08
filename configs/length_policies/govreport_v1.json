@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "govreport-length-v1",
+  "dataset": "GovReport",
+  "status": "frozen_for_development",
+  "frozen_at_utc": "2026-08-08T06:11:06.7814521Z",
+  "unit": "whitespace_words",
+  "requested_min_words": 500,
+  "max_words": 650,
+  "max_sentences": null,
+  "short_source_policy": "effective_min_only_when_source_is_infeasible_under_upper_constraints",
+  "selector_shortfall_policy": "retain_prediction_score_on_all_rows_and_record_infeasibility",
+  "selection_study": {
+    "study_id": "a1-length-contract-govreport-v1",
+    "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+    "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+    "dev_test_summary_path": "runs_v2/a1_length_contract/govreport/dev-test/study_summary.json",
+    "dev_test_summary_sha256": "5ca2d19858ff8e3d34c6f2b62c9f2dd762878fad5763589cb3167e36bf18f400",
+    "selected_candidate": "dev_iqr_band_500_650",
+    "selected_resolved_config_sha256": "82ad907c42e1eb36736cccb1ea5f954759d1b30a6848b72d9bfbbaa8ba22e914",
+    "partition_rows": 292,
+    "cross_method_macro_rouge": 0.3934150991512854,
+    "holm_family_size": 3,
+    "bootstrap_resamples": 10000,
+    "raw_winner_significant_against_all": true
+  },
+  "test_split_accessed": false,
+  "change_control": "Changing this policy requires an explicit data-policy decision; do not infer a replacement from test performance."
+}

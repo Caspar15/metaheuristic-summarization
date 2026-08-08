@@ -1,0 +1,78 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T06:09:35.054584+00:00",
+  "started_at_utc": "2026-08-08T06:08:59.381468+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "lead",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "lead",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\a1_length_contract\\govreport\\dev-test\\p75_cap_650\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\a1_length_contract\\govreport\\dev-test\\p75_cap_650\\lead",
+    "--stamp",
+    "run",
+    "--ordering",
+    "document_order"
+  ],
+  "implementation_commit": "9c870fad484a343cfd786a35a42fe7e6497a2a3b",
+  "config_path": "runs_v2/a1_length_contract/govreport/dev-test/p75_cap_650/resolved_config.yaml",
+  "config_sha256": "57e567039c8f0a5808b773299e15d8af501ed03c67d1ee0e7be4e8660f82cdeb",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_preflight_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+  "partition_preflight_sha256": "5232207c0d70a7bb03744107fb508b06a6b6420e6067a188fb6dec4996aec6d4",
+  "predictions_path": "runs_v2/a1_length_contract/govreport/dev-test/p75_cap_650/lead/run/predictions.jsonl",
+  "predictions_sha256": "b23e4f3fc813bc45e9cccb5e90e1c0d802208f19a1865dc4120ad0ed77f69d3c",
+  "selected_indices_sha256": "635e96d3581ef562ffc084598b456f570a41cd6062779704227ad10f2680695c",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 292,
+    "rouge": {
+      "rouge1": 0.5114793783548157,
+      "rouge2": 0.18668265399674436,
+      "rougeLsum": 0.48628251164017255
+    },
+    "macro_rouge": 0.3948148479972442,
+    "feasible_rows": 292,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 631.8253424657535,
+      "min": 173,
+      "max": 650
+    }
+  },
+  "study_id": "a1-length-contract-govreport-v1",
+  "dataset": "GovReport",
+  "partition": "dev-test",
+  "partition_rows": 292,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "4d7d3cc7d90ad9e4e65fd08e942d5f1c4eb710eb2d9b3e4319f6adc73d0e234c",
+  "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+  "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+  "candidate": "p75_cap_650",
+  "candidate_hash": "da7ed2339f08564b21ab37a9f659da69fd7f6fc1fe643407407aa6b66c1e29ba",
+  "length_contract": {
+    "min_words": 0,
+    "max_words": 650
+  }
+}

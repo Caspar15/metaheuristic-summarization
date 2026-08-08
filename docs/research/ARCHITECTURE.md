@@ -410,6 +410,10 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
   floor500-cap650 才到 638.4 words。可是 floor-bound lexical Greedy macro `0.370385`
   仍低於 Lead `0.399232`、Random `0.408844`。所以 A1 只解決 length/stopping contract；
   它不能證明 lexical route 的 salience 有效，semantic/graph 去留仍須後續獨立 gate。
+  唯一一次 dev-test 亦選中 500–650：cross-method macro `0.393415`，對三案的
+  Holm-adjusted `p=0.000600`，292/292 feasible；dev→dev-test 差僅 `+0.000595`。
+  GovReport v1 因此凍結 requested 500、max 650 words，機器可讀來源為
+  `configs/length_policies/govreport_v1.json`。
 
 1. **Data pilot**：重建 GovReport validation 與 Multi-News validation，保存 boundaries、manifest 與 checksum。
 2. **Reality pilot**：Lead、LexRank/TextRank、PacSum、SBERT centroid、MMR/facility-location。

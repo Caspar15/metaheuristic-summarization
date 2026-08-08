@@ -19,8 +19,8 @@
       canonical SHA、dataset fingerprint、CC-BY-4.0、section/paragraph metadata 與
       0 個 U+FFFD；dev 681／dev-test 292 已在任何方法分數前凍結，manifest SHA-256
       `7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e`。
-- [~] A1 已完成兩 primary 的 reference-only 統計與預註冊；Multi-News 已完成唯一一次
-      dev-test 並依預註冊規則選定 200–250 words，GovReport dev-test 尚未觀察；
+- [x] A1 已完成兩 primary 的 reference-only 統計、預註冊、dev 與唯一一次 dev-test；
+      Multi-News 依預註冊規則選定 200–250 words，GovReport 選定 500–650 words；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
       partition freeze 已完成；Gate 2 baseline 矩陣與 dev search 尚未完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
@@ -57,9 +57,16 @@
       test 未存取）。排名：IQR floor500-cap650 `0.392821` > p75 cap650 `0.328979` >
       median cap570 `0.324044` > paper-mean cap550 `0.322049`。no-floor Greedy 僅
       165.6–184.5 words／macro `0.175990–0.178859`；floor 使其到 638.4 words／
-      `0.370385`。四候選仍須一次 dev-test，尚未定案。
-- [~] F-24：即使 floor 拉長，GovReport lexical-only Greedy `0.370385` 仍低於 Lead
-      `0.399232` 與 Random `0.408844`；這是 objective/candidate salience 的 reality
+      `0.370385`。這是 dev 階段結果；最終一次性決選見下一項。
+- [x] A1 GovReport 唯一一次 dev-test 已完成（每候選 292 rows；12/12 evidence；test
+      未存取）。IQR 500–650 的 cross-method macro `0.393415`，相對 median570／
+      p75-cap650／paper-mean550 的 paired mean difference 為 `+0.065281/+0.060642/
+      +0.067218`，95% CI 全為正、Holm-adjusted `p=0.000600`，依規則選定 500–650。
+      dev→dev-test 僅 `+0.000595`，292/292 feasible。機器可讀 policy：
+      `configs/length_policies/govreport_v1.json`。
+- [~] F-24：即使 floor 拉長，GovReport lexical-only Greedy 在 dev-test 的 `0.375048`
+      仍低於 Lead `0.394815` 與 Random `0.410382`（dev 同方向）；這是 objective/
+      candidate salience 的 reality
       warning，不可由 length tuning 掩蓋。它不直接否定尚未加入的 semantic/graph route。
 
 ## 2026-08-06 selector milestone
