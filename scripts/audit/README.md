@@ -237,6 +237,24 @@ python -m scripts.audit.paired_run_intersection \
 
 ---
 
+## 凍結 validation 內的 dev／dev-test（2026-08-08）
+
+在任何新 optimization score 前，只依 canonical validation row ID 建立 reference-blind
+70/30 partition。此腳本會拒絕任何非 `validation` row；它不會產生或讀取 test split。
+
+```bash
+python -m scripts.audit.freeze_validation_partitions \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --output configs/validation_partitions/multinews_validation_dev_v1.json \
+  --dataset Multi-News \
+  --seed 3407 \
+  --dev_fraction 0.70
+```
+
+正式 runner 仍先對完整 canonical file 做 frozen data-policy preflight，才依 manifest 過濾；
+每個 run 會保存 `partition_preflight.json`。dev 可重複搜尋，dev-test 對每個 config hash
+只能看一次。
+
 ## Matched selector pilot（2026-08-06）
 
 先凍結 reference-blind manifest；凍結後才可跑品質比較：

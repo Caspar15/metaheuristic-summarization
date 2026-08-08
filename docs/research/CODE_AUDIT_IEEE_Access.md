@@ -20,6 +20,10 @@
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
 > Greedy、selection Jaccard 僅 `0.639`。selector 因此採 MMR，NSGA-II 降為
 > comparator；這仍未回答 full-source MMR／PacSum／兩 primary 的 system gate。
+> **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
+> full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
+> Multi-News 補上 reference-blind dev/dev-test 凍結與 runtime enforcement；GovReport
+> 仍須在首次 optimization score 前完成同一程序。
 
 ---
 
@@ -952,6 +956,39 @@ TextRank 與文獻數字意外地接近（0.3% 差距），LexRank 則明顯高�
 - offline word-only adapter 的全量 token 差異稽核（456,942 句、1,550 mismatch）：
   `docs/research/evidence/f19_word_tokenizer_parity.json`。
 - 重現：`python -m src.pipeline.evaluate --pred runs_v2/gate2_<textrank|lexrank>_multinews_validation_offline_v1/predictions.jsonl --gold data/processed/multi_news_validation_canonical.jsonl --out <out>.csv --protocol multisentence_lsum`。
+
+---
+
+### ✅ F-20. validation 沒有 development holdout，反覆 pilot 會把 validation 變成另一個 tuning set
+
+**發現**：2026-08-08 前的正式 policy 只區分 upstream `validation` 與 `test`；selector
+pilot、objective diagnostic 及 baseline reality check 都可反覆看完整 validation，沒有凍結的
+dev/dev-test membership。這不等同 P0-01 的 test contamination，但若繼續用同一批 5,621 rows
+挑長度、route、objective、selector 與權重，最終 validation 數字也會因研究者反覆決策而偏樂觀。
+
+**修正**：新增 `scripts/audit/freeze_validation_partitions.py`，只使用 row ID 與
+`split=validation`，依 `sha256(seed\0row_id)` 建立 reference-blind 70/30 membership。
+Multi-News 以 seed 3407 凍結為 dev 3,935、dev-test 1,686；manifest file SHA-256
+`e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee`。兩條 runner
+均先對完整輸入執行既有 frozen data-policy preflight，再由 `src/data/partitions.py` 過濾；
+因此不需也沒有修改既有 `multinews-validation-v1` policy。
+
+**fail-loud 條件**：manifest file SHA、input file SHA、dataset name、row count、selected-ID
+SHA 任一不符即停止；selected ID 遺失或重複也停止。run 另存不含大型 ID 清單的
+`partition_preflight.json`。dev 可重複搜尋，dev-test 每個 configuration hash 只看一次。
+
+**仍未完成**：GovReport canonical validation 尚不存在，故無法凍結其 manifest；必須在任何
+GovReport optimization score 前完成。過去已看過的 full-validation 結果仍保留並標為
+historical diagnostic，不刪除、不重新包裝成 partitioned evidence。
+
+**重現**：
+
+```bash
+python -m scripts.audit.freeze_validation_partitions \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --output configs/validation_partitions/multinews_validation_dev_v1.json \
+  --dataset Multi-News --seed 3407 --dev_fraction 0.70
+```
 
 ---
 

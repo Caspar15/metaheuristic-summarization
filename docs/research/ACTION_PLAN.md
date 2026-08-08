@@ -1,5 +1,24 @@
 # ACTION PLAN —— 到底要做什麼
 
+## 2026-08-08 freeze 前自治執行狀態
+
+- [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
+      SHA-256 排序、固定 seed `3407` 凍結為 dev `3,935`（70.005%）與
+      dev-test `1,686`（29.995%）；兩者互斥且完整覆蓋 5,621 rows。manifest：
+      `configs/validation_partitions/multinews_validation_dev_v1.json`，file SHA-256
+      `e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee`。
+- [x] proposed-method 與 baseline runner 均先驗證完整 canonical validation／frozen
+      data policy，之後才依 manifest ID 過濾；canonical row 的 split 仍誠實保留
+      `validation`，不把 dev/dev-test 偽裝成上游資料 split。每個 run 另寫
+      `partition_preflight.json`。
+- [x] 分割與 runtime enforcement 已版本化於
+      `scripts/audit/freeze_validation_partitions.py`、`src/data/partitions.py`；manifest
+      漂移、輸入 SHA 不符、遺失 ID、重複 ID 都 fail loud。
+- [ ] GovReport 尚未取得，故 GovReport dev/dev-test manifest 尚未凍結；必須在任何
+      GovReport optimization score 前完成。
+- [ ] A1 長度協定、A2 greedy-reference 修正、A3 GovReport 資料層、Gate 2 baseline
+      矩陣與 dev search 尚未完成。**test split 仍為硬禁止；到 freeze 簽字前不執行。**
+
 ## 2026-08-06 selector milestone
 
 - [x] 寫定 `SELECTOR_COMPARISON_PROTOCOL.md`：區分 candidate-matched selector
@@ -25,8 +44,9 @@
       selection Jaccard `0.639`，僅 `9.5%` rows 五 seed 完全相同。依 gate，
       **selector 架構確定以 MMR 為主，NSGA-II 降為 comparator**；是否在 full
       validation 保留 NSGA diagnostic，由成本與審稿敘事另決定，不再阻塞主線。
-- [ ] 跑 full Multi-News validation Greedy/MMR/NSGA-II、full-source SBERT baselines、
-      paired bootstrap；再依規則決定 NSGA-II retain/demote/remove。
+- [ ] 舊的「跑 full Multi-News validation」排程已被 2026-08-08 治理規則取代：
+      配置搜尋只跑 dev；每個候選配置只能看一次 dev-test。Greedy/MMR/NSGA-II、
+      full-source SBERT baselines 與 paired bootstrap 必須分別按此 partition protocol 執行。
 - [ ] PacSum 與 GovReport 仍未完成；test split 仍不得執行。
 
 > 這是**唯一的執行清單**。研究標準以 `paper_revision_plan_IEEE_Access.md` 為準；程式稽核與策略評估的結論全部收斂到這裡。

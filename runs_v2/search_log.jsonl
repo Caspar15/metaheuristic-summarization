@@ -1,0 +1,1 @@
+{"record_type":"registry_initialized","event_id":"governance-20260808-validation-partitions","measured_at_utc":"2026-08-08T03:55:13.9150595Z","implementation_commit":"28d4280fce1fbd351298cd4c99fb1f99d7ab8cd9","scores_observed":false,"test_split_accessed":false,"reason":"Initialize append-only governed search registry before partitioned A1 optimization experiments."}

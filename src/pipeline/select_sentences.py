@@ -26,6 +26,11 @@ from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.data.schemas import flatten_sentence_records, validate_candidate_record
 from src.data.policy import validate_dataset_policy_request
+from src.data.partitions import (
+    iter_partition_rows,
+    partition_report_for_artifact,
+    resolve_experiment_partition,
+)
 from src.eval.feasibility import classify_feasibility_row
 
 from src.pipeline.feature_builder import build_base_scores
@@ -761,6 +766,7 @@ def summarize_jsonl(
     cfg: Dict,
     requested_split: str,
     dataset_preflight: Dict | None = None,
+    partition_preflight: Dict | None = None,
 ) -> int:
     """Stream one dataset into an atomic prediction artifact."""
 
@@ -768,12 +774,15 @@ def summarize_jsonl(
         dataset_preflight = validate_dataset_policy_request(
             cfg, input_path, requested_split
         )
+    if partition_preflight is None:
+        partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     processed = 0
 
     def prediction_rows():
         nonlocal processed
-        for doc in tqdm(read_jsonl(input_path), desc="Summarizing"):
+        rows = iter_partition_rows(read_jsonl(input_path), partition_preflight)
+        for doc in tqdm(rows, desc="Summarizing"):
             validate_requested_split(doc, requested_split)
             result = summarize_one(doc, cfg)
             processed += 1
@@ -810,6 +819,7 @@ def main():
 
     validate_experiment_request(cfg, args.split)
     dataset_preflight = validate_dataset_policy_request(cfg, args.input, args.split)
+    partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     # Guard: Stage2 union input should use fast (non-BERT) optimizers only
     method_opt = (cfg.get("optimizer", {}).get("method") or "").lower()
@@ -834,6 +844,7 @@ def main():
         cfg,
         args.split,
         dataset_preflight=dataset_preflight,
+        partition_preflight=partition_preflight,
     )
     t1 = time.perf_counter()
 
@@ -848,6 +859,14 @@ def main():
             encoding="utf-8",
         ) as f:
             json.dump(dataset_preflight, f, ensure_ascii=False, indent=2)
+    partition_report = partition_report_for_artifact(partition_preflight)
+    if partition_report is not None:
+        with open(
+            os.path.join(out_dir, "partition_preflight.json"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(partition_report, f, ensure_ascii=False, indent=2)
 
     feasibility_report = build_feasibility_report(preds_path)
     with open(

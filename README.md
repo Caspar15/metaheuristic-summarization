@@ -1,5 +1,14 @@
 # Metaheuristic Extractive Summarization
 
+## 2026-08-08 development freeze checkpoint
+
+- Multi-News canonical validation 已在任何新 optimization score 前，以固定 seed 3407
+  reference-blind 凍結為 dev 3,935／dev-test 1,686。proposed-method 與 baseline runner
+  會先驗完整 frozen data policy，再依相同 manifest 過濾，並保存 partition provenance。
+- dev 可反覆搜尋；每個候選配置只能看一次 dev-test。GovReport 尚未下載／重建，故其
+  manifest 仍待資料層完成後、首次分數產生前凍結。
+- freeze 簽字前禁止 test split；目前只推進到「可以跑 test」的狀態，屆時停下等待批准。
+
 ## 2026-08-06 selector-comparison checkpoint
 
 - 已新增同候選、同 SBERT salience/similarity/coverage、同 budget 的

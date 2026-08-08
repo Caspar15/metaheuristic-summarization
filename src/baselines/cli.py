@@ -53,6 +53,11 @@ from src.baselines.semantic import (
     summarize_one_sbert_mmr,
 )
 from src.data.policy import validate_dataset_policy_request
+from src.data.partitions import (
+    iter_partition_rows,
+    partition_report_for_artifact,
+    resolve_experiment_partition,
+)
 from src.pipeline.select_sentences import (
     build_feasibility_report,
     validate_experiment_request,
@@ -215,6 +220,7 @@ def summarize_jsonl_baseline(
     first_k: Optional[int],
     seed: Optional[int] = None,
     dataset_preflight: Dict | None = None,
+    partition_preflight: Dict | None = None,
 ) -> int:
     """Stream one dataset into a baseline prediction artifact."""
 
@@ -226,12 +232,15 @@ def summarize_jsonl_baseline(
 
     if dataset_preflight is None:
         dataset_preflight = validate_dataset_policy_request(cfg, input_path, requested_split)
+    if partition_preflight is None:
+        partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     processed = 0
 
     def prediction_rows():
         nonlocal processed
-        for doc in tqdm(read_jsonl(input_path), desc=f"{baseline} baseline"):
+        rows = iter_partition_rows(read_jsonl(input_path), partition_preflight)
+        for doc in tqdm(rows, desc=f"{baseline} baseline"):
             validate_requested_split(doc, requested_split)
             # Three-way, not binary: SEEDED_BASELINES and ORDERED_BASELINES
             # are independent axes (see their own comments above), so a
@@ -316,6 +325,7 @@ def main():
 
     validate_experiment_request(cfg, args.split)
     dataset_preflight = validate_dataset_policy_request(cfg, args.input, args.split)
+    partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     set_global_seed(cfg.get("seed"))
     stamp = args.stamp or now_stamp()
@@ -334,6 +344,7 @@ def main():
         first_k=resolved_first_k,
         seed=args.seed,
         dataset_preflight=dataset_preflight,
+        partition_preflight=partition_preflight,
     )
     t1 = time.perf_counter()
 
@@ -354,6 +365,14 @@ def main():
     if dataset_preflight is not None:
         with open(os.path.join(out_dir, "dataset_preflight.json"), "w", encoding="utf-8") as f:
             json.dump(dataset_preflight, f, ensure_ascii=False, indent=2)
+    partition_report = partition_report_for_artifact(partition_preflight)
+    if partition_report is not None:
+        with open(
+            os.path.join(out_dir, "partition_preflight.json"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(partition_report, f, ensure_ascii=False, indent=2)
 
     # Same artifact the system pipeline writes (src.pipeline.select_sentences
     # .main), retroactively closing a gap that predates TextRank/LexRank:

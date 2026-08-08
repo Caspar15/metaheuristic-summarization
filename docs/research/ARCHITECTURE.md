@@ -378,6 +378,22 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 
 只用 validation；不得查看新 test 結果。
 
+### 10.0 Validation 內部 development protocol（2026-08-08 凍結）
+
+- 每個 primary 的 canonical `validation` 先依既有 frozen data policy 驗證完整檔案，
+  再用 reference-blind、固定 seed 的 manifest 分成 dev 70%／dev-test 30%。這是
+  experiment partition，不修改 canonical row 的 `split=validation`。
+- dev 可重複搜尋；dev-test 對每個候選 configuration hash 只能評估一次。所有嘗試
+  （含失敗）寫入 `runs_v2/search_log.jsonl`，並記錄 manifest SHA、config SHA、
+  predictions SHA、dependency 版本與實際日期。
+- Multi-News manifest 已凍結：dev 3,935、dev-test 1,686，seed 3407，manifest
+  SHA-256 `e6140548...e42ee`。GovReport 必須在任何該資料集的 optimization score
+  產生前以相同規則另建 manifest。
+- 舊的 full-validation pilot 數字保留為歷史 diagnostic，不得再充當新的 model
+  selection 證據；也不得因已看過舊數字而重分 membership。
+- test 只有在人員簽署 freeze 建議書後才能解鎖；freeze 前任何 CLI、腳本或人工
+  診斷都不得執行 test split。
+
 1. **Data pilot**：重建 GovReport validation 與 Multi-News validation，保存 boundaries、manifest 與 checksum。
 2. **Reality pilot**：Lead、LexRank/TextRank、PacSum、SBERT centroid、MMR/facility-location。
 3. **Candidate pilot**：lexical／semantic／graph 各自的 recall@K、unique recall、位置與文件覆蓋。
