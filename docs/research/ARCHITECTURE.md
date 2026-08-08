@@ -440,6 +440,14 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 5. **Cost pilot**：cold load、warm inference、route cost、selector cost、peak memory。
 6. **Freeze decision**：刪除無增量 route，固定 objective、router、candidate budget 與 Pareto policy。
 
+> **Greedy-reference protocol（2026-08-09 預註冊）**：它是 reference-aware headroom／
+> candidate-recall diagnostic，不是 baseline、exact oracle 或 upper bound。Multi-News／
+> GovReport 分別受 250／650 whitespace-word cap；R1、R2、Lsum 必須獨立搜尋。為保留
+> forward-greedy 的定義，不強迫填滿系統用 requested floor；沒有正 target gain 即停止，
+> 並報實際輸出長度。runner 只接受 frozen dev，逐列 checkpoint，任何 schema/row failure
+> 都使整個 configuration fail，不得跳列。機器可讀規格為
+> `configs/preregistrations/gate2_greedy_reference_v1.json`。
+
 ### Freeze gate
 
 - 兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。

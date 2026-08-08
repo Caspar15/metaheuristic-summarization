@@ -118,6 +118,11 @@ SBERT-MMR λ=0.9，R1/R2/Lsum `0.575010/0.241576/0.541718`、macro `0.452768`；
 `attempt_01_interrupted/`，failed attempt 與 final retry 都在 search log。F-53 驗得
 27×681 row accesses、680 unique cold misses、17,707 hits；dev-test/test 未讀。
 
+`gate2-greedy-reference-v1` 已在任何正式分數前預註冊兩 primary × 三個 ROUGE target
+共 6 configurations。它只作 headroom／candidate-recall diagnostic，不是 baseline 或
+exact upper bound；只讀 frozen dev，max_words 採 A1 的 250／650 上限，但不強迫填
+requested floor。runner 與正式 artifacts 尚未完成。
+
 `gate2_baseline_matrix_v1/govreport/dev/non_plm/` 亦完成 23/23，無 failed attempt。
 winner 是 LexRank，R1/R2/Lsum `0.572517/0.241004/0.541340`、macro `0.451620`，比
 frozen Lead 高 `0.052388`、比 proposed S02b 高 `0.033758`；TextRank 亦比 S02b 高

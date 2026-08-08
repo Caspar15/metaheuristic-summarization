@@ -1,0 +1,62 @@
+{
+  "study_id": "gate2-greedy-reference-v1",
+  "status": "frozen_before_greedy_reference_scores",
+  "registered_at_local": "2026-08-09T05:30:56.1309010+08:00",
+  "purpose": "reference-aware headroom and candidate-recall diagnostic; not a baseline competitor and not an exact upper bound",
+  "partition": "dev",
+  "dev_test_accessed": false,
+  "test_split_prohibited": true,
+  "datasets": {
+    "multinews": {
+      "label": "Multi-News",
+      "input": "data/processed/multi_news_validation_canonical.jsonl",
+      "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+      "manifest": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "partition_rows": 3935,
+      "length_policy": "configs/length_policies/multinews_v1.json",
+      "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+      "max_words": 250
+    },
+    "govreport": {
+      "label": "GovReport",
+      "input": "data/processed/govreport_validation_canonical.jsonl",
+      "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+      "manifest": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_rows": 681,
+      "length_policy": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "max_words": 650
+    }
+  },
+  "configurations": {
+    "optimization_targets": ["rouge1", "rouge2", "rougeLsum"],
+    "configuration_count": 6,
+    "search": "source-order-delivered forward greedy addition; accept only gains greater than 1e-9; exact source-index tie resolves to the earliest index",
+    "report_metrics": ["rouge1", "rouge2", "rougeLsum"],
+    "multi_reference_rule": "candidate gain maximizes the optimization target over references; reported metrics use the same target-selected reference",
+    "word_unit": "whitespace-delimited words",
+    "max_sentences": null,
+    "requested_min_rule": "do not force-fill the frozen system floor; reference-aware diagnostic stops when no positive target gain remains and reports achieved length",
+    "all_rows_denominator": true,
+    "exact_upper_bound": false
+  },
+  "execution": {
+    "document_parallelism": "execution-only; worker count does not enter the scientific configuration hash",
+    "ordered_result_assembly": true,
+    "row_checkpointing": true,
+    "resume_requires_exact_frozen_prefix": true,
+    "schema_or_row_failure": "fail the configuration; never skip a row",
+    "all_completed_and_interrupted_attempts_enter_search_log": true
+  },
+  "success": {
+    "correctness": "every target covers the exact frozen-dev ID sequence and records selected indices plus per-row metrics",
+    "interpretation": "report metric-specific headroom separately; never combine targets into a synthetic oracle summary and never call the result an upper bound",
+    "promotion": "none; this diagnostic informs headroom and candidate recall only"
+  },
+  "protected_splits": {
+    "dev_test": "not read in this study",
+    "test": "prohibited until a signed freeze"
+  }
+}

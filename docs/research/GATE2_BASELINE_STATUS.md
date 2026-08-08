@@ -119,6 +119,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 ### 尚未完成（下一步）
 
 1. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
+   `gate2-greedy-reference-v1` 已在分數前凍結，governed runner 與 6 個 configs 待執行。
 2. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較；
    GovReport MMR 與 LexRank 的 `0.001148` 差距在推論前只能稱 point estimate。
 3. 針對 Multi-News 仍輸 strongest completed baseline、GovReport 仍輸 strongest completed

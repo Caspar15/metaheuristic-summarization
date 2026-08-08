@@ -429,6 +429,10 @@
       Multi-News `0.307098`、GovReport `0.408844`；仍須收斂進 Gate 2 governed matrix、
       paired significance 與共同 reporting artifact。
 - [ ] 在兩個 primary 跑 exact extractive oracle（可行時）或明確標示的 greedy reference（不可稱 upper bound）
+- [x] `gate2-greedy-reference-v1` 已在任何正式 greedy-reference score 前預註冊：兩
+      primary × R1/R2/Lsum 各自最佳化共 6 configs，只讀 frozen dev；max_words 採 A1
+      凍結上限，reference-aware diagnostic 不強迫填 floor，因無正增益自然停止並報實際長度。
+- [ ] governed greedy-reference runner、6 個 runs、headroom 與 candidate recall 尚未完成
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
 
