@@ -5,6 +5,8 @@ from pathlib import Path
 import pytest
 
 from scripts.audit.run_greedy_sensitivity import (
+    _archive_interrupted_run,
+    _candidate_diagnostics,
     _load_protocol,
     _logical_hash,
     _set_dotted,
@@ -60,3 +62,65 @@ def test_logical_hash_is_partition_independent_and_delta_sensitive():
     )
     assert left_hash != right_hash
 
+
+def test_archive_interrupted_run_preserves_partial_and_writes_evidence(tmp_path):
+    candidate = tmp_path / "L00_base"
+    run_path = candidate / "greedy" / "run"
+    run_path.mkdir(parents=True)
+    (run_path / "predictions.jsonl.partial").write_text("partial\n", encoding="utf-8")
+    config_path = candidate / "resolved_config.yaml"
+    config_path.write_text("seed: 3407\n", encoding="utf-8")
+
+    attempt_id, evidence = _archive_interrupted_run(
+        candidate,
+        context={
+            "study_id": "d1-greedy-sensitivity-v1",
+            "dataset": "Multi-News",
+            "partition": "dev",
+            "family": "lexical_objective",
+            "candidate": "L00_base",
+            "candidate_hash": "logical",
+        },
+        config_path=config_path,
+        config_sha256="config",
+    )
+
+    archive = candidate / "greedy" / "attempts" / attempt_id
+    assert not run_path.exists()
+    assert (archive / "predictions.jsonl.partial").read_text(encoding="utf-8") == "partial\n"
+    persisted = json.loads(
+        (archive / "interruption_evidence.json").read_text(encoding="utf-8")
+    )
+    assert persisted == evidence
+    assert evidence["status"] == "failed"
+    assert evidence["test_split_accessed"] is False
+    assert evidence["dev_test_accessed"] is False
+
+
+def test_candidate_diagnostics_distinguish_selector_from_provenance_pool(tmp_path):
+    predictions = tmp_path / "predictions.jsonl"
+    rows = [
+        {
+            "selector_inputs": {"candidate_count": 80},
+            "candidate_pool": {"actual_size": 0},
+            "candidate_records": [],
+            "selected_indices": [1],
+        },
+        {
+            "selector_inputs": {"candidate_count": 20},
+            "candidate_pool": {"actual_size": 20},
+            "candidate_records": [],
+            "selected_indices": [2],
+        },
+    ]
+    predictions.write_text(
+        "".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8"
+    )
+
+    diagnostics = _candidate_diagnostics(predictions)
+
+    assert diagnostics["candidate_size_mean"] == 50.0
+    assert diagnostics["selector_candidate_size_mean"] == 50.0
+    assert diagnostics["selector_candidate_size_max"] == 80
+    assert diagnostics["provenance_candidate_size_mean"] == 10.0
+    assert diagnostics["route_agreement_mean"] is None

@@ -12,6 +12,7 @@ import argparse
 import copy
 import json
 from pathlib import Path
+import shutil
 from typing import Any, Mapping
 
 import numpy as np
@@ -21,6 +22,7 @@ from scripts.audit.run_length_contract_study import (
     REPO_ROOT,
     _append_search_log,
     _canonical_sha256,
+    _git_commit,
     _load_gold,
     _load_search_log,
     _relative,
@@ -167,13 +169,20 @@ def _logical_hash(
 
 def _candidate_diagnostics(predictions_path: Path) -> dict[str, Any]:
     rows = list(read_jsonl(str(predictions_path)))
-    sizes: list[int] = []
+    selector_sizes: list[int] = []
+    provenance_sizes: list[int] = []
     agreements: list[float] = []
     unique_candidates: dict[str, list[int]] = {}
     unique_selected: dict[str, list[int]] = {}
     for row in rows:
         records = list(row.get("candidate_records", []))
-        sizes.append(int(row.get("candidate_pool", {}).get("actual_size", len(records))))
+        provenance_sizes.append(
+            int(row.get("candidate_pool", {}).get("actual_size", len(records)))
+        )
+        selector_inputs = row.get("selector_inputs", {})
+        if "candidate_count" not in selector_inputs:
+            raise ValueError("prediction is missing selector_inputs.candidate_count")
+        selector_sizes.append(int(selector_inputs["candidate_count"]))
         if records:
             agreements.append(float(np.mean([r.get("route_agreement", 0) for r in records])))
         selected = set(row.get("selected_indices", []))
@@ -195,9 +204,27 @@ def _candidate_diagnostics(predictions_path: Path) -> dict[str, Any]:
                 sum(record.get("original_index") in selected for record in exclusive)
             )
     return {
+        "diagnostics_schema_version": "2.0",
         "rows": len(rows),
-        "candidate_size_mean": float(np.mean(sizes)) if sizes else 0.0,
-        "route_agreement_mean": float(np.mean(agreements)) if agreements else 0.0,
+        # Backward-compatible name now means the actual selector search space,
+        # including the full source when candidate prefiltering is disabled.
+        "candidate_size_mean": (
+            float(np.mean(selector_sizes)) if selector_sizes else 0.0
+        ),
+        "selector_candidate_size_mean": (
+            float(np.mean(selector_sizes)) if selector_sizes else 0.0
+        ),
+        "selector_candidate_size_p95": (
+            float(np.percentile(selector_sizes, 95)) if selector_sizes else 0.0
+        ),
+        "selector_candidate_size_max": max(selector_sizes, default=0),
+        "provenance_candidate_size_mean": (
+            float(np.mean(provenance_sizes)) if provenance_sizes else 0.0
+        ),
+        # No route records means not applicable, not zero agreement.
+        "route_agreement_mean": (
+            float(np.mean(agreements)) if agreements else None
+        ),
         "unique_candidate_mean_by_route": {
             route: float(np.mean(values)) for route, values in unique_candidates.items()
         },
@@ -207,7 +234,109 @@ def _candidate_diagnostics(predictions_path: Path) -> dict[str, Any]:
     }
 
 
-def run_family(dataset: str, family: str) -> dict[str, Any]:
+def _log_result_once(
+    *,
+    preregistration: Mapping[str, Any],
+    spec: Mapping[str, Any],
+    family: str,
+    variant_id: str,
+    result: Mapping[str, Any],
+    run_attempt: str = "final",
+) -> None:
+    """Append one D1 attempt without duplicating an already-recorded attempt."""
+
+    existing = _load_search_log()
+    if any(
+        row.get("study_id") == preregistration["study_id"]
+        and row.get("dataset") == spec["dataset_label"]
+        and row.get("family") == family
+        and row.get("candidate") == variant_id
+        and row.get("candidate_hash") == result["candidate_hash"]
+        and row.get("run_attempt", "final") == run_attempt
+        for row in existing
+    ):
+        return
+    completed_run = result["status"] == "completed"
+    _append_search_log(
+        {
+            "logged_at_utc": _utc_now(),
+            "study_id": preregistration["study_id"],
+            "dataset": spec["dataset_label"],
+            "partition": "dev",
+            "family": family,
+            "candidate": variant_id,
+            "candidate_hash": result["candidate_hash"],
+            "config_path": result["config_path"],
+            "config_hash": result["config_sha256"],
+            "run_attempt": run_attempt,
+            "dev_score": (
+                float(result["metrics"]["macro_rouge"])
+                if completed_run
+                else None
+            ),
+            "dev_test_score": None,
+            "status": result["status"],
+            "promoted": None,
+            "reason": (
+                "pending all-family and cross-dataset screening decision"
+                if completed_run
+                else result.get("failure")
+            ),
+            "comparison_family_size": int(
+                preregistration["measurement"]["comparison_count"]
+            ),
+            "test_split_accessed": False,
+        }
+    )
+
+
+def _archive_interrupted_run(
+    candidate_root: Path,
+    *,
+    context: Mapping[str, Any],
+    config_path: Path,
+    config_sha256: str,
+) -> tuple[str, dict[str, Any]]:
+    """Preserve an externally interrupted run before retrying it.
+
+    A missing ``candidate_summary.json`` means the family process terminated
+    outside its normal exception handler (for example, a job-runner timeout).
+    The incomplete artifact is evidence, not disposable scratch data.
+    """
+
+    run_path = candidate_root / "greedy" / "run"
+    if not run_path.exists():
+        raise ValueError(f"cannot recover missing run directory: {run_path}")
+    attempts_root = candidate_root / "greedy" / "attempts"
+    attempts_root.mkdir(parents=True, exist_ok=True)
+    attempt_number = 1
+    while (attempts_root / f"attempt_{attempt_number:02d}_interrupted").exists():
+        attempt_number += 1
+    attempt_id = f"attempt_{attempt_number:02d}_interrupted"
+    archive_path = attempts_root / attempt_id
+    shutil.move(str(run_path), str(archive_path))
+    evidence = {
+        "evidence_schema_version": "1.0",
+        "measured_at_utc": _utc_now(),
+        "status": "failed",
+        "failure_type": "external_runner_interruption",
+        "failure": (
+            "Incomplete atomic artifact recovered after external runner "
+            "termination; no final predictions or method evidence existed."
+        ),
+        "test_split_accessed": False,
+        "dev_test_accessed": False,
+        **dict(context),
+        "config_path": _relative(config_path),
+        "config_sha256": config_sha256,
+        "run_attempt": attempt_id,
+        "archived_run_path": _relative(archive_path),
+    }
+    _write_json(archive_path / "interruption_evidence.json", evidence)
+    return attempt_id, evidence
+
+
+def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, Any]:
     preregistration, variants = _load_protocol()
     if family not in preregistration["families"]:
         raise ValueError(f"unknown D1 family {family!r}")
@@ -228,11 +357,10 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
     input_path = REPO_ROOT / spec["input"]
     gold = _load_gold(input_path, ordered_ids)
     output_root = REPO_ROOT / "runs_v2" / "d1_greedy_sensitivity" / dataset / "dev" / family
-    if output_root.exists():
+    if output_root.exists() and not resume:
         raise ValueError(f"refusing to overwrite existing D1 family: {output_root}")
-    output_root.mkdir(parents=True, exist_ok=False)
+    output_root.mkdir(parents=True, exist_ok=resume)
 
-    existing_log = _load_search_log()
     results: dict[str, dict[str, Any]] = {}
     for raw_variant in preregistration["families"][family]:
         variant_id = raw_variant["id"]
@@ -245,15 +373,6 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
             variant_id=variant_id,
             resolved_without_partition=resolved_without_partition,
         )
-        if any(
-            row.get("study_id") == preregistration["study_id"]
-            and row.get("dataset") == spec["dataset_label"]
-            and row.get("candidate_hash") == logical_hash
-            and row.get("status") == "completed"
-            for row in existing_log
-        ):
-            raise ValueError(f"completed D1 variant {variant_id!r} is already logged")
-
         config = copy.deepcopy(resolved_without_partition)
         config["experiment_partition"] = {
             "manifest_path": spec["manifest"],
@@ -270,13 +389,25 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
             "preregistration_sha256": PREREGISTRATION_SHA256,
         }
         candidate_root = output_root / variant_id
-        candidate_root.mkdir(parents=True, exist_ok=False)
         config_path = candidate_root / "resolved_config.yaml"
-        config_path.write_text(
-            yaml.safe_dump(config, sort_keys=False, allow_unicode=True),
-            encoding="utf-8",
-            newline="\n",
+        expected_config_text = yaml.safe_dump(
+            config, sort_keys=False, allow_unicode=True
         )
+        if candidate_root.exists():
+            if not resume:
+                raise ValueError(f"refusing to overwrite D1 candidate: {candidate_root}")
+            if not config_path.exists():
+                raise ValueError(f"resume candidate has no resolved config: {config_path}")
+            existing_config = load_yaml(str(config_path))
+            if existing_config != config:
+                raise ValueError(f"resume config drift for D1 candidate {variant_id!r}")
+        else:
+            candidate_root.mkdir(parents=True, exist_ok=False)
+            config_path.write_text(
+                expected_config_text,
+                encoding="utf-8",
+                newline="\n",
+            )
         config_sha256 = sha256_file(str(config_path))
         context = {
             "study_id": preregistration["study_id"],
@@ -295,6 +426,56 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
             "candidate_hash": logical_hash,
             "declared_delta": raw_variant.get("delta", raw_variant.get("dataset_delta", {})),
         }
+        candidate_summary_path = candidate_root / "candidate_summary.json"
+        if candidate_summary_path.exists():
+            result = json.loads(candidate_summary_path.read_text(encoding="utf-8"))
+            if (
+                result.get("candidate_hash") != logical_hash
+                or result.get("config_sha256") != config_sha256
+                or result.get("candidate") != variant_id
+            ):
+                raise ValueError(f"resume summary drift for D1 candidate {variant_id!r}")
+            if result.get("status") == "completed":
+                evidence_path = candidate_root / "greedy" / "run" / "evidence.json"
+                if not evidence_path.exists():
+                    raise ValueError(
+                        f"completed resume candidate has no evidence: {variant_id!r}"
+                    )
+                predictions_path = (
+                    candidate_root / "greedy" / "run" / "predictions.jsonl"
+                )
+                diagnostics = _candidate_diagnostics(predictions_path)
+                result["candidate_diagnostics"] = diagnostics
+                evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+                evidence["candidate_diagnostics"] = diagnostics
+                evidence["candidate_diagnostics_implementation_commit"] = _git_commit()
+                _write_json(evidence_path, evidence)
+                _write_json(candidate_summary_path, result)
+            results[variant_id] = result
+            _log_result_once(
+                preregistration=preregistration,
+                spec=spec,
+                family=family,
+                variant_id=variant_id,
+                result=result,
+            )
+            continue
+
+        if candidate_root.exists() and (candidate_root / "greedy" / "run").exists():
+            attempt_id, interrupted = _archive_interrupted_run(
+                candidate_root,
+                context=context,
+                config_path=config_path,
+                config_sha256=config_sha256,
+            )
+            _log_result_once(
+                preregistration=preregistration,
+                spec=spec,
+                family=family,
+                variant_id=variant_id,
+                result=interrupted,
+                run_attempt=attempt_id,
+            )
         try:
             metrics, _ = _run_method(
                 "greedy",
@@ -328,8 +509,15 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
                 "config_sha256": config_sha256,
                 "failure": f"{type(error).__name__}: {error}",
             }
-        _write_json(candidate_root / "candidate_summary.json", result)
+        _write_json(candidate_summary_path, result)
         results[variant_id] = result
+        _log_result_once(
+            preregistration=preregistration,
+            spec=spec,
+            family=family,
+            variant_id=variant_id,
+            result=result,
+        )
 
     completed = {
         name: row for name, row in results.items() if row["status"] == "completed"
@@ -355,38 +543,6 @@ def run_family(dataset: str, family: str) -> dict[str, Any]:
         "promotion_status": "pending_all_families_and_both_datasets",
     }
     _write_json(output_root / "study_summary.json", summary)
-    for variant_id, result in results.items():
-        completed_run = result["status"] == "completed"
-        _append_search_log(
-            {
-                "logged_at_utc": _utc_now(),
-                "study_id": preregistration["study_id"],
-                "dataset": spec["dataset_label"],
-                "partition": "dev",
-                "family": family,
-                "candidate": variant_id,
-                "candidate_hash": result["candidate_hash"],
-                "config_path": result["config_path"],
-                "config_hash": result["config_sha256"],
-                "dev_score": (
-                    float(result["metrics"]["macro_rouge"])
-                    if completed_run
-                    else None
-                ),
-                "dev_test_score": None,
-                "status": result["status"],
-                "promoted": None,
-                "reason": (
-                    "pending all-family and cross-dataset screening decision"
-                    if completed_run
-                    else result.get("failure")
-                ),
-                "comparison_family_size": int(
-                    preregistration["measurement"]["comparison_count"]
-                ),
-                "test_split_accessed": False,
-            }
-        )
     return summary
 
 
@@ -398,8 +554,16 @@ def main() -> None:
         required=True,
         choices=("lexical_objective", "cheap_multiroute", "semantic_route"),
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help=(
+            "validate and reuse completed candidates, archive an externally "
+            "interrupted attempt, and run only missing candidates"
+        ),
+    )
     args = parser.parse_args()
-    summary = run_family(args.dataset, args.family)
+    summary = run_family(args.dataset, args.family, resume=args.resume)
     print(
         json.dumps(
             {
@@ -416,4 +580,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

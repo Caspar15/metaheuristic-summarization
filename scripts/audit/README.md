@@ -26,7 +26,9 @@
 ```
 
 family 可為 `lexical_objective`、`cheap_multiroute`、`semantic_route`。每個 family
-只能建立一次既定 output root；所有成功與失敗都進 method evidence 與
+預設只能建立一次既定 output root；外部 job timeout 後可加 `--resume`，它會驗證並
+重用完整 candidate、封存不完整 atomic artifact 與 interruption evidence，再只重跑
+缺少者。所有成功、方法失敗與外部中斷 attempt 都進 method evidence 與
 `runs_v2/search_log.jsonl`。這些是正式 governance 下的 development evidence，但仍不是
 test 結果或可直接投稿的最終主表。
 
