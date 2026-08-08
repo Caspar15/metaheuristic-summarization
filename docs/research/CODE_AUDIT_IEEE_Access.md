@@ -1786,7 +1786,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**376 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**382 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1858,3 +1858,40 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 - **未做 paired significance test**
 
 要升格為正式證據，必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程（官方 split、freeze config、多 seed、paired bootstrap）。
+## F-51 — Gate 2 PLM matrix 對每個候選重複編碼同一 frozen-dev 輸入（已實作修正，待全量等價驗證）
+
+**嚴重度：P1（成本／可恢復性；若快取未驗證也可能污染 correctness）**
+
+### 重現與證據
+
+在 commit `557b9c0` 的 Multi-News frozen-dev PLM family 中，`sbert_centroid` 與
+`sbert_mmr_lambda_0.1` 分別耗時約 `1305.60 s` 與 `1502.09 s`；兩者使用完全相同的
+3,935 篇 frozen-dev 文件、eligible sentence sequence、pinned
+`all-MiniLM-L6-v2@c9745ed...`、batch size 32 與 256-token 上限，但原 runner 為每個候選
+啟動獨立程序並重新做 Transformer inference。第三個候選
+`sbert_mmr_lambda_0.3` 因整個 family 命令達 3,600 秒外層限制而中斷。
+
+重現：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_gate2_baseline_matrix --dataset multinews --family plm
+```
+
+### 修正
+
+- `src/models/extractive/encoder_rank.py` 新增預設關閉、只有
+  `META_SUM_EMBEDDING_CACHE_DIR` 明示時才啟用的 content-addressed NPZ cache。
+- key 綁定 ordered sentence bytes、模型名稱與固定 revision、batch size、token 上限、
+  resolved device、Torch／Transformers 版本與 pooling/normalization contract。
+- 寫入採同目錄 temporary file + `os.replace`；既存 artifact 損壞、dtype/shape/row count、
+  identity 或非有限值不符時 fail loud，不會靜默重算或覆寫。
+- cache 是 execution-only optimization，不進 scientific YAML，也不改 frozen candidate hash；
+  Gate 2 evidence 另記 root、contract、每 run hit/miss counts 與 ordered row-key digest。
+- `.gitignore` 排除 bulk cache；小型 provenance/evidence 仍版本化。
+
+### 驗證狀態
+
+單元與完整回歸為 **382 passed**。但在完成一個既有全量 3,935-row 候選的 cached rerun，
+並確認逐篇 `selected_indices`、representation hashes 與 ROUGE 完全一致前，這個 cache
+**不得用於續跑正式 PLM matrix**。等價性量測必須先預註冊，且只讀 frozen dev；
+dev-test/test 均禁止。

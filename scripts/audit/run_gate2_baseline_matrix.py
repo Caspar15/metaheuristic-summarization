@@ -31,6 +31,10 @@ from scripts.audit.run_length_contract_study import (
 )
 from src.data.partitions import selected_ids_sha256
 from src.data.policy import sha256_file
+from src.models.extractive.encoder_rank import (
+    EMBEDDING_CACHE_CONTRACT_VERSION,
+    EMBEDDING_CACHE_ENV,
+)
 from src.utils.io import load_yaml
 
 
@@ -313,6 +317,7 @@ def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, 
     if output_root.exists() and not resume:
         raise ValueError(f"refusing to overwrite existing Gate 2 family: {output_root}")
     output_root.mkdir(parents=True, exist_ok=resume)
+    embedding_cache_root = output_root / "_embedding_cache"
 
     results: dict[str, Any] = {}
     for variant in variants:
@@ -366,6 +371,17 @@ def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, 
             "declared_variant": variant,
             "dev_test_accessed": False,
         }
+        subprocess_env = None
+        if family == "plm":
+            context["execution_optimization"] = {
+                "embedding_cache": {
+                    "enabled": True,
+                    "root": _relative(embedding_cache_root),
+                    "contract_version": EMBEDDING_CACHE_CONTRACT_VERSION,
+                    "scientific_config_unchanged": True,
+                }
+            }
+            subprocess_env = {EMBEDDING_CACHE_ENV: str(embedding_cache_root)}
         if resume:
             interruption = _archive_partial(candidate_root, variant["method"], context)
             if interruption is not None:
@@ -388,6 +404,7 @@ def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, 
                 ordered_ids=ordered_ids,
                 gold=gold,
                 study_context=context,
+                subprocess_env=subprocess_env,
             )
             result = {
                 "status": "completed",

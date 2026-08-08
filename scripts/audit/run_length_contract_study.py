@@ -342,6 +342,48 @@ def _load_gold(
     return gold
 
 
+def _embedding_cache_summary(
+    prediction_rows: Sequence[Mapping[str, Any]],
+) -> dict[str, Any] | None:
+    """Summarize per-row cache provenance without storing every cache key."""
+
+    statuses: dict[str, int] = {}
+    contract_versions: set[str] = set()
+    keyed_rows: list[dict[str, str]] = []
+    for row in prediction_rows:
+        diagnostics = row.get("baseline_diagnostics") or {}
+        representation = diagnostics.get("representation") or {}
+        cache = representation.get("embedding_cache")
+        if cache is None:
+            continue
+        if not isinstance(cache, Mapping):
+            raise ValueError("embedding cache provenance must be a mapping")
+        status = cache.get("status")
+        key = cache.get("cache_key")
+        contract = cache.get("contract_version")
+        if status not in {"hit", "miss_written"}:
+            raise ValueError(f"unknown embedding cache status: {status!r}")
+        if not isinstance(key, str) or len(key) != 64:
+            raise ValueError("embedding cache provenance has no SHA-256 key")
+        if not isinstance(contract, str) or not contract:
+            raise ValueError("embedding cache provenance has no contract version")
+        statuses[status] = statuses.get(status, 0) + 1
+        contract_versions.add(contract)
+        keyed_rows.append({"id": str(row.get("id")), "cache_key": key})
+    if not keyed_rows:
+        return None
+    if len(keyed_rows) != len(prediction_rows):
+        raise ValueError("embedding cache provenance is present for only some rows")
+    if len(contract_versions) != 1:
+        raise ValueError("embedding cache contract changed within one run")
+    return {
+        "rows": len(keyed_rows),
+        "status_counts": statuses,
+        "contract_version": next(iter(contract_versions)),
+        "ordered_row_cache_keys_sha256": _canonical_sha256(keyed_rows),
+    }
+
+
 def _command_for_method(
     method: str,
     *,
@@ -388,6 +430,7 @@ def _run_method(
     ordered_ids: Sequence[str],
     gold: Mapping[str, Sequence[str]],
     study_context: Mapping[str, Any],
+    subprocess_env: Mapping[str, str] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, float]]]:
     method_root = candidate_root / method
     run_path = method_root / "run"
@@ -400,6 +443,12 @@ def _run_method(
         method_root=method_root,
     )
     started_at = _utc_now()
+    execution_env = None
+    if subprocess_env:
+        execution_env = os.environ.copy()
+        execution_env.update(
+            {str(key): str(value) for key, value in subprocess_env.items()}
+        )
     completed = subprocess.run(
         command,
         cwd=REPO_ROOT,
@@ -407,6 +456,7 @@ def _run_method(
         text=True,
         encoding="utf-8",
         errors="replace",
+        env=execution_env,
     )
     run_path.mkdir(parents=True, exist_ok=True)
     (run_path / "command.log").write_text(
@@ -436,6 +486,17 @@ def _run_method(
 
     predictions_path = run_path / "predictions.jsonl"
     prediction_rows = list(read_jsonl(str(predictions_path)))
+    embedding_cache = _embedding_cache_summary(prediction_rows)
+    expected_cache = (
+        (study_context.get("execution_optimization") or {})
+        .get("embedding_cache", {})
+        .get("enabled", False)
+    )
+    if expected_cache and embedding_cache is None:
+        raise ValueError(
+            "PLM execution declared an embedding cache but predictions have no "
+            "per-row cache provenance"
+        )
     prediction_by_id: dict[str, dict[str, Any]] = {}
     for row in prediction_rows:
         row_id = row.get("id")
@@ -497,6 +558,8 @@ def _run_method(
         "metrics": metrics,
         **dict(study_context),
     }
+    if embedding_cache is not None:
+        evidence["embedding_cache_summary"] = embedding_cache
     _write_json(run_path / "evidence.json", evidence)
     return metrics, [dict(scores) for scores in per_example]
 

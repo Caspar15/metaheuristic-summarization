@@ -1,5 +1,17 @@
 # Gate 2 baseline 狀態報告
 
+## 2026-08-09 checkpoint：Multi-News PLM 2/27 與 execution-cache safety gate
+
+- Multi-News PLM family 已完成 `sbert_centroid` 與 `sbert_mmr_lambda_0.1`，即 **2/27**；
+  macro ROUGE 分別為 `0.316024`、`0.294505`。這是 dev point estimate，不是 finalist。
+- `sbert_mmr_lambda_0.3` 在 family 命令達 3,600 秒外層限制時中斷；partial run 保留，
+  下一次 `--resume` 必須先依 F-48 封存為 failed attempt 並寫入 `search_log.jsonl`。
+- 觀察到每個 PLM candidate 重複編碼完全相同的 frozen-dev inputs（F-51）。已實作
+  execution-only content-addressed cache，相關測試與完整回歸為 **382 passed**；但全量
+  3,935-row cached-vs-uncached `selected_indices` 等價驗證尚未完成，因此目前不可續跑。
+- 本 checkpoint 沒有讀 dev-test 或 test，也沒有依已看到的分數刪減預註冊 27-candidate
+  網格。Gate 2 仍未通過。
+
 ## 2026-08-09 checkpoint：兩 primary non-PLM frozen-dev 完成
 
 ### 已完成
@@ -76,7 +88,8 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 
 ### 尚未完成（下一步）
 
-1. Multi-News 與 GovReport PLM families，各 27 candidates。
+1. 先完成並版本化 F-51 全量等價驗證；通過後續跑 Multi-News PLM 剩餘 25 candidates，
+   再跑 GovReport PLM 27 candidates。
 2. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
 3. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較。
 4. 針對兩資料集都輸 strongest non-PLM baseline 的現況，在 dev 做已預註冊的 selector／salience

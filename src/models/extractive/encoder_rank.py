@@ -1,6 +1,11 @@
 """Sentence-encoder ranking used by both candidate routing and selection."""
 
+import hashlib
+import importlib.metadata
+import json
 import os
+from pathlib import Path
+import tempfile
 from typing import Any, Dict, List, Optional, Tuple
 
 from src.utils.tokenizer import count_tokens
@@ -17,6 +22,131 @@ def _ensure_imports() -> None:
 
 
 _MODEL_CACHE: dict = {}
+
+# This cache is an execution-only optimisation.  It is deliberately opt-in so
+# an unrelated experiment cannot silently inherit artifacts from an earlier
+# run.  Bump the contract whenever pooling, normalisation, tokenisation, or the
+# serialized payload changes.
+EMBEDDING_CACHE_ENV = "META_SUM_EMBEDDING_CACHE_DIR"
+EMBEDDING_CACHE_CONTRACT_VERSION = "sbert_mean_pool_l2_npz_v1"
+
+
+def _sentence_sequence_sha256(sentences: List[str]) -> str:
+    """Hash an ordered sentence sequence without delimiter ambiguity."""
+
+    digest = hashlib.sha256()
+    digest.update(len(sentences).to_bytes(8, "big"))
+    for sentence in sentences:
+        payload = sentence.encode("utf-8")
+        digest.update(len(payload).to_bytes(8, "big"))
+        digest.update(payload)
+    return digest.hexdigest()
+
+
+def _embedding_cache_identity(
+    sentences: List[str],
+    *,
+    model_name: str,
+    revision: Optional[str],
+    device: Optional[str],
+    batch_size: int,
+    max_model_tokens: int,
+) -> Tuple[str, Dict[str, Any]]:
+    import torch
+
+    resolved_device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+    identity = {
+        "cache_contract_version": EMBEDDING_CACHE_CONTRACT_VERSION,
+        "sentence_count": len(sentences),
+        "sentence_sequence_sha256": _sentence_sequence_sha256(sentences),
+        "model_name": model_name,
+        "revision": revision,
+        "resolved_device": str(resolved_device),
+        "batch_size": int(batch_size),
+        "max_model_tokens": int(max_model_tokens),
+        "torch_version": importlib.metadata.version("torch"),
+        "transformers_version": importlib.metadata.version("transformers"),
+    }
+    canonical = json.dumps(
+        identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest(), identity
+
+
+def _cache_path(cache_root: Path, key: str) -> Path:
+    return cache_root / key[:2] / f"{key}.npz"
+
+
+def _load_cached_embeddings(path: Path, *, key: str, identity: Dict[str, Any]):
+    import numpy as np
+    import torch
+
+    try:
+        with np.load(path, allow_pickle=False) as payload:
+            embeddings = np.asarray(payload["embeddings"])
+            metadata_bytes = np.asarray(payload["metadata_json"], dtype=np.uint8)
+        stored = json.loads(metadata_bytes.tobytes().decode("utf-8"))
+    except Exception as exc:
+        raise ValueError(f"invalid embedding cache artifact {path}: {exc}") from exc
+    if stored.get("cache_key") != key or stored.get("identity") != identity:
+        raise ValueError(f"embedding cache identity mismatch: {path}")
+    if embeddings.dtype != np.float32 or embeddings.ndim != 2:
+        raise ValueError(f"embedding cache must contain a 2-D float32 matrix: {path}")
+    if embeddings.shape[0] != identity["sentence_count"]:
+        raise ValueError(f"embedding cache row count mismatch: {path}")
+    if not np.all(np.isfinite(embeddings)):
+        raise ValueError(f"embedding cache contains non-finite values: {path}")
+    metadata = stored.get("encoder_metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError(f"embedding cache has no encoder metadata: {path}")
+    return torch.from_numpy(np.array(embeddings, copy=True)), metadata
+
+
+def _write_cached_embeddings(
+    path: Path,
+    *,
+    key: str,
+    identity: Dict[str, Any],
+    embeddings: Any,
+    metadata: Dict[str, Any],
+) -> None:
+    import numpy as np
+
+    values = np.ascontiguousarray(embeddings.detach().cpu().numpy(), dtype=np.float32)
+    if values.ndim != 2 or values.shape[0] != identity["sentence_count"]:
+        raise ValueError("refusing to cache an invalid embedding matrix")
+    if not np.all(np.isfinite(values)):
+        raise ValueError("refusing to cache non-finite embeddings")
+    stored = {
+        "cache_key": key,
+        "identity": identity,
+        "encoder_metadata": metadata,
+    }
+    metadata_bytes = json.dumps(
+        stored, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary: Optional[Path] = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            prefix=f".{key}.",
+            suffix=".partial",
+            delete=False,
+        ) as handle:
+            temporary = Path(handle.name)
+            np.savez(
+                handle,
+                embeddings=values,
+                metadata_json=np.frombuffer(metadata_bytes, dtype=np.uint8),
+            )
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
 
 
 def load_encoder(
@@ -217,7 +347,42 @@ def encoder_document_embeddings(
 
     _ensure_imports()
     token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN")
-    return _sentence_embeddings(
+    cache_value = os.environ.get(EMBEDDING_CACHE_ENV)
+    if not cache_value:
+        return _sentence_embeddings(
+            sentences,
+            model_name=model_name,
+            device=device,
+            token=token,
+            revision=revision,
+            batch_size=batch_size,
+            max_model_tokens=max_model_tokens,
+        )
+
+    cache_root = Path(cache_value).resolve()
+    key, identity = _embedding_cache_identity(
+        sentences,
+        model_name=model_name,
+        revision=revision,
+        device=device,
+        batch_size=batch_size,
+        max_model_tokens=max_model_tokens,
+    )
+    path = _cache_path(cache_root, key)
+    if path.exists():
+        embeddings, metadata = _load_cached_embeddings(
+            path, key=key, identity=identity
+        )
+        metadata = dict(metadata)
+        metadata["embedding_cache"] = {
+            "enabled": True,
+            "status": "hit",
+            "cache_key": key,
+            "contract_version": EMBEDDING_CACHE_CONTRACT_VERSION,
+        }
+        return embeddings, metadata
+
+    embeddings, metadata = _sentence_embeddings(
         sentences,
         model_name=model_name,
         device=device,
@@ -226,6 +391,21 @@ def encoder_document_embeddings(
         batch_size=batch_size,
         max_model_tokens=max_model_tokens,
     )
+    _write_cached_embeddings(
+        path,
+        key=key,
+        identity=identity,
+        embeddings=embeddings,
+        metadata=metadata,
+    )
+    metadata = dict(metadata)
+    metadata["embedding_cache"] = {
+        "enabled": True,
+        "status": "miss_written",
+        "cache_key": key,
+        "contract_version": EMBEDDING_CACHE_CONTRACT_VERSION,
+    }
+    return embeddings, metadata
 
 
 def centroid_scores_from_embeddings(embeddings) -> List[float]:

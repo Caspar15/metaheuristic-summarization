@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from scripts.audit import run_gate2_baseline_matrix as runner
+from scripts.audit.run_length_contract_study import _embedding_cache_summary
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,6 +51,79 @@ def test_protocol_explicitly_prohibits_devtest_and_test():
     assert protocol["frozen_partition"] == "dev"
     assert protocol["dev_test_access"] == "none_in_baseline_search"
     assert protocol["test_split_prohibited"] is True
+
+
+def test_execution_cache_is_not_part_of_scientific_candidate_hash():
+    protocol = _raw_protocol()
+    variant = runner.expand_variants(protocol, "plm")[0]
+    base = {"routes": {"semantic": {"model_name": "m", "revision": "r"}}}
+    spec = {
+        "manifest": "frozen-dev.json",
+        "manifest_sha256": "a" * 64,
+    }
+    resolved = runner._resolved_config(
+        base,
+        spec=spec,
+        family="plm",
+        variant=variant,
+        candidate_hash="candidate-hash",
+    )
+    assert "embedding_cache" not in resolved
+    assert "embedding_cache_dir" not in resolved["routes"]["semantic"]
+
+
+def test_embedding_cache_summary_counts_all_rows_and_hashes_order():
+    rows = [
+        {
+            "id": "a",
+            "baseline_diagnostics": {
+                "representation": {
+                    "embedding_cache": {
+                        "status": "miss_written",
+                        "cache_key": "1" * 64,
+                        "contract_version": "v1",
+                    }
+                }
+            },
+        },
+        {
+            "id": "b",
+            "baseline_diagnostics": {
+                "representation": {
+                    "embedding_cache": {
+                        "status": "hit",
+                        "cache_key": "2" * 64,
+                        "contract_version": "v1",
+                    }
+                }
+            },
+        },
+    ]
+    summary = _embedding_cache_summary(rows)
+    assert summary is not None
+    assert summary["rows"] == 2
+    assert summary["status_counts"] == {"miss_written": 1, "hit": 1}
+    assert len(summary["ordered_row_cache_keys_sha256"]) == 64
+
+
+def test_embedding_cache_summary_rejects_partial_provenance():
+    rows = [
+        {
+            "id": "a",
+            "baseline_diagnostics": {
+                "representation": {
+                    "embedding_cache": {
+                        "status": "hit",
+                        "cache_key": "1" * 64,
+                        "contract_version": "v1",
+                    }
+                }
+            },
+        },
+        {"id": "b", "baseline_diagnostics": {}},
+    ]
+    with pytest.raises(ValueError, match="only some rows"):
+        _embedding_cache_summary(rows)
 
 
 def test_interrupted_resume_is_written_to_search_log(monkeypatch):

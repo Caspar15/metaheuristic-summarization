@@ -1,0 +1,81 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T18:18:20.288382+00:00",
+  "started_at_utc": "2026-08-08T17:53:18.198504+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "sbert_mmr",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "sbert_mmr",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\plm\\sbert_mmr_lambda_0.1\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\plm\\sbert_mmr_lambda_0.1\\sbert_mmr",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "557b9c0bc82b11e40af5d9d11f4a2ba04db603b0",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.1/resolved_config.yaml",
+  "config_sha256": "a0a482dd3715b3a69ecb27d791329820cfaa6669c85eca13987ec2413a9bcc69",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.1/sbert_mmr/run/predictions.jsonl",
+  "predictions_sha256": "d6ab01063b4f750b312aaceb7f06024958d2f01a73a5d0f73a58d08c8251fae3",
+  "selected_indices_sha256": "019672c5bee69d7e8d210fe4a8a4cc57d9627c00d7d898330a4b4cc7d30aaee6",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.40251783779256495,
+      "rouge2": 0.11361958764340188,
+      "rougeLsum": 0.3673775302270533
+    },
+    "macro_rouge": 0.2945049852210067,
+    "feasible_rows": 3933,
+    "infeasible_rows": 2,
+    "summary_words": {
+      "mean": 246.37966963151206,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "plm",
+  "candidate": "sbert_mmr_lambda_0.1",
+  "candidate_hash": "b8c2b53d2d66e2ca1037a8546d189b34b59f50a1f2f50e9fb348685547838b04",
+  "declared_variant": {
+    "id": "sbert_mmr_lambda_0.1",
+    "method": "sbert_mmr",
+    "sbert_mmr": {
+      "lambda_relevance": 0.1
+    }
+  },
+  "dev_test_accessed": false
+}

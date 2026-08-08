@@ -94,6 +94,12 @@ summary SHA-256 `4b63b59a7f6ddf96fa9698522909ebe363fa96ae2ca5c937357577bbdf87793
 
 ## Gate 2 baseline matrix 狀態（2026-08-09）
 
+Multi-News PLM family 目前完成 2/27：`sbert_centroid` macro `0.316024`、
+`sbert_mmr_lambda_0.1` macro `0.294505`。第三候選在 3,600 秒外層限制中斷，partial
+artifact 待 resume 依 F-48 封存與登錄。F-51 execution-only embedding cache 已通過
+382-test 回歸，但在完成 3,935-row cached-vs-uncached 逐篇等價 audit 前不得用於正式續跑。
+所有輸出只讀 frozen dev；dev-test/test 未讀。
+
 `gate2_baseline_matrix_v1/multinews/dev/non_plm/` 已完成事前註冊的 23/23 candidates。
 family winner 是非退化 `pacsum_tfidf_P08_previous_-0.8`，macro `0.331740`；beta=1.0
 在 3,935/3,935 rows 全部 score-degenerate，只能視為 canonical-order skip-tolerant control。
