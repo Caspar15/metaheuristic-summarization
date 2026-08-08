@@ -253,9 +253,27 @@ coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
   的 S02b 都是目前已跑 proposed 配置最高點估計，構成跨資料集正訊號；仍非
   capacity-matched route ablation，也尚未對 strong baseline／paired significance。
 
+## Multi-News capacity-matched route ablation
+
+在看過 S02b aggregate 後、任何 matched-ablation 分數前另行預註冊；固定 total 80、
+guard cap 20、Greedy/RRF 與其餘設定，只移除一路：
+
+| 配置 | Routes | Macro | Δ：S02b − 配置 | selection seconds | pool mean/max |
+|---|---|---:|---:|---:|---:|
+| S02b | lexical + semantic + graph | **0.328077** | — | 1,467.99 | 52.09 / 80 |
+| A01 | lexical + graph（無 semantic） | 0.324209 | **+0.003868** | 330.05 | 48.09 / 80 |
+| A02 | lexical + semantic（無 graph） | 0.322719 | **+0.005358** | 1,646.88 | 47.18 / 80 |
+
+- A01 的 aggregate 與既有 G04 total-80 完全一致，表示 Multi-News 的 guard cap 20
+  沒有改變該配置選句；S02b−A01 因而是比先前 G02 更乾淨的 semantic 邊際比較。
+- semantic 與 graph 在 point estimate 都有正增量，graph 的增量較大；但尚未做 paired
+  bootstrap／31-config multiplicity correction，不能宣稱任一路已通過保留 gate。
+- A01 比 graph G00 更慢，反映 pool 60→80 的 selector 成本；A02 與 S02b 的 wall-time
+  差不能只歸因 graph，因兩次獨立 process 仍受系統負載影響。正式 cost 結論需重複 pilot。
+
 ## 還沒做
 
-1. 已預註冊的 capacity-matched semantic／graph route-removal ablation。
+1. GovReport capacity-matched semantic／graph route-removal ablation。
 2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。

@@ -134,6 +134,9 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > G07 `0.003031` 與 Random `0.009018`。兩 primary 的 S02b 都是目前 proposed 最高
 > point estimate，支持繼續做 paired/matched ablation；但 GovReport 成本約 graph G00
 > `18.28×`，且尚未對 strong baseline，不能直接凍結成最終架構。
+> Multi-News capacity-matched route removal 隨後得到：S02b 相對移除 semantic
+> `+0.003868`、相對移除 graph `+0.005358`。這排除「只因 cap 變大」的完整解釋，
+> 但仍須 GovReport 複現與 31-config multiplicity-corrected paired inference。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

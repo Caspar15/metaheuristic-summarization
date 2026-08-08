@@ -135,7 +135,9 @@
       inference、strong baseline 與 matched route ablation，未讀 dev-test/test。
 - [~] 已在看過 S02b aggregate、但尚未跑 matched ablation 前，預註冊兩-primary
       capacity-matched route removal：固定 S02b total 80／guard cap 20，只分別移除
-      semantic 或 graph。runner 無 split 參數；兩資料集完成並做 paired analysis 才勾選。
+      semantic 或 graph。Multi-News 已完成：S02b 相對無 semantic `+0.003868`、相對無
+      graph `+0.005358`；兩者 point estimate 都正向。GovReport 與 paired analysis 尚未
+      完成，runner 無 split 參數，整格仍不勾選。
 
 ## 2026-08-06 selector milestone
 

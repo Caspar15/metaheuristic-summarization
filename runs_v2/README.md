@@ -74,3 +74,7 @@ selection `1,106.27 s`，dev-test/test 未讀。它是目前 GovReport proposed 
 下一步的 `d1_capacity_matched_route_ablation/` 已在任何該 family 分數前預註冊：從
 S02b 只移除 semantic 或 graph，其他 capacity/guard/selector contract 固定。註冊時間
 明確晚於 S02b aggregate，不冒充事前未知；runner 固定 validation-dev，無 split CLI。
+
+`d1_capacity_matched_route_ablation/multinews/dev/` 已完成：A01 無 semantic macro
+`0.324209`、A02 無 graph `0.322719`，S02b 分別高 `0.003868/0.005358`。兩個 runs
+各 3,935 rows、pool max 80，dev-test/test 未讀；paired route decision 尚未完成。

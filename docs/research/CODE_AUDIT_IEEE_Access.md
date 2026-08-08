@@ -1457,6 +1457,25 @@ selected-indices SHA-256 `62987c3698e7adb0a0ba7d5d37c8795651347ffceb8909a4b9f8b5
 
 ---
 
+### 🟡 F-41. Multi-News capacity-matched ablation 顯示 semantic 與 graph 皆有正增量，尚待 paired 驗證
+
+**證據（frozen dev 3,935 rows，2026-08-08）**：固定 S02b 的 total 80／guard cap 20，
+A01 移除 semantic 得 macro `0.324209`，A02 移除 graph 得 `0.322719`；完整 S02b
+`0.328077` 分別高 `0.003868`／`0.005358`。兩個 ablation 各 3,930 feasible + 5
+既定 infeasible、pool max 80，config audit 證實除 `enabled_routes` 與 study metadata 外
+沒有差異。A01 又與既有 G04 aggregate 完全一致，排除 guard cap 在此資料集造成分數差。
+
+**成本**：A01 `330.05 s`，A02 `1,646.88 s`，S02b `1,467.99 s`。這支持 semantic
+路徑很昂貴，但 A02/S02b 是不同 process，不能把約 12% wall-time 差直接歸因 graph。
+
+**決策**：point estimate 尚未滿足保留 gate；先完成 GovReport 同 ablation，再以逐篇
+paired bootstrap 與包含 31 configs 的多重比較治理判斷。此時不讀 dev-test。
+
+**重現**：`python -m scripts.audit.run_d1_capacity_matched_route_ablation --dataset multinews`；
+主證據在 `runs_v2/d1_capacity_matched_route_ablation/multinews/dev/`。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

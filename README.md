@@ -59,8 +59,10 @@
   `15.15×`；S01 跨資料集失敗，該 selector 接法刪除。GovReport S02b 隨後完成，macro
   `0.417862`，高全文 lexical L10、graph G07 與 Random，但成本約 graph G00 `18.28×`。
   兩 primary S02b 均為目前 proposed 最高點估計；仍缺 strong baseline／paired inference，
-  本 screen 不看 dev-test。F-30 Greedy 等價效能修正與
-  F-31 的錯誤 runtime 外推更正見
+  本 screen 不看 dev-test。Multi-News capacity-matched ablation 進一步顯示 S02b 相對
+  移除 semantic／graph 分別 `+0.003868/+0.005358`，但 GovReport 與
+  multiplicity-corrected paired inference 未完成。F-30 Greedy 等價效能修正與 F-31 的
+  錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
