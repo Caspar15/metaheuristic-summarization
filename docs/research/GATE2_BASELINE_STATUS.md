@@ -51,7 +51,10 @@
   保留於 `attempt_01_interrupted/`，resume 後的 final run 另存，不覆寫失敗紀錄。
 - GovReport 23 個 runs 全部一次完成；兩 family 的成功／失敗歷史都已寫入 registry。
 - family 彙整器會驗 candidate count、每個 evidence 的 partition guards、結果完整性，且
-  CLI 沒有 partition 參數。目前加入 F-51～F-55 guards 後完整本地回歸為 **392 passed**。
+  CLI 沒有 partition 參數。目前加入 F-51～F-56 guards 後完整本地回歸為 **394 passed**。
+- greedy-reference Multi-News R1 首次 Windows sandbox attempt 在 0 rows 失敗；之後外層
+  terminate 未帶走子程序，造成雙 writer。F-56 已封存 295-row 污染檔、只保留驗證過的
+  270-row exact prefix，並加入 OS-level single-writer lock；正式結果仍為 0/6 completed。
 
 ### Multi-News frozen-dev 結果
 

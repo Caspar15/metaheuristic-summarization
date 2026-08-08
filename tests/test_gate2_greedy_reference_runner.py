@@ -6,7 +6,9 @@ import pytest
 
 from scripts.audit.run_gate2_greedy_reference import (
     _aggregate,
+    _checkpoint_prefix_length,
     _evaluate_row,
+    _exclusive_run_lock,
     _load_protocol,
     _validate_checkpoint_prefix,
     build_parser,
@@ -74,3 +76,29 @@ def test_checkpoint_requires_exact_frozen_prefix_and_target():
     ]
     with pytest.raises(ValueError, match="exact frozen ID prefix"):
         _validate_checkpoint_prefix(checkpoint, ["a", "b"], "rouge1")
+
+
+def test_checkpoint_prefix_length_stops_before_duplicate_writer_row():
+    checkpoint = [
+        {
+            "position": 0,
+            "id": "a",
+            "optimization_target": "rouge1",
+            "scores": {"rouge1": 1.0, "rouge2": 1.0, "rougeLsum": 1.0},
+        },
+        {
+            "position": 0,
+            "id": "a",
+            "optimization_target": "rouge1",
+            "scores": {"rouge1": 1.0, "rouge2": 1.0, "rougeLsum": 1.0},
+        },
+    ]
+    assert _checkpoint_prefix_length(checkpoint, ["a", "b"], "rouge1") == 1
+
+
+def test_exclusive_writer_lock_rejects_second_holder(tmp_path):
+    lock_path = tmp_path / "greedy.lock"
+    with _exclusive_run_lock(lock_path):
+        with pytest.raises(RuntimeError, match="another greedy-reference writer"):
+            with _exclusive_run_lock(lock_path):
+                pass

@@ -8,6 +8,7 @@ are assembled in the exact frozen-manifest order and checkpointed per row.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from concurrent.futures import ProcessPoolExecutor
 import json
 import os
@@ -35,6 +36,43 @@ from src.utils.io import read_jsonl
 PREREGISTRATION = "configs/preregistrations/gate2_greedy_reference_v1.json"
 PREREGISTRATION_SHA256 = "04235301d400a1a7bd502879cd8d59b5a5c27cafc902b23ee16bde3435c9f735"
 OUTPUT_ROOT = REPO_ROOT / "runs_v2/gate2_greedy_reference_v1"
+
+
+@contextmanager
+def _exclusive_run_lock(path: Path):
+    """Hold a non-blocking OS lock for one dataset/target writer."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stream = path.open("a+b")
+    if stream.seek(0, os.SEEK_END) == 0:
+        stream.write(b"\0")
+        stream.flush()
+    stream.seek(0)
+    try:
+        if os.name == "nt":
+            import msvcrt
+
+            msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError as error:
+        stream.close()
+        raise RuntimeError(f"another greedy-reference writer holds {path}") from error
+    try:
+        yield
+    finally:
+        stream.seek(0)
+        if os.name == "nt":
+            import msvcrt
+
+            msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+        stream.close()
 
 
 def _load_protocol() -> dict[str, Any]:
@@ -138,6 +176,26 @@ def _validate_checkpoint_prefix(
     return rows
 
 
+def _checkpoint_prefix_length(
+    checkpoint: Iterable[Mapping[str, Any]], ordered_ids: list[str], target: str
+) -> int:
+    """Return the longest exact canonical prefix, including row contracts."""
+
+    rows = [dict(row) for row in checkpoint]
+    for position, row in enumerate(rows):
+        if position >= len(ordered_ids):
+            return position
+        if str(row.get("id")) != ordered_ids[position]:
+            return position
+        if row.get("position") != position:
+            return position
+        if row.get("optimization_target") != target:
+            return position
+        if set(row.get("scores", {})) != set(DEFAULT_METRICS):
+            return position
+    return len(rows)
+
+
 def _selected_indices_digest(rows: Iterable[Mapping[str, Any]]) -> str:
     return _canonical_sha256(
         [
@@ -207,7 +265,7 @@ def _aggregate(rows: list[Mapping[str, Any]]) -> dict[str, Any]:
     }
 
 
-def run_configuration(
+def _run_configuration_locked(
     dataset: str, target: str, *, workers: int, resume: bool = False
 ) -> dict[str, Any]:
     protocol = _load_protocol()
@@ -386,6 +444,16 @@ def run_configuration(
         }
     )
     return evidence
+
+
+def run_configuration(
+    dataset: str, target: str, *, workers: int, resume: bool = False
+) -> dict[str, Any]:
+    lock_path = OUTPUT_ROOT / ".locks" / f"{dataset}-{target}.lock"
+    with _exclusive_run_lock(lock_path):
+        return _run_configuration_locked(
+            dataset, target, workers=workers, resume=resume
+        )
 
 
 def build_parser() -> argparse.ArgumentParser:

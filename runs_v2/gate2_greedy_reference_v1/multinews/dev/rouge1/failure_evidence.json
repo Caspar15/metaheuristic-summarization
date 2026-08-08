@@ -1,0 +1,13 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:39:45.693465+00:00",
+  "status": "failed",
+  "failure": "PermissionError: [WinError 5] 存取被拒。",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "optimization_target": "rouge1",
+  "completed_prefix_rows": 0,
+  "scientific_config_sha256": "cadf512ee380a288ab81312d5c367e1002b21dac8d9ad4a72ec7bfbe3e4c9779",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

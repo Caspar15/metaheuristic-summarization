@@ -1788,7 +1788,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**392 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**394 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1893,8 +1893,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55 後為
-**392 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55/F-56 後為
+**394 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -1991,6 +1991,27 @@ schema/row exception 使整個 configuration fail，不會跳列。
 
 toy corpus exact-equivalence test 證明逐文件組裝與原 `greedy_reference_run(corpus)` 的
 selected indices／三 metric 完全相同；CLI boundary 與 checkpoint tampering 另有 regression。
-runner 自身 4 tests、與既有 greedy-reference 合併 11 tests 全過，完整回歸
-**392 passed**。正式 6 個 runs 尚未開始，故本條只代表
+F-55 runner 當時自身 4 tests、與既有 greedy-reference 合併 11 tests 全過，完整回歸
+**392 passed**。正式 6 個 runs 尚未完成，故本條只代表
 runner 可以安全動工，不代表 headroom 已量得。dev-test/test 未讀。
+
+## F-56 — 外層終止沒有帶走 Windows process tree，造成 checkpoint 雙 writer（已修正）
+
+**嚴重度：P0（artifact integrity；正式分數尚未產生）**
+
+Multi-News R1 的第一次正式 attempt 因 sandbox 禁止 multiprocessing pipe，在 0 rows
+fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU 使用率在 228 rows
+終止外層 wrapper。但 Windows 上該終止沒有帶走 Python parent／workers；16-worker resume
+又啟動第二個 writer。只檢查列數會錯把它當成正常進度，exact-prefix audit 則在 295 rows
+中定位到 index 270 回跳到 position 259（期望 position 270）。任何 partial ROUGE 都未讀。
+
+兩棵已辨識的 process tree 已精確終止。`recover_greedy_reference_checkpoint.py` 將原
+295-row 檔完整封存（SHA-256 `b5357d17...705a7883`），丟棄污染尾端 25 rows，只保留並
+重驗 270-row frozen-ID exact prefix（SHA-256 `f294388e...1104bce6`）；recovery evidence
+與 failed search-log entry 均保留，dev-test/test 未讀。
+
+永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
+仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
+與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
+**394 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。

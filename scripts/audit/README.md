@@ -359,3 +359,12 @@ evidence。它是 headroom／candidate-recall diagnostic，不是 baseline、ora
 
 預註冊：`configs/preregistrations/gate2_greedy_reference_v1.json`。不得用舊
 `src.eval.oracle --limit` CLI 產生正式 Gate 2 數字。
+
+runner 以 OS-level lock 保證同一 dataset/target 只有一個 writer。若外部程序管理器曾
+留下重複 writer 而破壞 checkpoint，使用下列治理工具；它會完整封存污染檔、只保留
+可驗證的 frozen-ID prefix，並把失敗寫入 evidence 與 search log：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.recover_greedy_reference_checkpoint `
+  --dataset multinews --target rouge1
+```
