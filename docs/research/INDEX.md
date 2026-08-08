@@ -35,8 +35,8 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、兩 primary canonical/frozen-policy/dev-partition 已完成；published-protocol parity、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **357 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
-| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已接線；既有 Multi-News full-validation artifacts 只能作 historical diagnostics。PacSum、partitioned SBERT run、GovReport 方法 runs、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
+| 測試 | ✅ **366 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR、clean-room PacSum TF-IDF／SBERT 程式已接線；既有 Multi-News full-validation artifacts 只能作 historical diagnostics。partitioned PacSum／SBERT runs、GovReport 方法 runs、完整 paired matrix 與正式兩-primary矩陣未完成，**Gate 2 未過** |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |

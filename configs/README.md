@@ -51,8 +51,9 @@ PR #10 的 `src.baselines.cli` 會讀同一份 `phase1_mvp_multinews.yaml`，因
 source capacity、selected words 與 reason。正式 run 請明確指定 `--run_dir runs_v2`；
 CLI 目前的 `runs` 預設值不可當作新舊結果分界。
 
-截至 2026-08-08，Lead、Random、TextRank、LexRank、SBERT centroid/MMR 已接線；
-舊 full-validation artifacts 只算 historical diagnostics。PacSum、兩 primary 的正式
+截至 2026-08-08，Lead、Random、TextRank、LexRank、SBERT centroid/MMR，以及明確標示
+clean-room adaptation 的 `pacsum_tfidf`／`pacsum_sbert` 已接線；舊 full-validation artifacts
+只算 historical diagnostics。PacSum 與 SBERT 的兩-primary正式
 partitioned matrix 與 paired significance 仍是 Phase 2 待辦。
 
 ---

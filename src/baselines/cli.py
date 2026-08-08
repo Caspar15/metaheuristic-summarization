@@ -48,6 +48,10 @@ from tqdm import tqdm
 from src.baselines.centrality import summarize_one_lexrank, summarize_one_textrank
 from src.baselines.lead import ORDERINGS, summarize_one_lead
 from src.baselines.random_baseline import summarize_one_random
+from src.baselines.pacsum import (
+    summarize_one_pacsum_sbert,
+    summarize_one_pacsum_tfidf,
+)
 from src.baselines.semantic import (
     summarize_one_sbert_centroid,
     summarize_one_sbert_mmr,
@@ -77,6 +81,8 @@ BASELINE_METHODS = {
     "random": summarize_one_random,
     "textrank": summarize_one_textrank,
     "lexrank": summarize_one_lexrank,
+    "pacsum_tfidf": summarize_one_pacsum_tfidf,
+    "pacsum_sbert": summarize_one_pacsum_sbert,
     "sbert_centroid": summarize_one_sbert_centroid,
     "sbert_mmr": summarize_one_sbert_mmr,
 }
@@ -104,6 +110,8 @@ UNORDERED_BASELINES = {
     "random",
     "textrank",
     "lexrank",
+    "pacsum_tfidf",
+    "pacsum_sbert",
     "sbert_centroid",
     "sbert_mmr",
 }
@@ -128,6 +136,8 @@ UNGOVERNED_LENGTH_BASELINES = {
     "random",
     "textrank",
     "lexrank",
+    "pacsum_tfidf",
+    "pacsum_sbert",
     "sbert_centroid",
 }
 

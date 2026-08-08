@@ -367,7 +367,7 @@ def test_every_baseline_is_dispatchable(tmp_path, monkeypatch, baseline):
         "  min_words: 0\n"
         "  require_nonempty: true\n"
     )
-    if baseline.startswith("sbert_"):
+    if "sbert" in baseline:
         config_text += (
             "routes:\n"
             "  semantic:\n"
@@ -388,6 +388,10 @@ def test_every_baseline_is_dispatchable(tmp_path, monkeypatch, baseline):
 
         monkeypatch.setattr(
             "src.baselines.semantic.encoder_document_embeddings",
+            fake_embeddings,
+        )
+        monkeypatch.setattr(
+            "src.baselines.pacsum.encoder_document_embeddings",
             fake_embeddings,
         )
     config_path.write_text(config_text, encoding="utf-8")

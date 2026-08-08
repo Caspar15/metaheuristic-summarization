@@ -51,7 +51,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已加入；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs與完整 paired matrix 尚未完成，Gate 2 未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 與 clean-room PacSum TF-IDF／SBERT 程式已加入；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。partitioned PacSum／SBERT runs、GovReport 方法 runs 與完整 paired matrix 尚未完成，Gate 2 未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News／GovReport canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動，CNN-DM 僅在 Gate 3 後納入時處理** |
@@ -60,7 +60,7 @@
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
 1. 🔴 **F-0 只在 dev 部分回答** —— route paired evidence 有正訊號，但 Multi-News 對 Lead 的 R-2 顯著落後；未對齊強 baseline，不等於方法已勝出
-2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank historical rerun 已完成；PacSum、partitioned SBERT+MMR、GovReport 方法 runs 與完整 Gate 2 paired matrix 未完成，F-0 仍無法回答
+2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank historical rerun 已完成，PacSum clean-room adaptations 已接線；partitioned PacSum／SBERT+MMR、GovReport 方法 runs 與完整 Gate 2 paired matrix 未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -1525,6 +1525,23 @@ selection-aware strong rule。這是解析度上限，不是「證明不顯著�
 Multi-News 對 Lead 的 R-2 `−0.008336`，CI `[−0.010951,−0.005706]`；GovReport 對 Lead
 R-2 的 CI 跨 0，故目前本來就不符合跨 metrics 勝出。
 
+### 🟡 F-45. PacSum 上游 repo 與 checkpoint 無足夠授權／完整性 metadata，不能冒充原版重現
+
+**重現**：作者公開 repo `https://github.com/mswellhao/PacSum` 的 HEAD 固定為
+`67cc8ad370eac160ede997b7c32eb74907728bf8`；tree 內沒有 `LICENSE` 或 `NOTICE`。
+README 提供 fine-tuned BERT 的 Google Drive 連結，但沒有 checkpoint licence、SHA-256 或版本化
+model card，且宣告 runtime 為 Python 3.6、舊 PyTorch／gensim／pyrouge。完整檔案級稽核見
+`docs/research/evidence/f45_pacsum_upstream_audit.json`。
+
+**風險**：直接複製上游程式或 checkpoint 會同時造成授權、供應鏈完整性與 evaluator 不一致；
+即使勉強跑通，也不能合理宣稱 bit-exact reproduction。
+
+**處理**：不 vendoring 上游 code／weights。依 ACL 2019 論文公開方程 clean-room 實作
+`pacsum_tfidf` 與 `pacsum_sbert`，共同使用 frozen canonical sentences、共享 length/evaluator
+contract、確定性 sentence-order tie-break，artifact 強制標記
+`clean_room_protocol_adaptation`。前者分離 centrality 本身，後者測試同一 pinned MiniLM
+representation 下的 directed-centrality 對照；論文不得簡寫成「官方 PacSum checkpoint 重現」。
+
 ---
 
 ## Part 2 — 對研究主計畫的實證補充
@@ -1541,7 +1558,7 @@ R-2 的 CI 跨 0，故目前本來就不符合跨 metrics 勝出。
 | **P2-1** mutation 1.0 語義 | 「per-individual 還是 per-gene 待確認」 | ✅ **已確認**：pymoo `BitflipMutation()` 的 `prob=1.0` 是 **per-individual**；per-gene 預設 `1/n_var`。實測 n_var=50 時每基因翻轉率 0.0204 ≈ 1/50，約 63% 的個體至少被改動一個位元。**R4 擔心的「整條染色體隨機化」不會發生**，論文照實寫即可 |
 | **P2-1** pop_size / generations | 「補上 NSGA-II 設定」 | ⚠️ **狀態見 §0.0 狀態表**：config 裡的值從未被讀取，實際跑的一律是 100/100。**不要照 YAML 抄進論文** |
 | **P2-2** 多次執行取平均 | 「必須報告 mean ± std over ≥5 runs」 | ✅ 同意。補充：目前跨 process 重跑是可重現的（實測三次相同），但靠的是全域 seed 的巧合，應把 seed 顯式接線 |
-| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 連舊論文報告的 Lead/TextRank/LexRank 都沒有實作（F-9）；現在已補實作與 historical Multi-News diagnostics，但 PacSum、partitioned SBERT+MMR、GovReport 方法 runs 與 paired significance 仍缺 |
+| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 連舊論文報告的 Lead/TextRank/LexRank 都沒有實作（F-9）；現在已補上述 baseline 核心實作與 historical Multi-News diagnostics，但 partitioned PacSum／SBERT+MMR、GovReport 方法 runs 與完整 paired matrix 仍缺 |
 
 ### 稽核補充、且已收斂進主計畫／行動清單的項目
 
@@ -1703,11 +1720,12 @@ R-2 的 CI 跨 0，故目前本來就不符合跨 metrics 勝出。
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**357 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**366 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
-Multi-News TextRank／LexRank final rerun 已完成。PacSum、SBERT full run、GovReport、paired
+Multi-News TextRank／LexRank final rerun 已完成，PacSum clean-room adaptations 已接線。
+partitioned PacSum／SBERT full run、GovReport、paired
 significance、兩個 primary 的完整 baseline 矩陣與 proposed-method validation 仍未完成。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
