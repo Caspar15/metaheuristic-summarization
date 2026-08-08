@@ -393,6 +393,10 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
   selection 證據；也不得因已看過舊數字而重分 membership。
 - test 只有在人員簽署 freeze 建議書後才能解鎖；freeze 前任何 CLI、腳本或人工
   診斷都不得執行 test split。
+- A1 長度協定不可由 test 或單一方法決定。Multi-News 比較歷史 200–250 band 與三個
+  no-floor caps；GovReport 因無官方 extractive word cap，在分數前另以 dev IQR、median、
+  論文全資料平均與 dev p75 實例化四個角色。兩者均以 Lead／Random／lexical Greedy
+  cross-method macro ROUGE 排名，dev-test 一次確認並做 Holm correction。
 
 1. **Data pilot**：重建 GovReport validation 與 Multi-News validation，保存 boundaries、manifest 與 checksum。
 2. **Reality pilot**：Lead、LexRank/TextRank、PacSum、SBERT centroid、MMR/facility-location。

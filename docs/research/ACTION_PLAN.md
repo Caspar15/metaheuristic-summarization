@@ -19,7 +19,7 @@
       canonical SHA、dataset fingerprint、CC-BY-4.0、section/paragraph metadata 與
       0 個 U+FFFD；dev 681／dev-test 292 已在任何方法分數前凍結，manifest SHA-256
       `7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e`。
-- [~] A1 已完成 Multi-News reference-only 統計與預註冊，候選 runs 尚未執行；
+- [~] A1 已完成兩 primary 的 reference-only 統計與預註冊，候選 runs 尚未執行；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
       partition freeze 已完成；Gate 2 baseline 矩陣與 dev search 尚未完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
@@ -28,6 +28,11 @@
       勝出與 Holm/tie 規則已在任何候選 system score 前預註冊於
       `configs/preregistrations/a1_length_contract_v1.json`。GovReport 數值只可在其
       data layer/partition 凍結後依同一 rule family 實例化，不能照抄 Multi-News。
+- [x] A1 GovReport addendum 已在任何 method score 前凍結（681 dev rows：mean 567.08、
+      median 572、p25 500、p75 653）。因作者論文未提供 extractive word cap，候選為
+      IQR band 500–650、median cap 570、paper-mean cap 550、p75 cap 650；若 Holm 後
+      無勝者，採最簡單的無下限 median-cap。見
+      `configs/preregistrations/a1_length_contract_govreport_v1.json`。
 
 ## 2026-08-06 selector milestone
 

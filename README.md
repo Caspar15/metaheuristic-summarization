@@ -28,7 +28,8 @@
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
   Greedy、selection Jaccard 僅 `0.639`；因此 selector 已決定採 MMR，NSGA-II
   降為 comparator。這是 diagnostic，不是 full-validation 結論。
-- 仍缺：A1 長度協定實測、partitioned baseline matrix、PacSum、GovReport 方法 runs；test split
+- A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；仍缺候選實測、
+  partitioned baseline matrix、PacSum、GovReport 方法 runs；test split
   仍鎖定。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
