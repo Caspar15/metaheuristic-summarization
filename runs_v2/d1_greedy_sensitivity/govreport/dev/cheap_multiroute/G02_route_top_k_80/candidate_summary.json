@@ -1,0 +1,57 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G02_route_top_k_80",
+  "candidate_hash": "f448ec38ba3c9e63f303f5188ba2c95af09e9b47c762c61c2389e983a7529f4f",
+  "declared_delta": {
+    "candidate_budget.route_top_k": 80
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G02_route_top_k_80/resolved_config.yaml",
+  "config_sha256": "fdd750b60e83d907c1e64a778bea2fe346bec99ffa34de6cc4ce32169c250164",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.53039256397876,
+      "rouge2": 0.18556715897203932,
+      "rougeLsum": 0.4968875754959065
+    },
+    "macro_rouge": 0.4042824328155686,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 642.8825256975036,
+      "min": 591,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 59.93685756240822,
+    "selector_candidate_size_mean": 59.93685756240822,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 59.93685756240822,
+    "route_agreement_mean": 1.3026676456191877,
+    "unique_candidate_mean_by_route": {
+      "graph": 20.908957415565347,
+      "lexical": 20.930983847283407
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 8.055800293685756,
+      "lexical": 8.058737151248165
+    }
+  }
+}

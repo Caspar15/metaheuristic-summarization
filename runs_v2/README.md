@@ -40,3 +40,9 @@ L10 dev point estimate 高於 Lead／Random 就提前晉級。
 route-top-K 80 的 macro `0.324305` 居首，selector pool mean/max `48.03/60`；相對
 純 lexical L00 是 `+0.013952`，但仍低於同協定 Lead macro `0.326291`。family summary
 明示 `dev_test_accessed=false`、`test_split_accessed=false`，不得提前 promotion。
+
+`d1_greedy_sensitivity/govreport/dev/cheap_multiroute/` 已嘗試全部 12 個原預註冊
+configs：11 success，G11 因 77 mandatory section/route reservations 超過 total cap 60
+而 fail loud。原 failure 永久保留；另在執行前預註冊
+`d1_govreport_section_guard_followup_v1.json`，以容量推導的 `max_items=20` 作獨立
+feasibility follow-up，不取代 G11。原 family 沒有讀 dev-test/test。

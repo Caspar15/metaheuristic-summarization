@@ -112,6 +112,11 @@
       居首，macro `0.324305`；相對純 lexical L00 `+0.013952`，受控 pool mean/max
       `48.03/60`，但仍低於 Lead macro `0.326291`，不得晉級。G06 membership-only 比
       graph base 低 `0.004023`，route-aware salience 不可刪。
+- [~] D1 GovReport cheap-multiroute 原 12 configs 已全部嘗試：11 success + G11
+      structural failure。G02 hard pool macro `0.404282`，高 Lead 但低 Random；G07
+      full/soft pool `0.414831` 居首，但 selection 是 G00 約 `13.28×` 且仍略低全文
+      lexical L10，不是 final architecture。G11 的 77 mandatory reservations 超過 cap 60，
+      已依事前 inventory 另預註冊 `max_items=20` feasibility follow-up；跑完後才勾選。
 
 ## 2026-08-06 selector milestone
 

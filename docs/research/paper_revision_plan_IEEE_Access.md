@@ -107,7 +107,13 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > significance。新增的 Multi-News cheap-multiroute 證據顯示 sparse graph G02 以
 > mean/max `48.03/60` 的受控 pool 達到 macro `0.324305`，相對純 lexical base
 > `+0.013952`、也高於全文 lexical，但仍低 Lead `0.001986`，主要缺口在 R-2。
-> GovReport graph、兩資料集 semantic 與 governed Gate 2 未完成前不能提前下最終結論。
+> GovReport cap-aware section follow-up、兩資料集 semantic 與 governed Gate 2 未完成前
+> 不能提前下最終結論。
+
+> GovReport cheap-multiroute 隨後完成 11 個有效 runs；G02 hard pool macro `0.404282`
+> 高於 Lead、低於 Random。G07 full/soft pool `0.414831` 但成本約 G00 `13.28×`，且仍
+> 略低全文 lexical L10。uncapped section guard 因 mandatory 77 > cap 60 正確失敗；
+> 原 failure 保留，容量推導的 cap-aware G11b 已獨立預註冊，不能覆寫原配置。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

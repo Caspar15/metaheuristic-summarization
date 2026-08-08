@@ -1325,6 +1325,39 @@ summary 明示 `dev_test_accessed=false`、`test_split_accessed=false`。
 
 ---
 
+### 🟡 F-34. GovReport uncapped section guard 與固定候選總額結構上不相容
+
+**重現（2026-08-08，GovReport frozen dev 第一列）**：G11 同時要求兩 route 各保留
+20 個 evidence、每個 section 再保留一個 guard。第一列形成 77 個 mandatory
+reservations，但 `candidate_budget.total=60`，因此
+`candidate_builder.py` 正確拋出 `candidate total cap 60 cannot fit 77 mandatory
+route/guard reservations`。這不是不可行摘要列，不能依 F-17 降低限制或跳列。
+
+**處理**：原 G11 保持 failed，不修改、不覆寫。分數前的 tunable inventory 已明定
+`coverage_guard.max_items`「only if guards overflow cap」，所以另立
+`d1_govreport_section_guard_followup_v1.json`，固定 `max_items=20`；20 是由 total 60
+減去兩 route 最壞情況各 20 個 disjoint reservations 得到，不用 ROUGE 選值。follow-up
+只作 feasibility/diagnostic，總比較數改記 28；執行前已版本化 runner，且沒有 split CLI。
+
+---
+
+### 🟡 F-35. GovReport hard-pool graph 有增益，但受控候選召回仍不足；全文 soft pool 成本過高
+
+**證據（D1 frozen dev 681 rows，2026-08-08）**：G00 lexical+graph macro `0.403496`，
+G02 route top-K 80 為 `0.404282`；相對純 lexical L00 分別
+`+0.033111/+0.033897`。G00 也高於 TF-IDF centroid 第二路 G01 `0.003075`，因此 graph
+route 目前不符合刪除條件。G02 pool mean/max `59.94/60`，高於 Lead macro
+`0.399232`，但低於 Random `0.408844`。
+
+G07 soft/full pool macro `0.414831` 高於便宜 baseline，卻仍低於全文 lexical L10
+`0.415585`；selection `804.13 s` 對 G00 `60.53 s` 約 `13.28×`，pool max 2,889。
+因此它沒有提供 graph 的全文增量，且不符合最終成本目標。G06 membership-only 在
+GovReport 比 G00 低 `0.002624`，與 Multi-News `−0.004023` 同方向，跨資料集支持刪除
+membership-only 設計、保留 route-aware salience。仍未做 semantic、強 baseline、
+paired inference 或 dev-test，不得宣稱 graph 方法勝出。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

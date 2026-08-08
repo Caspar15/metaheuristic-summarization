@@ -1,0 +1,691 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T10:35:38.939036+00:00",
+  "status": "partial_failure",
+  "test_split_accessed": false,
+  "dev_test_accessed": false,
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "rows": 681,
+  "family": "cheap_multiroute",
+  "candidate_count": 12,
+  "ranking": [
+    "G07_soft_pool",
+    "G02_route_top_k_80",
+    "G03_min_per_route_10",
+    "G04_total_80",
+    "G00_lexical_graph",
+    "G10_graph_alpha_0_90",
+    "G09_graph_min_similarity_0_10",
+    "G05_rrf_constant_30",
+    "G08_graph_neighbors_16",
+    "G06_membership_only",
+    "G01_tfidf_centroid_route"
+  ],
+  "candidates": {
+    "G00_lexical_graph": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G00_lexical_graph",
+      "candidate_hash": "211aa8021fc204d0b4368e8c2c8f23cdecb626580b8c480a06e295acdebb8806",
+      "declared_delta": {
+        "compute_budget.enabled_routes": [
+          "lexical",
+          "graph"
+        ]
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G00_lexical_graph/resolved_config.yaml",
+      "config_sha256": "898f543ec2b84f151890ae04a85a1b4dee44a2d058b0d5a884d3ece5df7a1a9e",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5295421979886559,
+          "rouge2": 0.18519050181374094,
+          "rougeLsum": 0.4957556618226385
+        },
+        "macro_rouge": 0.4034961205416785,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.3157121879589,
+          "min": 551,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.819383259911895,
+        "route_agreement_mean": 1.1156321267138196,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.534508076358296,
+          "lexical": 26.455212922173274
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 9.154185022026432,
+          "lexical": 9.405286343612335
+        }
+      }
+    },
+    "G01_tfidf_centroid_route": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G01_tfidf_centroid_route",
+      "candidate_hash": "435853a2977fa76edd76683ee0f7773dc4932b316ff66196422d93e2adbe49ae",
+      "declared_delta": {
+        "compute_budget.enabled_routes": [
+          "lexical",
+          "tfidf_centroid"
+        ]
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G01_tfidf_centroid_route/resolved_config.yaml",
+      "config_sha256": "8ef7d6d8cec1bda2dbbace10addb404f1efbe6a7fa219c8e5e5502960fba9683",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5272262211868609,
+          "rouge2": 0.18279611723604514,
+          "rougeLsum": 0.4912405693616465
+        },
+        "macro_rouge": 0.40042096926151755,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 641.6079295154185,
+          "min": 554,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.776798825256975,
+        "selector_candidate_size_mean": 59.776798825256975,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.776798825256975,
+        "route_agreement_mean": 1.1228859747032045,
+        "unique_candidate_mean_by_route": {
+          "lexical": 26.577092511013216,
+          "tfidf_centroid": 25.95741556534508
+        },
+        "unique_selected_mean_by_route": {
+          "lexical": 10.568281938325992,
+          "tfidf_centroid": 6.091042584434655
+        }
+      }
+    },
+    "G02_route_top_k_80": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G02_route_top_k_80",
+      "candidate_hash": "f448ec38ba3c9e63f303f5188ba2c95af09e9b47c762c61c2389e983a7529f4f",
+      "declared_delta": {
+        "candidate_budget.route_top_k": 80
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G02_route_top_k_80/resolved_config.yaml",
+      "config_sha256": "fdd750b60e83d907c1e64a778bea2fe346bec99ffa34de6cc4ce32169c250164",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.53039256397876,
+          "rouge2": 0.18556715897203932,
+          "rougeLsum": 0.4968875754959065
+        },
+        "macro_rouge": 0.4042824328155686,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.8825256975036,
+          "min": 591,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.93685756240822,
+        "selector_candidate_size_mean": 59.93685756240822,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.93685756240822,
+        "route_agreement_mean": 1.3026676456191877,
+        "unique_candidate_mean_by_route": {
+          "graph": 20.908957415565347,
+          "lexical": 20.930983847283407
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 8.055800293685756,
+          "lexical": 8.058737151248165
+        }
+      }
+    },
+    "G03_min_per_route_10": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G03_min_per_route_10",
+      "candidate_hash": "8f44b1dcf9d7786e2d5dddfa8d729dcfe68940f7c632ab74e335dde3544b55a6",
+      "declared_delta": {
+        "candidate_budget.min_per_route": 10
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G03_min_per_route_10/resolved_config.yaml",
+      "config_sha256": "d5a0fe1826d226a96943533fc48915a288988a5c229977f099974c23003d62e5",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5300827086123711,
+          "rouge2": 0.18572896829281277,
+          "rougeLsum": 0.49642156955012545
+        },
+        "macro_rouge": 0.40407774881843644,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.1762114537445,
+          "min": 551,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.819383259911895,
+        "route_agreement_mean": 1.1156321267138196,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.559471365638768,
+          "lexical": 26.430249632892803
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 9.124816446402349,
+          "lexical": 9.367107195301028
+        }
+      }
+    },
+    "G04_total_80": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G04_total_80",
+      "candidate_hash": "fb7000d87502bad085d981718b6137db65754efdbac51c9eb62ab5cb804b02c1",
+      "declared_delta": {
+        "candidate_budget.total": 80
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G04_total_80/resolved_config.yaml",
+      "config_sha256": "0f5943d23952e6f22a5d0e9167c6d17cafc6e34a33fe1cc31847e53bc6d10757",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5295224269130595,
+          "rouge2": 0.18426641819529135,
+          "rougeLsum": 0.4969928524105012
+        },
+        "macro_rouge": 0.40359389917295063,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 643.3641703377386,
+          "min": 619,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 73.17033773861968,
+        "selector_candidate_size_mean": 73.17033773861968,
+        "selector_candidate_size_p95": 79.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 73.17033773861968,
+        "route_agreement_mean": 1.1012294051086031,
+        "unique_candidate_mean_by_route": {
+          "graph": 33.17033773861968,
+          "lexical": 33.17033773861968
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 10.869309838472834,
+          "lexical": 10.051395007342144
+        }
+      }
+    },
+    "G05_rrf_constant_30": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G05_rrf_constant_30",
+      "candidate_hash": "39883a91b4bbdd87742ba6fc35ab5f480738f6ebfbc6783d221542102cf6fe07",
+      "declared_delta": {
+        "candidates.rrf_constant": 30
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G05_rrf_constant_30/resolved_config.yaml",
+      "config_sha256": "01e5c74657c6c2b78e1f53441824087eea81567b8f8c5f9be828401b93e657e4",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.52865644802319,
+          "rouge2": 0.18438024841063763,
+          "rougeLsum": 0.4949455065542949
+        },
+        "macro_rouge": 0.4026607343293742,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.4434654919237,
+          "min": 545,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.819383259911895,
+        "route_agreement_mean": 1.1156321267138196,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.505139500734213,
+          "lexical": 26.484581497797357
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 9.101321585903083,
+          "lexical": 9.452276064610867
+        }
+      }
+    },
+    "G06_membership_only": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G06_membership_only",
+      "candidate_hash": "67c5ba4386a9d6de8d070cbe4b0dc581396fc54b3c34d725eff06fbceea36470",
+      "declared_delta": {
+        "selector.salience_source": "membership_only"
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G06_membership_only/resolved_config.yaml",
+      "config_sha256": "7c09c801391f1ffaad07c86f9ab6243b32a178be860bd58d5040dff911605b03",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.527141991382809,
+          "rouge2": 0.18265676007740467,
+          "rougeLsum": 0.49281660780210446
+        },
+        "macro_rouge": 0.40087178642077276,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.9324522760646,
+          "min": 606,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_mean": 59.819383259911895,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.819383259911895,
+        "route_agreement_mean": 1.1156321267138196,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.534508076358296,
+          "lexical": 26.455212922173274
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 8.258443465491924,
+          "lexical": 9.813509544787077
+        }
+      }
+    },
+    "G07_soft_pool": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G07_soft_pool",
+      "candidate_hash": "bf117c534f8c7df9cae30a46aff4488ab4956206377a5f462d9600947b8db707",
+      "declared_delta": {
+        "candidates.mode": "soft",
+        "selector.salience_source": "membership_only"
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G07_soft_pool/resolved_config.yaml",
+      "config_sha256": "1b0f19f070e7fe3881b552df9db242af716cd0599ab95fa977ee01ad8bda964a",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.540744910313215,
+          "rouge2": 0.18958486994090015,
+          "rougeLsum": 0.5141628769368025
+        },
+        "macro_rouge": 0.41483088573030596,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.0088105726873,
+          "min": 635,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 318.51835535976505,
+        "selector_candidate_size_mean": 318.51835535976505,
+        "selector_candidate_size_p95": 698.0,
+        "selector_candidate_size_max": 2889,
+        "provenance_candidate_size_mean": 59.819383259911895,
+        "route_agreement_mean": 1.1156321267138196,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.534508076358296,
+          "lexical": 26.455212922173274
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 5.177679882525697,
+          "lexical": 2.575624082232012
+        }
+      }
+    },
+    "G08_graph_neighbors_16": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G08_graph_neighbors_16",
+      "candidate_hash": "933fa75e03e08467ebd7fe4685e0f5ec37fadbb3aa878de452dafba910e6a853",
+      "declared_delta": {
+        "routes.graph.n_neighbors": 16
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G08_graph_neighbors_16/resolved_config.yaml",
+      "config_sha256": "1c3babaccf7d5dad645f3e3b3925d31599520f8705e66564d2fc90ae852cac69",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5279486466092986,
+          "rouge2": 0.18221235352529308,
+          "rougeLsum": 0.4932016719351957
+        },
+        "macro_rouge": 0.4011208906899291,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 641.8575624082232,
+          "min": 617,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.79001468428781,
+        "selector_candidate_size_mean": 59.79001468428781,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.79001468428781,
+        "route_agreement_mean": 1.1267090262481463,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.215859030837006,
+          "lexical": 26.093979441997064
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 7.461086637298091,
+          "lexical": 10.044052863436123
+        }
+      }
+    },
+    "G09_graph_min_similarity_0_10": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G09_graph_min_similarity_0_10",
+      "candidate_hash": "5016bdc9971f39aea3fc785329bca8fc9c4365d5d678529911886a0cd36f4917",
+      "declared_delta": {
+        "routes.graph.min_similarity": 0.1
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G09_graph_min_similarity_0_10/resolved_config.yaml",
+      "config_sha256": "4a2fd68915504a8601f2ba4202247003c20db825c3284d75a9aaca744a50ccff",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5296230433482849,
+          "rouge2": 0.1850532644549383,
+          "rougeLsum": 0.49577306031804674
+        },
+        "macro_rouge": 0.40348312270709,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.4522760646108,
+          "min": 551,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.81204111600587,
+        "selector_candidate_size_mean": 59.81204111600587,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.81204111600587,
+        "route_agreement_mean": 1.1157084718208232,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.52863436123348,
+          "lexical": 26.45374449339207
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 9.208516886930983,
+          "lexical": 9.386196769456681
+        }
+      }
+    },
+    "G10_graph_alpha_0_90": {
+      "status": "completed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G10_graph_alpha_0_90",
+      "candidate_hash": "d1da18a9c0b3f2875e7a36abf8f7d80450e0500bf53f458e4549d45a22e75813",
+      "declared_delta": {
+        "routes.graph.alpha": 0.9
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G10_graph_alpha_0_90/resolved_config.yaml",
+      "config_sha256": "dd4d94409632facf4b2c5f62c2c0b1b1dedd438362c59185c3dca03358772262",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5296675263263482,
+          "rouge2": 0.1852859689512846,
+          "rougeLsum": 0.4955333273704887
+        },
+        "macro_rouge": 0.40349560754937386,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 642.2041116005873,
+          "min": 535,
+          "max": 650
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 681,
+        "candidate_size_mean": 59.822320117474305,
+        "selector_candidate_size_mean": 59.822320117474305,
+        "selector_candidate_size_p95": 60.0,
+        "selector_candidate_size_max": 60,
+        "provenance_candidate_size_mean": 59.822320117474305,
+        "route_agreement_mean": 1.114189187570104,
+        "unique_candidate_mean_by_route": {
+          "graph": 26.577092511013216,
+          "lexical": 26.5007342143906
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 9.130690161527166,
+          "lexical": 9.493392070484582
+        }
+      }
+    },
+    "G11_dataset_structure_guard": {
+      "status": "failed",
+      "study_id": "d1-greedy-sensitivity-v1",
+      "dataset": "GovReport",
+      "partition": "dev",
+      "partition_rows": 681,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+      "length_policy_path": "configs/length_policies/govreport_v1.json",
+      "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+      "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "family": "cheap_multiroute",
+      "candidate": "G11_dataset_structure_guard",
+      "candidate_hash": "988e50a1fe5d90b0f0f2a62b2625decc9db148733ec0f15b0c31ac926e2bcbc0",
+      "declared_delta": {
+        "Multi-News": {
+          "coverage_guard.document": false
+        },
+        "GovReport": {
+          "coverage_guard.section": true
+        }
+      },
+      "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G11_dataset_structure_guard/resolved_config.yaml",
+      "config_sha256": "16101ab9c2c2e7f1e3fb423908ace84a854890be3a909cde803e9ba3e38fb1f3",
+      "failure": "RuntimeError: greedy failed with exit code 1; see runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G11_dataset_structure_guard/greedy/run/command.log"
+    }
+  },
+  "promotion_status": "pending_all_families_and_both_datasets"
+}

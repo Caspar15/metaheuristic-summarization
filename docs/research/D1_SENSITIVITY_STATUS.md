@@ -16,7 +16,7 @@
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | **12/12 complete** | pending |
-| GovReport | **12/12 complete** | pending | pending |
+| GovReport | **12/12 complete** | **11 success + 1 structural failure; follow-up preregistered** | pending |
 
 ## Multi-News lexical/objective 結果
 
@@ -160,10 +160,45 @@
 - GovReport search log 保存 12 final successes 加 1 個 L10 interruption failure；全部
   `dev_test_score=null`、`test_split_accessed=false`。
 
+## GovReport cheap-multiroute 結果
+
+原預註冊的 12 個配置已全部嘗試：11 success，G11 因 section guard mandatory
+reservations 77 > total cap 60 正確 fail loud。
+
+| ID | 單一變動 | Macro | Δ vs G00 | selector pool mean/max |
+|---|---|---:|---:|---:|
+| G07 | soft/full pool + membership-only | **0.414831** | **+0.011335** | 318.52 / 2,889 |
+| G02 | route top-K 40 → 80 | 0.404282 | +0.000786 | 59.94 / 60 |
+| G03 | min per route 20 → 10 | 0.404078 | +0.000582 | 59.82 / 60 |
+| G04 | total budget 60 → 80 | 0.403594 | +0.000098 | 73.17 / 80 |
+| G00 | lexical + sparse graph | 0.403496 | 0 | 59.82 / 60 |
+| G10 | graph alpha 0.85 → 0.90 | 0.403496 | −0.000001 | 59.82 / 60 |
+| G09 | graph min similarity 0 → 0.10 | 0.403483 | −0.000013 | 59.81 / 60 |
+| G05 | RRF constant 60 → 30 | 0.402661 | −0.000835 | 59.82 / 60 |
+| G08 | graph neighbors 8 → 16 | 0.401121 | −0.002375 | 59.79 / 60 |
+| G06 | membership-only salience | 0.400872 | −0.002624 | 59.82 / 60 |
+| G01 | lexical + TF-IDF centroid | 0.400421 | −0.003075 | 59.78 / 60 |
+| G11 | section guard（uncapped） | **failed** | — | first row mandatory 77 > cap 60 |
+
+### 解讀與 follow-up 治理
+
+- G00/G02 相對純 lexical L00 分別 `+0.033111/+0.033897`，graph 又比 TF-IDF
+  centroid 第二路 G01 高 `0.003075`。graph 刪除條件尚未觸發，但 G02 hard pool
+  macro 只高 Lead `0.005050`、仍低 Random `0.004562`，不能晉級。
+- G07 高於 Lead／Random macro `+0.015599/+0.005987`，但比全文 lexical L10 仍低
+  `0.000754`；selection `804.13 s`，是 G00 `60.53 s` 的約 `13.28×`。它沒有證明
+  graph 能在全文池增量勝過 lexical，且成本不適合作 final architecture。
+- G06 在兩 primary 都低於 G00（Multi-News `−0.004023`；GovReport `−0.002624`）。
+  因此 membership-only 架構已得到跨資料集負證據，route-aware salience 必須保留。
+- G11 failure 不得靠事後放大 total cap 覆寫。事前 inventory 已限定
+  `coverage_guard.max_items` 只在 overflow 時啟用；因此另以系統時間預註冊
+  `G11b_section_guard_cap20`。20 由 `60 − 2×20` 的最壞情況容量推導，不使用分數選值；
+  原 G11 failure 永久保留。follow-up 尚未執行。
+
 ## 還沒做
 
 1. Multi-News semantic family。
-2. GovReport cheap-multiroute／semantic family；不能把 Multi-News 排名外推。
+2. GovReport G11b section-guard feasibility follow-up，以及 GovReport semantic family。
 3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
