@@ -70,3 +70,7 @@ S01 接法在兩資料集均失敗，後續刪除；GovReport S02b 依既有 pre
 `a338737` 後完成：681/681 feasible、pool mean/max `78.74/80`、macro `0.417862`、
 selection `1,106.27 s`，dev-test/test 未讀。它是目前 GovReport proposed 最高點估計，
 但仍是 capacity follow-up 而非 route 純 ablation；原 S02 failure 不被取代。
+
+下一步的 `d1_capacity_matched_route_ablation/` 已在任何該 family 分數前預註冊：從
+S02b 只移除 semantic 或 graph，其他 capacity/guard/selector contract 固定。註冊時間
+明確晚於 S02b aggregate，不冒充事前未知；runner 固定 validation-dev，無 split CLI。

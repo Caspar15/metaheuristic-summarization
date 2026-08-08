@@ -133,6 +133,9 @@
       高全文 lexical L10 `0.002277`、graph G07 `0.003031` 與 Random `0.009018`，但成本
       約 graph G00 `18.28×`。兩 primary S02b 均為目前 proposed 最高點估計；仍待 paired
       inference、strong baseline 與 matched route ablation，未讀 dev-test/test。
+- [~] 已在看過 S02b aggregate、但尚未跑 matched ablation 前，預註冊兩-primary
+      capacity-matched route removal：固定 S02b total 80／guard cap 20，只分別移除
+      semantic 或 graph。runner 無 split 參數；兩資料集完成並做 paired analysis 才勾選。
 
 ## 2026-08-06 selector milestone
 

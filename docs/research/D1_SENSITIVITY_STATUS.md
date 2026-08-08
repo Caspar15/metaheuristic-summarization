@@ -255,7 +255,8 @@ coverage guard 在第一列達 mandatory 61 > cap 60 而正確 fail loud。
 
 ## 還沒做
 
-1. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
-2. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
+1. 已預註冊的 capacity-matched semantic／graph route-removal ablation。
+2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
+3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
-3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+4. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
