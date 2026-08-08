@@ -1,0 +1,78 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T05:03:35.862260+00:00",
+  "started_at_utc": "2026-08-08T05:02:04.028905+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "random",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "random",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\a1_length_contract\\multinews\\dev\\legacy_floor_200_cap_250\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\a1_length_contract\\multinews\\dev\\legacy_floor_200_cap_250\\random",
+    "--stamp",
+    "run",
+    "--seed",
+    "3407"
+  ],
+  "implementation_commit": "f320f06600c051938fe0d0475003835c237dfaaf",
+  "config_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/resolved_config.yaml",
+  "config_sha256": "cffe519d00da6bb05b7f33215161fcac0a97c437a9329d7906489eeb1ebe1c7f",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/random/run/predictions.jsonl",
+  "predictions_sha256": "f35078e5449880d6bde1a4fd142d8ae68f256fdf2a6774f3e8d1748c2b1a7892",
+  "selected_indices_sha256": "913c4d25347dae9b86f51ded6999b4b15dba7393c01cfe0f752a8a589467d78a",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4179007958181792,
+      "rouge2": 0.12328876864885509,
+      "rougeLsum": 0.3801038161786124
+    },
+    "macro_rouge": 0.3070977935485489,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.03557814485387,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "a1-length-contract-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+  "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+  "candidate": "legacy_floor_200_cap_250",
+  "candidate_hash": "e6a9108129238a61e913915950837b33aacbde3a93d8496737a60684b31cd1f4",
+  "length_contract": {
+    "min_words": 200,
+    "max_words": 250
+  }
+}

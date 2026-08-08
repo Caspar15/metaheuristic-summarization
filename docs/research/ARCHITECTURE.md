@@ -397,6 +397,11 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
   no-floor caps；GovReport 因無官方 extractive word cap，在分數前另以 dev IQR、median、
   論文全資料平均與 dev p75 實例化四個角色。兩者均以 Lead／Random／lexical Greedy
   cross-method macro ROUGE 排名，dev-test 一次確認並做 Holm correction。
+- Multi-News dev 結果顯示 floor 不是被 A1 自動消除的多餘設定：同一 250 cap 下，
+  Lead/Random 不受 floor 影響，lexical Greedy 卻由 200.45 words／macro `0.279831`
+  變成 242.60 words／`0.310353`。因此「floor 是否保留」實際上同時是 selector
+  stopping contract，不能只用 reference length coverage 解讀；最終仍以一次 dev-test
+  規則定案。
 
 1. **Data pilot**：重建 GovReport validation 與 Multi-News validation，保存 boundaries、manifest 與 checksum。
 2. **Reality pilot**：Lead、LexRank/TextRank、PacSum、SBERT centroid、MMR/facility-location。

@@ -37,6 +37,15 @@
       對 Lead／Random／lexical Greedy 寫逐 run evidence、prediction SHA、逐篇 selected-
       indices digest、dependency versions、per-example ROUGE 與 `search_log.jsonl`；已完成
       的 logical candidate 不可第二次觀察 dev-test。4 個 pure-function regression 通過。
+- [x] A1 Multi-News dev 四候選 × 三方法已完整跑完（每個 3,935 rows，12/12 run
+      evidence 完成，test 未存取）。cross-method macro 排名：legacy floor 200–250
+      `0.314581` > p75 cap260 `0.305578` > max-only250 `0.304407` > median cap220
+      `0.298191`。同 250 cap 的 Lead／Random 完全相同；差距來自 Greedy：floor 版本
+      242.60 words／`0.310353`，no-floor 200.45 words／`0.279831`。四候選依預註冊
+      均仍須各看一次 dev-test，現在不得定案。
+- [~] A1 新發現 F-23：floor-bearing Greedy 有 4/3,935 rows 在 source/candidate capacity
+      都可達 250 時仍低於 effective minimum 200；目前依 F-17 完整記錄並以 all-row
+      denominator 計分，未放寬或補句。是否可接受由預註冊 dev-test 與 freeze 決策處理。
 
 ## 2026-08-06 selector milestone
 

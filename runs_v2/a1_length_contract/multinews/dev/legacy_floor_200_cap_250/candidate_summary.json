@@ -1,0 +1,75 @@
+{
+  "status": "completed",
+  "study_id": "a1-length-contract-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+  "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+  "candidate": "legacy_floor_200_cap_250",
+  "candidate_hash": "e6a9108129238a61e913915950837b33aacbde3a93d8496737a60684b31cd1f4",
+  "length_contract": {
+    "min_words": 200,
+    "max_words": 250
+  },
+  "resolved_config_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/resolved_config.yaml",
+  "resolved_config_sha256": "cffe519d00da6bb05b7f33215161fcac0a97c437a9329d7906489eeb1ebe1c7f",
+  "methods": {
+    "lead": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 3935,
+      "rouge": {
+        "rouge1": 0.43503283092084166,
+        "rouge2": 0.148138832947838,
+        "rougeLsum": 0.39570096591010867
+      },
+      "macro_rouge": 0.3262908765929295,
+      "feasible_rows": 3935,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 233.70419313850064,
+        "min": 22,
+        "max": 250
+      }
+    },
+    "random": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 3935,
+      "rouge": {
+        "rouge1": 0.4179007958181792,
+        "rouge2": 0.12328876864885509,
+        "rougeLsum": 0.3801038161786124
+      },
+      "macro_rouge": 0.3070977935485489,
+      "feasible_rows": 3935,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 247.03557814485387,
+        "min": 36,
+        "max": 250
+      }
+    },
+    "greedy": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 3935,
+      "rouge": {
+        "rouge1": 0.42294418595001687,
+        "rouge2": 0.1273627971951294,
+        "rougeLsum": 0.38075237440758963
+      },
+      "macro_rouge": 0.3103531191842453,
+      "feasible_rows": 3931,
+      "infeasible_rows": 4,
+      "summary_words": {
+        "mean": 242.602541296061,
+        "min": 36,
+        "max": 250
+      }
+    }
+  },
+  "cross_method_macro_rouge": 0.31458059644190767,
+  "per_example_sha256": "a3b186c121289fdc8907245d147035c6f0b9f21fbdd2322c8ad77f93e4a535be"
+}

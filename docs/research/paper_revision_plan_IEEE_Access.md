@@ -537,7 +537,7 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
    Phase 1e 已完成工程前提：Greedy、GRASP、MMR、NSGA-II 共用 constraints 與 final evaluator；Greedy／NSGA-II 另嚴格共用同一 scalar objective，MMR 的 sequential rule 則明確分開標示。200-row paired selector comparison 與 NSGA 五 seed stability 已完成，證據不支持 NSGA-II；exact small-instance gap 只在仍需解釋 stochastic comparator 時補做，不再是 main architecture blocker。
 
-   新 shared objective 的 3-row correctness smoke 也揭露：若 multi-sentence mean-salience 只有 max budget、沒有 lower length bound，deterministic greedy 三筆皆退化為單句（41–88 words）。因此 Multi-News MVP 暫以 requested 200–250 words 作 length-matched validation band；逐列 effective minimum 只能在完整來源於相同 upper constraints 下本身不可達時調降，且 requested/effective/source capacity/reason 全部保存。全文可達但 candidate pool 不可達時必須報錯，不能以第二次 clamp 掩蓋候選設計缺陷。此值與 objective form 仍須在 validation 凍結，不能依 test 表現選擇。這個結果再次說明「修正公式」不等於「效果自然會變好」。
+   新 shared objective 的 3-row correctness smoke 也揭露：若 multi-sentence mean-salience 只有 max budget、沒有 lower length bound，deterministic greedy 三筆皆退化為單句（41–88 words）。因此 Multi-News MVP 暫以 requested 200–250 words 作 length-matched validation band；逐列 effective minimum 只能在完整來源於相同 upper constraints 下本身不可達時調降，且 requested/effective/source capacity/reason 全部保存。全文可達但 candidate pool 不可達時必須報錯，不能以第二次 clamp 掩蓋候選設計缺陷。2026-08-08 的 frozen dev A1 又確認，同 250 cap 下移除 floor 會讓 length-normalized Greedy 從平均 242.60 降到 200.45 words，macro ROUGE 由 0.310353 降到 0.279831；floor 仍是 selector stopping mechanism，不只是長度標籤。最終數值仍須由一次 dev-test 凍結，不能依 test 表現選擇。這個結果再次說明「修正公式」不等於「效果自然會變好」。
 
 6. Pareto output policy（comparator only）
    不再把 Pareto front 最後任意 scalarize。若最終稿仍報 NSGA-II comparator，須預先固定 knee point、reference point 或使用者偏好，並報 front 的穩定性；不得再將它升格為主方法。

@@ -1,0 +1,72 @@
+experiment:
+  status: validation_pilot_only
+  dataset: multi_news
+data_policy:
+  policy_path: configs/data_policies/multinews_validation_v1.json
+  policy_sha256: dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615
+  analysis: main
+seed: 3407
+features:
+  tf_isf:
+    version: v2
+    use_stopwords: true
+    use_sublinear_tf: true
+    use_bigrams: false
+  weights:
+    importance: 1.0
+    length: 0.0
+    position: 0.0
+    graph: 0.0
+    centrality: 0.0
+    novelty: 0.0
+representations:
+  use: true
+  method: tfidf
+compute_budget:
+  mode: fixed
+  enabled_routes:
+  - lexical
+candidate_budget:
+  route_top_k: 40
+  min_per_route: 20
+  total: 60
+candidates:
+  use: true
+  mode: hard
+  rrf_constant: 60
+selector:
+  salience_source: rrf_fusion
+  similarity_source: pipeline_similarity
+objectives:
+  importance_aggregation: length_normalized
+  coverage_method: max
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+routes:
+  lexical:
+    revision: tf_isf_v2:smooth_nonnegative_sublinear_unigram
+coverage_guard:
+  enabled: true
+  document: true
+  section: false
+  position: false
+optimizer:
+  method: greedy
+length_control:
+  unit: words
+  require_nonempty: true
+  min_words: 200
+  max_words: 250
+experiment_partition:
+  manifest_path: configs/validation_partitions/multinews_validation_dev_v1.json
+  manifest_sha256: e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee
+  name: dev
+study:
+  study_id: a1-length-contract-v1
+  dataset_key: multinews
+  candidate: legacy_floor_200_cap_250
+  candidate_hash: e6a9108129238a61e913915950837b33aacbde3a93d8496737a60684b31cd1f4
+  partition: dev
+  preregistration_path: configs/preregistrations/a1_length_contract_v1.json
+  preregistration_sha256: 95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792

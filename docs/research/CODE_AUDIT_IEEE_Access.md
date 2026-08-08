@@ -1063,6 +1063,32 @@ python -m scripts.audit.govreport_validation_audit \
 
 ---
 
+### 🟡 F-23. `min_words` 不只是輸出協定；它大幅改變 Greedy trajectory，且仍可能在可行時未達 floor
+
+**預註冊 dev 證據（Multi-News 3,935 rows，2026-08-08）**：A1 對四個長度協定
+各跑 Lead document-order、Random seed 3407、lexical-only length-normalized Greedy。
+同一 `max_words=250` 下，Lead 與 Random 在 `min_words=200`／`0` 的 selected-indices
+digest 與分數完全相同，符合 baseline 明確不套用 selector floor 的 frozen contract；
+Greedy 則由 no-floor 的平均 200.45 words、macro ROUGE `0.279831`，變為 floor 版本的
+242.60 words、`0.310353`。所以 A1 的 dev 暫時由 legacy 200–250 勝出，不支持「只要
+把 cap 對齊 reference，floor 病因自然消失」的原推測。
+
+**第二個現象**：floor-bearing Greedy 有 4/3,935 rows 回報
+`selector_min_words_shortfall`。四列的 `source_capacity_words=250`、
+`candidate_capacity_words=250`、`effective_min_words=200`，但實際只選 193、195、185、
+182 words；這不是來源本身不可達，而是 selector trajectory 沒找到已知存在的可行 subset。
+F-17 policy 正確保留完整 prediction row 並在 all-row denominator 計分，沒有補句或刪列；
+但「誠實記錄 infeasible」不等於 selector 已滿足 length contract。
+
+**影響範圍**：這是 dev finding，尚未看 dev-test，不能據此 freeze 200–250。四個協定仍依
+preregistration 各評估一次 dev-test；若 floor 協定最後被選中，論文必須把它描述為
+selector stopping/feasibility mechanism，並報 infeasibility rate，不能只寫成公平的輸出長度
+上限。證據在 `runs_v2/a1_length_contract/multinews/dev/`；所有 12 method runs 均有
+config/prediction SHA、逐篇 selected-indices digest、dependency versions，search registry
+恰新增四筆，test split 未存取。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

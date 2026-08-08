@@ -31,6 +31,9 @@
 - A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；study runner 已
   版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。仍缺候選實測、
   partitioned baseline matrix、PacSum 與 GovReport 方法 runs；test split 仍鎖定。
+- A1 Multi-News dev 已完成：legacy 200–250 cross-method macro `0.314581` 暫列第一，
+  但尚未看 dev-test，不能 freeze。它相對 no-floor 250 的差距全由 Greedy 的輸出長度／
+  trajectory 造成；且有 4/3,935 篇未達可行的 200-word floor（F-23）。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
 目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。

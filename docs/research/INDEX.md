@@ -41,6 +41,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |
+| A1 長度協定 | 🟡 Multi-News dev 四候選 × 三方法完成；legacy 200–250 暫列第一，但差距全由 Greedy trajectory/長度造成，且有 4/3,935 可行 floor shortfalls（F-23）。GovReport dev 與兩資料集各一次 dev-test 尚未完成 |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
 > validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。
