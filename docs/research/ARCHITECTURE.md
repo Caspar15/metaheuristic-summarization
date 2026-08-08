@@ -440,6 +440,10 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 ### Freeze gate
 
 - 兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。
+
+Gate 2 的 baseline tuning 不得在看分數後臨時擴張。`gate2-baseline-matrix-v1` 已固定每資料集
+50 個新 dev candidates：TextRank、LexRank、SBERT centroid、5 個 MMR λ、TF-IDF／SBERT
+各 21 個 PacSum OFAT 點。完整矩陣前不讀 dev-test；所有 candidate（含失敗）都算搜尋機會。
 - semantic／graph 每一路若保留，都有非零 unique contribution 與相符 ablation。
 - NSGA-II 通過 §7.3；否則退出核心。
 - 所有 schema、budget 與 evaluator conformance tests 通過。

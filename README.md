@@ -82,8 +82,9 @@
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
 | Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR，以及 clean-room `pacsum_tfidf`／`pacsum_sbert` 已接線；TextRank／LexRank 的舊 Multi-News full-validation rerun 只能算 historical diagnostic。partitioned PacSum／SBERT runs、GovReport 方法 runs、完整 paired matrix 與兩個 primary 的 Gate 2 仍未完成 |
+| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在任何正式 baseline 分數前預註冊：每資料集 non-PLM 23、PLM 27 個新 candidates，只能讀 frozen dev；dev-test/test 皆無 runner 路徑 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **366 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **370 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

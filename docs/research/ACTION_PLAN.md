@@ -413,6 +413,10 @@
 - [~] 在兩個 primary 跑 PacSum —— `pacsum_tfidf`／`pacsum_sbert` clean-room 實作已完成；
       上游 repo／checkpoint 的無 LICENSE、無 checkpoint digest 風險見 F-45。正式 frozen-dev
       runs 與 paired matrix 尚未完成
+- [x] Gate 2 baseline dev 搜尋已在任何新 baseline 分數前預註冊：每資料集 50 個新 candidates
+      （non-PLM 23、PLM 27），PacSum 採 21-point OFAT／representation、MMR 採 5 個 λ；
+      exact tie 回 default，所有機會進 selection correction。runner 無 split 參數且明禁
+      dev-test/test；見 `configs/preregistrations/gate2_baseline_matrix_v1.json`
 - [ ] 在兩個 primary 跑 Sentence-BERT centroid + MMR
 - [~] 兩個 primary 的 Random frozen-dev point estimate 已由 A1 固定 seed 產生：
       Multi-News `0.307098`、GovReport `0.408844`；仍須收斂進 Gate 2 governed matrix、
@@ -551,7 +555,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 366 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、exact batched Greedy additions、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners、greedy-reference correctness 與 PacSum adaptations 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 370 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、exact batched Greedy additions、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1/D1 runners、greedy-reference correctness、PacSum adaptations 與 Gate 2 dev-only runner 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR、clean-room PacSum TF-IDF／SBERT 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。partitioned PacSum／SBERT runs、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |

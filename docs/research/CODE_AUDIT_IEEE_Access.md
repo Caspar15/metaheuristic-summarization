@@ -1542,6 +1542,18 @@ contract、確定性 sentence-order tie-break，artifact 強制標記
 `clean_room_protocol_adaptation`。前者分離 centrality 本身，後者測試同一 pinned MiniLM
 representation 下的 directed-centrality 對照；論文不得簡寫成「官方 PacSum checkpoint 重現」。
 
+### 🟡 F-46. PacSum 上游以未綁 seed 的 shuffle 打散排序 ties，不能作跨機器確定性依據
+
+**重現**：固定上游 commit `67cc8ad` 的 `code/extractor.py::_select_tops` 在依 centrality
+排序前呼叫 `random.shuffle(paired_scores)`，README／CLI 沒有 tie-break seed 或 per-row seed
+contract。當 threshold 使多句同分（β 高或短文件很常見）時，selected indices 取決於未記錄的
+process RNG state；artifact SHA 或單次 ROUGE 不能證明重現。
+
+**處理**：本專案不複製該行為；clean-room PacSum adaptations 明訂以 frozen canonical sentence
+order 作 stable tie-break，並在每列 `baseline_diagnostics.tie_break` 記錄。這是 protocol adaptation，
+不是官方 stochastic tie policy 的重現；後續比較不替 PacSum 額外加 seed 平均，避免把未預註冊的
+隨機性帶進 50-candidate Gate 2 搜尋。
+
 ---
 
 ## Part 2 — 對研究主計畫的實證補充
@@ -1720,7 +1732,7 @@ representation 下的 directed-centrality 對照；論文不得簡寫成「官�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**366 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**370 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與

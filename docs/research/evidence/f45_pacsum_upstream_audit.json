@@ -15,6 +15,7 @@
     "checkpoint_link_present": true,
     "checkpoint_license_stated_in_repository": false,
     "checkpoint_sha256_stated_in_repository": false,
+    "upstream_tie_break_uses_unseeded_random_shuffle": true,
     "declared_runtime": "Python 3.6, pytorch >= 1.0, numpy, gensim, pyrouge",
     "upstream_code_copied_into_project": false
   },

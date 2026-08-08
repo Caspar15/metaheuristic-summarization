@@ -6,6 +6,10 @@
 > ⚠️ **這些是 diagnostic，不是論文結果。**
 > 全部使用 `src.eval.rouge` 的**內部多句 Lsum 協定**，與 published Perl ROUGE 數字
 > 不保證可比。greedy reference **不是** exact upper bound，也不是任何資料集的官方 oracle 協定。
+
+`run_gate2_baseline_matrix.py` 執行預註冊的兩-primary Gate 2 baseline 搜尋。它沒有 split
+參數，只能讀 frozen dev manifest；`non_plm` 展開 23 個 candidates，`plm` 展開 27 個。
+每次成功或失敗都寫 evidence 與 `runs_v2/search_log.jsonl`，不得用它讀 dev-test/test。
 > 正式結果必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程。
 
 > 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；

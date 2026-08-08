@@ -1,0 +1,77 @@
+{
+  "study_id": "gate2-baseline-matrix-v1",
+  "status": "frozen_before_gate2_baseline_scores",
+  "frozen_partition": "dev",
+  "dev_test_access": "none_in_baseline_search",
+  "test_split_prohibited": true,
+  "datasets": ["Multi-News", "GovReport"],
+  "length_contract": "dataset-specific A1-frozen 200-250 and 500-650 word contracts",
+  "evaluation": {
+    "protocol": "multisentence_lsum",
+    "metrics": ["rouge1", "rouge2", "rougeLsum"],
+    "primary_selection_score": "unweighted macro mean of all three metrics on frozen dev",
+    "all_rows_denominator": true,
+    "tie_rule": "exact numerical ties choose the documented default because it is easier to explain",
+    "later_system_comparison": "paired bootstrap on every metric with all system-search and baseline-search opportunities included in selection-aware correction"
+  },
+  "existing_locked_runs": {
+    "lead": "reuse A1 document_order frozen-dev artifact after exact ID, config-length, evaluator, and prediction-integrity validation",
+    "random": "reuse A1 seed-3407 frozen-dev artifact after the same validation",
+    "rerun_if_validation_fails": false
+  },
+  "families": {
+    "non_plm": {
+      "fixed": ["textrank", "lexrank"],
+      "pacsum": {
+        "method": "pacsum_tfidf",
+        "default": {"beta": 0.0, "lambda_previous": 0.0, "lambda_following": 1.0},
+        "ofat": {
+          "beta": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+          "lambda_previous": [0.0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.8, -0.9, -1.0],
+          "lambda_following_rule": "1 + lambda_previous",
+          "only_one_axis_differs_from_default": true
+        },
+        "tfidf": {"lowercase": true, "sublinear_tf": false, "ngram_range": [1, 1], "stop_words": null}
+      }
+    },
+    "plm": {
+      "fixed": ["sbert_centroid"],
+      "sbert_mmr": {
+        "lambda_relevance": [0.1, 0.3, 0.5, 0.7, 0.9],
+        "documented_default": 0.7
+      },
+      "pacsum": {
+        "method": "pacsum_sbert",
+        "default": {"beta": 0.0, "lambda_previous": 0.0, "lambda_following": 1.0},
+        "ofat": {
+          "beta": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+          "lambda_previous": [0.0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.8, -0.9, -1.0],
+          "lambda_following_rule": "1 + lambda_previous",
+          "only_one_axis_differs_from_default": true
+        }
+      }
+    }
+  },
+  "expected_candidate_counts_per_dataset": {
+    "non_plm": 23,
+    "plm": 27,
+    "total_new": 50,
+    "existing_locked": 2
+  },
+  "selection": {
+    "pacsum_tfidf": "highest dev macro among its 21 preregistered candidates",
+    "pacsum_sbert": "highest dev macro among its 21 preregistered candidates",
+    "sbert_mmr": "highest dev macro among its 5 preregistered candidates",
+    "gate2_adversarial_baseline": "highest dev macro among every completed baseline candidate, including locked Lead and Random",
+    "failed_candidates": "remain comparison opportunities and are never silently removed from the search log"
+  },
+  "promotion": {
+    "dev_test": "forbidden in this study; only the final proposed configuration and dev-selected baseline finalists may be evaluated once after Gate 2 and selector comparison are complete",
+    "test": "forbidden until signed freeze"
+  },
+  "sources": {
+    "pacsum_paper": "https://aclanthology.org/P19-1628/",
+    "pacsum_upstream_audit": "docs/research/evidence/f45_pacsum_upstream_audit.json",
+    "memsum_scope_decision": "MemSum is reported separately as a trained GovReport-domain model, not mixed into the primary no-task-training baseline family"
+  }
+}
