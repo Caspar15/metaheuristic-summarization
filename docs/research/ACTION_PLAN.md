@@ -560,7 +560,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 382 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51 cache guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 386 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51/F-52 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23 已完成，且 proposed S02b 在兩者都輸 strongest completed baseline；PLM、greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
@@ -572,9 +572,11 @@
       artifact 已保留，仍須在 resume 時依 F-48 登錄 failed attempt。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      **382 passed**。
-- [ ] 在使用 cache 續跑研究候選前，先預註冊並完成 Multi-News frozen-dev 3,935-row
-      cached-vs-uncached 等價性 audit；DoD 是逐篇 `selected_indices`、representation hashes
-      與 ROUGE 全部一致。未達 DoD 不得勾選。
+      **386 passed**。
+- [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
+      scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
+- [ ] 在使用 cache 續跑研究候選前完成上述 3,935-row audit；DoD 是 cold/warm 的逐篇
+      `selected_indices`、summary、feasibility、representation hashes 與 ROUGE全部等於
+      uncached reference，且 warm run 3,935/3,935 cache hits。未達 DoD 不得勾選。
 - [ ] Multi-News PLM 剩餘 25/27、GovReport PLM 27/27、greedy reference 與 paired matrix
       尚未完成；Gate 2 未過，dev-test/test 未讀。

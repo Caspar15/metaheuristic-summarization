@@ -2,10 +2,18 @@ import numpy as np
 
 from scripts.audit.run_length_contract_study import (
     _candidate_macro_rows,
+    _dependency_versions,
     _logical_candidate_hash,
     _select_protocol,
     _selected_indices_digest,
 )
+
+
+def test_dependency_provenance_includes_plm_runtime():
+    versions = _dependency_versions()
+    for dependency in ("torch", "transformers", "tokenizers"):
+        assert dependency in versions
+        assert versions[dependency] != "not-installed"
 
 
 def test_logical_candidate_hash_excludes_partition_by_construction():

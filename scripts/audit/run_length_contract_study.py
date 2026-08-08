@@ -118,6 +118,10 @@ def _dependency_versions() -> dict[str, str]:
         "nltk",
         "rouge-score",
         "PyYAML",
+        "torch",
+        "transformers",
+        "tokenizers",
+        "sentence-transformers",
     ):
         try:
             versions[distribution] = metadata.version(distribution)

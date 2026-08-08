@@ -1,0 +1,53 @@
+{
+  "study_id": "f51-embedding-cache-equivalence-v1",
+  "status": "frozen_before_cached_rerun",
+  "purpose": "prove the execution-only content-addressed embedding cache preserves the completed uncached SBERT baseline exactly before it may accelerate Gate 2",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "dev_test_accessed": false,
+  "test_split_prohibited": true,
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "reference": {
+    "candidate": "sbert_centroid",
+    "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/resolved_config.yaml",
+    "config_sha256": "3f9229033ccdbbcbcc05ce4d14cc86b1884596cbab332f972b15f3ced00e3f6e",
+    "predictions_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/sbert_centroid/run/predictions.jsonl",
+    "predictions_sha256": "d740c2150e2566573b7ccc1648b1eebeb1ca5bdcdd37b96510af34a0e6b19cb2",
+    "evidence_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/sbert_centroid/run/evidence.json",
+    "selected_indices_sha256": "e93ee982edcafd7160099bbab8b71144423f674fc04c57e6358641f7f53cc919",
+    "implementation_commit": "557b9c0bc82b11e40af5d9d11f4a2ba04db603b0",
+    "selection_seconds": 1305.597510
+  },
+  "cached_rerun": {
+    "method": "sbert_centroid",
+    "scientific_config_must_be_byte_identical_to_reference": true,
+    "cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+    "cache_must_be_empty_before_run": true,
+    "cache_contract_version": "sbert_mean_pool_l2_npz_v1",
+    "output_root": "runs_v2/f51_embedding_cache_equivalence_v1/multinews/dev",
+    "cold_populate_run": "cold_populate",
+    "warm_hit_run": "warm_hit"
+  },
+  "exact_acceptance_criteria": {
+    "ordered_ids": "identical",
+    "selected_indices_per_row": "identical",
+    "summary_per_row": "identical",
+    "feasible_and_infeasible_code_per_row": "identical",
+    "eligible_original_indices_sha256_per_row": "identical",
+    "centroid_relevance_sha256_per_row": "identical",
+    "similarity_sha256_per_row": "identical",
+    "rouge1_rouge2_rougeLsum": "identical floating-point values",
+    "cold_cache_provenance_rows": 3935,
+    "warm_cache_provenance_rows": 3935,
+    "warm_cache_status": "3935 hit and zero miss_written",
+    "cache_contract_version": "sbert_mean_pool_l2_npz_v1"
+  },
+  "failure_policy": "write mismatch evidence, append a failed run to runs_v2/search_log.jsonl, prohibit Gate 2 cache use, and do not weaken exact criteria",
+  "promotion_if_passed": "permit this exact cache contract to accelerate remaining preregistered Gate 2 PLM candidates; report cold uncached timing separately from cached search timing",
+  "multiple_comparison_impact": "none; this is a deterministic engineering-equivalence audit and does not select a scientific configuration"
+}

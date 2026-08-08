@@ -7,8 +7,8 @@
 - `sbert_mmr_lambda_0.3` 在 family 命令達 3,600 秒外層限制時中斷；partial run 保留，
   下一次 `--resume` 必須先依 F-48 封存為 failed attempt 並寫入 `search_log.jsonl`。
 - 觀察到每個 PLM candidate 重複編碼完全相同的 frozen-dev inputs（F-51）。已實作
-  execution-only content-addressed cache，相關測試與完整回歸為 **382 passed**；但全量
-  3,935-row cached-vs-uncached `selected_indices` 等價驗證尚未完成，因此目前不可續跑。
+  execution-only content-addressed cache，相關測試與完整回歸為 **386 passed**；cold-populate
+  + warm-hit 的 3,935-row exact audit 已預註冊但尚未執行，因此目前不可續跑。
 - 本 checkpoint 沒有讀 dev-test 或 test，也沒有依已看到的分數刪減預註冊 27-candidate
   網格。Gate 2 仍未通過。
 

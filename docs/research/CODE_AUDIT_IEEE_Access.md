@@ -1786,7 +1786,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**382 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**386 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1891,7 +1891,19 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-單元與完整回歸為 **382 passed**。但在完成一個既有全量 3,935-row 候選的 cached rerun，
-並確認逐篇 `selected_indices`、representation hashes 與 ROUGE 完全一致前，這個 cache
+單元與完整回歸為 **386 passed**。但在完成一個既有全量 3,935-row 候選的
+cold-populate 與 warm-hit 兩次 cached rerun，並確認兩次逐篇 `selected_indices`、
+representation hashes 與 ROUGE 完全一致，且 warm run 3,935/3,935 cache hits 前，這個 cache
 **不得用於續跑正式 PLM matrix**。等價性量測必須先預註冊，且只讀 frozen dev；
 dev-test/test 均禁止。
+## F-52 — 共用 run evidence 未記錄 PLM runtime 版本（已修正）
+
+**嚴重度：P1（provenance）**
+
+`scripts/audit/run_length_contract_study.py::_dependency_versions()` 原只記 Python、NumPy、
+scikit-learn、NLTK、rouge-score 與 PyYAML；Gate 2 的 SBERT evidence 因此缺少實際影響
+embedding 的 Torch／Transformers／tokenizers 版本。F-51 cache key 雖已綁 Torch 與
+Transformers，run evidence 本身仍不完整。現已補記 `torch`、`transformers`、
+`tokenizers` 與 `sentence-transformers`（未安裝時明示 `not-installed`），並由 regression
+test 確認本 PLM 環境前三者存在。既有 evidence 保留原貌，不回填假 provenance；後續
+cached audit 與 PLM runs 使用新 schema 內容。

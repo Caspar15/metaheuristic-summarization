@@ -337,3 +337,10 @@ NSGA-II 多 seed 完成後，以 `aggregate_nsga_seed_stability.py` 對同一 Gr
 reference 做 10,000 次 paired bootstrap、15-test Holm correction，並計算每篇
 選句集合的 seed-pair Jaccard。它會再次驗證每個 seed 的 selector-input hashes；
 不可只把五個 corpus means 手動貼在一起後挑最高值。
+## F-51 embedding-cache equivalence
+
+`verify_embedding_cache_equivalence.py` 固定只讀 Multi-News frozen dev，沒有 dataset/split
+CLI。它以既有 uncached SBERT-centroid artifact 為基準，先做 cold-populate，再做
+3,935/3,935 warm-hit；兩次都必須逐篇 selected indices、summary、feasibility、
+representation hashes 與 ROUGE 完全一致。預註冊：
+`configs/preregistrations/f51_embedding_cache_equivalence_v1.json`。
