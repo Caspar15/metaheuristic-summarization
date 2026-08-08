@@ -1,0 +1,112 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T04:46:41.514489+00:00",
+  "scope": "data_layer_only_no_system_scores",
+  "test_split_accessed": false,
+  "dataset": "GovReport",
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "official_validation_membership_rows": 974,
+  "canonical_validation_rows": 973,
+  "canonical_input": {
+    "path": "data/processed/govreport_validation_canonical.jsonl",
+    "file_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+    "dataset_fingerprint": "4f2506cb94ce65882b6e5f176c27cb471a08c60a75f21b5383dc9cfc90cfad7d"
+  },
+  "official_archive": {
+    "path": "data/raw/gov-report.tar.gz",
+    "file_sha256": "bedf7a780910afbaa8bb64e794742722f3faea06d3c156fd1cedc1a7b5c4cd3c",
+    "expected_file_sha256": "bedf7a780910afbaa8bb64e794742722f3faea06d3c156fd1cedc1a7b5c4cd3c"
+  },
+  "license": {
+    "name": "Creative Commons Attribution 4.0 International",
+    "spdx": "CC-BY-4.0",
+    "official_dataset_page": "https://gov-report-data.github.io/"
+  },
+  "official_sources": {
+    "paper": "https://aclanthology.org/2021.naacl-main.112/",
+    "dataset_page": "https://gov-report-data.github.io/",
+    "code": "https://github.com/luyang-huang96/LongDocSum"
+  },
+  "exclusion_manifest": {
+    "path": "configs/data_policies/govreport_validation_exclusions_v1.json",
+    "file_sha256": "59e6107a2f3ac93fc9bd8e8b3c20e6e6d225250ad9cf9c11e8a47cb72a9dc041",
+    "excluded_rows": 1,
+    "rule": "exclude only rows with a pinned empty official reference; never fabricate a target"
+  },
+  "agency_rows": {
+    "CRS": 361,
+    "GAO": 612
+  },
+  "section_metadata": {
+    "sections_per_row": {
+      "mean": 20.40082219938335,
+      "min": 1,
+      "p10": 9.0,
+      "p25": 13.0,
+      "p50": 17.0,
+      "p75": 25.0,
+      "p90": 34.80000000000007,
+      "p95": 42.0,
+      "p99": 71.95999999999981,
+      "max": 214
+    },
+    "unnamed_sections": 39,
+    "rows_with_unnamed_sections": 39,
+    "sentences_missing_section_tree_path": 0,
+    "sentences_missing_paragraph_position": 0,
+    "ignored_empty_section_nodes": 4651,
+    "excluded_gao_letter_paragraphs": 4814
+  },
+  "text_lengths": {
+    "source_words_per_row": {
+      "mean": 8072.378211716341,
+      "min": 173,
+      "p10": 2857.0,
+      "p25": 4373.0,
+      "p50": 6984.0,
+      "p75": 10028.0,
+      "p90": 14212.400000000003,
+      "p95": 17554.2,
+      "p99": 27853.879999999997,
+      "max": 54091
+    },
+    "reference_words_per_row": {
+      "mean": 570.174717368962,
+      "min": 56,
+      "p10": 394.0,
+      "p25": 506.0,
+      "p50": 575.0,
+      "p75": 654.0,
+      "p90": 716.8000000000001,
+      "p95": 745.4,
+      "p99": 974.9199999999996,
+      "max": 1424
+    },
+    "sentence_words": {
+      "mean": 25.48863230722301,
+      "min": 1,
+      "p10": 9.0,
+      "p25": 16.0,
+      "p50": 24.0,
+      "p75": 33.0,
+      "p90": 43.0,
+      "p95": 50.0,
+      "p99": 68.0,
+      "max": 629
+    },
+    "longest_sentence": {
+      "words": 629,
+      "row_id": "validation_crs_R45583",
+      "sentence_id": "validation_crs_R45583:d000:s000019"
+    }
+  },
+  "metadata_completeness": {
+    "rows_missing_title": 0,
+    "rows_missing_url": 361
+  },
+  "replacement_characters": {
+    "rows": 0,
+    "characters": 0,
+    "text_repair": "forbidden"
+  }
+}

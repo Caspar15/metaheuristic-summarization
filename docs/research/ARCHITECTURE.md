@@ -113,7 +113,7 @@ MVP 的通過條件沿用 §10 Freeze gate 的第一條，但只要求單一 pri
 
 | 角色 | 資料集 | 決策 | 原因與限制 |
 |---|---|---|---|
-| Primary A | **GovReport** | 保留，先做 validation pilot | 長單文件、長摘要，最適合檢驗全局 coverage、scaling 與 adaptive routing；官方約 19.5k 筆，常用 split 為 17,517/973/973，CC BY 4.0。本機尚未下載，正式採用前須驗證原始檔、split、checksum 與 section 可用性。 |
+| Primary A | **GovReport** | 保留；validation 資料層與 development partition 已凍結 | 使用作者官方 archive（非扁平 mirror）。官方 validation membership 974，空 reference 1 筆依 manifest 排除，canonical 973；dev 681／dev-test 292。nested section、paragraph position、archive/canonical SHA、CC-BY-4.0 與異常規則均已驗證。方法與 baseline 尚未跑。 |
 | Primary B | **Multi-News** | 保留；validation 已重建，其他 split 待補 | 官方 split 44,972/5,622/5,622，適合 cross-document coverage 與去重。pinned validation 已重建為 5,621 筆 structurally valid canonical rows，保存 document boundaries，並凍結 main／clean sensitivity policy；train/test 仍待生成，legacy 扁平資料不得用於正式結果。 |
 | Required data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | 必跑 validation paired sensitivity | 由 frozen 72-row manifest 從 5,621-row main 排除，得到 5,549 rows；只回答 replacement-character rows 是否改變結論，不等於 retrieval cleaning。main 結果仍是 primary。 |
 | Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v1 不跑 | 原版有錯誤 retrieval 與無關文件，但兩個外部 variant 的清理規則與現有 U+FFFD clean sensitivity 不同；若日後納入，必須另存 mapping、版本與移除規則。 |
@@ -387,8 +387,8 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
   （含失敗）寫入 `runs_v2/search_log.jsonl`，並記錄 manifest SHA、config SHA、
   predictions SHA、dependency 版本與實際日期。
 - Multi-News manifest 已凍結：dev 3,935、dev-test 1,686，seed 3407，manifest
-  SHA-256 `e6140548...e42ee`。GovReport 必須在任何該資料集的 optimization score
-  產生前以相同規則另建 manifest。
+  SHA-256 `e6140548...e42ee`。GovReport 亦在任何方法分數前以相同規則凍結為
+  dev 681、dev-test 292，manifest SHA-256 `7a15ffbb...e2717e`。
 - 舊的 full-validation pilot 數字保留為歷史 diagnostic，不得再充當新的 model
   selection 證據；也不得因已看過舊數字而重分 membership。
 - test 只有在人員簽署 freeze 建議書後才能解鎖；freeze 前任何 CLI、腳本或人工

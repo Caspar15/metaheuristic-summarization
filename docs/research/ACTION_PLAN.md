@@ -14,11 +14,15 @@
 - [x] 分割與 runtime enforcement 已版本化於
       `scripts/audit/freeze_validation_partitions.py`、`src/data/partitions.py`；manifest
       漂移、輸入 SHA 不符、遺失 ID、重複 ID 都 fail loud。
-- [ ] GovReport 尚未取得，故 GovReport dev/dev-test manifest 尚未凍結；必須在任何
-      GovReport optimization score 前完成。
+- [x] GovReport 已由官方作者 archive 重建；官方 validation 974 筆中，空 reference
+      的 CRS `98-228` 依 frozen manifest 排除，留下 973 筆。資料政策綁定 archive／
+      canonical SHA、dataset fingerprint、CC-BY-4.0、section/paragraph metadata 與
+      0 個 U+FFFD；dev 681／dev-test 292 已在任何方法分數前凍結，manifest SHA-256
+      `7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e`。
 - [~] A1 已完成 Multi-News reference-only 統計與預註冊，候選 runs 尚未執行；
-      A2 greedy-reference correctness 已完成；A3 GovReport 資料層、Gate 2 baseline
-      矩陣與 dev search 尚未完成。**test split 仍為硬禁止；到 freeze 簽字前不執行。**
+      A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
+      partition freeze 已完成；Gate 2 baseline 矩陣與 dev search 尚未完成。
+      **test split 仍為硬禁止；到 freeze 簽字前不執行。**
 - [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
       median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
       勝出與 Holm/tie 規則已在任何候選 system score 前預註冊於
@@ -161,15 +165,16 @@
 ### 1b. 資料層
 
 - [x] 🔴 `preprocess_scitldr.py`：**停止串接 multi-reference**，`references` 存成 list（2026-07-26；含 canonical schema 與 golden test）
-- [~] canonical Multi-News 已改用 deterministic NLTK Punkt 並保存 char-span mapping；GovReport／CNN-DM 仍須各自驗證分句規則
+- [~] canonical Multi-News 與 GovReport 已改用 deterministic NLTK Punkt 並保存 char-span mapping；CNN-DM 只有 Gate 3 後納入時才須驗證
       （legacy 正則分句曾造成 358/37349 個「句子」超過 80 字，最長 855 字，該 flat artifact 不得進正式實驗）
 - [x] Multi-News preprocessor 正確保留 `|||||` 分隔與換行 mapping；U+FFFD 預設 fail closed。正式 `multinews-validation-v1` 政策已在看 validation 分數前凍結：主分析保留 5,621 列且禁止修字，另以固定 72-row manifest 產生 5,549-row clean sensitivity；runner 強制核對 policy、dataset 與 manifests 的 SHA/fingerprint
 - [~] 已實作從 pinned 作者資料重建 Multi-News，保存 boundary、source order、raw char span、hash 與 original-to-cleaned mapping；validation 的 5,621-row main 與 5,549-row clean sensitivity 已生成並受 frozen policy 守門，train/test 與各自 manifest 仍待生成。legacy 扁平 `sentences` 不得進正式實驗
-- [ ] 下載並驗證 GovReport 官方資料：split、row count、checksum、license、section metadata 與異常列規則
+- [x] GovReport 官方資料層已驗收：author archive SHA-256、validation ID counts、CC-BY-4.0、nested section／paragraph metadata、GAO Letter 規則與唯一空 reference 排除均版本化；canonical 973 rows、CRS 361／GAO 612、U+FFFD 0，詳見 `docs/research/evidence/a3_govreport_validation_data_audit.json`
 - [x] `max_words / max_sentences / max_model_tokens / candidate_budget / compute_budget` 已拆成不同設定與 output artifact；`unit: words` 不再繞過 selector
 - [ ] **條件式**：只有 Gate 3 通過且決定保留 CNN/DM optional sanity，才重建其 canonical validation／官方 **test 11,490**；不得使用舊 validation 結果冒充 test
-- [~] 資料健檢器已實作：筆數、ID、split、文件／reference／每列句數分布、U+FFFD、debug subset、revision 與 checksum；完整 pinned Multi-News validation 已生成並保存摘要證據，其他 split／dataset 報告仍待完成
+- [~] 資料健檢器已實作：筆數、ID、split、文件／reference／每列句數分布、U+FFFD、debug subset、revision 與 checksum；兩個 primary 的 validation 已生成並保存證據，其他 split 不在 freeze 前讀取範圍
       （validation：5,622 raw → 5,621 canonical，1 列空來源排除；72 列／1,042 個 U+FFFD 依 frozen policy 保留於 main 並排除於 paired clean sensitivity；58 個 singleton clusters；412 列少於 20 句；最大 3,347 句，單句最長 2,638 words）
+      （GovReport validation：974 official → 973 canonical；1 列空 reference 排除；每列平均 316.7 句、最大 2,889 句；reference 平均 570.2 words；section path 與 paragraph position 缺失皆 0）
 
 ### 1c. 候選生成重構 🔴 這是核心
 
@@ -424,8 +429,8 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 323 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight、partition enforcement 與 greedy-reference correctness 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
-| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；Multi-News TextRank／LexRank 正式重跑已完成。PacSum、SBERT full run、GovReport、完整 paired matrix 與 Gate 2 尚未完成 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 328 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、兩 primary validation policy/preflight、partition enforcement、GovReport data layer 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |

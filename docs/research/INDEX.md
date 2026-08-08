@@ -4,7 +4,7 @@
 
 `Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
 接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
-hash 全部相同；加入 partition／greedy-reference regression 後 323 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
+hash 全部相同；加入兩 primary partition／greedy-reference／GovReport data-layer regression 後 328 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
 baseline 亦已接入 shared baseline CLI。凍結的 200-row matched pilot 顯示 MMR
 相對 Greedy 的 R-1／R-2 分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；
 NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`；selector
@@ -30,17 +30,17 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 
 → 詳見 `ACTION_PLAN.md` 的 Phase −1；這兩件事已被版本化為研究治理前提。**後續不得再以 legacy 結果直接改寫或支撐新論文。**
 
-### 目前進度速覽（2026-08-02）
+### 目前進度速覽（2026-08-08）
 
 | | 狀態 |
 |---|---|
-| Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、canonical schema 與 frozen-policy preflight 已完成；published-protocol parity、GovReport 資料層、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **323 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
-| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已接線；Multi-News Lead 與最終實作 TextRank／LexRank 的 5,621-row governed artifacts 已產出並驗證。PacSum、SBERT full run、GovReport、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
+| Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、兩 primary canonical/frozen-policy/dev-partition 已完成；published-protocol parity、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
+| 測試 | ✅ **328 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已接線；既有 Multi-News full-validation artifacts 只能作 historical diagnostics。PacSum、partitioned SBERT run、GovReport 方法 runs、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
-| 資料 | 🟡 Multi-News validation main/clean policy、fingerprints 與 manifests 已凍結；GovReport 與其餘 splits 尚未完成 |
+| 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
 > validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。

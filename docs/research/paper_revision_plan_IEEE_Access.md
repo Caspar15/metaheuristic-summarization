@@ -81,16 +81,16 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 | P0-07 | NSGA-II 參數與 config 不一致 | ✅ **已修** | `pop_size`/`n_gen`/`seed` 已接線、移除靜默 fallback、有 regression test |
 | P0-08 | 公式與實作多處不一致 | 🟡 **部分修** | 已修：TF-ISF v2 改用非負平滑、graph 不再就地竄改、τ 已接線。**仍未修：`length_scores` 除以「文件內觀察最大值」而非論文的 `min(len/40,1)`；`centrality` 與 `novelty` 完全反相關** |
 | P0-09 | Runtime protocol 不可重現 | 🟡 **程式已修，數字待重測** | `load_encoder()` 模型快取已修。**正式計時必須依鎖定 protocol 重測**（載入佔比在兩次量測間為 78% 與 93%，不穩定） |
-| P0-10 | Data integrity 與 preprocessing | 🟡 **Multi-News validation 已修；其餘待補** | validation 的 canonical schema、pinned revision、health report、fingerprint、frozen main/clean policy 與防竄改守門已完成；Multi-News train/test、GovReport 與可選 CNN/DM 尚未完成 |
+| P0-10 | Data integrity 與 preprocessing | 🟡 **兩 primary validation 已修；freeze 後 splits 尚未讀取** | Multi-News 與 GovReport validation 的 canonical schema、pinned revision、health report、fingerprint、frozen policy、development partition 與防竄改守門已完成。test split 在人員簽署 freeze 前禁止；CNN/DM 是 Gate 3 後的條件式工作 |
 
 **目前真正還擋著投稿的**：
 
 1. 🔴 **Baseline Gate 2 尚未通過** —— Lead、Random、TextRank／LexRank 程式已進
    master；PR #15 centrality offline tokenizer hotfix、Linux CI 與 Multi-News 5,621-row
    TextRank／LexRank final-implementation rerun 已完成。但 PacSum、SBERT+MMR、
-   GovReport、paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
+   GovReport 方法 runs、paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
    單一資料集實測不能替代完整 Gate 2，見 §9 Go/No-Go
-2. 🔴 **第二個 primary benchmark GovReport 尚未建立**；Multi-News 也只有 validation 完成，train/test 尚未生成
+2. 🔴 **第二個 primary 的資料層已建立，但方法證據尚未建立**；GovReport canonical validation／dev／dev-test 已凍結，Gate 2 runs 仍為零
 3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
 4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張
 5. 🟡 P0-01 的 legacy artifact 永久作廢（不是待修，是既成事實）

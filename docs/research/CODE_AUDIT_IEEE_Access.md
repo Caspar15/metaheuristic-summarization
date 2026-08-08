@@ -22,8 +22,8 @@
 > comparator；這仍未回答 full-source MMR／PacSum／兩 primary 的 system gate。
 > **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
-> Multi-News 補上 reference-blind dev/dev-test 凍結與 runtime enforcement；GovReport
-> 仍須在首次 optimization score 前完成同一程序。
+> Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime
+> enforcement；GovReport 資料層詳見 F-22。兩者均未讀取 test split。
 
 ---
 
@@ -47,10 +47,10 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已加入；Multi-News TextRank／LexRank final rerun 已完成。PacSum、SBERT full run、GovReport 與完整 paired matrix 尚未完成，Gate 2 未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已加入；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs與完整 paired matrix 尚未完成，Gate 2 未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
-| F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動,GovReport/CNN-DM 待做** |
+| F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News／GovReport canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動，CNN-DM 僅在 Gate 3 後納入時處理** |
 | F-13 | 其他（requirements 重複、pytest 缺、靜默 fallback…） | 🔴 成立 | ✅ canonical 主路徑已修 | requirements 去重 + pytest、fallback 移除；Greedy／GRASP／NSGA-II 共用同一 evaluator。legacy `fast_*` 路徑仍只供舊 artifact 重現 |
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
@@ -58,7 +58,7 @@
 1. 🔴 **F-0 尚未在新 pipeline 上回答** —— 修好一堆東西不等於贏過 Lead
 2. 🔴 **F-9 baseline 矩陣仍不完整** —— Multi-News TextRank／LexRank final rerun 已完成；PacSum、SBERT+MMR、GovReport 與 paired significance 未完成，F-0 仍無法回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
-4. 🟡 **F-12 legacy 分句、GovReport/CNN-DM 分句規則**
+4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
 6. 🟡 **F-14 的 legacy_unprofiled raw-sum 例外**與 **F-15 的 legacy unmatched ablation**；兩者不得被誤當成新 canonical pipeline 的 matched evidence
 
@@ -977,9 +977,11 @@ Multi-News 以 seed 3407 凍結為 dev 3,935、dev-test 1,686；manifest file SH
 SHA 任一不符即停止；selected ID 遺失或重複也停止。run 另存不含大型 ID 清單的
 `partition_preflight.json`。dev 可重複搜尋，dev-test 每個 configuration hash 只看一次。
 
-**仍未完成**：GovReport canonical validation 尚不存在，故無法凍結其 manifest；必須在任何
-GovReport optimization score 前完成。過去已看過的 full-validation 結果仍保留並標為
-historical diagnostic，不刪除、不重新包裝成 partitioned evidence。
+**GovReport 後續狀態（F-22）**：canonical validation 建立後，已在任何該資料集方法分數
+前以同一 seed/rule 凍結為 dev 681、dev-test 292；manifest SHA-256
+`7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e`。過去已看過的
+Multi-News full-validation 結果仍保留並標為 historical diagnostic，不刪除、不重新包裝成
+partitioned evidence。
 
 **重現**：
 
@@ -1016,6 +1018,51 @@ target 分離、schema fail-loud、source-order search regression。此階段是
 
 ---
 
+### ✅ F-22. GovReport Primary A 缺資料身分、結構與異常列政策，無法進 Gate 2
+
+**發現**：舊計畫只寫「使用 GovReport」，沒有釘住資料來源。常見 flattened mirror 的
+split count 與作者論文不完全一致，且會丟掉 section/paragraph 結構；若直接使用，graph／
+structure route 的輸入定義與 denominator 都無法稽核。
+
+**修正（2026-08-08，任何 GovReport 方法分數前）**：使用作者官方 archive，archive
+SHA-256 `bedf7a78...cd3c`。只讀取兩個 official validation membership（CRS 362、GAO 612）
+及其 payload，不讀 test membership 或 test payload bytes。preprocessor 保留 nested section
+path、heading path、paragraph position、原始順序與 raw JSON SHA；GAO top-level `Letter`
+paragraphs 依作者 README 排除，但保留其 subsections。
+
+**異常列政策**：官方 974 個 validation IDs 中，CRS `98-228` 的 official `summary=[]`。
+不捏造 target，依 raw JSON SHA 釘住後排除，canonical denominator 為 973（CRS 361／GAO
+612）。canonical file SHA-256 `db8aa2b7...de678`，dataset fingerprint
+`4f2506cb...fad7d`，U+FFFD 為 0。資料政策為
+`configs/data_policies/govreport_validation_v1.json`；完整統計與來源／授權證據在
+`docs/research/evidence/a3_govreport_validation_data_audit.json`。
+
+**結構與 scaling 證據**：section tree path 與 paragraph position 的 sentence 缺失皆 0；
+每列平均 316.7 句、最大 2,889 句，來源平均 8,072 words，reference 平均 570.2 words。
+這確認 GovReport 適合測長文件 coverage，也揭露 dense `N×N` 方法在正式 run 前必須通過
+memory/cost pilot；不能因跑不動而改 denominator。
+
+**development freeze**：reference-blind seed 3407 manifest 已凍結 dev 681／dev-test 292，
+file SHA-256 `7a15ffbb...e2717e`。此段只有 data-layer/reference-blind membership，沒有任何
+system score；test split 未存取。
+
+**重現**：
+
+```bash
+python -m src.data.preprocess_govreport \
+  --archive data/raw/gov-report.tar.gz \
+  --output data/processed/govreport_validation_canonical.jsonl \
+  --exclusion_manifest data/processed/govreport_validation_exclusions.json
+python -m scripts.audit.govreport_validation_audit \
+  --input data/processed/govreport_validation_canonical.jsonl \
+  --archive data/raw/gov-report.tar.gz \
+  --exclusion_manifest data/processed/govreport_validation_exclusions.json \
+  --replacement_manifest_out data/processed/govreport_validation_replacement_characters.json \
+  --out docs/research/evidence/a3_govreport_validation_data_audit.json
+```
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。
@@ -1030,7 +1077,7 @@ target 分離、schema fail-loud、source-order search regression。此階段是
 | **P2-1** mutation 1.0 語義 | 「per-individual 還是 per-gene 待確認」 | ✅ **已確認**：pymoo `BitflipMutation()` 的 `prob=1.0` 是 **per-individual**；per-gene 預設 `1/n_var`。實測 n_var=50 時每基因翻轉率 0.0204 ≈ 1/50，約 63% 的個體至少被改動一個位元。**R4 擔心的「整條染色體隨機化」不會發生**，論文照實寫即可 |
 | **P2-1** pop_size / generations | 「補上 NSGA-II 設定」 | ⚠️ **狀態見 §0.0 狀態表**：config 裡的值從未被讀取，實際跑的一律是 100/100。**不要照 YAML 抄進論文** |
 | **P2-2** 多次執行取平均 | 「必須報告 mean ± std over ≥5 runs」 | ✅ 同意。補充：目前跨 process 重跑是可重現的（實測三次相同），但靠的是全域 seed 的巧合，應把 seed 顯式接線 |
-| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 連舊論文報告的 Lead/TextRank/LexRank 都沒有實作（F-9）；現在 Multi-News replacement runs 已補 Lead、TextRank、LexRank，但 PacSum、SBERT+MMR、GovReport 與 paired significance 仍缺 |
+| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 連舊論文報告的 Lead/TextRank/LexRank 都沒有實作（F-9）；現在已補實作與 historical Multi-News diagnostics，但 PacSum、partitioned SBERT+MMR、GovReport 方法 runs 與 paired significance 仍缺 |
 
 ### 稽核補充、且已收斂進主計畫／行動清單的項目
 
@@ -1192,7 +1239,7 @@ target 分離、schema fail-loud、source-order search regression。此階段是
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**323 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**328 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與

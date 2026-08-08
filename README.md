@@ -5,8 +5,9 @@
 - Multi-News canonical validation 已在任何新 optimization score 前，以固定 seed 3407
   reference-blind 凍結為 dev 3,935／dev-test 1,686。proposed-method 與 baseline runner
   會先驗完整 frozen data policy，再依相同 manifest 過濾，並保存 partition provenance。
-- dev 可反覆搜尋；每個候選配置只能看一次 dev-test。GovReport 尚未下載／重建，故其
-  manifest 仍待資料層完成後、首次分數產生前凍結。
+- dev 可反覆搜尋；每個候選配置只能看一次 dev-test。GovReport 已由作者官方 archive
+  重建為 973 筆可評估 canonical validation rows，並在任何方法分數前凍結為
+  dev 681／dev-test 292；唯一排除的是官方 reference 為空的 CRS `98-228`。
 - freeze 簽字前禁止 test split；目前只推進到「可以跑 test」的狀態，屆時停下等待批准。
 
 ## 2026-08-06 selector-comparison checkpoint
@@ -21,13 +22,13 @@
   Multi-News validation 正式 run。
 - 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
-  加上 validation partition 與 greedy-reference correctness 後，現行測試為 **323 passed**。
+  加上兩 primary partition、greedy-reference correctness 與 GovReport data-layer regression 後，現行測試為 **328 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
   Greedy、selection Jaccard 僅 `0.639`；因此 selector 已決定採 MMR，NSGA-II
   降為 comparator。這是 diagnostic，不是 full-validation 結論。
-- 仍缺：full validation、full-source SBERT+MMR、PacSum、GovReport；test split
+- 仍缺：A1 長度協定實測、partitioned baseline matrix、PacSum、GovReport 方法 runs；test split
   仍鎖定。
 
 抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
@@ -44,9 +45,9 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 已在 frozen Multi-News validation 完成 5,621-row full-split rerun。PacSum、SBERT full run、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
+| Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 的舊 Multi-News full-validation rerun 只能算 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **323 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **328 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

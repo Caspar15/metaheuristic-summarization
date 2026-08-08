@@ -1,0 +1,18 @@
+{
+  "manifest_schema_version": "1.0",
+  "dataset": "GovReport",
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "official_split": "validation",
+  "official_membership_rows": 974,
+  "canonical_rows": 973,
+  "rule": "exclude only rows with a pinned empty official reference; never fabricate a target",
+  "excluded_rows": [
+    {
+      "agency": "CRS",
+      "source_report_id": "98-228",
+      "official_split": "validation",
+      "reason": "empty_official_reference",
+      "raw_json_sha256": "246a634dfe0eb44a73fe8916d9ae7db553fc8396aedee349a570b131ae50902c"
+    }
+  ]
+}
