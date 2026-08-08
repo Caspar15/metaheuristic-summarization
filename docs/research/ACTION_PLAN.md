@@ -19,7 +19,8 @@
       canonical SHA、dataset fingerprint、CC-BY-4.0、section/paragraph metadata 與
       0 個 U+FFFD；dev 681／dev-test 292 已在任何方法分數前凍結，manifest SHA-256
       `7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e`。
-- [~] A1 已完成兩 primary 的 reference-only 統計與預註冊，候選 runs 尚未執行；
+- [~] A1 已完成兩 primary 的 reference-only 統計與預註冊；Multi-News 已完成唯一一次
+      dev-test 並依預註冊規則選定 200–250 words，GovReport dev-test 尚未觀察；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
       partition freeze 已完成；Gate 2 baseline 矩陣與 dev search 尚未完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
@@ -41,11 +42,17 @@
       evidence 完成，test 未存取）。cross-method macro 排名：legacy floor 200–250
       `0.314581` > p75 cap260 `0.305578` > max-only250 `0.304407` > median cap220
       `0.298191`。同 250 cap 的 Lead／Random 完全相同；差距來自 Greedy：floor 版本
-      242.60 words／`0.310353`，no-floor 200.45 words／`0.279831`。四候選依預註冊
-      均仍須各看一次 dev-test，現在不得定案。
-- [~] A1 新發現 F-23：floor-bearing Greedy 有 4/3,935 rows 在 source/candidate capacity
-      都可達 250 時仍低於 effective minimum 200；目前依 F-17 完整記錄並以 all-row
-      denominator 計分，未放寬或補句。是否可接受由預註冊 dev-test 與 freeze 決策處理。
+      242.60 words／`0.310353`，no-floor 200.45 words／`0.279831`。
+- [x] A1 Multi-News 唯一一次 dev-test 已完成（每候選 1,686 rows；12/12 evidence；
+      test 未存取）。legacy 200–250 的 cross-method macro `0.310382` 居首；相對
+      max-only250／median220／p75-cap260 的 paired-bootstrap mean difference 分別
+      `+0.009185/+0.015510/+0.008022`，三個 95% CI 全為正，Holm-adjusted
+      `p=0.000600`，故依預註冊規則選定 200–250 words。
+      凍結機器可讀 policy：`configs/length_policies/multinews_v1.json`。
+- [~] F-23：floor-bearing Greedy 在 dev 有 4/3,935、dev-test 有 3/1,686 rows 未達
+      effective minimum 200；均依 F-17 完整記錄並以 all-row denominator 計分，未放寬、
+      補句或刪列。A1 已選定 floor，但這仍是待 selector feasibility 改善並須正式報告的
+      limitation；不得把 floor 僅描述成外部公平長度上限。
 - [x] A1 GovReport dev 四候選 × 三方法已完整跑完（每個 681 rows，12/12 evidence，
       test 未存取）。排名：IQR floor500-cap650 `0.392821` > p75 cap650 `0.328979` >
       median cap570 `0.324044` > paper-mean cap550 `0.322049`。no-floor Greedy 僅

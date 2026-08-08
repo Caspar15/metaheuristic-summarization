@@ -1080,12 +1080,18 @@ Greedy 則由 no-floor 的平均 200.45 words、macro ROUGE `0.279831`，變為 
 F-17 policy 正確保留完整 prediction row 並在 all-row denominator 計分，沒有補句或刪列；
 但「誠實記錄 infeasible」不等於 selector 已滿足 length contract。
 
-**影響範圍**：這是 dev finding，尚未看 dev-test，不能據此 freeze 200–250。四個協定仍依
-preregistration 各評估一次 dev-test；若 floor 協定最後被選中，論文必須把它描述為
-selector stopping/feasibility mechanism，並報 infeasibility rate，不能只寫成公平的輸出長度
-上限。證據在 `runs_v2/a1_length_contract/multinews/dev/`；所有 12 method runs 均有
-config/prediction SHA、逐篇 selected-indices digest、dependency versions，search registry
-恰新增四筆，test split 未存取。
+**一次性 dev-test 決選（1,686 rows，2026-08-08）**：四候選依預註冊各觀察一次；
+200–250 的 cross-method macro 為 `0.310382`，相對 max-only250、median220、p75-cap260
+的 paired mean difference 分別為 `+0.009185/+0.015510/+0.008022`。10,000 次 paired
+bootstrap 的三個 95% CI 全為正，Holm family size 3，adjusted `p=0.000600`，故依原規則
+凍結 200–250 words。Greedy 仍有 3/1,686 `selector_min_words_shortfall`，同樣保留完整列
+與 all-row score；這確認 floor 是 selector stopping/feasibility mechanism，論文必須報
+infeasibility rate，不能只寫成公平的輸出長度上限。
+
+**證據**：dev 與唯一一次 dev-test 分別位於
+`runs_v2/a1_length_contract/multinews/dev/`、`.../dev-test/`；每個 partition 都有 12/12
+method evidence、同一 input/partition identity、逐篇 selected-indices digest、dependency
+versions，search registry 各四筆，`test_split_accessed=false`。dev-test 不得重跑。
 
 **跨資料集補證**：GovReport dev 681 rows 的 no-floor Greedy 只輸出 165.6–184.5
 words，macro `0.175990–0.178859`；floor500-cap650 將它推至 638.4 words、

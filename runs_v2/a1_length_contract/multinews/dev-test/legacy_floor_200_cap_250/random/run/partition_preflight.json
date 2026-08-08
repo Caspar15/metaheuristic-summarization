@@ -1,0 +1,13 @@
+{
+  "valid": true,
+  "manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "manifest_file_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "manifest_status": "frozen_before_optimization_scores",
+  "dataset": "Multi-News",
+  "base_split": "validation",
+  "partition": "dev-test",
+  "rows": 1686,
+  "selected_ids_sha256": "47247f2fb8087def0739ae20d15432b0b4058c2e9fa425957a1635c27cbd6c0b",
+  "selection_algorithm": "lowest_sha256(seed\\0row_id) to nearest-integer dev_fraction; IDs stored in canonical input order",
+  "seed": 3407
+}

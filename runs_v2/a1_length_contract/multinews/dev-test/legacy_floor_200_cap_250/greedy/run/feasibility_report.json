@@ -1,0 +1,46 @@
+{
+  "total_count": 1686,
+  "feasible_count": 1683,
+  "infeasible_count": 3,
+  "infeasible_ids": [
+    {
+      "id": "validation_915",
+      "infeasible_code": "selector_min_words_shortfall",
+      "violations": {
+        "nonempty": -8.0,
+        "min_words": 7.0,
+        "max_length": -57.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=7 words); selection kept as-is",
+      "selected_words": 193,
+      "effective_min_words": 200
+    },
+    {
+      "id": "validation_3349",
+      "infeasible_code": "selector_min_words_shortfall",
+      "violations": {
+        "nonempty": -8.0,
+        "min_words": 12.0,
+        "max_length": -62.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=12 words); selection kept as-is",
+      "selected_words": 188,
+      "effective_min_words": 200
+    },
+    {
+      "id": "validation_4576",
+      "infeasible_code": "selector_min_words_shortfall",
+      "violations": {
+        "nonempty": -5.0,
+        "min_words": 20.0,
+        "max_length": -70.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "selector could not reach effective_min_words for this document (shortfall=20 words); selection kept as-is",
+      "selected_words": 180,
+      "effective_min_words": 200
+    }
+  ]
+}

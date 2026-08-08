@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "multinews-length-v1",
+  "dataset": "Multi-News",
+  "status": "frozen_for_development",
+  "frozen_at_utc": "2026-08-08T06:02:27.0223101Z",
+  "unit": "whitespace_words",
+  "requested_min_words": 200,
+  "max_words": 250,
+  "max_sentences": null,
+  "short_source_policy": "effective_min_only_when_source_is_infeasible_under_upper_constraints",
+  "selector_shortfall_policy": "retain_prediction_score_on_all_rows_and_record_infeasibility",
+  "selection_study": {
+    "study_id": "a1-length-contract-v1",
+    "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+    "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+    "dev_test_summary_path": "runs_v2/a1_length_contract/multinews/dev-test/study_summary.json",
+    "dev_test_summary_sha256": "c2791bb944f4c6ef4b65f7463c4d87ea6f08c78bd2f18503e3cb2e2915c06a96",
+    "selected_candidate": "legacy_floor_200_cap_250",
+    "selected_resolved_config_sha256": "9c8b5bd49f65b39068d4c010b6e098a850a6fa343374a6c04db350cb270e502e",
+    "partition_rows": 1686,
+    "cross_method_macro_rouge": 0.3103820835891993,
+    "holm_family_size": 3,
+    "bootstrap_resamples": 10000,
+    "raw_winner_significant_against_all": true
+  },
+  "test_split_accessed": false,
+  "change_control": "Changing this policy requires an explicit data-policy decision; do not infer a replacement from test performance."
+}

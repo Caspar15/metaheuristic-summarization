@@ -400,8 +400,12 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 - Multi-News dev 結果顯示 floor 不是被 A1 自動消除的多餘設定：同一 250 cap 下，
   Lead/Random 不受 floor 影響，lexical Greedy 卻由 200.45 words／macro `0.279831`
   變成 242.60 words／`0.310353`。因此「floor 是否保留」實際上同時是 selector
-  stopping contract，不能只用 reference length coverage 解讀；最終仍以一次 dev-test
-  規則定案。
+  stopping contract，不能只用 reference length coverage 解讀。唯一一次 dev-test
+  依預註冊規則確認 200–250：cross-method macro `0.310382`，相對另外三案的 10,000 次
+  paired-bootstrap 95% CI 全為正，Holm-adjusted `p=0.000600`。因此 Multi-News v1
+  length contract 凍結為 requested 200、max 250 words；3/1,686 Greedy shortfalls
+  依 F-17 保留在全分母，且必須作為 selector limitation 報告。機器可讀來源為
+  `configs/length_policies/multinews_v1.json`；後續 config 不得自行覆寫這兩個值。
 - GovReport dev 重現更強的同一現象：max-only Greedy 只輸出 165.6–184.5 words，
   floor500-cap650 才到 638.4 words。可是 floor-bound lexical Greedy macro `0.370385`
   仍低於 Lead `0.399232`、Random `0.408844`。所以 A1 只解決 length/stopping contract；

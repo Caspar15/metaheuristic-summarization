@@ -29,11 +29,13 @@
   Greedy、selection Jaccard 僅 `0.639`；因此 selector 已決定採 MMR，NSGA-II
   降為 comparator。這是 diagnostic，不是 full-validation 結論。
 - A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；study runner 已
-  版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。仍缺候選實測、
-  partitioned baseline matrix、PacSum 與 GovReport 方法 runs；test split 仍鎖定。
-- A1 Multi-News dev 已完成：legacy 200–250 cross-method macro `0.314581` 暫列第一，
-  但尚未看 dev-test，不能 freeze。它相對 no-floor 250 的差距全由 Greedy 的輸出長度／
-  trajectory 造成；且有 4/3,935 篇未達可行的 200-word floor（F-23）。
+  版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。Multi-News 的
+  唯一一次 dev-test 已完成；GovReport 尚未觀察。partitioned baseline matrix、PacSum
+  與 GovReport 方法 runs 仍缺；test split 仍鎖定。
+- A1 Multi-News 已依預註冊規則選定 200–250 words：dev-test cross-method macro
+  `0.310382`，相對 max-only250／median220／p75-cap260 的 paired-bootstrap 95% CI
+  全為正，三個 Holm-adjusted `p=0.000600`。這個勝負主要來自 Greedy stopping，不能
+  誤寫成「200–250 最貼近所有 reference」；Greedy 仍有 3/1,686 篇未達 floor（F-23）。
 - A1 GovReport dev 亦完成：IQR 500–650 暫列第一。no-floor Greedy 嚴重早停；floor
   拉長後 macro `0.370385`，仍低於 Lead `0.399232` 與 Random `0.408844`（F-24）。
   這只診斷 lexical-only cheap method，semantic/graph 尚未評估。
