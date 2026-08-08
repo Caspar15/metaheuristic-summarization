@@ -15,7 +15,7 @@
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
-| Multi-News | **12/12 complete** | **12/12 complete** | pending |
+| Multi-News | **12/12 complete** | **12/12 complete** | **2 success + 1 structural failure; follow-up preregistered** |
 | GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | pending |
 
 ## Multi-News lexical/objective 結果
@@ -94,6 +94,28 @@
   因此不保留 soft/full-pool + membership-only 組合。
 - G02 與 G04 的差只有 `0.000096`；這個 OFAT screen 只能把 candidate budget 列為
   後續優先項，不能先把 80/60 或 40/80 組合成未預註冊的新配置後直接看 dev-test。
+
+## Multi-News semantic 結果
+
+原預註冊三案中 S00/S01 完成，S02 因三路 reservations 加 document guard 超過 cap
+而 fail loud：
+
+| ID | 設計 | Macro | R-1/R-2/R-Lsum | selection seconds |
+|---|---|---:|---:|---:|
+| S00 | lexical + semantic、RRF selector | **0.322404** | 0.435165 / 0.135871 / 0.396177 | 1,387.23 |
+| S01 | 同候選，semantic raw + SBERT similarity selector | 0.299634 | 0.409085 / 0.117613 / 0.372204 | 1,394.26 |
+| S02 | lexical + semantic + graph | **failed** | mandatory 61 > cap 60 | — |
+
+- S00 相對純 lexical L00 是 `+0.012051`，但低於 graph G00 `0.001003`、graph G02
+  `0.001900`、Lead `0.003886`。semantic route 有平均 10.48 個 unique candidates、
+  3.68 個 unique selected sentences，證明不是完全重複；但目前沒有 quality gain beyond
+  graph，且 selection 約 graph G00 的 `10.37×`。須等 GovReport 與 S02b 才依 §5.3
+  決定保留、按需 routing 或刪除。
+- S01 比 S00 低 `0.022771`，直接以 semantic raw salience/SBERT similarity 取代目前
+  selector inputs 明顯失敗；這個 selector 接法不保留。
+- S02 原 failure 保留。兩-primary S02b 已在 GovReport semantic 分數前獨立預註冊：
+  total 80、guard max 20，由 `3 routes × 20 + 20 guards = 80` 推導，不用分數選值；
+  follow-up 尚未執行。
 
 ## 完整性與可重現性檢查
 
@@ -200,8 +222,8 @@ reservations 77 > total cap 60 正確 fail loud。
 
 ## 還沒做
 
-1. Multi-News semantic family。
-2. GovReport semantic family。
+1. Multi-News S02b capacity-correct three-route follow-up。
+2. GovReport semantic family與 S02b follow-up。
 3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。

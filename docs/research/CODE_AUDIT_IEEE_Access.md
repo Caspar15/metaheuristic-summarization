@@ -1361,6 +1361,35 @@ paired inference 或 dev-test，不得宣稱 graph 方法勝出。
 
 ---
 
+### 🟡 F-36. 三路各保留 20 個候選與 total 60/coverage guard 結構上衝突
+
+**重現（2026-08-08，Multi-News frozen dev）**：S02 啟用 lexical/semantic/graph，
+但沿用 `min_per_route=20`、`total=60` 與 document guard；前三列後遇到 61 個 mandatory
+reservations，正確 fail loud。三路最低保留已把 60 全部用完，所以任何不與 route
+reservation 重疊的 guard 都會失敗。原 S02 保持 failed。
+
+**處理**：在 GovReport semantic 分數前，以系統時間另立兩-primary preregistration；
+S02b 固定 total 80、guard max 20，容量公式為 `3×20+20=80`，不依 ROUGE 選值。
+runner 只有 dataset 參數，固定 validation-dev；比較總數改記 29。follow-up 尚未執行。
+
+---
+
+### 🟡 F-37. Multi-News semantic 有 unique candidates，但目前不勝 graph，且 CPU 成本約十倍
+
+**證據（D1 frozen dev 3,935 rows，2026-08-08）**：S00 lexical+semantic macro
+`0.322404`，相對純 lexical L00 `+0.012051`，但低 graph G00 `0.001003`、graph G02
+`0.001900` 與 Lead `0.003886`。semantic route 平均有 10.48 unique candidates、3.68
+unique selected sentences，所以不是完全重複；然而 selection `1,387.23 s`，約 graph
+G00 `133.75 s` 的 `10.37×`。S01 直接採 semantic raw salience + SBERT similarity 為
+`0.299634`，比 S00 低 `0.022771`，該 selector 接法不保留。
+
+**決策邊界**：S00 尚不能單靠一個資料集觸發整條 semantic route 刪除，因 unique
+contribution 存在且 GovReport/S02b 未完成；但它已排除「直接 semantic selector」並把
+semantic 的舉證責任提高為跨資料集 quality gain 或明確 adaptive-routing 子群增益。
+沒有 paired inference、strong baselines 或 dev-test，不得 promotion。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

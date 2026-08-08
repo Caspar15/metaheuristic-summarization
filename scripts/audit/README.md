@@ -276,6 +276,7 @@ python -m scripts.audit.paired_run_intersection \
 | `greedy_scaling_projection.py` | F-30/F-31 archived partial 的 prefix-calibrated 舊 Greedy 成本 proxy | `CODE_AUDIT_IEEE_Access.md` F-30/F-31 |
 | `verify_greedy_incremental_equivalence.py` | post-F-30 真實 GovReport L00 逐篇 selected-indices 等價 | `CODE_AUDIT_IEEE_Access.md` F-30 |
 | `run_d1_section_guard_followup.py` | G11 section reservations overflow 後、事前清單已授權的 cap-aware GovReport dev follow-up；固定 `max_items=20`，無 split CLI | `CODE_AUDIT_IEEE_Access.md` F-34 |
+| `run_d1_three_route_followup.py` | S02 三路 reservations overflow 後的兩-primary capacity follow-up；固定 total 80、guard max 20，只有 dataset CLI | `CODE_AUDIT_IEEE_Access.md` F-36 |
 
 ---
 

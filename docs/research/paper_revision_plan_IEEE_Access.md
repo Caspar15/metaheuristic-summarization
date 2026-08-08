@@ -117,6 +117,11 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > G11b 隨後在 prereg commit 後完成 681/681 rows，pool max 60、macro `0.404182`；它只
 > 證明 cap-aware section guard 可行且點估計小幅正向，不構成 promotion。
 
+> Multi-News semantic S00 隨後得到 macro `0.322404`：有 semantic unique candidates，
+> 但仍低 graph G02 `0.001900`，selection 成本約 graph G00 `10.37×`；S01 直接 semantic
+> selector 更低 `0.022771`，該接法刪除。原 S02 因三路 reservations + guard 超過 cap
+> 失敗；容量推導的兩-primary S02b 已在 GovReport semantic 分數前獨立預註冊。
+
 ### P0-01. Multi-News 在 test set 上調參與選模型
 
 證據：

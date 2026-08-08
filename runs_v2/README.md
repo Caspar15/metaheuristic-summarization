@@ -50,3 +50,8 @@ feasibility follow-up，不取代 G11。原 family 沒有讀 dev-test/test。
 `d1_section_guard_followup/govreport/dev/G11b_section_guard_cap20/` 是上述獨立 follow-up：
 prereg commit `3b6813e` 後才執行，681/681 feasible、pool max 60、macro `0.404182`；
 evidence 與 search log 都記 `comparison_family_size=28`、dev-test/test 未讀。
+
+`d1_greedy_sensitivity/multinews/dev/semantic_route/` 原三案為 2 success + S02 structural
+failure。S00 macro `0.322404`、selection `1,387.23 s`；S01 `0.299634`。S02 的三路
+reservations 加 document guard 為 mandatory 61 > cap 60，原 failure 保留；另在執行前
+預註冊兩-primary S02b capacity follow-up（total 80、guard max 20）。

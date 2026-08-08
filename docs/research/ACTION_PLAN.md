@@ -118,6 +118,10 @@
       lexical L10，不是 final architecture。G11 的 77 mandatory reservations 超過 cap 60，
       已依事前 inventory 另預註冊並完成 `max_items=20` follow-up：681/681 feasible、
       pool max 60、macro `0.404182`；原 G11 failure 保留，未讀 dev-test/test。
+- [~] D1 Multi-News semantic 原三案已嘗試：S00 macro `0.322404`，低 graph G02
+      `0.001900` 且 selection 約 graph G00 `10.37×`；S01 semantic-direct selector 再低
+      `0.022771`，刪除該接法。S02 三路 mandatory 61 > cap 60 正確失敗；已在 GovReport
+      semantic 分數前預註冊兩-primary S02b（total 80、guard max 20），跑完才勾選。
 
 ## 2026-08-06 selector milestone
 
