@@ -1,0 +1,62 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G11_dataset_structure_guard",
+  "candidate_hash": "1f6a87cdaea18ae9c70d2f6e07d025ca2c36321358a948c40253e62029caf96a",
+  "declared_delta": {
+    "Multi-News": {
+      "coverage_guard.document": false
+    },
+    "GovReport": {
+      "coverage_guard.section": true
+    }
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/cheap_multiroute/G11_dataset_structure_guard/resolved_config.yaml",
+  "config_sha256": "d00e9bce0d6eeee6240c3d908fb4d2f254d9351b440bdc98d06533230dfeef39",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.43616275451391223,
+      "rouge2": 0.13636003757900997,
+      "rougeLsum": 0.3977614936425033
+    },
+    "macro_rouge": 0.3234280952451418,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.21855146124523,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 46.18424396442185,
+    "selector_candidate_size_mean": 46.18424396442185,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 46.18424396442185,
+    "route_agreement_mean": 1.6065897616077036,
+    "unique_candidate_mean_by_route": {
+      "graph": 11.17992376111817,
+      "lexical": 11.245235069885641
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 3.9621346886912323,
+      "lexical": 2.546378653113088
+    }
+  }
+}

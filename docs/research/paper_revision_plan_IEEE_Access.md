@@ -104,7 +104,10 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > macro `0.320912` 仍低於 Lead `0.326291`；GovReport 全文候選 `0.415585` 高於
 > Lead `0.399232` 與 Random `0.408844` 的 dev point estimate。這支持候選召回是主要
 > 病因，但全文 dense 搜尋不是 final architecture，且尚無 strong-baseline／paired
-> significance。graph／semantic 與 governed Gate 2 未完成前不能提前下最終結論。
+> significance。新增的 Multi-News cheap-multiroute 證據顯示 sparse graph G02 以
+> mean/max `48.03/60` 的受控 pool 達到 macro `0.324305`，相對純 lexical base
+> `+0.013952`、也高於全文 lexical，但仍低 Lead `0.001986`，主要缺口在 R-2。
+> GovReport graph、兩資料集 semantic 與 governed Gate 2 未完成前不能提前下最終結論。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

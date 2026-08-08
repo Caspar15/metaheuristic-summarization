@@ -93,7 +93,9 @@
       **12 success + 1 failure**。完整 regression **345 tests passed**。
 - [~] F-29：取消 top-40 prefilter 是目前最大正向 OFAT，但 selector pool 由平均
       `35.95` 增至 `81.85`、最大 `3,318`，不是可接受的最終解。待兩資料集的 graph／
-      semantic／candidate-budget family 判定能否用受控 pool 回收品質。
+      semantic／candidate-budget family 判定能否用受控 pool 回收品質。Multi-News 已有
+      正向答案：lexical+graph G02 macro `0.324305`，平均 pool `48.03`／最大 `60`，比
+      全文 lexical L10 高 `0.003393`；GovReport 與 semantic 尚待量測。
 - [x] F-30：GovReport L10 暴露 Greedy 對每個候選重算兩次 full-source facility
       coverage。pre-fix attempt `639.47 CPU s` 後封存 152-row prefix；更正後全 dev
       平方 proxy 約 `0.766 h`（原 `4.05 h` 推論作廢，F-31）。已實作等價 batched
@@ -105,6 +107,11 @@
       對 base `+0.045200`；dev point estimate 高於 Lead `0.399232` 與 Random `0.408844`，
       但尚未對強 baseline、做 paired significance 或看 dev-test，不得晉級。完整表見
       `D1_SENSITIVITY_STATUS.md`。
+- [x] D1 Multi-News cheap-multiroute family 已完成（12/12 configs、每個 3,935 frozen
+      dev rows；另保留 G00/G01 各一個 external interruption failure）。G02 route-top-K 80
+      居首，macro `0.324305`；相對純 lexical L00 `+0.013952`，受控 pool mean/max
+      `48.03/60`，但仍低於 Lead macro `0.326291`，不得晉級。G06 membership-only 比
+      graph base 低 `0.004023`，route-aware salience 不可刪。
 
 ## 2026-08-06 selector milestone
 

@@ -45,10 +45,12 @@
 - D1 dev-only Greedy 敏感度研究已在任何新分數前預註冊：完整盤點 19 組／90 個
   runtime config paths，分 lexical/objective、cheap multiroute、semantic 三個 family。
   document-aware position correctness 已修復（F-25），governed family runner 已版本化。
-  兩個 primary 的 lexical/objective 各 12/12 已完成：Multi-News 全文候選相對 base
-  `+0.010559` 但仍低於 Lead；GovReport 為 `+0.045200`，dev point estimate 首次高於
-  同協定 Lead／Random。這尚未對強 baseline或做 paired significance；其餘四個
-  dataset×family cells 未完成，本 screen 不看 dev-test。F-30 Greedy 等價效能修正與
+  兩個 primary 的 lexical/objective 各 12/12、Multi-News cheap-multiroute 12/12 已完成。
+  Multi-News lexical+graph G02 相對純 lexical base `+0.013952`，平均 pool 48.03、最大
+  60，但 macro `0.324305` 仍低於 Lead `0.326291`；GovReport 全文 lexical 對 base
+  `+0.045200`，dev point estimate 首次高於同協定 Lead／Random。這尚未對強 baseline
+  或做 paired significance；其餘三個 dataset×family cells未完成，本 screen 不看
+  dev-test。F-30 Greedy 等價效能修正與
   F-31 的錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 

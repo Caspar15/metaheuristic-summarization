@@ -1302,6 +1302,29 @@ Random 三項都高；對 Lead 仍在 R-2 低 `0.003935`。
 
 ---
 
+### 🟡 F-33. Multi-News sparse graph 能以受控候選池回收 lexical recall，但仍未補足 R-2
+
+**證據（D1 frozen dev 3,935 rows，2026-08-08）**：純 lexical L00 macro
+`0.310353`；lexical+graph G00 `0.323407`（`+0.013054`）；把 route top-K 40 改為 80
+的 G02 為 `0.324305`（對 L00 `+0.013952`）。G02 selector pool mean/max 僅
+`48.03/60`，卻高於全文 lexical L10 `0.320912`，因此不是靠把全文直接交給 selector
+才得到增益。G02 的 R-1/R-2/R-Lsum 是 `0.436696/0.137103/0.399115`；同協定 Lead
+是 `0.435033/0.148139/0.395701`，macro 仍低 `0.001986`，差距集中在 R-2。
+
+**架構判斷**：ARCHITECTURE §5.4 的 graph 刪除條件目前**未觸發**；Multi-News dev
+已有實質正貢獻，graph 應保留至 GovReport 同 family 與 paired inference 完成。相反，
+G06 membership-only 比 G00 低 `0.004023`，證明 route-aware salience 不能退回只決定
+candidate membership。G07 soft/full pool + membership-only 的 macro 更低（`0.320997`）、
+pool 最大 3,318，品質與成本都不支持保留。這仍是 27-config screen 的其中一格，沒有
+dev-test、強 baseline 或顯著性，不得寫成 graph 已勝出。
+
+**證據位置**：
+`runs_v2/d1_greedy_sensitivity/multinews/dev/cheap_multiroute/study_summary.json`；
+12 個 final runs 均為 3,935 rows，另保留 G00／G01 external interruption attempts；
+summary 明示 `dev_test_accessed=false`、`test_split_accessed=false`。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

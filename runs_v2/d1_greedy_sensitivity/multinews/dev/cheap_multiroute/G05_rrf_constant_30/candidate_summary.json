@@ -1,0 +1,57 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G05_rrf_constant_30",
+  "candidate_hash": "5df8f2de7c297937433d2042a84299ec7eeceb8fc5e35f8ca11f89a11eff16ef",
+  "declared_delta": {
+    "candidates.rrf_constant": 30
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/cheap_multiroute/G05_rrf_constant_30/resolved_config.yaml",
+  "config_sha256": "94ad0bbb7ced8616e550d48b9054160864660ad568dc33b024e2c89068de8888",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.435897863147481,
+      "rouge2": 0.13640532165845487,
+      "rougeLsum": 0.39706715357787853
+    },
+    "macro_rouge": 0.32312344612793814,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.29123252858957,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 46.18703939008895,
+    "selector_candidate_size_mean": 46.18703939008895,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 46.18703939008895,
+    "route_agreement_mean": 1.606187291114458,
+    "unique_candidate_mean_by_route": {
+      "graph": 11.175095298602287,
+      "lexical": 11.230495552731893
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 3.8307496823379923,
+      "lexical": 2.5298602287166454
+    }
+  }
+}

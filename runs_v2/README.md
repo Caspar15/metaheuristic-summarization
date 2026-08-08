@@ -34,3 +34,9 @@ L10 dev point estimate 高於 Lead／Random 就提前晉級。
 等價性稽核：681 frozen-dev rows 的逐篇 selected indices 與 pre-F-30 L00 artifact
 **0 差異**，兩者 digest 同為 `8273f162...d7982`。`predictions.jsonl` 依慣例不進 Git；
 可提交的 `evidence.json` 記錄 commit、輸入/config hash、列數與 split guards。
+
+`d1_greedy_sensitivity/multinews/dev/cheap_multiroute/` 已完成 12 個 final runs，每個
+3,935 frozen-dev rows；另保留 G00/G01 各一個 external interruption failure。G02
+route-top-K 80 的 macro `0.324305` 居首，selector pool mean/max `48.03/60`；相對
+純 lexical L00 是 `+0.013952`，但仍低於同協定 Lead macro `0.326291`。family summary
+明示 `dev_test_accessed=false`、`test_split_accessed=false`，不得提前 promotion。

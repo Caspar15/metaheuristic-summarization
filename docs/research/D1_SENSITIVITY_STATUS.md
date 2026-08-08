@@ -8,14 +8,14 @@
   參數，且尚未讀取 dev-test 或 test。
 - 27 個配置與兩資料集的 delta 已在任何 D1 分數前凍結於
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
-- 目前完成兩個 primary 的 **lexical/objective family**：各 12/12 configs，
-  Multi-News 每個 3,935 rows、GovReport 每個 681 rows。兩資料集的
-  cheap-multiroute／semantic 都尚未完成，因此沒有配置可晉級，也尚未做一次性
-  dev-test。
+- 目前完成兩個 primary 的 **lexical/objective family**，以及 Multi-News 的
+  **cheap-multiroute family**：每格 12/12 configs；Multi-News 每個 3,935 rows、
+  GovReport 每個 681 rows。GovReport cheap-multiroute 與兩資料集 semantic 尚未完成，
+  因此沒有配置可晉級，也尚未做 D1 的一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
-| Multi-News | **12/12 complete** | pending | pending |
+| Multi-News | **12/12 complete** | **12/12 complete** | pending |
 | GovReport | **12/12 complete** | pending | pending |
 
 ## Multi-News lexical/objective 結果
@@ -61,6 +61,40 @@
   全文 Greedy 當最終方法。下一輪應先看兩路 candidate budget、graph／semantic 是否
   能用遠小於全文的 pool 回收這個增益。
 
+## Multi-News cheap-multiroute 結果
+
+同一 frozen dev／length／evaluator／Greedy selector；G00 是 lexical+graph 兩路 base：
+
+| ID | 單一變動 | Macro | Δ vs G00 | selector pool mean/max |
+|---|---|---:|---:|---:|
+| G02 | route top-K 40 → 80 | **0.324305** | **+0.000898** | 48.03 / 60 |
+| G04 | total budget 60 → 80 | 0.324209 | +0.000802 | 48.09 / 80 |
+| G09 | graph min similarity 0 → 0.10 | 0.323913 | +0.000506 | 46.24 / 60 |
+| G03 | min per route 20 → 10 | 0.323728 | +0.000320 | 46.19 / 60 |
+| G10 | graph alpha 0.85 → 0.90 | 0.323466 | +0.000059 | 46.17 / 60 |
+| G11 | 關閉 Multi-News document guard | 0.323428 | +0.000021 | 46.18 / 60 |
+| G00 | lexical + sparse graph | 0.323407 | 0 | 46.19 / 60 |
+| G05 | RRF constant 60 → 30 | 0.323123 | −0.000284 | 46.19 / 60 |
+| G08 | graph neighbors 8 → 16 | 0.322582 | −0.000825 | 45.78 / 60 |
+| G01 | lexical + TF-IDF centroid | 0.322130 | −0.001278 | 45.38 / 60 |
+| G07 | soft/full pool + membership-only | 0.320997 | −0.002410 | 81.85 / 3,318 |
+| G06 | membership-only salience | 0.319384 | −0.004023 | 46.19 / 60 |
+
+### 可支持與不可支持的結論
+
+- G00 相對純 lexical L00 是 `+0.013054` macro；G02 相對 L00 是 `+0.013952`，且比
+  全文 lexical L10 高 `+0.003393`。因此 Multi-News dev 已支持：**sparse graph route
+  能用平均 48、最大 60 的受控 selector pool 回收並超過全文 lexical 的品質**。
+- G02 三項是 `0.436696/0.137103/0.399115`；同協定 Lead 是
+  `0.435033/0.148139/0.395701`。G02 的 R-1／R-Lsum 較高，但 R-2 低 `0.011036`，macro
+  仍低 `0.001986`。沒有 paired inference，也未對 TextRank／LexRank／PacSum／
+  SBERT+MMR／greedy reference，因此不能稱為勝出或進入 dev-test。
+- G06 比 G00 低 `0.004023`，顯示 route-aware salience 不是可刪的包裝；只讓 graph
+  決定 membership 會系統性低估它。G07 同時更慢、pool 最大 3,318 且品質更低，
+  因此不保留 soft/full-pool + membership-only 組合。
+- G02 與 G04 的差只有 `0.000096`；這個 OFAT screen 只能把 candidate budget 列為
+  後續優先項，不能先把 80/60 或 40/80 組合成未預註冊的新配置後直接看 dev-test。
+
 ## 完整性與可重現性檢查
 
 - L00 macro `0.3103531191842453` 與 selected-indices SHA-256
@@ -74,6 +108,10 @@
 - 主 evidence：`runs_v2/d1_greedy_sensitivity/multinews/dev/lexical_objective/`。
   所有 final evidence 均標示 `test_split_accessed=false`；study summary 另標示
   `dev_test_accessed=false`。
+- cheap-multiroute 主 evidence：
+  `runs_v2/d1_greedy_sensitivity/multinews/dev/cheap_multiroute/`。12 個 final runs
+  均為 3,935 rows；search log 另保留 G00／G01 各一個 external interruption failure。
+  family summary 為 `dev_test_accessed=false`、`test_split_accessed=false`。
 
 ## GovReport lexical/objective 結果
 
@@ -124,8 +162,8 @@
 
 ## 還沒做
 
-1. Multi-News cheap-multiroute 與 semantic family。
-2. 兩資料集的 cheap-multiroute／semantic family；不能把 lexical 排名外推。
+1. Multi-News semantic family。
+2. GovReport cheap-multiroute／semantic family；不能把 Multi-News 排名外推。
 3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
