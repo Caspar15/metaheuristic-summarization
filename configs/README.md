@@ -12,7 +12,19 @@ validation 前仍須依成本 preflight 凍結 NSGA-II population/generations。
 凍結的 200-row reference-blind hash sample。它只供 pilot；正式 primary 仍是
 policy 所定義的全部 5,621 rows。不要重新抽樣或依 pilot 分數換 manifest。
 
-> ⚠️ 除 `phase1_mvp_multinews.yaml` 外，**其餘都是 legacy 設定。** 它們產生的結果全部是在 test set 上調參得到的（見
+## Governed A1/D1 studies
+
+- `length_policies/{multinews,govreport}_v1.json` 是 A1 唯一一次 dev-test 後凍結的
+  word contracts；正式 development config 不得自行覆寫。
+- `studies/d1/{multinews,govreport}_base.yaml` 是 D1 dev-only Greedy sensitivity 的
+  dataset base。27 個 resolved variants 只能由
+  `preregistrations/d1_greedy_sensitivity_v1.json` 與 governed runner 產生。
+- D1 分成 lexical/objective、cheap multiroute、semantic 三個可獨立提交的 family；
+  runner 沒有 split 參數且只讀 frozen validation manifest 的 `dev` membership。
+
+> ⚠️ 根目錄的舊 numbered/fusion configs 是 **legacy 設定**；`studies/`、
+> `preregistrations/`、`length_policies/`、`validation_partitions/` 與現行 Phase 1 configs
+> 不在此列。legacy configs 產生的結果是在 test set 上調參得到的（見
 > `docs/research/CODE_AUDIT_IEEE_Access.md` 的 P0-01），**不可用於新論文**。
 > 保留它們只為了重現 `runs/` 底下的既有 artifact。
 > 新架構以 `phase1_mvp_*.yaml` 命名，且只允許 validation pilot；schema 以 `docs/research/ARCHITECTURE.md` 為準。
@@ -39,8 +51,9 @@ PR #10 的 `src.baselines.cli` 會讀同一份 `phase1_mvp_multinews.yaml`，因
 source capacity、selected words 與 reason。正式 run 請明確指定 `--run_dir runs_v2`；
 CLI 目前的 `runs` 預設值不可當作新舊結果分界。
 
-截至 2026-08-02，master 只包含 Lead。Random 的 PR #11 尚未合併；其他 baseline
-仍是 Phase 2 待辦。
+截至 2026-08-08，Lead、Random、TextRank、LexRank、SBERT centroid/MMR 已接線；
+舊 full-validation artifacts 只算 historical diagnostics。PacSum、兩 primary 的正式
+partitioned matrix 與 paired significance 仍是 Phase 2 待辦。
 
 ---
 

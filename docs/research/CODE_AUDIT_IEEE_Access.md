@@ -1151,7 +1151,8 @@ document 重置；請求 document scope 卻沒有 records 時 fail loud。以兩
 0..n−1 position，v1/v2 都逐 document 計算；`build_base_scores()` 只有明確
 `scope=document` 才使用它，既有 global configs 保持不變。position candidate route 亦
 共用此實作。兩文件 v1/v2 golden、缺 provenance／不連續位置 fail-loud、10-document
-snapshot 與完整 **338 tests passed**（2026-08-08）。D1 分數仍未執行。
+snapshot 與當時完整 **338 tests passed**（2026-08-08）；加入 D1 governed runner 後為
+**343 tests passed**。D1 分數仍未執行。
 
 ---
 
@@ -1345,7 +1346,7 @@ RRF constant。完整盤點在 `docs/research/evidence/d1_effective_tunable_inve
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**338 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**343 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與

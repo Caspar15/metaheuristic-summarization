@@ -3,6 +3,9 @@
 configs/data_policies/*.json text eol=lf
 configs/data_policies/*.jsonl text eol=lf
 configs/phase1_mvp_multinews_length_normalized.yaml text eol=lf
+configs/preregistrations/*.json text eol=lf
+configs/length_policies/*.json text eol=lf
+configs/studies/**/*.yaml text eol=lf
 
 # Test fixtures are integrity-checked by raw-file SHA-256 for the same reason.
 tests/fixtures/*.jsonl text eol=lf
@@ -10,3 +13,10 @@ tests/fixtures/*.jsonl text eol=lf
 # Generated paired-evaluation artifacts carry published raw-byte SHA-256 values.
 # The generator writes LF and checkout must preserve that cross-platform.
 docs/research/evidence/f18_paired_intersection/** text eol=lf
+
+# Governed run evidence is generated with LF and several policy files pin its
+# raw-byte SHA.  Checkout normalization must not invalidate those identities.
+runs_v2/**/*.json text eol=lf
+runs_v2/**/*.jsonl text eol=lf
+runs_v2/**/*.yaml text eol=lf
+runs_v2/**/*.txt text eol=lf

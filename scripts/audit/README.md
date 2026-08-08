@@ -12,6 +12,24 @@
 > 本目錄的 `lead_vs_system.py` 仍只用來重現 test-tuned legacy F-0，不是 Phase 2
 > baseline runner，也不會因 Lead 程式已合併而自動變成投稿級結果。
 
+## Governed development runners（不是 legacy test diagnostics）
+
+- `run_length_contract_study.py` 已完成 A1；兩 primary 各自唯一一次 dev-test 已凍結
+  length policy，不得重跑。
+- `effective_tunable_inventory.py` 驗證 D1 的 19 組／90 paths 手工 runtime audit。
+- `run_greedy_sensitivity.py` 只跑 frozen validation 的 `dev` membership；CLI 刻意沒有
+  split 參數。用法：
+
+```bash
+.venv/Scripts/python.exe -m scripts.audit.run_greedy_sensitivity \
+  --dataset multinews --family lexical_objective
+```
+
+family 可為 `lexical_objective`、`cheap_multiroute`、`semantic_route`。每個 family
+只能建立一次既定 output root；所有成功與失敗都進 method evidence 與
+`runs_v2/search_log.jsonl`。這些是正式 governance 下的 development evidence，但仍不是
+test 結果或可直接投稿的最終主表。
+
 執行位置：`metaheuristic-summarization/`（模組路徑需要 repo root 在 `sys.path`）
 
 ---
