@@ -50,3 +50,37 @@ def test_protocol_explicitly_prohibits_devtest_and_test():
     assert protocol["frozen_partition"] == "dev"
     assert protocol["dev_test_access"] == "none_in_baseline_search"
     assert protocol["test_split_prohibited"] is True
+
+
+def test_interrupted_resume_is_written_to_search_log(monkeypatch):
+    captured = []
+    monkeypatch.setattr(runner, "_load_search_log", lambda: [])
+    monkeypatch.setattr(runner, "_append_search_log", captured.append)
+    config_path = ROOT / "configs/preregistrations/gate2_baseline_matrix_v1.json"
+    evidence = {
+        "measured_at_utc": "2026-08-08T16:05:27+00:00",
+        "failure_type": "external_runner_interruption",
+        "failure": "Incomplete run preserved before an explicit --resume retry.",
+        "archived_run_path": (
+            "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/"
+            "candidate/method/attempts/attempt_01_interrupted"
+        ),
+    }
+
+    runner._append_interruption_log(
+        spec={"dataset_label": "Multi-News"},
+        family="non_plm",
+        variant={"id": "candidate", "method": "method"},
+        candidate_hash="candidate-hash",
+        config_path=config_path,
+        config_sha256="config-hash",
+        evidence=evidence,
+    )
+
+    assert len(captured) == 1
+    row = captured[0]
+    assert row["status"] == "failed"
+    assert row["run_attempt"] == "attempt_01_interrupted"
+    assert row["dev_score"] is None
+    assert row["dev_test_accessed"] is False
+    assert row["test_split_accessed"] is False

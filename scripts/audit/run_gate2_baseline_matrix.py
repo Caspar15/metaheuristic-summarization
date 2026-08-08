@@ -169,10 +169,12 @@ def _resolved_config(
     return config
 
 
-def _archive_partial(candidate_root: Path, method: str, context: Mapping[str, Any]) -> None:
+def _archive_partial(
+    candidate_root: Path, method: str, context: Mapping[str, Any]
+) -> dict[str, Any] | None:
     run_path = candidate_root / method / "run"
     if not run_path.exists():
-        return
+        return None
     attempts = candidate_root / method / "attempts"
     attempts.mkdir(parents=True, exist_ok=True)
     number = 1
@@ -192,6 +194,53 @@ def _archive_partial(candidate_root: Path, method: str, context: Mapping[str, An
         **dict(context),
     }
     _write_json(destination / "interruption_evidence.json", evidence)
+    return evidence
+
+
+def _append_interruption_log(
+    *,
+    spec: Mapping[str, str],
+    family: str,
+    variant: Mapping[str, Any],
+    candidate_hash: str,
+    config_path: Path,
+    config_sha256: str,
+    evidence: Mapping[str, Any],
+) -> None:
+    run_attempt = Path(str(evidence["archived_run_path"])).name
+    if any(
+        row.get("study_id") == "gate2-baseline-matrix-v1"
+        and row.get("dataset") == spec["dataset_label"]
+        and row.get("candidate_hash") == candidate_hash
+        and row.get("run_attempt") == run_attempt
+        for row in _load_search_log()
+    ):
+        return
+    _append_search_log(
+        {
+            "logged_at_utc": evidence["measured_at_utc"],
+            "study_id": "gate2-baseline-matrix-v1",
+            "dataset": spec["dataset_label"],
+            "partition": "dev",
+            "family": family,
+            "candidate": variant["id"],
+            "method": variant["method"],
+            "candidate_hash": candidate_hash,
+            "config_path": _relative(config_path),
+            "config_hash": config_sha256,
+            "run_attempt": run_attempt,
+            "dev_score": None,
+            "dev_test_score": None,
+            "status": "failed",
+            "promoted": False,
+            "reason": evidence["failure"],
+            "failure_type": evidence["failure_type"],
+            "archived_run_path": evidence["archived_run_path"],
+            "comparison_family_size": 50,
+            "dev_test_accessed": False,
+            "test_split_accessed": False,
+        }
+    )
 
 
 def _append_result_log(
@@ -318,7 +367,17 @@ def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, 
             "dev_test_accessed": False,
         }
         if resume:
-            _archive_partial(candidate_root, variant["method"], context)
+            interruption = _archive_partial(candidate_root, variant["method"], context)
+            if interruption is not None:
+                _append_interruption_log(
+                    spec=spec,
+                    family=family,
+                    variant=variant,
+                    candidate_hash=candidate_hash,
+                    config_path=config_path,
+                    config_sha256=config_sha256,
+                    evidence=interruption,
+                )
         try:
             metrics, _ = _run_method(
                 variant["method"],
