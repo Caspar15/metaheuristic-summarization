@@ -115,8 +115,10 @@
   `4.05 h` 推論已作廢。F-30 batched exact additions 完整 357 tests 通過。
 - post-F-30 L10 selection 實測 `817.84 s`，不是舊版完整 run 的直接配對，因此只能說
   相對 prefix-calibrated projection 約 `3.37×`；不能寫成實測 speedup。
-- L00 selected-indices digest `8273f162...d7982` 與 A1 完全一致，但兩者都是 pre-F-30
-  artifacts。仍需另跑 reference-blind post-F-30 equivalence audit，才能勾完 F-30。
+- 固定 post-F-30 reference-blind audit 已重跑全部 681 frozen-dev rows；逐篇 selected
+  indices **0 差異**，pre/post digest 同為 `8273f162...d7982`。evidence 在
+  `runs_v2/f30_greedy_equivalence/govreport_l00_post_f30/evidence.json`；沒有評估
+  references，也沒有讀 dev-test/test。F-30 至此通過。
 - GovReport search log 保存 12 final successes 加 1 個 L10 interruption failure；全部
   `dev_test_score=null`、`test_split_accessed=false`。
 

@@ -94,11 +94,12 @@
 - [~] F-29：取消 top-40 prefilter 是目前最大正向 OFAT，但 selector pool 由平均
       `35.95` 增至 `81.85`、最大 `3,318`，不是可接受的最終解。待兩資料集的 graph／
       semantic／candidate-budget family 判定能否用受控 pool 回收品質。
-- [~] F-30：GovReport L10 暴露 Greedy 對每個候選重算兩次 full-source facility
+- [x] F-30：GovReport L10 暴露 Greedy 對每個候選重算兩次 full-source facility
       coverage。pre-fix attempt `639.47 CPU s` 後封存 152-row prefix；更正後全 dev
       平方 proxy 約 `0.766 h`（原 `4.05 h` 推論作廢，F-31）。已實作等價 batched
-      additions，targeted 43／完整 357 tests 通過；L10/L11 resume 完成，待 post-F-30
-      L00 selected-indices equivalence audit 後勾選。
+      additions，targeted 43／完整 357 tests 通過；L10/L11 resume 完成。post-F-30
+      L00 reference-blind audit 比對 681 rows，逐篇 selected indices **0 差異**，digest
+      同為 `8273f162...d7982`，且未讀 dev-test/test。
 - [x] D1 GovReport lexical/objective family 已完成（12/12 configs、每個 681 frozen dev
       rows；另保留 1 個 L10 interruption failure）。L10 全文候選 macro `0.415585`、
       對 base `+0.045200`；dev point estimate 高於 Lead `0.399232` 與 Random `0.408844`，

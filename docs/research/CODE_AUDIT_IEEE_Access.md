@@ -1260,9 +1260,13 @@ redundancy、constraints、停止條件與 lower-bound 行為未改。Greedy 改
 3 種 importance aggregation、3 種 coverage method、rectangular full-source coverage
 及負相似值逐欄精確對照；另以 40 組 deterministic random problems 對照 pre-F-30 完整
 Greedy loop 的 selected indices；single-sentence structural guard 另有 pipeline regression。
-targeted **43 passed**、完整 **357 passed**。恢復後仍須以既有 L00 artifact 的逐篇
-selected-indices hash 驗證真實 pipeline 等價。被中止的 attempt 必須由 `--resume`
-封存，不得刪除。
+targeted **43 passed**、完整 **357 passed**。固定的 post-F-30 reference-blind audit
+另在真實 GovReport L00 pipeline 重跑全部 681 frozen-dev rows：逐篇 selected indices
+**0 差異**，pre/post digest 同為
+`8273f16296008019ccd566240ae868e46d841dcb1e04cfa4435b8fc72b4d7982`；沒有評估
+references，也沒有讀 dev-test/test。evidence：
+`runs_v2/f30_greedy_equivalence/govreport_l00_post_f30/evidence.json`。被中止的 attempt
+由 `--resume` 封存，沒有刪除。
 
 ---
 

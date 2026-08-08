@@ -29,3 +29,8 @@ prefilter 時後者為 0、前者為全文，兩者不得混稱。研究解讀�
 L10 resume 使用 commit `4198025` 的 exact batched Greedy additions；舊 partial 的
 Windows size=0 誤判與更正見 F-31。GovReport 本 family 沒有讀 dev-test/test，不能因
 L10 dev point estimate 高於 Lead／Random 就提前晉級。
+
+`f30_greedy_equivalence/govreport_l00_post_f30/` 是固定的 reference-blind 真實 pipeline
+等價性稽核：681 frozen-dev rows 的逐篇 selected indices 與 pre-F-30 L00 artifact
+**0 差異**，兩者 digest 同為 `8273f162...d7982`。`predictions.jsonl` 依慣例不進 Git；
+可提交的 `evidence.json` 記錄 commit、輸入/config hash、列數與 split guards。
