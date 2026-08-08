@@ -292,7 +292,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 |---|---|
 | Phase 1（correctness refactor） | canonical 主路徑的 357 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight、partition enforcement 與 exact batched Greedy additions 已完成；GovReport data layer、A1/D1 runners、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
 | Phase 2（baseline validation） | Multi-News Lead 與 final-implementation TextRank／LexRank 已完成 governed full-split run；下一步是 PacSum、SBERT+MMR、paired significance，並在 GovReport 重建後補齊同一矩陣。程式存在或單一資料集結果不等於 Gate 2 已完成 |
-| Phase 3（方法實驗） | lexical/objective 與 graph screens 已完成（保留原 structural failures 與 cap-aware follow-ups）。Multi-News semantic S00 有 unique candidates 但低 graph G02 `0.001900`、成本約 graph G00 `10.37×`；S01 semantic-direct selector 明顯失敗，S02 capacity follow-up 已預註冊。仍缺 GovReport semantic、兩-primary S02b、paired inference 及 **候選池對 greedy reference 的 recall@K** |
+| Phase 3（方法實驗） | lexical/objective 與 graph screens 已完成（保留原 structural failures 與 cap-aware follow-ups）。Multi-News semantic S00 有 unique candidates 但低 graph G02 `0.001900`、成本約 graph G00 `10.37×`；S01 semantic-direct selector 明顯失敗。capacity-correct S02b macro `0.328077` 首次高於 Lead 點估計，但不是 semantic 純 ablation。仍缺 GovReport semantic／S02b、paired inference 及 **候選池對 greedy reference 的 recall@K** |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 

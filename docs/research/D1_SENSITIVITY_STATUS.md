@@ -8,14 +8,14 @@
   參數，且尚未讀取 dev-test 或 test。
 - 27 個配置與兩資料集的 delta 已在任何 D1 分數前凍結於
   `configs/preregistrations/d1_greedy_sensitivity_v1.json`。
-- 目前完成兩個 primary 的 **lexical/objective family**，以及 Multi-News 的
-  **cheap-multiroute family**：每格 12/12 configs；Multi-News 每個 3,935 rows、
-  GovReport 每個 681 rows。GovReport cheap-multiroute 與兩資料集 semantic 尚未完成，
+- 目前完成兩個 primary 的 **lexical/objective family**、**cheap-multiroute family**，
+  以及 Multi-News semantic 原 family 與 capacity-correct follow-up；Multi-News 每個
+  完整 run 為 3,935 rows、GovReport 為 681 rows。GovReport semantic 尚未完成，
   因此沒有配置可晉級，也尚未做 D1 的一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
-| Multi-News | **12/12 complete** | **12/12 complete** | **2 success + 1 structural failure; follow-up preregistered** |
+| Multi-News | **12/12 complete** | **12/12 complete** | **2 success + 1 structural failure; capacity follow-up complete** |
 | GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | pending |
 
 ## Multi-News lexical/objective 結果
@@ -105,17 +105,23 @@
 | S00 | lexical + semantic、RRF selector | **0.322404** | 0.435165 / 0.135871 / 0.396177 | 1,387.23 |
 | S01 | 同候選，semantic raw + SBERT similarity selector | 0.299634 | 0.409085 / 0.117613 / 0.372204 | 1,394.26 |
 | S02 | lexical + semantic + graph | **failed** | mandatory 61 > cap 60 | — |
+| S02b | 三路、total 80、guard cap 20（獨立 follow-up） | **0.328077** | 0.440759 / 0.139803 / 0.403670 | 1,467.99 |
 
 - S00 相對純 lexical L00 是 `+0.012051`，但低於 graph G00 `0.001003`、graph G02
   `0.001900`、Lead `0.003886`。semantic route 有平均 10.48 個 unique candidates、
   3.68 個 unique selected sentences，證明不是完全重複；但目前沒有 quality gain beyond
-  graph，且 selection 約 graph G00 的 `10.37×`。須等 GovReport 與 S02b 才依 §5.3
-  決定保留、按需 routing 或刪除。
+  graph，且 selection 約 graph G00 的 `10.37×`。S02b 已出現三路整體正訊號，但非
+  semantic 純 ablation；仍須等 GovReport 與 paired evidence 才依 §5.3 決定保留、
+  按需 routing 或刪除。
 - S01 比 S00 低 `0.022771`，直接以 semantic raw salience/SBERT similarity 取代目前
   selector inputs 明顯失敗；這個 selector 接法不保留。
 - S02 原 failure 保留。兩-primary S02b 已在 GovReport semantic 分數前獨立預註冊：
   total 80、guard max 20，由 `3 routes × 20 + 20 guards = 80` 推導，不用分數選值；
-  follow-up 尚未執行。
+  Multi-News follow-up 已於 prereg commit `73769c5` 後完成。3,930/3,935 feasible、
+  selector pool mean/max `52.09/80`，macro `0.328077`；比 graph G02 高 `0.003772`、
+  比 Lead 高 `0.001786`，但 R-2 仍低 Lead `0.008336`。因 S02b 同時改 total 與 guard
+  cap，這是三路**整體配置**的正訊號，不是 semantic 的純因果增益；沒有 paired
+  significance、強 baseline 或 GovReport 複現前不得 promotion。
 
 ## 完整性與可重現性檢查
 
@@ -222,9 +228,8 @@ reservations 77 > total cap 60 正確 fail loud。
 
 ## 還沒做
 
-1. Multi-News S02b capacity-correct three-route follow-up。
-2. GovReport semantic family與 S02b follow-up。
-3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
-4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
+1. GovReport semantic family與 S02b follow-up。
+2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
+3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
-5. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+4. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。

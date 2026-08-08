@@ -55,3 +55,8 @@ evidence 與 search log 都記 `comparison_family_size=28`、dev-test/test 未�
 failure。S00 macro `0.322404`、selection `1,387.23 s`；S01 `0.299634`。S02 的三路
 reservations 加 document guard 為 mandatory 61 > cap 60，原 failure 保留；另在執行前
 預註冊兩-primary S02b capacity follow-up（total 80、guard max 20）。
+
+`d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/` 已在 prereg commit
+`73769c5` 後完成：3,935 rows、3,930 feasible、pool mean/max `52.09/80`、macro
+`0.328077`，dev-test/test 未讀。它高於 graph G02 與 Lead 的 dev 點估計，但同時變更
+total/guard cap，不能當 semantic-only ablation；原 S02 structural failure 仍永久保留。

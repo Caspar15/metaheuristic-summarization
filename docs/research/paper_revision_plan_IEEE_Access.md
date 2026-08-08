@@ -121,6 +121,9 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > 但仍低 graph G02 `0.001900`，selection 成本約 graph G00 `10.37×`；S01 直接 semantic
 > selector 更低 `0.022771`，該接法刪除。原 S02 因三路 reservations + guard 超過 cap
 > 失敗；容量推導的兩-primary S02b 已在 GovReport semantic 分數前獨立預註冊。
+> Multi-News S02b 隨後完成：macro `0.328077`，相對 graph G02 `+0.003772`、Lead
+> `+0.001786`，pool mean/max `52.09/80`。這是首次受控池配置在該 dev 點估計高於 Lead，
+> 但 S02b 同時改 total/guard cap、R-2 仍落後，尚不能把提升歸因 semantic 或宣稱勝出。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

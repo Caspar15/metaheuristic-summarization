@@ -1370,7 +1370,11 @@ reservation 重疊的 guard 都會失敗。原 S02 保持 failed。
 
 **處理**：在 GovReport semantic 分數前，以系統時間另立兩-primary preregistration；
 S02b 固定 total 80、guard max 20，容量公式為 `3×20+20=80`，不依 ROUGE 選值。
-runner 只有 dataset 參數，固定 validation-dev；比較總數改記 29。follow-up 尚未執行。
+runner 只有 dataset 參數，固定 validation-dev；比較總數改記 29。兩資料集必須各自
+在 prereg commit 後執行，原 S02 failure 不得覆寫。
+
+**後續狀態**：Multi-News S02b 已在 prereg commit `73769c5` 後完成 3,935 rows；
+3,930 feasible、pool max 80、dev-test/test 未讀。原 S02 failure 不被覆寫。
 
 ---
 
@@ -1384,9 +1388,31 @@ G00 `133.75 s` 的 `10.37×`。S01 直接採 semantic raw salience + SBERT simil
 `0.299634`，比 S00 低 `0.022771`，該 selector 接法不保留。
 
 **決策邊界**：S00 尚不能單靠一個資料集觸發整條 semantic route 刪除，因 unique
-contribution 存在且 GovReport/S02b 未完成；但它已排除「直接 semantic selector」並把
-semantic 的舉證責任提高為跨資料集 quality gain 或明確 adaptive-routing 子群增益。
+contribution 存在，且 S02b 雖為正訊號卻不是 semantic 純 ablation、GovReport 仍未完成；
+但它已排除「直接 semantic selector」並把 semantic 的舉證責任提高為跨資料集 quality
+gain 或明確 adaptive-routing 子群增益。
 沒有 paired inference、strong baselines 或 dev-test，不得 promotion。
+
+---
+
+### 🟡 F-38. 三路 capacity-correct 配置首次在 Multi-News dev 點估計高於 Lead，但尚不能歸因 semantic
+
+**證據（frozen dev 3,935 rows，2026-08-08）**：預註冊 S02b（lexical + semantic +
+graph、total 80、guard cap 20）macro `0.328077`，R-1/R-2/R-Lsum 為
+`0.440759/0.139803/0.403670`；相對 graph G02 `+0.003772`、相對 Lead macro
+`+0.001786`。候選池 mean/max `52.09/80`，三路 unique selected means 分別為 graph
+`2.23`、lexical `1.32`、semantic `1.78`。3,930/3,935 feasible；5 列沿既定政策記錄
+infeasible，未放寬 fail-loud。
+
+**限制與決策**：S02b 為修正結構容量的整體 follow-up，同時改變 total cap 與 guard
+cap；它不是 capacity-matched 的 semantic-only ablation，不能把全部提升歸因於 semantic。
+而且 R-2 仍低 Lead `0.008336`。保留為候選配置，等待 GovReport 複現、strong baseline
+與 paired bootstrap；在這些完成前不晉級、不讀 dev-test。
+
+**重現**：`python -m scripts.audit.run_d1_three_route_followup --dataset multinews`；主證據在
+`runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/`，preregistration
+SHA-256 `2cac40b58c2d669ab0a2e5088f25afafbaaaa5c332460dad62e7bb9564e92743`，
+selected-indices SHA-256 `6ad798fc2b71fd5810e8d6ae1611d3ce668624d4c2c2d1844d940d6f15039d6c`。
 
 ---
 
