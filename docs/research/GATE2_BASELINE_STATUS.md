@@ -54,7 +54,17 @@
   CLI 沒有 partition 參數。目前加入 F-51～F-56 guards 後完整本地回歸為 **394 passed**。
 - greedy-reference Multi-News R1 首次 Windows sandbox attempt 在 0 rows 失敗；之後外層
   terminate 未帶走子程序，造成雙 writer。F-56 已封存 295-row 污染檔、只保留驗證過的
-  270-row exact prefix，並加入 OS-level single-writer lock；正式結果仍為 0/6 completed。
+  270-row exact prefix，並加入 OS-level single-writer lock；事故修復當時正式結果為
+  0/6 completed，現已由同配置安全續跑至 Multi-News 3/3。
+
+### Multi-News metric-specific greedy reference（frozen dev）
+
+三個 target 已完成 3,935/3,935 rows；它們是分別最大化指定 metric 的 greedy
+reference，不是 exact upper bound。R1 target 得 `0.595288`、平均 `213.29` words；R2
+target 得 `0.345229`、平均 `170.51` words；Lsum target 得 `0.558596`、平均 `212.66`
+words。Lsum 16-worker invocation 為 `2,531.55 s`，極端長文件造成明顯 tail cost。
+三 target 的 dev-test/test guards 皆為 false。GovReport 0/3 尚未開始，因此總進度 3/6；
+headroom/candidate recall 已預註冊但尚未計算，不能把本段當成 Gate 2 完成。
 
 ### Multi-News frozen-dev 結果
 

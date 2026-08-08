@@ -1,0 +1,14 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:49:05.121951+00:00",
+  "status": "interrupted",
+  "reason": "incomplete row checkpoint detected on explicit resume",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "optimization_target": "rouge1",
+  "completed_prefix_rows": 270,
+  "checkpoint_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rouge1/rows.jsonl",
+  "checkpoint_sha256": "f294388ec136843033b71c28f22c8eefe0dce5745459f2f1a75801e91104bce6",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

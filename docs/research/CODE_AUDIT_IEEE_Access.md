@@ -2015,3 +2015,22 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
 **394 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
+
+## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
+
+**嚴重度：P1（headroom 診斷完整性）**
+
+在 F-55/F-56 治理後，Multi-News frozen dev 3,935 rows 的三個獨立 target 全部完成：
+R1 target 的 R1 為 `0.595288`，R2 target 的 R2 為 `0.345229`，Lsum target 的 Lsum
+為 `0.558596`。對應平均摘要長度為 `213.29/170.51/212.66` words；R2 最短為 0 words，
+代表該列沒有任何正 R2 gain，並非 skip 或 schema failure。這證明只拿 R1 greedy 選句再
+報三個 metric 會低估 R2/Lsum 各自可達的 greedy 診斷值。
+
+三份 evidence 都有 input／manifest／policy/preregistration SHA、3,935-row coverage、
+selected-indices digest、dependency versions 與 dev-test/test=false。Lsum invocation 為
+`2,531.55 s`，其中 frozen position 277 的文件有 2,128 句／40,773 source words，造成
+ordered tail cost；未因耗時排除。這些仍不是 exact upper bound，也未宣稱 significance。
+
+候選 overlap/headroom 公式已另在任何 recall 數字前凍結於
+`configs/preregistrations/gate2_greedy_reference_analysis_v1.json`（SHA-256
+`a33b0ec9...74669`）。GovReport 0/3 與分析尚未完成，故 Gate 2 仍未通過；test 未讀。

@@ -1,0 +1,18 @@
+{
+  "study_id": "gate2-greedy-reference-v1",
+  "dataset": "multinews",
+  "dataset_label": "Multi-News",
+  "partition": "dev",
+  "optimization_target": "rouge2",
+  "max_words": 250,
+  "max_sentences": null,
+  "algorithm": "source-order-delivered forward greedy addition; accept only gains greater than 1e-9; exact source-index tie resolves to the earliest index",
+  "report_metrics": [
+    "rouge1",
+    "rouge2",
+    "rougeLsum"
+  ],
+  "requested_min_rule": "do not force-fill the frozen system floor; reference-aware diagnostic stops when no positive target gain remains and reports achieved length",
+  "preregistration_sha256": "04235301d400a1a7bd502879cd8d59b5a5c27cafc902b23ee16bde3435c9f735",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f"
+}

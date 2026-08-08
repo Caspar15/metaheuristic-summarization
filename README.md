@@ -82,7 +82,7 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 23/23、PLM 27/27 均完成。Multi-News 最強 P08 比 S02b 高 `0.003663`；GovReport MMR λ=0.9 比 LexRank `0.001148`、比 S02b `0.034906`，前一小差距尚未 paired。greedy reference、paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
+| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 23/23、PLM 27/27 均完成。Multi-News metric-specific greedy reference 已完成 3/3；GovReport 尚為 0/3，故總計 3/6。Multi-News 最強 P08 比 S02b 高 `0.003663`；GovReport MMR λ=0.9 比 LexRank `0.001148`、比 S02b `0.034906`，前一小差距尚未 paired。完整 greedy reference、candidate recall 與 paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
 | 測試 | ✅ **394 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |

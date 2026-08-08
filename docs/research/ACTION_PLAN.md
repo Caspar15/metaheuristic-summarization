@@ -432,10 +432,15 @@
 - [x] `gate2-greedy-reference-v1` 已在任何正式 greedy-reference score 前預註冊：兩
       primary × R1/R2/Lsum 各自最佳化共 6 configs，只讀 frozen dev；max_words 採 A1
       凍結上限，reference-aware diagnostic 不強迫填 floor，因無正增益自然停止並報實際長度。
-- [ ] 6 個 governed greedy-reference runs、headroom 與 candidate recall 尚未完成
+- [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport 0/3；總計
+      3/6。headroom 與 candidate recall 尚未完成
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
-      evidence/search log；與原 corpus API exact-equivalence test 通過。正式 6 runs 尚未開始。
+      evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 3/6。
+- [x] candidate recall/headroom 分析已在任何 overlap 數字前凍結：
+      `gate2_greedy_reference_analysis_v1.json`（SHA-256 `a33b0ec9...74669`）；定義
+      union-cap-80、route-top-40、final-selection 的 micro/macro recall、空集合處理與
+      `(system−Lead)/(greedy−Lead)`。分析尚未執行。
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
 

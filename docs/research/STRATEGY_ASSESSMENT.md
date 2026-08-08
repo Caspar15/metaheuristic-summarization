@@ -293,7 +293,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | 插入位置 | 新增項目 |
 |---|---|
 | Phase 1（correctness refactor） | canonical 主路徑的 394 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-56 guards 已完成；published-protocol parity、完整 baseline 與 validation-frozen output policy仍未完成 |
-| Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成；Multi-News P08 高 S02b `0.003663`，GovReport MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。下一步是 greedy reference 與 paired inference；目前方法未過 strongest-completed-baseline gate |
+| Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成；Multi-News metric-specific greedy reference 3/3 完成，GovReport 0/3。Multi-News P08 高 S02b `0.003663`，GovReport MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。下一步是 GovReport greedy reference、candidate recall 與 paired inference；目前方法未過 strongest-completed-baseline gate |
 | Phase 3（方法實驗） | screens、matched route ablations 與 paired inference 已完成。12/12 route endpoints 通過 Holm p=`0.002400` 與 186-opportunity p=`0.037196`，semantic/graph 暫留；semantic-direct selector 刪除。Multi-News 對 Lead R-2 仍顯著落後，且 strong baseline／**候選池對 greedy reference 的 recall@K** 未完成，故不能 promotion |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
