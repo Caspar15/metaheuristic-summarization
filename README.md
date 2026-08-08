@@ -24,7 +24,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行完整測試為 **386 passed**。
+  現行完整測試為 **388 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -32,8 +32,8 @@
   降為 comparator。這是 diagnostic，不是 full-validation 結論。
 - A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；study runner 已
   版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。兩個 primary 的
-  唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 已完成，PLM、greedy
-  reference 與正式方法 paired comparison 仍缺；test split 仍鎖定。
+  唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 與 Multi-News PLM
+  已完成，GovReport PLM、greedy reference 與正式方法 paired comparison 仍缺；test split 仍鎖定。
 - A1 Multi-News 已依預註冊規則選定 200–250 words：dev-test cross-method macro
   `0.310382`，相對 max-only250／median220／p75-cap260 的 paired-bootstrap 95% CI
   全為正，三個 Holm-adjusted `p=0.000600`。這個勝負主要來自 Greedy stopping，不能
@@ -81,10 +81,10 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 各 23/23 已完成：Multi-News P08 比 S02b 高 `0.003663`；GovReport LexRank 比 S02b 高 `0.033758`、TextRank高 `0.013104`。PLM、greedy reference、paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
-| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。兩 primary non-PLM 完成；Multi-News PLM 2/27。F-51 cache 已通過 3,935-row cold/warm exact audit，可續跑既有網格；runner 只讀 frozen dev，dev-test/test 皆未讀 |
+| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成。Multi-News 最強仍為 TF-IDF PacSum P08，比 PLM winner 高 `0.000282`、比 S02b 高 `0.003663`；GovReport LexRank 比 S02b 高 `0.033758`。GovReport PLM、greedy reference、paired matrix尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
+| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。Multi-News PLM 已 27/27；F-51 exact cache audit 與 F-53 family provenance verifier 通過。runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **386 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **388 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

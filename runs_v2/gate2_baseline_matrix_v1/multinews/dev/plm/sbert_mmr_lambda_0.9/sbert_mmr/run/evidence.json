@@ -1,0 +1,101 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T19:30:06.769633+00:00",
+  "started_at_utc": "2026-08-08T19:26:52.535840+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "sbert_mmr",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "sbert_mmr",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\plm\\sbert_mmr_lambda_0.9\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\plm\\sbert_mmr_lambda_0.9\\sbert_mmr",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "bcaecb5c6b309dba501b8c8cfceefb051346d94e",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.9/resolved_config.yaml",
+  "config_sha256": "898ea936e1c6ad9237e4911445783777998dd16939698605ae51718a105fc768",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/predictions.jsonl",
+  "predictions_sha256": "ee84e581d2fc79e52255213943b1d1e2682954acb5c545a7a8492d3eb63fe497",
+  "selected_indices_sha256": "f41045a854f712534bd7d02097a90ce0227a5471125b233664e901389317bacd",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.43039057070641734,
+      "rouge2": 0.13702408465735674,
+      "rougeLsum": 0.38693593204932825
+    },
+    "macro_rouge": 0.31811686247103416,
+    "feasible_rows": 3932,
+    "infeasible_rows": 3,
+    "summary_words": {
+      "mean": 247.38653113087673,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "plm",
+  "candidate": "sbert_mmr_lambda_0.9",
+  "candidate_hash": "3f1ff119ff7a22cf8807713d37151acea6681d3bd425d6a2e544c73e2e19b960",
+  "declared_variant": {
+    "id": "sbert_mmr_lambda_0.9",
+    "method": "sbert_mmr",
+    "sbert_mmr": {
+      "lambda_relevance": 0.9
+    }
+  },
+  "dev_test_accessed": false,
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "contract_version": "sbert_mean_pool_l2_npz_v1",
+      "scientific_config_unchanged": true
+    }
+  },
+  "embedding_cache_summary": {
+    "rows": 3935,
+    "status_counts": {
+      "hit": 3935
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "3da91212ab7f08fa5fb6083074dfcd52af826837ee39930d6b89c31ad942afa6"
+  }
+}

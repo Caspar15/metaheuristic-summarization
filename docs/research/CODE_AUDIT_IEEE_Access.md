@@ -51,7 +51,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | baseline 程式已加入；兩 primary frozen-dev non-PLM 各 23/23 已完成，strongest baseline 均勝 proposed S02b。PLM、greedy reference 與完整 paired matrix 尚未完成，Gate 2 未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | baseline 程式已加入；兩 primary frozen-dev non-PLM 各 23/23、Multi-News PLM 27/27 已完成，strongest baseline 仍勝 proposed S02b。GovReport PLM、greedy reference 與完整 paired matrix 尚未完成，Gate 2 未通過 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News／GovReport canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動，CNN-DM 僅在 Gate 3 後納入時處理** |
@@ -60,7 +60,7 @@
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
 1. 🔴 **F-0 只在 dev 部分回答** —— route paired evidence 有正訊號，但 Multi-News 對 Lead 的 R-2 顯著落後；未對齊強 baseline，不等於方法已勝出
-2. 🔴 **F-9 baseline 矩陣仍不完整** —— 兩 primary frozen-dev non-PLM 各 23/23 已完成，strongest baseline 均勝 proposed S02b；PLM、greedy reference 與完整 Gate 2 paired matrix未完成，F-0 仍無法最終回答
+2. 🔴 **F-9 baseline 矩陣仍不完整** —— 兩 primary frozen-dev non-PLM 各 23/23、Multi-News PLM 27/27 已完成，strongest baseline 仍勝 proposed S02b；GovReport PLM、greedy reference 與完整 Gate 2 paired matrix未完成，F-0 仍無法最終回答
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -479,7 +479,8 @@ centroid／MMR 程式皆已接線，
 所以「目前 repo 零 baseline」已不再成立。Lead／Random 共用 canonical data-policy
 preflight 與 output upper-bound contract；TextRank／LexRank 包裝 pinned sumy。PR #15
 已移除 offline `punkt_tab` regression，Linux CI 綠燈。Multi-News frozen-dev non-PLM
-23/23 已完成，P08 是該 family 最強；GovReport non-PLM 亦已完成且 LexRank 勝出。PLM、greedy reference 與完整 paired
+23/23 已完成，P08 是該 family 最強；Multi-News PLM 27/27 亦完成，PacSum-SBERT P03
+仍低 P08 `0.000282`；GovReport non-PLM 已完成且 LexRank 勝出。GovReport PLM、greedy reference 與完整 paired
 matrix 仍未完成。因此 F-9 仍只能列「部分解除」，
 Gate 2 不能標成完成。
 
@@ -1624,14 +1625,14 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 | **P2-1** mutation 1.0 語義 | 「per-individual 還是 per-gene 待確認」 | ✅ **已確認**：pymoo `BitflipMutation()` 的 `prob=1.0` 是 **per-individual**；per-gene 預設 `1/n_var`。實測 n_var=50 時每基因翻轉率 0.0204 ≈ 1/50，約 63% 的個體至少被改動一個位元。**R4 擔心的「整條染色體隨機化」不會發生**，論文照實寫即可 |
 | **P2-1** pop_size / generations | 「補上 NSGA-II 設定」 | ⚠️ **狀態見 §0.0 狀態表**：config 裡的值從未被讀取，實際跑的一律是 100/100。**不要照 YAML 抄進論文** |
 | **P2-2** 多次執行取平均 | 「必須報告 mean ± std over ≥5 runs」 | ✅ 同意。補充：目前跨 process 重跑是可重現的（實測三次相同），但靠的是全域 seed 的巧合，應把 seed 顯式接線 |
-| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 沒有 baseline（F-9）；現在兩 primary non-PLM 各 23/23 已完成，但 PLM、greedy reference 與完整 paired matrix 仍缺 |
+| **P1-1** baseline | 「必補 Lead-3、PacSum、SBERT centroid、LLM zero-shot」 | ✅ 同意。**補充**：稽核當時 repo 沒有 baseline（F-9）；現在兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成，但 GovReport PLM、greedy reference 與完整 paired matrix 仍缺 |
 
 ### 稽核補充、且已收斂進主計畫／行動清單的項目
 
 0. 🔴 **F-0（legacy Multi-News 未贏 Lead）** —— 同資料同內部 evaluator 下，ExpB 只在 R1 高 0.0021，R2/R-Lsum 較低；因 ExpB test-tuned，只能觸發 redesign，不能當新結果。
 1. **F-3（Stage 2 無 PLM）** —— 方法章與實作不符，必須在任何新實驗前解決。
 2. **F-5（相似度矩陣就地竄改）** —— 會靜默改變實驗語意；狀態見 §0.0 狀態表。
-3. **F-9（legacy 無 baseline、目前矩陣仍不完整）** —— 舊表不能回溯當作本地重現；兩 primary non-PLM 各 23/23 已補，Gate 2 尚缺 PLM、greedy reference、paired significance 與正式兩-primary矩陣。
+3. **F-9（legacy 無 baseline、目前矩陣仍不完整）** —— 舊表不能回溯當作本地重現；兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已補，Gate 2 尚缺 GovReport PLM、greedy reference、paired significance 與正式兩-primary矩陣。
 4. **F-12（分句品質）** —— 855 words 的「句子」會直接破壞長度控制，且系統對它有正向偏好。
 5. **F-13(f)（靜默退回 greedy）** —— 需先確認沒有既有實驗其實跑的是 greedy。
 
@@ -1786,7 +1787,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**386 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**388 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1891,7 +1892,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-完整回歸為 **386 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；加入 F-53 family verifier 後目前為
+**388 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible

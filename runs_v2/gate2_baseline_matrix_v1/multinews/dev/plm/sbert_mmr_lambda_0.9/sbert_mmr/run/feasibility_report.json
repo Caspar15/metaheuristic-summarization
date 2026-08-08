@@ -1,0 +1,46 @@
+{
+  "total_count": 3935,
+  "feasible_count": 3932,
+  "infeasible_count": 3,
+  "infeasible_ids": [
+    {
+      "id": "validation_2893",
+      "infeasible_code": "baseline_min_words_shortfall",
+      "violations": {
+        "nonempty": -9.0,
+        "min_words": 5.0,
+        "max_length": -55.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "sbert_mmr could not reach effective_min_words (shortfall=5 words); selection kept as-is",
+      "selected_words": 195,
+      "effective_min_words": 200
+    },
+    {
+      "id": "validation_4066",
+      "infeasible_code": "baseline_min_words_shortfall",
+      "violations": {
+        "nonempty": -13.0,
+        "min_words": 15.0,
+        "max_length": -65.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "sbert_mmr could not reach effective_min_words (shortfall=15 words); selection kept as-is",
+      "selected_words": 185,
+      "effective_min_words": 200
+    },
+    {
+      "id": "validation_5593",
+      "infeasible_code": "baseline_min_words_shortfall",
+      "violations": {
+        "nonempty": -11.0,
+        "min_words": 3.0,
+        "max_length": -53.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "sbert_mmr could not reach effective_min_words (shortfall=3 words); selection kept as-is",
+      "selected_words": 197,
+      "effective_min_words": 200
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-# IEEE Access 全面重建計畫
+# IEEE Access 全面修訂計畫
 
 ## 2026-08-06 selector-comparison update
 
@@ -14,8 +14,10 @@ utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROU
 五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
 且選句 mean pairwise Jaccard 僅 0.639；selector 層因此確定以 MMR 為主線、
 Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成立：Multi-News
-frozen-dev non-PLM 23/23 已完成，且 PacSum TF-IDF P08 macro 比 proposed S02b 高
-`0.003663`；GovReport LexRank 亦高 S02b `0.033758`。仍須完成 PLM、greedy reference與完整 paired matrix才能判斷
+frozen-dev non-PLM 23/23 與 PLM 27/27 已完成；PacSum TF-IDF P08 macro 仍比
+PLM winner 高 `0.000282`、比 proposed S02b 高 `0.003663`，而最佳 full-source
+SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍須完成
+GovReport PLM、greedy reference 與完整 paired matrix才能判斷
 candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
@@ -35,7 +37,10 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 4. 用一致的程式在本地重跑所有 baseline、ablation 與 proposed variants。
 5. 只有當預先定義的效果、統計顯著性與 quality-cost Pareto gate 通過，才開始寫 IEEE Access 主文。
 
-這不是「補實驗」而是一次 research reset。若不做 reset，高機率再次被拒，而且下一次 reviewer 可能會把問題定性為實驗有效性與研究可重現性不足。
+這不是只「補幾個實驗」，而是對 ICACT／ICT Express 既有研究問題做受控的全面修訂：
+保留原本的 zero-training、多訊號候選生成與 selector 問題，重做不可信的資料治理、
+實驗與必要實作。它不是另起一篇全新方法。若不做這層修訂，高機率再次被拒，而且
+下一次 reviewer 可能會把問題定性為實驗有效性與研究可重現性不足。
 
 目前唯一完成獨立重算的 F-0 是 legacy Multi-News 診斷：ExpB（K=20 Coverage）在相同 5,622 筆資料與目前的內部 evaluator 下為 R1/R2/R-Lsum = 0.4352/0.1405/0.3880；同一 245-whitespace-word 上限的 Lead prefix 為 0.4331/0.1453/0.3901。這表示舊系統只在 R1 高 0.0021，R2 與 R-Lsum 反而較低。這批 ExpB 是在 test set 選出的設定，故只能證明舊設計未通過 reality check，不能作為新稿結果。CNN/DailyMail 舊系統是 validation split，而文獻 Lead 是 test split，尚不能宣稱誰勝誰負。
 
@@ -86,10 +91,10 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **Baseline Gate 2 尚未通過** —— 兩 primary frozen-dev non-PLM 各 23/23 已完成；
-   Multi-News P08 比 proposed S02b 高 `0.003663`，GovReport LexRank 高 `0.033758`，所以
-   目前方法沒有勝過 strongest completed baseline。PLM、greedy reference、
-   paired significance 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎與
+1. 🔴 **Baseline Gate 2 尚未通過** —— 兩 primary frozen-dev non-PLM 各 23/23、
+   Multi-News PLM 27/27 已完成；Multi-News P08 比 proposed S02b 高 `0.003663`，
+   GovReport LexRank 高 `0.033758`，所以目前方法沒有勝過 strongest completed baseline。
+   GovReport PLM、greedy reference、paired significance 及完整 baseline 矩陣仍缺。程式基礎與
    單一資料集實測不能替代完整 Gate 2，見 §9 Go/No-Go
 2. 🔴 **第二個 primary 的資料層與 lexical D1 已建立，但證據矩陣仍不完整**；GovReport
    canonical validation／dev／dev-test 已凍結，A1 與 12-config lexical/objective dev

@@ -1,17 +1,24 @@
 # Gate 2 baseline 狀態報告
 
-## 2026-08-09 checkpoint：Multi-News PLM 2/27 與 execution-cache safety gate
+## 2026-08-09 checkpoint：Multi-News PLM 27/27 完成
 
-- Multi-News PLM family 已完成 `sbert_centroid` 與 `sbert_mmr_lambda_0.1`，即 **2/27**；
-  macro ROUGE 分別為 `0.316024`、`0.294505`。這是 dev point estimate，不是 finalist。
-- `sbert_mmr_lambda_0.3` 在 family 命令達 3,600 秒外層限制時中斷；partial run 保留，
-  下一次 `--resume` 必須先依 F-48 封存為 failed attempt 並寫入 `search_log.jsonl`。
-- 觀察到每個 PLM candidate 重複編碼完全相同的 frozen-dev inputs（F-51）。execution-only
-  cache 已通過 cold-populate + warm-hit 的 3,935-row exact audit：所有逐篇 mismatch 為 0，
-  warm 3,935/3,935 hits；selection `1379.55 s` → `89.85 s`。因此可續跑原預註冊網格，
-  但 warm timing 不得冒充 uncached end-to-end 方法成本。
-- 本 checkpoint 沒有讀 dev-test 或 test，也沒有依已看到的分數刪減預註冊 27-candidate
-  網格。Gate 2 仍未通過。
+- 事前註冊的 Multi-News PLM family 已完成 **27/27**：SBERT centroid 1、full-source
+  SBERT-MMR 5 個 λ、PacSum-SBERT 21 個 OFAT 點。沒有 final candidate failure。
+- family winner 是非退化 `pacsum_sbert_P03_previous_-0.3`：R-1/R-2/R-Lsum
+  `0.442111/0.150742/0.401520`，macro `0.331458`。它比 proposed S02b macro 高
+  `0.003381`，但仍比 non-PLM PacSum TF-IDF P08 低 `0.000282`。這只是 dev point
+  estimate；差距尚未做 paired inference，不能宣稱 TF-IDF 或 SBERT representation 勝出。
+- 最佳 full-source SBERT-MMR 是 λ=`0.7`，macro `0.322581`，比 proposed S02b 低
+  `0.005496`；SBERT centroid macro `0.316024`。這類 full-source baseline 與方法內
+  candidate-matched selector swap 是不同實驗，不能用 200-row matched pilot 的 MMR
+  優勢覆蓋本結果。
+- 原 `sbert_mmr_lambda_0.3` 中斷已依 F-48 封存為 `attempt_01_interrupted` 並登錄失敗；
+  final retry 另存且成功，不覆寫歷史。
+- F-51 cache 的全量 exact audit 先於 cached rerun 完成。後續 25 個 run 共驗得
+  98,375 hits、相同 ordered-key digest 與完整 PLM dependency versions；最初兩個 uncached
+  run 明列 legacy。F-53 family verifier 對列數、狀態、contract、digest 與版本 fail loud。
+- 本 checkpoint 沒有讀 dev-test 或 test，也沒有依中途分數刪減網格。Gate 2 仍未通過：
+  GovReport PLM、兩 primary greedy reference 與完整 paired inference 尚未完成。
 
 ## 2026-08-09 checkpoint：兩 primary non-PLM frozen-dev 完成
 
@@ -26,7 +33,7 @@
   保留於 `attempt_01_interrupted/`，resume 後的 final run 另存，不覆寫失敗紀錄。
 - GovReport 23 個 runs 全部一次完成；兩 family 的成功／失敗歷史都已寫入 registry。
 - family 彙整器會驗 candidate count、每個 evidence 的 partition guards、結果完整性，且
-  CLI 沒有 partition 參數。修正 GovReport A1 Lead path 後完整本地回歸為 **376 passed**。
+  CLI 沒有 partition 參數。目前加入 F-51～F-53 guards 後完整本地回歸為 **388 passed**。
 
 ### Multi-News frozen-dev 結果
 
@@ -73,7 +80,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
   它不是 directed centrality 有效的證據；P08 才是本 family 的非退化 dev winner。
 - P08 仍有 1/3,935 row score-degenerate。它與 frozen Lead 只有 166/3,935 rows 的
   `selected_indices` 完全相同，平均 selection Jaccard `0.617715`，並非單純複製 Lead。
-- 目前只有 point estimates。尚未完成兩資料集 PLM family、greedy reference、
+- 目前只有 point estimates。Multi-News PLM 已完成；尚未完成 GovReport PLM、greedy reference、
   Multi-News clean sensitivity、完整 paired bootstrap／selection correction，因此
   **Gate 2 仍未通過，也不讀 dev-test**。
 
@@ -84,16 +91,19 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - 驗證後解讀：`runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/analysis_summary.json`
 - GovReport family：`runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/family_summary.json`
 - GovReport 解讀：`runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/analysis_summary.json`
+- Multi-News PLM family：`runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/family_summary.json`
+- Multi-News PLM 解讀：`runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/analysis_summary.json`
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
 ### 尚未完成（下一步）
 
-1. 續跑 Multi-News PLM 剩餘 25 candidates，再跑 GovReport PLM 27 candidates；不得依目前
-   已看到的 2 個分數刪減網格。
+1. 跑完 GovReport PLM 27 candidates；不得把 Multi-News 的 candidate 排名或最優參數
+   套到 GovReport，也不得刪減其預註冊網格。
 2. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
 3. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較。
-4. 針對兩資料集都輸 strongest non-PLM baseline 的現況，在 dev 做已預註冊的 selector／salience
+4. 針對 Multi-News 仍輸 strongest completed baseline、GovReport 仍輸 strongest non-PLM
+   baseline 的現況，在 dev 做已預註冊的 selector／salience
    搜尋；若搜尋空間耗盡仍無顯著優勢，依停止條件寫重新定位建議。
 5. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
    test 仍鎖定至 freeze 簽字。

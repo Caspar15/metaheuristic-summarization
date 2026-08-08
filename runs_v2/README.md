@@ -94,20 +94,23 @@ summary SHA-256 `4b63b59a7f6ddf96fa9698522909ebe363fa96ae2ca5c937357577bbdf87793
 
 ## Gate 2 baseline matrix 狀態（2026-08-09）
 
-Multi-News PLM family 目前完成 2/27：`sbert_centroid` macro `0.316024`、
-`sbert_mmr_lambda_0.1` macro `0.294505`。第三候選在 3,600 秒外層限制中斷，partial
-artifact 待 resume 依 F-48 封存與登錄。F-51 execution-only embedding cache 已通過
-3,935-row cold/warm exact audit：所有逐篇 mismatch 為 0，warm 3,935 hits，selection
-`1379.55 s` → `89.85 s`；可續跑既有網格，但 warm timing 不代表 uncached 方法成本。
-證據在 `f51_embedding_cache_equivalence_v1/multinews/dev/equivalence_summary.json`。
-所有輸出只讀 frozen dev；dev-test/test 未讀。
+Multi-News PLM family 已完成 27/27。winner `pacsum_sbert_P03_previous_-0.3` 的
+R1/R2/Lsum 為 `0.442111/0.150742/0.401520`、macro `0.331458`；仍比 non-PLM
+P08 低 `0.000282`。最佳 full-source SBERT-MMR 是 λ=0.7（macro `0.322581`），低
+proposed S02b `0.005496`。第三候選的中斷已依 F-48 封存並登錄，final retry 成功。
+F-51 execution-only cache 已先通過 3,935-row cold/warm exact audit；F-53 verifier 又
+確認後續 25 runs 共 98,375 hits、同一 contract／ordered-key digest 與完整 PLM runtime
+versions。證據在 `f51_embedding_cache_equivalence_v1/multinews/dev/equivalence_summary.json`
+及 `gate2_baseline_matrix_v1/multinews/dev/plm/analysis_summary.json`。所有輸出只讀
+frozen dev；dev-test/test 未讀。
 
 `gate2_baseline_matrix_v1/multinews/dev/non_plm/` 已完成事前註冊的 23/23 candidates。
 family winner 是非退化 `pacsum_tfidf_P08_previous_-0.8`，macro `0.331740`；beta=1.0
 在 3,935/3,935 rows 全部 score-degenerate，只能視為 canonical-order skip-tolerant control。
 P07 第一次外層中斷保留於 `attempt_01_interrupted/`，失敗與 final retry 都已寫入
 `search_log.jsonl`。`analysis_summary.json` 固定驗證 partition guards、ranking、退化率與
-相對 frozen Lead 的逐篇選句重疊。PLM、greedy reference 與 paired inference尚未完成；dev-test/test 未讀。
+相對 frozen Lead 的逐篇選句重疊。Multi-News PLM 已完成；GovReport PLM、greedy
+reference 與 paired inference尚未完成；dev-test/test 未讀。
 
 `gate2_baseline_matrix_v1/govreport/dev/non_plm/` 亦完成 23/23，無 failed attempt。
 winner 是 LexRank，R1/R2/Lsum `0.572517/0.241004/0.541340`、macro `0.451620`，比

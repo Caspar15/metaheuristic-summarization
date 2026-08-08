@@ -174,9 +174,10 @@
       配置搜尋只跑 dev；每個候選配置只能看一次 dev-test。Greedy/MMR/NSGA-II、
       full-source SBERT baselines 與 paired bootstrap 必須分別按此 partition protocol 執行。
 - [~] PacSum clean-room TF-IDF／SBERT protocol adaptations 已完成實作與 contract tests；
-      兩 primary non-PLM 各 23/23 已完成。Multi-News P08 高 S02b `0.003663`；GovReport
-      LexRank／TextRank 分別高 S02b `0.033758/0.013104`。兩資料集 PLM、
-      greedy reference 與 paired matrix 尚未完成；test split 仍不得執行。
+      兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成。Multi-News P08 高
+      PLM winner `0.000282`、高 S02b `0.003663`；最佳 full-source SBERT-MMR 低 S02b
+      `0.005496`。GovReport LexRank／TextRank 分別高 S02b `0.033758/0.013104`。
+      GovReport PLM、greedy reference 與 paired matrix 尚未完成；test split 仍不得執行。
 
 > 這是**唯一的執行清單**。研究標準以 `paper_revision_plan_IEEE_Access.md` 為準；程式稽核與策略評估的結論全部收斂到這裡。
 > 每天工作看這份就好，需要理由再回去翻對應的分析文件。
@@ -414,12 +415,14 @@
 - [~] 在兩個 primary 跑 PacSum —— `pacsum_tfidf`／`pacsum_sbert` clean-room 實作已完成；
       Multi-News TF-IDF 21-point OFAT 已完成，P08 勝出；beta=1 的 3,935 rows 全部退化，
       不得當 centrality 證據（F-47）；GovReport 21-point TF-IDF 亦完成，P07 勝出。
-      兩資料集 SBERT 與 paired matrix 尚未完成
+      Multi-News SBERT 21-point OFAT 已完成，P03 勝出但仍低 TF-IDF P08 `0.000282`；
+      GovReport SBERT 與 paired matrix 尚未完成
 - [x] Gate 2 baseline dev 搜尋已在任何新 baseline 分數前預註冊：每資料集 50 個新 candidates
       （non-PLM 23、PLM 27），PacSum 採 21-point OFAT／representation、MMR 採 5 個 λ；
       exact tie 回 default，所有機會進 selection correction。runner 無 split 參數且明禁
       dev-test/test；見 `configs/preregistrations/gate2_baseline_matrix_v1.json`
-- [ ] 在兩個 primary 跑 Sentence-BERT centroid + MMR
+- [~] 在兩個 primary 跑 Sentence-BERT centroid + MMR：Multi-News 6/6 已完成，最佳
+      MMR λ=0.7 macro `0.322581`；GovReport 0/6 尚未完成
 - [~] 兩個 primary 的 Random frozen-dev point estimate 已由 A1 固定 seed 產生：
       Multi-News `0.307098`、GovReport `0.408844`；仍須收斂進 Gate 2 governed matrix、
       paired significance 與共同 reporting artifact。
@@ -429,7 +432,8 @@
 
 **Gate 2**：兩個 primary benchmark 的 baseline 在各自明確 evaluator 下跑出合理數字。v1 沒有 SciTLDR gate。
 
-> 2026-08-09 中途狀態：兩 primary non-PLM 各 23/23 完成，不等於 Gate 2 完成。詳細分數、
+> 2026-08-09 中途狀態：兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 完成，
+> 仍不等於 Gate 2 完成。詳細分數、
 > 退化端點與剩餘工作見 `GATE2_BASELINE_STATUS.md`。
 
 ---
@@ -560,24 +564,27 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 386 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51/F-52 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
-| 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23 已完成，且 proposed S02b 在兩者都輸 strongest completed baseline；PLM、greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 388 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-53 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23、Multi-News PLM 27/27 已完成，且 proposed S02b 仍輸 strongest completed baseline；GovReport PLM、greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
 | 6 投稿稽核 | `[ ]` | | |
 ## 2026-08-09 Gate 2 PLM execution checkpoint
 
-- [~] Multi-News PLM family：2/27 completed；第三候選因 3,600 秒外層限制中斷，partial
-      artifact 已保留，仍須在 resume 時依 F-48 登錄 failed attempt。
+- [x] Multi-News PLM family：27/27 completed；第三候選的外層中斷已依 F-48 封存並登錄，
+      final retry 成功。winner PacSum-SBERT P03 macro `0.331458`，仍低 non-PLM P08
+      `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      **386 passed**。
+      **388 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、
       feasibility、representation hashes 與 ROUGE 全部等於 uncached reference；cold
       3,935 misses、warm 3,935 hits，selection `1379.55 s` → `89.85 s`。cache 現可用於
       既有預註冊 PLM 網格；不可改候選或以 warm timing 取代 uncached 方法成本。
-- [ ] Multi-News PLM 剩餘 25/27、GovReport PLM 27/27、greedy reference 與 paired matrix
-      尚未完成；Gate 2 未過，dev-test/test 未讀。
+- [x] F-53 family verifier 會聚合且 fail loud 驗 cache partition rows、98,375 hit 覆蓋、
+      contract、ordered-key digest 與 PLM dependencies；兩個早期 uncached run 明列 legacy。
+- [ ] GovReport PLM 27/27、兩 primary greedy reference 與 paired matrix尚未完成；
+      Gate 2 未過，dev-test/test 未讀。

@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "pacsum_sbert_B07_beta_0.7",
+  "method": "pacsum_sbert",
+  "candidate_hash": "ebdc14ae4125eda2bbb925da5882f90e342d1509ed36cdce8a1387e3cc98d281",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/pacsum_sbert_B07_beta_0.7/resolved_config.yaml",
+  "config_sha256": "39e7150876164bc74c353f4dfb4f3ffb06b6448b8b6522394ffbf45b36c76580",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4303412483957562,
+      "rouge2": 0.14496785729547224,
+      "rougeLsum": 0.3911392975192147
+    },
+    "macro_rouge": 0.3221494677368144,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.10825921219822,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

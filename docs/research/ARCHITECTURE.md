@@ -337,10 +337,12 @@ Phase 1e 已實作此工程契約：coverage 明確使用 `full source sentences
 > shared objective 支援；Phase 2 的外部對照則已有 PR #10 Lead baseline contract／CLI。
 > 兩者角色不同，不能把方法內 greedy 當成 Lead。Lead、Random、TextRank／LexRank、
 > full-source SBERT centroid／MMR 與 clean-room PacSum TF-IDF／SBERT
-> 程式已進 master；兩 primary frozen-dev non-PLM 各 23/23 已完成。Multi-News P08
-> macro 高 proposed S02b `0.003663`；GovReport LexRank 高 S02b `0.033758`。PacSum
+> 程式已進 master；兩 primary frozen-dev non-PLM 各 23/23、Multi-News PLM 27/27
+> 已完成。Multi-News P08 macro 高 PLM winner `0.000282`、高 proposed S02b
+> `0.003663`；最佳 full-source SBERT-MMR λ=0.7 低 S02b `0.005496`。GovReport LexRank
+> 高 S02b `0.033758`。PacSum
 > 上游 repo／checkpoint 因缺授權與 digest 不直接 vendoring（F-45），改以論文公式實作並強制
-> 標示 protocol adaptation。PLM family、greedy reference、paired
+> 標示 protocol adaptation。GovReport PLM family、greedy reference、paired
 > significance 及兩個 primary 的完整 baseline
 > 矩陣仍未完成。
 
