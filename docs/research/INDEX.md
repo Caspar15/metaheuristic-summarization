@@ -4,7 +4,7 @@
 
 `Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
 接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
-hash 全部相同；312 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
+hash 全部相同；加入 partition／greedy-reference regression 後 323 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
 baseline 亦已接入 shared baseline CLI。凍結的 200-row matched pilot 顯示 MMR
 相對 Greedy 的 R-1／R-2 分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；
 NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`；selector
@@ -35,7 +35,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、canonical schema 與 frozen-policy preflight 已完成；published-protocol parity、GovReport 資料層、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **312 local tests 全過**；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| 測試 | ✅ **323 local tests 全過**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
 | **baseline** | 🟡 **Phase 2 進行中** —— shared contract、CLI、Lead、Random、TextRank／LexRank、full-source SBERT centroid／MMR 程式已接線；Multi-News Lead 與最終實作 TextRank／LexRank 的 5,621-row governed artifacts 已產出並驗證。PacSum、SBERT full run、GovReport、paired significance 與正式兩-primary矩陣未完成，**Gate 2 未過** |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
@@ -151,10 +151,11 @@ cd metaheuristic-summarization
 .venv/Scripts/python.exe -m src.pipeline.evaluate --pred runs/<run>/predictions.jsonl --gold data/processed/<dataset>_<split>.jsonl --out runs/<run>/metrics_fixed.csv --protocol multisentence_lsum
 ```
 
-計算 greedy oracle reference（不是 exact upper bound；目前的 `max_words` 是空白切詞）：
+計算 metric-specific greedy reference smoke（不是 exact upper bound；目前的
+`max_words` 是空白切詞；正式 Gate 2 必須依 frozen partition 過濾）：
 
 ```bash
-.venv/Scripts/python.exe -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_words 245 --limit 300
+.venv/Scripts/python.exe -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnostic_sample.jsonl --max_words 220 --limit 3
 ```
 
 > ⚠️ `runs/` 底下的既有數字全部視為 invalid，不要寫進論文。

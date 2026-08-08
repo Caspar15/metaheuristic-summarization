@@ -39,7 +39,7 @@
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
 | **F-0** | 系統未贏 Lead | 🔴 成立 | ⏳ **未量測** | 待 MVP 跑完 validation 才知道。**這是 go/no-go 的核心,尚未回答** |
-| F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；舊稿 0.136 須撤回。SciTLDR official oracle 為條件式 |
+| F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
 | F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
 | F-4 | PLM 每篇重載模型 | 🔴 成立 | ✅ 程式已修 | `load_encoder()` 快取。**但正式計時數字仍須依鎖定 protocol 重測** |
@@ -992,6 +992,30 @@ python -m scripts.audit.freeze_validation_partitions \
 
 ---
 
+### ✅ F-21. greedy reference 對 canonical schema 靜默產生 0，且搜尋／輸出順序不一致
+
+**重現（修正前）**：`oracle_scores()` 固定讀 `d.get("sentences", [])`。canonical
+Multi-News／GovReport 的來源位於 `documents[].sections[].sentences[]`，所以每列都得到空
+source、空 prediction，最後可能正常結束並回報 0.0000，而非報 schema 錯誤。此外搜尋按
+「句子被加入的順序」組 summary 計分，return 時才排序 indices；ROUGE-2/Lsum 因此可能
+用一個不會被實際輸出的句序挑解。
+
+**修正（2026-08-08）**：canonical 路徑改由 `flatten_sentence_texts()` 完整驗證並展平；
+legacy 只接受明確的非空 `sentences: list[str]`，缺 source/reference、錯誤 schema、空 corpus、
+非法 metric/budget 全部 fail loud。每一步 candidate summary 都先按 source index 排序，與
+最後輸出完全相同。
+
+**metric contract**：CLI 未指定 `--target_metric` 時會分別執行 `rouge1`、`rouge2`、
+`rougeLsum` 三次，輸出每個 target 的 selections、三項 scores、平均字數與句數；report
+明記 `exact_upper_bound=false`。舊 `greedy_oracle_summary`／`oracle_scores` 僅為 historical
+script 相容 wrapper，新文件與程式一律使用 `greedy_reference_*`。
+
+**驗收**：46 個 evaluation/schema/greedy-reference tests 通過，包含 canonical 非零、三
+target 分離、schema fail-loud、source-order search regression。此階段是 correctness，尚未
+產生任何 primary dev/dev-test greedy-reference 分數；Gate 2 仍待 A1 長度協定凍結後執行。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。
@@ -1168,7 +1192,7 @@ python -m scripts.audit.freeze_validation_partitions \
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**312 local tests 全過且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**323 local tests 全過（2026-08-08）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1178,7 +1202,7 @@ significance、兩個 primary 的完整 baseline 矩陣與 proposed-method valid
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
 |---|---|---|---|
 | `src/eval/rouge.py` | ROUGE-Lsum；同一 reference 由最大 R1 選定；長度 mismatch fail；保留 legacy evaluator | F-2, F-8 | ✅ 兩個 5622 篇 artifacts 已重現 0.3857／0.3880；✅ regression tests；⏳ official files2rouge conformance（僅保留 SciTLDR 時） |
-| `src/eval/oracle.py` | greedy oracle reference CLI；已更正不得稱 exact upper bound，`max_words` 明確化 | F-1 | ✅ CLI/smoke；SciTLDR v1 不跑，official single-sentence 52.4 conformance 未排程 |
+| `src/eval/oracle.py` | metric-specific greedy reference；canonical fail-loud、source-order search、`max_words` 明確化 | F-1, F-21 | ✅ 46-test correctness suite；兩 primary partitioned Gate 2 run 尚未執行 |
 | `src/features/graph.py` | thresholding 前先 `.copy()`，不再就地竄改呼叫端矩陣 | F-5 | ✅ 呼叫前後矩陣一致 |
 | `src/models/extractive/encoder_rank.py` | 模型快取、pinned revision、完整輸入 batch encode、截斷與成本 artifact | F-4 | ✅ CPU 與 3-row canonical smoke；⏳ 正式 cold/warm/GPU cost pilot |
 | `src/pipeline/optimizer_dispatch.py`、`src/objectives/evaluator.py` | `pop_size` / `n_gen` / `seed` 接線；移除 fallback；Greedy／GRASP／NSGA-II 共用 objective/constraints，保存 Pareto front | F-6, F-13f, F-3, F-7 | ✅ hand-computed、seed、no-fallback、pipeline regression；⏳ MMR/exact baseline 與 validation isolation |
@@ -1186,7 +1210,7 @@ significance、兩個 primary 的完整 baseline 矩陣與 proposed-method valid
 **執行 greedy reference 的指令**（例：Multi-News，245 whitespace-word 預算）
 
 ```bash
-python -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_words 245 --limit 300
+python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnostic_sample.jsonl --max_words 220 --limit 3
 ```
 
 **按目前多句內部協定重算已有 run（不等同 published-protocol parity）**

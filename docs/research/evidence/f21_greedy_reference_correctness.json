@@ -1,0 +1,28 @@
+{
+  "evidence_schema_version": "1.0",
+  "finding": "F-21",
+  "measured_at_utc": "2026-08-08T04:08:22.0882253Z",
+  "implementation_parent_commit": "510fec6",
+  "scope": "correctness_only_no_primary_scores",
+  "test_split_accessed": false,
+  "changes": [
+    "Canonical documents are validated and flattened through src.data.schemas.flatten_sentence_texts.",
+    "Missing or malformed source/reference schemas fail loudly.",
+    "ROUGE-1, ROUGE-2, and ROUGE-Lsum optimization targets run independently.",
+    "Greedy search scores source-ordered summaries, matching delivered output order.",
+    "Reports declare exact_upper_bound=false and preserve per-row selections."
+  ],
+  "verification": {
+    "command": ".venv/Scripts/python.exe -m pytest -q tests/test_greedy_reference.py tests/test_eval.py tests/test_rouge_golden.py tests/test_schemas.py",
+    "passed": 46,
+    "failed": 0,
+    "src_eval_oracle_sha256": "8a272d516922a44c27a6f389a721098cd7a9750e8177626f464434b5149eae2e",
+    "test_greedy_reference_sha256": "0a576fd0b3ca45899980c144c976694da63fdfca983404256e98e9c5e2a74a67"
+  },
+  "scores_observed": false,
+  "remaining": [
+    "Freeze the length contract before primary greedy-reference measurement.",
+    "Run governed dev and one-time dev-test on Multi-News and GovReport.",
+    "Record dataset, partition, config, dependencies, selections, and artifact hashes."
+  ]
+}

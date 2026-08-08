@@ -21,7 +21,7 @@
   Multi-News validation 正式 run。
 - 真實 canonical 3-row correctness/cost smoke 已通過 matched hashes；不含 ROUGE、
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
-  現行測試為 **312 passed**。
+  加上 validation partition 與 greedy-reference correctness 後，現行測試為 **323 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -46,7 +46,7 @@
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
 | Baseline | 🟡 **Phase 2 進行中** —— Lead、Random、TextRank／LexRank 與 full-source SBERT centroid／MMR 已接線；TextRank／LexRank 已在 frozen Multi-News validation 完成 5,621-row full-split rerun。PacSum、SBERT full run、GovReport、paired significance 與兩個 primary 的完整矩陣仍未完成 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **312 local tests passed**；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **323 local tests passed**（2026-08-08）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 
@@ -131,7 +131,7 @@ GitHub Actions 會在每次 push 到 `master` 或針對 `master` 的 pull reques
 | `src/representations/` | TF-IDF 向量與相似度矩陣 |
 | `src/models/extractive/` | Greedy(MMR)、GRASP、NSGA-II、encoder 排序 |
 | `src/pipeline/` | 特徵組合、候選池、optimizer dispatch、選句、評估 |
-| `src/eval/` | ROUGE（Lsum + multi-reference）、greedy oracle reference |
+| `src/eval/` | ROUGE（Lsum + multi-reference）、metric-specific greedy reference |
 | `src/selection/` | 長度控制與候選池工具 |
 
 ---
@@ -224,10 +224,11 @@ feasible／infeasible 數；不能讓不同方法各自排除失敗列後直接�
 必須使用 `scripts/audit/paired_run_intersection.py`，並明確指定 protocol；legacy
 缺列 artifact 只能在 `--assume-legacy-feasible` 下作 diagnostic，不能升格正式結果。
 
-Greedy oracle reference（**不是** exact upper bound）：
+Metric-specific greedy reference smoke（**不是** exact upper bound；正式 Gate 2 必須再由
+frozen dev/dev-test manifest 過濾）：
 
 ```bash
-python -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_words 245 --limit 300
+python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnostic_sample.jsonl --max_words 220 --limit 3
 ```
 
 ---

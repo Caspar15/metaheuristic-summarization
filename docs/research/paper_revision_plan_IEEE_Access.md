@@ -250,7 +250,7 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 - 至少報 R1、R2、RL，並保存每篇、每個 reference 的原始分數及最後 aggregation 結果。
 - extractive oracle 必須在和系統相同的句數或 token budget 下定義：
   - 小文件可 exhaustive best subset；
-  - 大文件可 greedy oracle，但名稱必須寫 greedy oracle，不得稱 exact upper bound；
+  - 大文件可使用 greedy reference，但名稱不得含 oracle，也不得稱 exact upper bound；
   - 若 dataset 提供 oracle labels，優先遵循官方 protocol。
 - 將 full-source score 改名為 full-source baseline，或直接刪除。
 
@@ -258,7 +258,7 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 
 - 系統不可能超過同一 metric、同一 budget 下的 exact extractive oracle。
 - reference 數量與官方資料一致。
-- 論文清楚區分 exact oracle、greedy oracle 與 full-source baseline。
+- 論文清楚區分 exhaustive exact oracle、metric-specific greedy reference 與 full-source baseline。
 - official test split 上重現 AIC one-sentence oracle R1 約 52.4；若無法在合理 rounding tolerance 內重現，SciTLDR 實驗不得進主文。
 - proposed method 在相同 no-task-training 條件下至少不低於重跑的 PACSUM；否則 SciTLDR 不得支持「跨領域有效」或「具競爭力」主張。
 
@@ -644,7 +644,7 @@ Prediction record：
 - candidate top-K rank preservation tests。
 - Stage-2 provenance score fusion tests。
 - sentence/word/token budget boundary tests。
-- exact/greedy oracle tests。
+- exact-search（若實作）／metric-specific greedy-reference tests。
 - multi-reference evaluation tests。
 - rougeL 與 rougeLsum golden tests。
 - NSGA-II parameter propagation、seed determinism、no-fallback tests。

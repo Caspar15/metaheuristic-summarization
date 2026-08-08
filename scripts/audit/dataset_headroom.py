@@ -3,7 +3,7 @@
 headroom = greedy_reference_score - lead_score
 
 If headroom is small, Lead is already near-optimal and no selector can win --
-the dataset is the wrong battlefield. If oracle-selected sentences cluster at
+the dataset is the wrong battlefield. If greedy-reference sentences cluster at
 the front of the document, the same conclusion follows.
 
 The greedy reference is NOT an exact upper bound and NOT an official protocol;
@@ -11,10 +11,8 @@ it is a reproducible internal diagnostic used to compare datasets.
 
 Usage
 -----
-    python -m scripts.audit.dataset_headroom \
-        --data data/processed/multi_news_test.jsonl --budget 245 --limit 200
-    python -m scripts.audit.dataset_headroom \
-        --data data/processed/_archive_legacy/cnn_dm_test.jsonl --lead_sentences 3 --limit 200
+    Historical diagnostic only. New governed runs must first filter the frozen
+    validation dev/dev-test manifest; test access is prohibited before freeze.
 """
 from __future__ import annotations
 
@@ -22,7 +20,7 @@ import argparse
 import statistics
 
 from src.eval.rouge import rouge_scores, _new_scorer
-from src.eval.oracle import greedy_oracle_summary
+from src.eval.oracle import greedy_reference_summary
 from scripts.audit.lead_vs_system import (
     load_jsonl, norm_sentences, reference_of, lead_prefix,
 )
@@ -47,9 +45,14 @@ def main() -> None:
         refs.append(ref)
         leads.append(lead_prefix(sents, max_words=args.budget,
                                  max_sentences=args.lead_sentences))
-        idx = greedy_oracle_summary(sents, ref, max_tokens=args.budget,
-                                    max_sentences=args.lead_sentences,
-                                    metric="rouge1", scorer=sc)
+        idx = greedy_reference_summary(
+            sents,
+            ref,
+            max_words=args.budget,
+            max_sentences=args.lead_sentences,
+            metric="rouge1",
+            scorer=sc,
+        )
         orc.append(" ".join(sents[i] for i in idx))
         n = len(sents)
         nsent.append(n)

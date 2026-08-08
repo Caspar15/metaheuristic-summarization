@@ -133,7 +133,11 @@
 ### 1a. Patch 與核心 regression 已完成，多資料集／外部協定驗收仍待補
 
 - [~] `src/eval/rouge.py` → 已改 ROUGE-Lsum、同一 reference 由最高 R1 選定、長度 mismatch fail，內部 golden/regression 已通過；published-protocol parity 仍待驗證
-- [~] `src/eval/oracle.py` → 已有 greedy oracle reference；不得稱 exact upper bound。SciTLDR official single-sentence oracle 僅在決定保留該 stress test 時才實作／重現
+- [x] `src/eval/oracle.py` → canonical `documents` 已正確展平，舊 schema 不符會
+      fail loud；ROUGE-1／ROUGE-2／ROUGE-Lsum 各自獨立最佳化並保存 selections。
+      搜尋每一步與最終輸出都採 source order。名稱固定為 greedy reference，明記
+      `exact_upper_bound=false`；舊 `greedy_oracle_*` 名稱僅留相容 wrapper。SciTLDR
+      official single-sentence conformance 因 v1 排除該資料集而不重開。
 - [x] `src/features/graph.py` → dense input 不被 mutation、dangling mass、zero diagonal、sparse edge bound 均有 regression tests
 - [x] `src/models/extractive/encoder_rank.py` → 模型快取、完整輸入 batch encode、revision/truncation artifact 已接線；pinned MiniLM CPU smoke 與 3-row canonical pipeline 通過（GPU 與正式成本屬後續 cost pilot）
 - [x] `src/pipeline/optimizer_dispatch.py` → NSGA-II 參數接線與 no-fallback pytest regression 已通過
@@ -414,7 +418,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 312 local tests、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 323 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、Multi-News validation policy/preflight、partition enforcement 與 greedy-reference correctness 已完成；外部 evaluator parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；Multi-News TextRank／LexRank 正式重跑已完成。PacSum、SBERT full run、GovReport、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |

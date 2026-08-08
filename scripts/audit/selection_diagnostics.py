@@ -3,20 +3,16 @@
 Produces the three numbers used to diagnose F-0:
   * position distribution of selected sentences (0 = doc start, 1 = doc end)
   * overlap between the system's picks and Lead's picks
-  * overlap between the system's picks and a greedy oracle reference
+  * overlap between the system's picks and a greedy reference
 
-A system whose picks look like Lead's, and rarely match the oracle's, is
+A system whose picks look like Lead's, and rarely match the greedy reference, is
 re-deriving Lead at much higher cost.
 
 The greedy reference here is NOT an exact upper bound and NOT any dataset's
 official oracle protocol -- it is a reproducible internal reference.
 
-Usage
------
-    python -m scripts.audit.selection_diagnostics \
-        --data data/processed/multi_news_test.jsonl \
-        --pred runs/tuning_experiments/ExpB_K20_Max_Coverage/predictions.jsonl \
-        --budget 245 --limit 200
+Historical diagnostic only. New governed runs must first filter the frozen
+validation dev/dev-test manifest; test access is prohibited before freeze.
 """
 from __future__ import annotations
 
@@ -25,7 +21,7 @@ import statistics
 from typing import List, Set
 
 from src.eval.rouge import _new_scorer
-from src.eval.oracle import greedy_oracle_summary
+from src.eval.oracle import greedy_reference_summary
 from scripts.audit.lead_vs_system import load_jsonl, norm_sentences, reference_of
 
 
@@ -72,9 +68,16 @@ def main() -> None:
         S: Set[int] = set(preds[key].get("selected_indices", []))
         if not S:
             continue
-        O: Set[int] = set(greedy_oracle_summary(
-            sents, reference_of(doc), max_tokens=args.budget,
-            max_sentences=args.max_sentences, metric="rouge1", scorer=sc))
+        O: Set[int] = set(
+            greedy_reference_summary(
+                sents,
+                reference_of(doc),
+                max_words=args.budget,
+                max_sentences=args.max_sentences,
+                metric="rouge1",
+                scorer=sc,
+            )
+        )
         L: Set[int] = set()
         tot = 0
         for i, s in enumerate(sents):
