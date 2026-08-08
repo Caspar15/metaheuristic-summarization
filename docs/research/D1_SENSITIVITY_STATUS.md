@@ -16,7 +16,7 @@
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
 | Multi-News | **12/12 complete** | **12/12 complete** | pending |
-| GovReport | **12/12 complete** | **11 success + 1 structural failure; follow-up preregistered** | pending |
+| GovReport | **12/12 complete** | **11 success + 1 structural failure; cap-aware follow-up complete** | pending |
 
 ## Multi-News lexical/objective 結果
 
@@ -169,6 +169,7 @@ reservations 77 > total cap 60 正確 fail loud。
 |---|---|---:|---:|---:|
 | G07 | soft/full pool + membership-only | **0.414831** | **+0.011335** | 318.52 / 2,889 |
 | G02 | route top-K 40 → 80 | 0.404282 | +0.000786 | 59.94 / 60 |
+| G11b | cap-aware section guard（獨立 follow-up） | 0.404182 | +0.000685 | 59.82 / 60 |
 | G03 | min per route 20 → 10 | 0.404078 | +0.000582 | 59.82 / 60 |
 | G04 | total budget 60 → 80 | 0.403594 | +0.000098 | 73.17 / 80 |
 | G00 | lexical + sparse graph | 0.403496 | 0 | 59.82 / 60 |
@@ -193,12 +194,14 @@ reservations 77 > total cap 60 正確 fail loud。
 - G11 failure 不得靠事後放大 total cap 覆寫。事前 inventory 已限定
   `coverage_guard.max_items` 只在 overflow 時啟用；因此另以系統時間預註冊
   `G11b_section_guard_cap20`。20 由 `60 − 2×20` 的最壞情況容量推導，不使用分數選值；
-  原 G11 failure 永久保留。follow-up 尚未執行。
+  原 G11 failure 永久保留。follow-up 已在 prereg commit `3b6813e` 後執行：681/681
+  feasible、pool max 60、macro `0.404182`（對 G00 `+0.000685`）；只作 feasibility/
+  diagnostic，不單獨 promotion。
 
 ## 還沒做
 
 1. Multi-News semantic family。
-2. GovReport G11b section-guard feasibility follow-up，以及 GovReport semantic family。
+2. GovReport semantic family。
 3. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
 4. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。

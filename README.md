@@ -50,7 +50,8 @@
   60，但 macro `0.324305` 仍低於 Lead `0.326291`；GovReport 全文 lexical 對 base
   `+0.045200`，dev point estimate 首次高於同協定 Lead／Random。這尚未對強 baseline
   或做 paired significance。GovReport cheap-multiroute 已有 11 success + 1 uncapped
-  section-guard structural failure；cap-aware follow-up 已另行預註冊、尚未執行。兩個
+  section-guard structural failure；cap-aware follow-up 已另行預註冊並完成（681/681
+  feasible、pool max 60）。兩個
   semantic cells 未完成，本 screen 不看 dev-test。F-30 Greedy 等價效能修正與
   F-31 的錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。

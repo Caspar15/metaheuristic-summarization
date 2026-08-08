@@ -1338,6 +1338,9 @@ route/guard reservations`。這不是不可行摘要列，不能依 F-17 降低�
 `d1_govreport_section_guard_followup_v1.json`，固定 `max_items=20`；20 是由 total 60
 減去兩 route 最壞情況各 20 個 disjoint reservations 得到，不用 ROUGE 選值。follow-up
 只作 feasibility/diagnostic，總比較數改記 28；執行前已版本化 runner，且沒有 split CLI。
+prereg commit `3b6813e` 後的實測為 681/681 feasible、candidate pool max 60、macro
+`0.404182`（對 G00 `+0.000685`）；dev-test/test 均未讀。這證明 cap-aware guard 可行，
+但增益很小，不能由此單獨 promotion。
 
 ---
 

@@ -114,6 +114,8 @@ candidate router 是否足以構成 IEEE Access 的方法貢獻。
 > 高於 Lead、低於 Random。G07 full/soft pool `0.414831` 但成本約 G00 `13.28×`，且仍
 > 略低全文 lexical L10。uncapped section guard 因 mandatory 77 > cap 60 正確失敗；
 > 原 failure 保留，容量推導的 cap-aware G11b 已獨立預註冊，不能覆寫原配置。
+> G11b 隨後在 prereg commit 後完成 681/681 rows，pool max 60、macro `0.404182`；它只
+> 證明 cap-aware section guard 可行且點估計小幅正向，不構成 promotion。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 

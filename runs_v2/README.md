@@ -46,3 +46,7 @@ configs：11 success，G11 因 77 mandatory section/route reservations 超過 to
 而 fail loud。原 failure 永久保留；另在執行前預註冊
 `d1_govreport_section_guard_followup_v1.json`，以容量推導的 `max_items=20` 作獨立
 feasibility follow-up，不取代 G11。原 family 沒有讀 dev-test/test。
+
+`d1_section_guard_followup/govreport/dev/G11b_section_guard_cap20/` 是上述獨立 follow-up：
+prereg commit `3b6813e` 後才執行，681/681 feasible、pool max 60、macro `0.404182`；
+evidence 與 search log 都記 `comparison_family_size=28`、dev-test/test 未讀。
