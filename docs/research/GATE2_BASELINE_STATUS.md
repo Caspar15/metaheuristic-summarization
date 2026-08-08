@@ -6,9 +6,10 @@
   macro ROUGE 分別為 `0.316024`、`0.294505`。這是 dev point estimate，不是 finalist。
 - `sbert_mmr_lambda_0.3` 在 family 命令達 3,600 秒外層限制時中斷；partial run 保留，
   下一次 `--resume` 必須先依 F-48 封存為 failed attempt 並寫入 `search_log.jsonl`。
-- 觀察到每個 PLM candidate 重複編碼完全相同的 frozen-dev inputs（F-51）。已實作
-  execution-only content-addressed cache，相關測試與完整回歸為 **386 passed**；cold-populate
-  + warm-hit 的 3,935-row exact audit 已預註冊但尚未執行，因此目前不可續跑。
+- 觀察到每個 PLM candidate 重複編碼完全相同的 frozen-dev inputs（F-51）。execution-only
+  cache 已通過 cold-populate + warm-hit 的 3,935-row exact audit：所有逐篇 mismatch 為 0，
+  warm 3,935/3,935 hits；selection `1379.55 s` → `89.85 s`。因此可續跑原預註冊網格，
+  但 warm timing 不得冒充 uncached end-to-end 方法成本。
 - 本 checkpoint 沒有讀 dev-test 或 test，也沒有依已看到的分數刪減預註冊 27-candidate
   網格。Gate 2 仍未通過。
 
@@ -88,8 +89,8 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 
 ### 尚未完成（下一步）
 
-1. 先完成並版本化 F-51 全量等價驗證；通過後續跑 Multi-News PLM 剩餘 25 candidates，
-   再跑 GovReport PLM 27 candidates。
+1. 續跑 Multi-News PLM 剩餘 25 candidates，再跑 GovReport PLM 27 candidates；不得依目前
+   已看到的 2 個分數刪減網格。
 2. 兩 primary 的 metric-specific greedy reference 與既有 Lead／Random integrity reuse。
 3. 全 baseline finalists 與 proposed candidates 的 paired inference、headroom 與成本比較。
 4. 針對兩資料集都輸 strongest non-PLM baseline 的現況，在 dev 做已預註冊的 selector／salience

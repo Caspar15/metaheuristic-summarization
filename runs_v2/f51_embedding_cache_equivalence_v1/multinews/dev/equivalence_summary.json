@@ -1,0 +1,124 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T19:13:59.619524+00:00",
+  "status": "passed",
+  "study_id": "f51-embedding-cache-equivalence-v1",
+  "implementation_commit": "9abeb5fde898059f5329bb8fe814f2736ccb841a",
+  "audit_hash": "f75d26a63b9c6e0edf885dafd56776f1c946f6db02b1f147f2fa66a1c12df36a",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/resolved_config.yaml",
+  "config_sha256": "3f9229033ccdbbcbcc05ce4d14cc86b1884596cbab332f972b15f3ced00e3f6e",
+  "reference_evidence_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/sbert_centroid/run/evidence.json",
+  "reference_evidence_sha256": "21d039f458b175ad547ee286d81fb5ce354a76bb393b95820ea5b52349078242",
+  "cold_evidence_path": "runs_v2/f51_embedding_cache_equivalence_v1/multinews/dev/cold_populate/sbert_centroid/run/evidence.json",
+  "cold_evidence_sha256": "cf608c92abbac21bd8bff473e17f85fa9070f842eee7149c41133009fb465b74",
+  "warm_evidence_path": "runs_v2/f51_embedding_cache_equivalence_v1/multinews/dev/warm_hit/sbert_centroid/run/evidence.json",
+  "warm_evidence_sha256": "bc575377f97deffe09573f65b6ef64184ca847c6c3a031e1644d15a5170261d0",
+  "reference_selected_indices_sha256": "e93ee982edcafd7160099bbab8b71144423f674fc04c57e6358641f7f53cc919",
+  "cold_selected_indices_sha256": "e93ee982edcafd7160099bbab8b71144423f674fc04c57e6358641f7f53cc919",
+  "warm_selected_indices_sha256": "e93ee982edcafd7160099bbab8b71144423f674fc04c57e6358641f7f53cc919",
+  "cold_row_comparison": {
+    "rows": 3935,
+    "mismatch_counts": {
+      "selected_indices": 0,
+      "summary": 0,
+      "feasibility": 0,
+      "representation_hashes": 0
+    },
+    "mismatch_examples_first_20": {
+      "selected_indices": [],
+      "summary": [],
+      "feasibility": [],
+      "representation_hashes": []
+    },
+    "all_row_contracts_exact": true
+  },
+  "warm_row_comparison": {
+    "rows": 3935,
+    "mismatch_counts": {
+      "selected_indices": 0,
+      "summary": 0,
+      "feasibility": 0,
+      "representation_hashes": 0
+    },
+    "mismatch_examples_first_20": {
+      "selected_indices": [],
+      "summary": [],
+      "feasibility": [],
+      "representation_hashes": []
+    },
+    "all_row_contracts_exact": true
+  },
+  "cold_metrics_exact": true,
+  "warm_metrics_exact": true,
+  "reference_metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42761333878811236,
+      "rouge2": 0.13612077089989616,
+      "rougeLsum": 0.38433733192488984
+    },
+    "macro_rouge": 0.3160238138709661,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.41550190597204,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "cold_metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42761333878811236,
+      "rouge2": 0.13612077089989616,
+      "rougeLsum": 0.38433733192488984
+    },
+    "macro_rouge": 0.3160238138709661,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.41550190597204,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "cached_metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42761333878811236,
+      "rouge2": 0.13612077089989616,
+      "rougeLsum": 0.38433733192488984
+    },
+    "macro_rouge": 0.3160238138709661,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.41550190597204,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "cold_cache_provenance_exact": true,
+  "warm_cache_provenance_exact": true,
+  "cold_embedding_cache_summary": {
+    "rows": 3935,
+    "status_counts": {
+      "miss_written": 3935
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "3da91212ab7f08fa5fb6083074dfcd52af826837ee39930d6b89c31ad942afa6"
+  },
+  "warm_embedding_cache_summary": {
+    "rows": 3935,
+    "status_counts": {
+      "hit": 3935
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "3da91212ab7f08fa5fb6083074dfcd52af826837ee39930d6b89c31ad942afa6"
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

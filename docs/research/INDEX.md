@@ -163,3 +163,8 @@ cd metaheuristic-summarization
 ```
 
 > ⚠️ `runs/` 底下的既有數字全部視為 invalid，不要寫進論文。
+# 2026-08-09 F-51 checkpoint
+
+Multi-News PLM 目前 2/27。execution-only embedding cache 已通過 frozen-dev 3,935-row
+cold-populate + warm-hit exact audit：逐篇 mismatch 全為 0、warm 3,935/3,935 hits；可續跑
+既有預註冊網格。dev-test/test 未讀。詳見 `GATE2_BASELINE_STATUS.md` 與 F-51 evidence。

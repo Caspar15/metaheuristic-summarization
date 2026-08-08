@@ -82,7 +82,7 @@
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
 | Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 各 23/23 已完成：Multi-News P08 比 S02b 高 `0.003663`；GovReport LexRank 比 S02b 高 `0.033758`、TextRank高 `0.013104`。PLM、greedy reference、paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
-| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。runner／family verifier 只讀 frozen dev；一次 P07 中斷與 final retry 均已保存，dev-test/test 皆未讀 |
+| Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27。兩 primary non-PLM 完成；Multi-News PLM 2/27。F-51 cache 已通過 3,935-row cold/warm exact audit，可續跑既有網格；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
 | 測試 | ✅ **386 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 

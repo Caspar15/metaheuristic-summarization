@@ -575,8 +575,9 @@
       **386 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
-- [ ] 在使用 cache 續跑研究候選前完成上述 3,935-row audit；DoD 是 cold/warm 的逐篇
-      `selected_indices`、summary、feasibility、representation hashes 與 ROUGE全部等於
-      uncached reference，且 warm run 3,935/3,935 cache hits。未達 DoD 不得勾選。
+- [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、
+      feasibility、representation hashes 與 ROUGE 全部等於 uncached reference；cold
+      3,935 misses、warm 3,935 hits，selection `1379.55 s` → `89.85 s`。cache 現可用於
+      既有預註冊 PLM 網格；不可改候選或以 warm timing 取代 uncached 方法成本。
 - [ ] Multi-News PLM 剩餘 25/27、GovReport PLM 27/27、greedy reference 與 paired matrix
       尚未完成；Gate 2 未過，dev-test/test 未讀。

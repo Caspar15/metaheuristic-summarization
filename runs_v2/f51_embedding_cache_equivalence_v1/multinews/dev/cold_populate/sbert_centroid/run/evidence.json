@@ -1,0 +1,92 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T19:11:01.121559+00:00",
+  "started_at_utc": "2026-08-08T18:46:35.869659+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "sbert_centroid",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "sbert_centroid",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\plm\\sbert_centroid\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\f51_embedding_cache_equivalence_v1\\multinews\\dev\\cold_populate\\sbert_centroid",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "9abeb5fde898059f5329bb8fe814f2736ccb841a",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/resolved_config.yaml",
+  "config_sha256": "3f9229033ccdbbcbcc05ce4d14cc86b1884596cbab332f972b15f3ced00e3f6e",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/f51_embedding_cache_equivalence_v1/multinews/dev/cold_populate/sbert_centroid/run/predictions.jsonl",
+  "predictions_sha256": "0b20de2b8bd5ab54b1a248b4e7124582fee8cb0235313599eba6761fe40248e1",
+  "selected_indices_sha256": "e93ee982edcafd7160099bbab8b71144423f674fc04c57e6358641f7f53cc919",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42761333878811236,
+      "rouge2": 0.13612077089989616,
+      "rougeLsum": 0.38433733192488984
+    },
+    "macro_rouge": 0.3160238138709661,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.41550190597204,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "f51-embedding-cache-equivalence-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/f51_embedding_cache_equivalence_v1.json",
+  "preregistration_sha256": "ccdd5a66c647c7a0448897ba8f4759fef356dee84d0b24eabf04d606bec66d98",
+  "audit_hash": "f75d26a63b9c6e0edf885dafd56776f1c946f6db02b1f147f2fa66a1c12df36a",
+  "dev_test_accessed": false,
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "contract_version": "sbert_mean_pool_l2_npz_v1",
+      "scientific_config_unchanged": true
+    }
+  },
+  "embedding_cache_summary": {
+    "rows": 3935,
+    "status_counts": {
+      "miss_written": 3935
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "3da91212ab7f08fa5fb6083074dfcd52af826837ee39930d6b89c31ad942afa6"
+  }
+}

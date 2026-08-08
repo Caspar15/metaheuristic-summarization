@@ -1858,7 +1858,7 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 - **未做 paired significance test**
 
 要升格為正式證據，必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程（官方 split、freeze config、多 seed、paired bootstrap）。
-## F-51 — Gate 2 PLM matrix 對每個候選重複編碼同一 frozen-dev 輸入（已實作修正，待全量等價驗證）
+## F-51 — Gate 2 PLM matrix 對每個候選重複編碼同一 frozen-dev 輸入（已修正並通過全量等價驗證）
 
 **嚴重度：P1（成本／可恢復性；若快取未驗證也可能污染 correctness）**
 
@@ -1891,11 +1891,18 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-單元與完整回歸為 **386 passed**。但在完成一個既有全量 3,935-row 候選的
-cold-populate 與 warm-hit 兩次 cached rerun，並確認兩次逐篇 `selected_indices`、
-representation hashes 與 ROUGE 完全一致，且 warm run 3,935/3,935 cache hits 前，這個 cache
-**不得用於續跑正式 PLM matrix**。等價性量測必須先預註冊，且只讀 frozen dev；
-dev-test/test 均禁止。
+完整回歸為 **386 passed**。預註冊
+`configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
+`ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
+與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
+indices／centroid relevance／similarity hashes 與三個 ROUGE 的 mismatch 全為 **0**；三份
+selected-index digest 皆為 `e93ee982...cc919`。cold 為 3,935 misses，warm 為 3,935 hits，
+ordered row-key digest 同為 `3da91212...2afa6`。selection time 為 `1379.55 s` 與 `89.85 s`
+（warm/cold 約 15.35×；只作同機 execution-cost 證據）。
+
+證據：`runs_v2/f51_embedding_cache_equivalence_v1/multinews/dev/equivalence_summary.json`。
+因此此一精確 cache contract 可用於續跑**已預註冊**的 Gate 2 PLM candidates；不得藉此
+更改候選網格或把 warm search timing 冒充 uncached end-to-end 方法成本。dev-test/test 未讀。
 ## F-52 — 共用 run evidence 未記錄 PLM runtime 版本（已修正）
 
 **嚴重度：P1（provenance）**

@@ -97,7 +97,9 @@ summary SHA-256 `4b63b59a7f6ddf96fa9698522909ebe363fa96ae2ca5c937357577bbdf87793
 Multi-News PLM family 目前完成 2/27：`sbert_centroid` macro `0.316024`、
 `sbert_mmr_lambda_0.1` macro `0.294505`。第三候選在 3,600 秒外層限制中斷，partial
 artifact 待 resume 依 F-48 封存與登錄。F-51 execution-only embedding cache 已通過
-386-test 回歸，但在完成 3,935-row cold/warm cached-vs-uncached 逐篇等價 audit 前不得用於正式續跑。
+3,935-row cold/warm exact audit：所有逐篇 mismatch 為 0，warm 3,935 hits，selection
+`1379.55 s` → `89.85 s`；可續跑既有網格，但 warm timing 不代表 uncached 方法成本。
+證據在 `f51_embedding_cache_equivalence_v1/multinews/dev/equivalence_summary.json`。
 所有輸出只讀 frozen dev；dev-test/test 未讀。
 
 `gate2_baseline_matrix_v1/multinews/dev/non_plm/` 已完成事前註冊的 23/23 candidates。
