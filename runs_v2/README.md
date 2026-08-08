@@ -78,3 +78,8 @@ S02b 只移除 semantic 或 graph，其他 capacity/guard/selector contract 固�
 `d1_capacity_matched_route_ablation/multinews/dev/` 已完成：A01 無 semantic macro
 `0.324209`、A02 無 graph `0.322719`，S02b 分別高 `0.003868/0.005358`。兩個 runs
 各 3,935 rows、pool max 80，dev-test/test 未讀；paired route decision 尚未完成。
+
+`d1_capacity_matched_route_ablation/govreport/dev/` 已完成：A01 無 semantic macro
+`0.403594`、A02 無 graph `0.406381`，S02b 分別高 `0.014268/0.011481`。兩個 runs
+各 681/681 feasible、pool max 80，dev-test/test 未讀；跨資料集 point estimate 同號，
+paired route decision 尚未完成。

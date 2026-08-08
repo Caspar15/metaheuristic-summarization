@@ -292,7 +292,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 |---|---|
 | Phase 1（correctness refactor） | canonical 主路徑的 357 local tests、PR #15 Linux CI、snapshot、shared objectives、document-aware position、兩 primary frozen-policy preflight、partition enforcement 與 exact batched Greedy additions 已完成；GovReport data layer、A1/D1 runners、matched selector pilot 與 NSGA seed stability 已完成。published-protocol parity、partitioned full-source baseline 與 validation-frozen output policy仍未完成；CNN/DM 是 Gate 3 後 optional |
 | Phase 2（baseline validation） | Multi-News Lead 與 final-implementation TextRank／LexRank 已完成 governed full-split run；下一步是 PacSum、SBERT+MMR、paired significance，並在 GovReport 重建後補齊同一矩陣。程式存在或單一資料集結果不等於 Gate 2 已完成 |
-| Phase 3（方法實驗） | lexical/objective、graph、semantic 與 capacity follow-ups 已完成（保留 structural failures）。S02b 在兩 primary 均為目前 proposed 最高；Multi-News matched ablation 對移除 semantic／graph 為 `+0.003868/+0.005358`，兩路 point estimate 皆正向。semantic-direct selector 跨資料集刪除。仍缺 GovReport matched ablation、paired inference 及 **候選池對 greedy reference 的 recall@K** |
+| Phase 3（方法實驗） | lexical/objective、graph、semantic、capacity follow-ups 與兩-primary matched route ablations 已完成（保留 failures）。S02b 在兩 primary 均為 proposed 最高；相對移除 semantic／graph，Multi-News `+0.003868/+0.005358`、GovReport `+0.014268/+0.011481`，兩路同號正向。semantic-direct selector 刪除。仍缺 paired inference 及 **候選池對 greedy reference 的 recall@K** |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 

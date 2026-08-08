@@ -136,8 +136,8 @@
 - [~] 已在看過 S02b aggregate、但尚未跑 matched ablation 前，預註冊兩-primary
       capacity-matched route removal：固定 S02b total 80／guard cap 20，只分別移除
       semantic 或 graph。Multi-News 已完成：S02b 相對無 semantic `+0.003868`、相對無
-      graph `+0.005358`；兩者 point estimate 都正向。GovReport 與 paired analysis 尚未
-      完成，runner 無 split 參數，整格仍不勾選。
+      graph `+0.005358`；GovReport 分別 `+0.014268/+0.011481`，兩路在兩 primary 的
+      point estimate 都正向。runner 無 split 參數；paired analysis 尚未完成，整格仍不勾選。
 
 ## 2026-08-06 selector milestone
 

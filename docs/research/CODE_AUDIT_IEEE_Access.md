@@ -1476,6 +1476,25 @@ paired bootstrap 與包含 31 configs 的多重比較治理判斷。此時不讀
 
 ---
 
+### 🟡 F-42. Capacity-matched route 增量在兩 primary 同號；semantic 昂貴、graph 邊際成本小
+
+**證據（GovReport frozen dev 681 rows，2026-08-08）**：A01 移除 semantic macro
+`0.403594`，A02 移除 graph `0.406381`；完整 S02b `0.417862` 分別高
+`0.014268/0.011481`。兩個 ablation 均 681/681 feasible、pool max 80，config audit
+證實只改 `enabled_routes`。A01 與既有 G04 aggregate 完全一致，因此 guard cap 不構成
+分數混淆。連同 Multi-News 的 `+0.003868/+0.005358`，semantic 與 graph 的
+capacity-matched point estimate 在兩 primary 都同號為正。
+
+**成本與決策**：GovReport A01 `163.77 s`、A02 `1,093.27 s`、S02b `1,106.27 s`。
+semantic 是主要額外成本；sparse graph 在 semantic 已開啟時成本很小。兩 route 暫不依
+§5.3/§5.4 刪除，但 semantic 是否 always-on 必須由 paired quality gain 與 adaptive
+quality-cost rule 決定。尚未做 31-config multiplicity-corrected paired analysis，故不晉級。
+
+**重現**：`python -m scripts.audit.run_d1_capacity_matched_route_ablation --dataset govreport`；
+主證據在 `runs_v2/d1_capacity_matched_route_ablation/govreport/dev/`。
+
+---
+
 ## Part 2 — 對研究主計畫的實證補充
 
 `paper_revision_plan_IEEE_Access.md` 是研究標準來源。以下列出 legacy 程式與 artifact 對其中幾條的補充；任何數字仍依 evidence status 判讀。

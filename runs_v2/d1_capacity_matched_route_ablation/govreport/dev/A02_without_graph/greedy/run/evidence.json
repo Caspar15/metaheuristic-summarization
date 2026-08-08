@@ -1,0 +1,99 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T14:19:32.123528+00:00",
+  "started_at_utc": "2026-08-08T13:59:37.818457+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "greedy",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.pipeline.select_sentences",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_capacity_matched_route_ablation\\govreport\\dev\\A02_without_graph\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_capacity_matched_route_ablation\\govreport\\dev\\A02_without_graph\\greedy",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "6da833de37b727d498df7c29bebe1e1e6cbbf030",
+  "config_path": "runs_v2/d1_capacity_matched_route_ablation/govreport/dev/A02_without_graph/resolved_config.yaml",
+  "config_sha256": "727b669994ffe913216ea5b7209db460b9702c63b2614c307964bcae7342e5fb",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_preflight_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+  "partition_preflight_sha256": "719b521d4c7567b238e95e79ac9de6bf5219dad00c720d9975dd1fbcd3e915d3",
+  "predictions_path": "runs_v2/d1_capacity_matched_route_ablation/govreport/dev/A02_without_graph/greedy/run/predictions.jsonl",
+  "predictions_sha256": "80fca14b576e462976d1b8ab555e30fcb0b9618364334c72004ec894a33441cd",
+  "selected_indices_sha256": "b3465de7e20ab73790599a1b0abe5db7ed5908fd2a11aaf24159aae503da069c",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5335532202771303,
+      "rouge2": 0.1861191185089455,
+      "rougeLsum": 0.49947099551183477
+    },
+    "macro_rouge": 0.40638111143263683,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 644.2437591776799,
+      "min": 614,
+      "max": 650
+    }
+  },
+  "study_id": "d1-capacity-matched-route-ablation-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_capacity_matched_route_ablation_v1.json",
+  "preregistration_sha256": "b614dfe7f2eb66ca6496adf427ffc6f3f56dce7db06cb874ce20cfd3353a642f",
+  "family": "capacity_matched_route_ablation",
+  "candidate": "A02_without_graph",
+  "candidate_hash": "4e2bfc4494c5f072250c77a88525d7a544d03377c0e97d8ca96d126778b9524a",
+  "declared_delta": {
+    "compute_budget.enabled_routes": [
+      "lexical",
+      "semantic"
+    ]
+  },
+  "base_candidate": "S02b_three_route_capacity_80",
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 72.38766519823788,
+    "selector_candidate_size_mean": 72.38766519823788,
+    "selector_candidate_size_p95": 79.0,
+    "selector_candidate_size_max": 80,
+    "provenance_candidate_size_mean": 72.38766519823788,
+    "route_agreement_mean": 1.1135521655532938,
+    "unique_candidate_mean_by_route": {
+      "lexical": 32.38766519823788,
+      "semantic": 32.38766519823788
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 10.251101321585903,
+      "semantic": 9.305433186490456
+    }
+  },
+  "dev_test_accessed": false
+}

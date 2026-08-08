@@ -42,7 +42,7 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |
 | A1 長度協定 | ✅ 兩 primary 的唯一一次 dev-test 已完成：Multi-News 凍結 200–250 words（macro `0.310382`），GovReport 凍結 500–650（`0.393415`）；兩者對三案的 Holm-adjusted `p=0.000600`。Multi-News Greedy 3/1,686 floor shortfalls 完整保留（F-23）；GovReport floor-bound lexical Greedy 仍輸 Lead/Random（F-24） |
-| D1 敏感度 | 🟡 兩 primary 原 screens／capacity follow-ups 完成（保留 structural failures）。S02b 在 Multi-News `0.328077`、GovReport `0.417862`，均為目前 proposed 最高；Multi-News matched ablation 對移除 semantic／graph 為 `+0.003868/+0.005358`。仍缺 GovReport matched ablation、強 baseline 與 paired significance；本階段不看 dev-test |
+| D1 敏感度 | 🟡 兩 primary 原 screens／capacity follow-ups／matched route ablations 完成（保留 failures）。S02b 是目前 proposed 最高；相對移除 semantic／graph，Multi-News `+0.003868/+0.005358`、GovReport `+0.014268/+0.011481`，兩路同號正向。仍缺強 baseline 與 31-config multiplicity-corrected paired significance；本階段不看 dev-test |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
 > validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。

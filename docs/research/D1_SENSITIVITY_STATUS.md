@@ -271,10 +271,26 @@ guard cap 20、Greedy/RRF 與其餘設定，只移除一路：
 - A01 比 graph G00 更慢，反映 pool 60→80 的 selector 成本；A02 與 S02b 的 wall-time
   差不能只歸因 graph，因兩次獨立 process 仍受系統負載影響。正式 cost 結論需重複 pilot。
 
+## GovReport capacity-matched route ablation
+
+使用同一預註冊與固定 S02b contract：
+
+| 配置 | Routes | Macro | Δ：S02b − 配置 | selection seconds | pool mean/max |
+|---|---|---:|---:|---:|---:|
+| S02b | lexical + semantic + graph | **0.417862** | — | 1,106.27 | 78.74 / 80 |
+| A01 | lexical + graph（無 semantic） | 0.403594 | **+0.014268** | 163.77 | 73.17 / 80 |
+| A02 | lexical + semantic（無 graph） | 0.406381 | **+0.011481** | 1,093.27 | 72.39 / 80 |
+
+- A01 與既有 GovReport G04 total-80 aggregate 完全一致；guard cap 20 同樣沒有改變
+  該對照。semantic 與 graph 的 point-estimate 邊際皆大，且與 Multi-News 同號。
+- 目前證據排除「三路提升全是 total cap 變大」；依 route deletion rule，semantic 與
+  graph 都暫留到 paired analysis。這仍不代表它們必須 always-on：A01 比完整 S02b
+  快約 `6.75×`，semantic 的品質增益要與成本／adaptive routing 一起判斷。
+- A02 與 S02b 耗時相近，顯示 sparse graph 的邊際計算成本小；但正式成本仍需重複測量。
+
 ## 還沒做
 
-1. GovReport capacity-matched semantic／graph route-removal ablation。
-2. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
-3. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
+1. 全 family／跨資料集優先序與 paired bootstrap、多重比較校正。
+2. Gate 2 PacSum、SBERT-centroid+MMR、TextRank、LexRank、Lead、Random 與
    metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
-4. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
