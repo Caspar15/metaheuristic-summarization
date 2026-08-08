@@ -437,8 +437,9 @@
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
       evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 3/6。
-- [x] candidate recall/headroom 分析已在任何 overlap 數字前凍結：
-      `gate2_greedy_reference_analysis_v1.json`（SHA-256 `a33b0ec9...74669`）；定義
+- [x] candidate recall/headroom 分析已在任何 overlap 數字前凍結；v1 把 retained
+      route membership 誤標為完整 top-40，尚未計分即由 v2 明確 supersede：
+      `gate2_greedy_reference_analysis_v2.json`（SHA-256 `ef45c056...a3e39`）；定義
       union-cap-80、route-top-40、final-selection 的 micro/macro recall、空集合處理與
       `(system−Lead)/(greedy−Lead)`。分析尚未執行。
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果

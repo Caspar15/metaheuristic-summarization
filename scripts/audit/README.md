@@ -368,3 +368,14 @@ runner 以 OS-level lock 保證同一 dataset/target 只有一個 writer。若�
 .venv\Scripts\python.exe -m scripts.audit.recover_greedy_reference_checkpoint `
   --dataset multinews --target rouge1
 ```
+
+三個 target 完成後，用已凍結的 v2 協定計算 metric-specific headroom 與 S02b 的
+union-cap-80／完整 route-top-40／final-selection recall。CLI 只有 dataset，沒有 split：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.analyze_gate2_greedy_reference `
+  --dataset multinews
+```
+
+v1 曾把 total-cap 後 `candidate_records.selected_by_routes` 誤標成完整 route top-40；
+在任何 overlap score 前由 v2（SHA-256 `ef45c056...a3e39`）保留並 supersede。

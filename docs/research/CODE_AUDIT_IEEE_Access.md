@@ -2031,6 +2031,26 @@ selected-indices digest、dependency versions 與 dev-test/test=false。Lsum inv
 `2,531.55 s`，其中 frozen position 277 的文件有 2,128 句／40,773 source words，造成
 ordered tail cost；未因耗時排除。這些仍不是 exact upper bound，也未宣稱 significance。
 
-候選 overlap/headroom 公式已另在任何 recall 數字前凍結於
-`configs/preregistrations/gate2_greedy_reference_analysis_v1.json`（SHA-256
-`a33b0ec9...74669`）。GovReport 0/3 與分析尚未完成，故 Gate 2 仍未通過；test 未讀。
+候選 overlap/headroom 公式已另在任何 recall 數字前凍結；v1 的 route-pool 結構錯誤
+依 F-58 在計分前由 v2 supersede。GovReport 0/3 與分析尚未完成，故 Gate 2 仍未通過；
+test 未讀。
+
+## F-58 — candidate-record route membership 不等於完整 route top-40（分析前已修正）
+
+**嚴重度：P1（metric definition）**
+
+最初的 `gate2_greedy_reference_analysis_v1.json` 將 route pool 定義為
+`candidate_records.selected_by_routes`，同時標成 recall@route-top-40。但
+`candidate_records` 只保存通過 union total-cap 後的候選；某 route 提出的 top-40 句若被
+RRF/total cap 移除，就不在 records 內。照 v1 計算會把「保留在 union 內的 route
+membership recall」錯稱完整 route recall@40，系統性低估各 route proposal 的覆蓋。
+
+此錯誤在任何 candidate-overlap score 產生前由 artifact schema inspection 發現；v1 檔案
+與 SHA 永久保留，不覆寫。新 `gate2_greedy_reference_analysis_v2.json`（SHA-256
+`ef45c056...a3e39`）明確 supersede v1，route set 改讀
+`candidate_pool.route_proposals[route]`，union 仍讀 cap 後 candidate records，final set
+仍讀 selected indices。v2 明記 `overlap_scores_accessed_before_correction=false`。
+
+分析器另驗每列 route top-K=40、total cap=80、actual size、三 route 完整性與 frozen ID
+alignment；headroom/recall 三個 golden tests 通過。正式 overlap 尚未執行，dev-test/test
+未讀。

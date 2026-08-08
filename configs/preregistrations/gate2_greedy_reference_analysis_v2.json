@@ -1,0 +1,40 @@
+{
+  "study_id": "gate2-greedy-reference-analysis-v2",
+  "registered_at_local": "2026-08-09T07:08:32.4559966+08:00",
+  "status": "frozen_before_candidate_overlap_scores",
+  "partition": "dev",
+  "dev_test_accessed": false,
+  "test_split_prohibited": true,
+  "supersedes": {
+    "path": "configs/preregistrations/gate2_greedy_reference_analysis_v1.json",
+    "sha256": "a33b0ec91f944ac2d8836cc8c46f24898fe9041b66a3da1bbd4c556e9c774669",
+    "reason": "v1 mislabeled retained candidate-record route membership as the complete route top-40 proposal set",
+    "overlap_scores_accessed_before_correction": false
+  },
+  "inherit_from_v1": [
+    "datasets",
+    "greedy_reference_contract",
+    "headroom",
+    "success_rule",
+    "promotion_rule"
+  ],
+  "candidate_recall": {
+    "greedy_set": "selected_indices from the matching metric-specific greedy-reference row",
+    "union_pool": "original_index values in proposed candidate_records after total-cap allocation",
+    "route_pool": "original_index values in candidate_pool.route_proposals[route], including proposals later removed by total-cap allocation",
+    "selected_set": "proposed selected_indices",
+    "routes": ["lexical", "semantic", "graph"],
+    "metrics": {
+      "micro_recall": "sum_i |G_i intersect C_i| / sum_i |G_i|",
+      "macro_recall": "mean_i |G_i intersect C_i| / |G_i| over nonempty G_i",
+      "complete_row_rate": "fraction of nonempty G_i with G_i subset C_i",
+      "exclusive_route_hits": "greedy indices present in exactly one complete route proposal set, counted by route"
+    },
+    "empty_greedy_rows": "exclude from macro and complete-row denominators; report count; micro denominator is unchanged",
+    "labels": {
+      "union_pool": "recall@configured-union-cap-80",
+      "route_pool": "recall@route-top-40",
+      "selected_set": "recall@final-selection"
+    }
+  }
+}
