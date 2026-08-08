@@ -247,8 +247,8 @@ CandidateRecord
 - 使用 length-normalized TF-ISF v2 或經 validation 選定的 BM25-style salience。
 - position 只能作獨立、可消融的弱 prior，不能再混入唯一候選入口。
 - position feature 必須以 canonical `document_id/document_position` 在每篇文件重置；
-  flattened global index 只屬 legacy，Multi-News 正式路徑不得使用。D1 在任何 position
-  score 前以 F-25 golden contract 修正。
+  flattened global index 只屬 legacy，Multi-News 正式路徑不得使用。F-25 已在任何 D1
+  position score 前以 document-scoped golden contract 修正並通過完整 regression。
 - 輸出完整排名或至少足以重建 rank 的分數，不輸出 length-bounded summary。
 
 ### 5.3 Semantic route：昂貴但可選

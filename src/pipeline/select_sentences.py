@@ -199,7 +199,12 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         sim = cosine_similarity_matrix(X)
 
     # 2. Feature scores
-    base_scores = build_base_scores(sentences, cfg, similarity_matrix=sim)
+    base_scores = build_base_scores(
+        sentences,
+        cfg,
+        similarity_matrix=sim,
+        sentence_records=sentence_records,
+    )
 
     # 3. Length / redundancy parameters
     lc = cfg.get("length_control", {})

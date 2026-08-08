@@ -32,3 +32,14 @@ def test_disabled_graph_does_not_require_similarity_matrix():
     cfg = {"features": {"weights": {"graph": 0.0}}}
     scores = build_base_scores(SENTENCES, cfg, similarity_matrix=None)
     assert len(scores) == len(SENTENCES)
+
+
+def test_document_position_scope_requires_sentence_records():
+    cfg = {
+        "features": {
+            "position": {"scope": "document", "version": "v2"},
+            "weights": {"importance": 1.0, "position": 0.2},
+        }
+    }
+    with pytest.raises(ValueError, match="requires one canonical sentence record"):
+        build_base_scores(SENTENCES, cfg, similarity_matrix=None)

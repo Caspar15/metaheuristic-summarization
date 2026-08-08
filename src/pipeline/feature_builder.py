@@ -1,12 +1,16 @@
 """Feature construction logic extracted from select_sentences.py."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Mapping, Optional, Sequence
 
 import numpy as np
 
 from src.features.tf_isf import sentence_tf_isf_scores, sentence_tf_isf_scores_v2
 from src.features.length import length_scores
-from src.features.position import position_scores, position_scores_v2
+from src.features.position import (
+    document_position_scores,
+    position_scores,
+    position_scores_v2,
+)
 from src.features.compose import combine_scores, combine_scores_v2
 from src.features.graph import compute_textrank_scores
 from src.features.semantic import sentence_centrality_scores, sentence_novelty_scores
@@ -16,6 +20,7 @@ def build_base_scores(
     sentences: List[str],
     cfg: Dict,
     similarity_matrix: Optional[np.ndarray] = None,
+    sentence_records: Optional[Sequence[Mapping]] = None,
 ) -> List[float]:
     """Compute and fuse all base feature scores for a document.
 
@@ -42,7 +47,22 @@ def build_base_scores(
 
     # --- position ---
     pos_cfg = feat_cfg.get("position", {}) or {}
-    if pos_cfg.get("version", "v1") == "v2":
+    position_scope = str(pos_cfg.get("scope", "global")).strip().lower()
+    if position_scope == "document":
+        if sentence_records is None or len(sentence_records) != len(sentences):
+            raise ValueError(
+                "features.position.scope='document' requires one canonical "
+                "sentence record per sentence"
+            )
+        f_pos = document_position_scores(
+            sentence_records,
+            version=str(pos_cfg.get("version", "v1")),
+            method=str(pos_cfg.get("method", "inverse")),
+            decay=float(pos_cfg.get("decay", 0.1)),
+        )
+    elif position_scope != "global":
+        raise ValueError("features.position.scope must be 'global' or 'document'")
+    elif pos_cfg.get("version", "v1") == "v2":
         f_pos = position_scores_v2(
             sentences,
             method=str(pos_cfg.get("method", "inverse")),

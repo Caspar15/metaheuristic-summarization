@@ -4,7 +4,11 @@ import pytest
 import numpy as np
 
 from src.features.tf_isf import sentence_tf_isf_scores, sentence_tf_isf_scores_v2
-from src.features.position import position_scores, position_scores_v2
+from src.features.position import (
+    document_position_scores,
+    position_scores,
+    position_scores_v2,
+)
 from src.features.length import length_scores
 from src.features.compose import combine_scores, combine_scores_v2
 from src.features.graph import (
@@ -91,6 +95,35 @@ class TestPosition:
     def test_v2_negative_decay_fails_loudly(self):
         with pytest.raises(ValueError, match="decay"):
             position_scores_v2(["a", "b"], method="exponential", decay=-0.1)
+
+    def test_document_scope_resets_at_each_document_boundary(self):
+        records = [
+            {"document_id": "d0", "document_position": 0},
+            {"document_id": "d0", "document_position": 1},
+            {"document_id": "d1", "document_position": 0},
+            {"document_id": "d1", "document_position": 1},
+        ]
+        assert document_position_scores(records, version="v1") == pytest.approx(
+            [1.0, 0.0, 1.0, 0.0]
+        )
+        assert document_position_scores(
+            records, version="v2", method="inverse"
+        ) == pytest.approx([1.0, 0.5, 1.0, 0.5])
+
+    def test_document_scope_requires_canonical_provenance(self):
+        with pytest.raises(ValueError, match="canonical document_id"):
+            document_position_scores(
+                [{"document_id": None, "document_position": 0}]
+            )
+
+    def test_document_scope_rejects_nonconsecutive_positions(self):
+        with pytest.raises(ValueError, match="consecutive"):
+            document_position_scores(
+                [
+                    {"document_id": "d0", "document_position": 0},
+                    {"document_id": "d0", "document_position": 2},
+                ]
+            )
 
 
 # ---- Length ----

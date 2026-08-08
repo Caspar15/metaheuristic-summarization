@@ -12,6 +12,7 @@ from src.features.graph import (
     compute_textrank_scores,
     sparse_tfidf_knn_textrank_scores,
 )
+from src.features.position import document_position_scores
 from src.models.extractive.encoder_rank import encoder_route_scores
 from src.representations.tfidf_helper import tfidf_scores_and_sim
 from src.utils.tokenizer import count_tokens
@@ -21,18 +22,7 @@ RouteMetadata = Dict[str, Any]
 
 
 def _document_aware_position_scores(sentence_records: List[Dict]) -> List[float]:
-    group_sizes: Dict[object, int] = {}
-    for record in sentence_records:
-        group = record.get("document_id") or "__legacy_flat__"
-        group_sizes[group] = group_sizes.get(group, 0) + 1
-
-    scores = []
-    for record in sentence_records:
-        group = record.get("document_id") or "__legacy_flat__"
-        position = int(record.get("document_position", record["original_index"]))
-        size = group_sizes[group]
-        scores.append(1.0 if size <= 1 else 1.0 - position / (size - 1))
-    return scores
+    return document_position_scores(sentence_records, version="v1")
 
 
 def _canonical_route_name(raw_source: str) -> str:

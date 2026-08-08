@@ -72,9 +72,10 @@
       證據與驗證器分別在 `docs/research/evidence/d1_effective_tunable_inventory.json`、
       `scripts/audit/effective_tunable_inventory.py`。27 個 dev-only Greedy screening configs
       已在任何 D1 score 前預註冊；本階段不看 dev-test。
-- [~] F-25：現行 base-feature position 對 flattened sentence list 計分，Multi-News 文件
-      邊界不會重置；D1 已預註冊先補 `scope=document` correctness contract 與 golden test，
-      修好前不得跑 position variant。
+- [x] F-25 已修：base-feature position 新增明確 `scope=document`，從 canonical
+      `document_id/document_position` 重置；缺 provenance、非連續 position 或 records
+      長度不符均 fail loud。兩文件 golden `[1,0,1,0]`、pipeline snapshot 與完整
+      **338 tests passed**，現在才允許跑預註冊 position variant。
 - [~] F-26：A1 lexical-only context 下 `min_per_route=20`、`total=60` 與 RRF constant
       結構上不能改變候選 membership/rank；這不影響 A1 長度決選，但不能拿來排序候選
       預算旋鈕。D1 會在 lexical+graph 的兩路 active context 各動一次。
@@ -479,7 +480,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 332 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1 runner 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 338 local tests（2026-08-08）、PR #15 Linux CI、10-document snapshot、shared objectives、document-aware position、兩 primary validation policy/preflight、partition enforcement、GovReport data layer、A1 runner 與 greedy-reference correctness 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補；CNN/DM 是 Gate 3 後 optional |
 | 2 Baseline | `[~]` | | Lead、Random、TextRank／LexRank／SBERT centroid／MMR 程式已接線；舊 Multi-News full-validation rerun 只保留為 historical diagnostic。PacSum、partitioned SBERT run、GovReport 方法 runs、完整 paired matrix 與 Gate 2 尚未完成 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
