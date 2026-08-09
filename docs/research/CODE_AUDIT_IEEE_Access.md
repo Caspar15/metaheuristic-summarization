@@ -2181,3 +2181,20 @@ baseline 與 canonical selector views，若同列多個 view 不一致則 fail l
 search-log rows、config、command/evidence 與 Greedy+SBERT selection artifact 保留；retry
 會先移入 numbered `attempt_*_failed`，不覆寫。新增 dispatch 與 cache-provenance regression。
 dev-test/test 未讀。
+
+## F-64 — 200-row MMR 優勢未外推到 Multi-News full dev；NSGA-II 高成本仍輸 Greedy
+
+**嚴重度：P0（方法有效性／selector freeze）**
+
+F-63 修正後，事前提交的 `d2-selector-full-dev-v1` 在 Multi-News frozen dev 3,935 rows
+完成 14/14 candidates；study summary 明記 `dev_test_accessed=false`、
+`test_split_accessed=false`。固定 S02b routes、candidate pool、RRF salience 與 A1
+200–250 words，Greedy-TFIDF anchor macro `0.328077` 仍最佳。NSGA-II+TF-IDF
+`0.322615`、最佳 TF-IDF-MMR（λ=0.3）`0.321744`、最佳 SBERT-MMR（λ=0.7）
+`0.316612`、NSGA-II+SBERT `0.308827`。
+
+NSGA-II+TF-IDF selection `4690.7s`，約為最佳 TF-IDF-MMR 的 `31.5×`，但比 Greedy
+低 `0.005462` macro；SBERT NSGA 更低。兩個 NSGA 候選均未達預註冊多 seed 門檻，
+因此不追加 seed。200-row pilot 的「MMR main」只能保留為早期 diagnostic，不能再當
+full-dev 架構決策；Multi-News 暫以 Greedy 為 anchor，final selector 等 GovReport D2。
+這加強 §7.3 將 NSGA-II 移出核心與標題的依據，但還不能跨資料集宣布最終刪除 MMR。

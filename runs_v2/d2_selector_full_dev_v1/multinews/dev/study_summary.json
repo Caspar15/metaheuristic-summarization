@@ -1,7 +1,7 @@
 {
   "evidence_schema_version": "1.0",
-  "measured_at_utc": "2026-08-09T07:43:30.182964+00:00",
-  "status": "partial",
+  "measured_at_utc": "2026-08-09T11:38:48.708100+00:00",
+  "status": "completed",
   "study_id": "d2-selector-full-dev-v1",
   "dataset": "Multi-News",
   "partition": "dev",
@@ -38,8 +38,8 @@
     },
     "S01_greedy_sbert": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:11.423678+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T07:52:12.308152+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -57,6 +57,7 @@
       "declared_delta": {
         "selector.similarity_source": "sbert"
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -68,12 +69,48 @@
       "method": "greedy",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S01_greedy_sbert/resolved_config.yaml",
       "config_sha256": "01bd48d3aa1b7d5d713809c083a0a2077bc89c261462f3922787997afae44476",
-      "failure": "ValueError: PLM execution declared an embedding cache but predictions have no per-row cache provenance"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.41561289559874764,
+          "rouge2": 0.1232113439877697,
+          "rougeLsum": 0.3786961899544784
+        },
+        "macro_rouge": 0.3058401431803319,
+        "feasible_rows": 3931,
+        "infeasible_rows": 4,
+        "summary_words": {
+          "mean": 243.58907242693775,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 2.363151207115629,
+          "lexical": 2.4165184243964424,
+          "semantic": 0.4627700127064803
+        }
+      }
     },
     "S02_mmr_tfidf_l01": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:13.362863+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:08:24.672561+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -91,6 +128,7 @@
       "declared_delta": {
         "optimizer.lambda_relevance": 0.1
       },
+      "run_attempt": "retry_02",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -102,12 +140,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S02_mmr_tfidf_l01/resolved_config.yaml",
       "config_sha256": "abe7cc431c975bca940390fca1a02af00d9dd2bb9f4b87264ab48bb776315d4d",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S02_mmr_tfidf_l01/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4267953783733773,
+          "rouge2": 0.12620732272576554,
+          "rougeLsum": 0.38178726778375965
+        },
+        "macro_rouge": 0.31159665629430083,
+        "feasible_rows": 3933,
+        "infeasible_rows": 2,
+        "summary_words": {
+          "mean": 246.24040660736975,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.7601016518424396,
+          "lexical": 1.2902160101651843,
+          "semantic": 0.9626429479034307
+        }
+      }
     },
     "S03_mmr_tfidf_l03": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:14.903716+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:12:24.744850+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -125,6 +199,7 @@
       "declared_delta": {
         "optimizer.lambda_relevance": 0.3
       },
+      "run_attempt": "retry_02",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -136,12 +211,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S03_mmr_tfidf_l03/resolved_config.yaml",
       "config_sha256": "fa94df68b97d4987c11211ac25be7d1fe266f31a00532eca5e72e4b071f49c40",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S03_mmr_tfidf_l03/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43839182499829654,
+          "rouge2": 0.13800456123745797,
+          "rougeLsum": 0.3888368074886337
+        },
+        "macro_rouge": 0.3217443979081294,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.85895806861498,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.2945362134688691,
+          "lexical": 0.11766200762388818,
+          "semantic": 0.2564167725540025
+        }
+      }
     },
     "S04_mmr_tfidf_l05": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:16.417621+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:16:20.664531+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -159,6 +270,7 @@
       "declared_delta": {
         "optimizer.lambda_relevance": 0.5
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -170,12 +282,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S04_mmr_tfidf_l05/resolved_config.yaml",
       "config_sha256": "44b5b507fb10647a5410ff98ce8c15ec5f9bea376180d480e48d8d2adf14e826",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S04_mmr_tfidf_l05/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4369433419742402,
+          "rouge2": 0.13959755061490253,
+          "rougeLsum": 0.3878456091931284
+        },
+        "macro_rouge": 0.321462167260757,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.98602287166455,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.24625158831003813,
+          "lexical": 0.03481575603557815,
+          "semantic": 0.1567979669631512
+        }
+      }
     },
     "S05_mmr_tfidf_l07": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:17.989119+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:20:14.917234+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -193,6 +341,7 @@
       "declared_delta": {
         "optimizer.lambda_relevance": 0.7
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -204,12 +353,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S05_mmr_tfidf_l07/resolved_config.yaml",
       "config_sha256": "02450fff7087839a7b13fe5d2f91eed979696c2a8f5ab24cf4923b3cf9618e10",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S05_mmr_tfidf_l07/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.434549744842919,
+          "rouge2": 0.13932589136020523,
+          "rougeLsum": 0.3860858845448773
+        },
+        "macro_rouge": 0.31998717358266715,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.0579415501906,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.22109275730622618,
+          "lexical": 0.021346886912325287,
+          "semantic": 0.12655654383735704
+        }
+      }
     },
     "S06_mmr_tfidf_l09": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:19.497690+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:24:09.713717+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -227,6 +412,7 @@
       "declared_delta": {
         "optimizer.lambda_relevance": 0.9
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -238,12 +424,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S06_mmr_tfidf_l09/resolved_config.yaml",
       "config_sha256": "c4748283fc62fc877bc5ff7bda76c6fa8a316267dbde9cfe966923e7aab9c621",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S06_mmr_tfidf_l09/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43033830695150865,
+          "rouge2": 0.1373114540735931,
+          "rougeLsum": 0.3821952211350862
+        },
+        "macro_rouge": 0.316614994053396,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.0327827191868,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.2188055908513342,
+          "lexical": 0.011689961880559084,
+          "semantic": 0.1085133418043202
+        }
+      }
     },
     "S07_mmr_sbert_l01": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:21.008282+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:28:53.542968+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -262,6 +484,7 @@
         "selector.similarity_source": "sbert",
         "optimizer.lambda_relevance": 0.1
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -273,12 +496,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S07_mmr_sbert_l01/resolved_config.yaml",
       "config_sha256": "b45a8e9f3bf4330e53f63f6876b90a42e538faf3f44b849a5f9b1e7087561435",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S07_mmr_sbert_l01/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.40866683719509367,
+          "rouge2": 0.11910448438828873,
+          "rougeLsum": 0.36798578763558504
+        },
+        "macro_rouge": 0.2985857030729891,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.10165184243965,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 1.781702668360864,
+          "lexical": 2.2256670902160103,
+          "semantic": 0.24294790343074968
+        }
+      }
     },
     "S08_mmr_sbert_l03": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:22.550989+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:33:11.747724+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -297,6 +556,7 @@
         "selector.similarity_source": "sbert",
         "optimizer.lambda_relevance": 0.3
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -308,12 +568,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S08_mmr_sbert_l03/resolved_config.yaml",
       "config_sha256": "bdb1caa6681c655d010f312b3d47aac147a3d98eede0e11aa5aa79f8f92d1515",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S08_mmr_sbert_l03/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4159831152892329,
+          "rouge2": 0.12552219739539233,
+          "rougeLsum": 0.37107807653452923
+        },
+        "macro_rouge": 0.3041944630730515,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.52350698856418,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 1.137992376111817,
+          "lexical": 1.1972045743329098,
+          "semantic": 0.11003811944091486
+        }
+      }
     },
     "S09_mmr_sbert_l05": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:24.085708+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:37:11.579821+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -332,6 +628,7 @@
         "selector.similarity_source": "sbert",
         "optimizer.lambda_relevance": 0.5
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -343,12 +640,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S09_mmr_sbert_l05/resolved_config.yaml",
       "config_sha256": "5a1ed6a420a70a5299cf65a658154b516feef4d17b68eee82b29976143ea5cef",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S09_mmr_sbert_l05/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4286652437369708,
+          "rouge2": 0.1346348157658742,
+          "rougeLsum": 0.38030998489643447
+        },
+        "macro_rouge": 0.3145366814664265,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 246.9125794155019,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.49783989834815756,
+          "lexical": 0.2,
+          "semantic": 0.07420584498094028
+        }
+      }
     },
     "S10_mmr_sbert_l07": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:25.636782+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:41:08.598558+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -367,6 +700,7 @@
         "selector.similarity_source": "sbert",
         "optimizer.lambda_relevance": 0.7
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -378,12 +712,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S10_mmr_sbert_l07/resolved_config.yaml",
       "config_sha256": "4959547e2f78a5df1a3d4b13af90c3dea9d8b8767ea04a6d53ca87248dcb989e",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S10_mmr_sbert_l07/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43070225398200074,
+          "rouge2": 0.13688780114123247,
+          "rougeLsum": 0.38224596037591557
+        },
+        "macro_rouge": 0.31661200516638294,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.0566709021601,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.30317662007623886,
+          "lexical": 0.025921219822109275,
+          "semantic": 0.08386277001270648
+        }
+      }
     },
     "S11_mmr_sbert_l09": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:27.162364+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T08:45:07.547994+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -402,6 +772,7 @@
         "selector.similarity_source": "sbert",
         "optimizer.lambda_relevance": 0.9
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -413,12 +784,48 @@
       "method": "mmr",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S11_mmr_sbert_l09/resolved_config.yaml",
       "config_sha256": "5af9cd076fda5763d4a5d3ff743d763b3feddb709f9edcee4ae4450e69a1ac00",
-      "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S11_mmr_sbert_l09/mmr/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.42942132482398376,
+          "rouge2": 0.1370576980248268,
+          "rougeLsum": 0.38135723119537784
+        },
+        "macro_rouge": 0.3159454180147295,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 247.07522236340535,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 0.2411689961880559,
+          "lexical": 0.013468869123252859,
+          "semantic": 0.10470139771283354
+        }
+      }
     },
     "S12_nsga2_tfidf_seed3407": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:28.685390+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T10:04:57.916562+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -437,6 +844,7 @@
         "optimizer.pop_size": 64,
         "optimizer.n_gen": 80
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -448,12 +856,48 @@
       "method": "nsga2",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S12_nsga2_tfidf_seed3407/resolved_config.yaml",
       "config_sha256": "0b433bf3ce704e1dcf4c04eb3b4e9b206c56737580a00fb17136684c50106e93",
-      "failure": "RuntimeError: nsga2 failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S12_nsga2_tfidf_seed3407/nsga2/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4330079606243028,
+          "rouge2": 0.13443423400690382,
+          "rougeLsum": 0.40040307816811904
+        },
+        "macro_rouge": 0.32261509093310853,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.30343074968235,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 2.7135959339263023,
+          "lexical": 1.3133418043202032,
+          "semantic": 2.583735705209657
+        }
+      }
     },
     "S13_nsga2_sbert_seed3407": {
       "evidence_schema_version": "1.0",
-      "measured_at_utc": "2026-08-09T07:43:30.181513+00:00",
-      "status": "failed",
+      "measured_at_utc": "2026-08-09T11:38:48.704526+00:00",
+      "status": "completed",
       "test_split_accessed": false,
       "study_id": "d2-selector-full-dev-v1",
       "dataset": "Multi-News",
@@ -473,6 +917,7 @@
         "optimizer.pop_size": 64,
         "optimizer.n_gen": 80
       },
+      "run_attempt": "retry_01",
       "execution_optimization": {
         "embedding_cache": {
           "enabled": true,
@@ -484,7 +929,43 @@
       "method": "nsga2",
       "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S13_nsga2_sbert_seed3407/resolved_config.yaml",
       "config_sha256": "4435d177568f597ca55bfafcddeb218d75d21cba3785dfcbc4bc4c43fc0ec711",
-      "failure": "RuntimeError: nsga2 failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S13_nsga2_sbert_seed3407/nsga2/run/command.log"
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4177473179630029,
+          "rouge2": 0.12463270504026061,
+          "rougeLsum": 0.3841008216875174
+        },
+        "macro_rouge": 0.3088269482302603,
+        "feasible_rows": 3935,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 239.4828462515883,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "candidate_diagnostics": {
+        "diagnostics_schema_version": "2.0",
+        "rows": 3935,
+        "candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_mean": 52.086658195679796,
+        "selector_candidate_size_p95": 80.0,
+        "selector_candidate_size_max": 80,
+        "provenance_candidate_size_mean": 52.086658195679796,
+        "route_agreement_mean": 2.267925369892448,
+        "unique_candidate_mean_by_route": {
+          "graph": 5.912833545108005,
+          "lexical": 7.343583227445998,
+          "semantic": 5.079288437102923
+        },
+        "unique_selected_mean_by_route": {
+          "graph": 2.9659466327827193,
+          "lexical": 2.2526048284625158,
+          "semantic": 0.8566709021601017
+        }
+      }
     }
   },
   "dev_test_accessed": false,

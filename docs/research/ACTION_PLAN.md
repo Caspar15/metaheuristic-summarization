@@ -169,8 +169,8 @@
       `[7,42,2024,2025,3407]`。五 seed 平均 R-1/R-2/R-Lsum
       `0.40376/0.10970/0.36820`，全部低於 Greedy；seed 間 mean pairwise
       selection Jaccard `0.639`，僅 `9.5%` rows 五 seed 完全相同。依 gate，
-      **selector 架構確定以 MMR 為主，NSGA-II 降為 comparator**；是否在 full
-      validation 保留 NSGA diagnostic，由成本與審稿敘事另決定，不再阻塞主線。
+      **在 pilot 層級**暫定 MMR 為主、NSGA-II 降為 comparator；2026-08-09
+      Multi-News full-dev D2 已顯示此排序不能外推，見 3c。
 - [ ] 舊的「跑 full Multi-News validation」排程已被 2026-08-08 治理規則取代：
       配置搜尋只跑 dev；每個候選配置只能看一次 dev-test。Greedy/MMR/NSGA-II、
       full-source SBERT baselines 與 paired bootstrap 必須分別按此 partition protocol 執行。
@@ -511,9 +511,11 @@
 - [~] Selector isolation：frozen 200-row + NSGA 五 seed已完成；完整 frozen-dev S02b
       selector screen 已在任何新 selector-swap score 前凍結為 14 candidates／dataset：
       Greedy、MMR（TF-IDF/SBERT × λ 0.1–0.9）、NSGA-II 64×80 單一 frozen seed。
-      預註冊：`d2_selector_full_dev_v1.json`；尚未完成，不能假設 200-row MMR 結論外推
-      。第一次 Multi-News attempt 揭露 F-63 runner dispatch/cache-provenance 缺陷；13 個
-      failed attempts 已保留，修正後必須用同 scientific candidates retry
+      預註冊：`d2_selector_full_dev_v1.json`。Multi-News 14/14 已完成：Greedy-TFIDF
+      anchor macro `0.328077` 最佳；NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR
+      `0.321744`、最佳 SBERT-MMR `0.316612`、NSGA-II+SBERT `0.308827`。兩個
+      NSGA 候選均未達多 seed 門檻；200-row MMR 排序未外推。第一次 attempt 的 F-63
+      failed/interrupted attempts 全保留；GovReport 14-candidate screen 尚未完成。
 - [ ] Ablation：No-statistical / No-graph / No-PLM / No-provenance / No-routing
 - [ ] Route utility：各路 unique candidate recall、quality delta、latency 與 peak memory；無增量效果的 route 刪除
 - [ ] 原版 Multi-News main 與 frozen 5,549-row U+FFFD clean sensitivity 作 paired validation 分析；bad-retrieval-removed／Multi-News+ 是未排程的另一種 retrieval-contamination 研究，不得混稱
@@ -521,7 +523,7 @@
 **Gate 3** 🔴：
 - 在 validation 上，至少一個主 benchmark明顯勝過強 no-task-training baseline；另一個至少 non-inferior 或形成預先定義的 cost Pareto 優勢
 - candidate recall 與 lead-overlap 診斷可解釋，且至少一條非 lexical route 有可重現的獨立效益；不要求為了好看而機械式降低 lead overlap
-- [x] NSGA-II 未在 matched pilot 提供穩定增益且選句不穩定，已移出標題與主方法；只作 comparator
+- [x] NSGA-II 未在 matched pilot 或 Multi-News full-dev 提供增益，已移出標題與主方法；只作 comparator
 - data schema、budget semantics、objective matrix、route set 與 output policy 全部通過 `ARCHITECTURE.md` freeze gate
 - → 通過才 **freeze config**，解鎖 test
 
@@ -607,7 +609,7 @@
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
 | 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 409 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2 runners 與 F-51～F-63 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
-| 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
+| 3 方法開發 | `[~]` | selector sub-gate進行中 | Multi-News full-dev D2 14/14 已完成，Greedy anchor 勝 MMR／NSGA-II；GovReport D2 待完成。NSGA-II 維持 comparator，final selector 未 freeze；candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
 | 6 投稿稽核 | `[ ]` | | |

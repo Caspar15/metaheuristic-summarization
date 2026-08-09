@@ -1,16 +1,14 @@
 {
   "evidence_schema_version": "1.0",
-  "measured_at_utc": "2026-08-09T07:43:30.179513+00:00",
-  "started_at_utc": "2026-08-09T07:43:28.698320+00:00",
-  "status": "failed",
+  "measured_at_utc": "2026-08-09T11:38:37.968745+00:00",
+  "started_at_utc": "2026-08-09T10:04:57.938121+00:00",
+  "status": "completed",
   "test_split_accessed": false,
   "method": "nsga2",
   "command": [
     "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
     "-m",
-    "src.baselines.cli",
-    "--baseline",
-    "nsga2",
+    "src.pipeline.select_sentences",
     "--config",
     "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d2_selector_full_dev_v1\\multinews\\dev\\S13_nsga2_sbert_seed3407\\resolved_config.yaml",
     "--split",
@@ -22,9 +20,46 @@
     "--stamp",
     "run"
   ],
-  "return_code": 2,
+  "implementation_commit": "e831d83f086d2d71fcddddfacf0eb2c81eb08b68",
   "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S13_nsga2_sbert_seed3407/resolved_config.yaml",
   "config_sha256": "4435d177568f597ca55bfafcddeb218d75d21cba3785dfcbc4bc4c43fc0ec711",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S13_nsga2_sbert_seed3407/nsga2/run/predictions.jsonl",
+  "predictions_sha256": "0436664d3a2d35a72fece5820224f81b5f2e691e68d27a1b406dfd846b6e9f18",
+  "selected_indices_sha256": "dccaf6414c2129e6f3d93f03e72d5487c129f0e78bfaf931f560c227935e83ae",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4177473179630029,
+      "rouge2": 0.12463270504026061,
+      "rougeLsum": 0.3841008216875174
+    },
+    "macro_rouge": 0.3088269482302603,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 239.4828462515883,
+      "min": 36,
+      "max": 250
+    }
+  },
   "study_id": "d2-selector-full-dev-v1",
   "dataset": "Multi-News",
   "partition": "dev",
@@ -43,6 +78,7 @@
     "optimizer.pop_size": 64,
     "optimizer.n_gen": 80
   },
+  "run_attempt": "retry_01",
   "execution_optimization": {
     "embedding_cache": {
       "enabled": true,
@@ -50,5 +86,13 @@
       "scientific_config_changed": false
     }
   },
-  "dev_test_accessed": false
+  "dev_test_accessed": false,
+  "embedding_cache_summary": {
+    "rows": 3935,
+    "status_counts": {
+      "hit": 3935
+    },
+    "contract_version": "sbert_mean_pool_l2_npz_v1",
+    "ordered_row_cache_keys_sha256": "1c82a344ad282f4a3278da9b519cafe67592c237419e7c8dc0aac1875ee84507"
+  }
 }

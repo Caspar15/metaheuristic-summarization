@@ -10,6 +10,19 @@
   dev 681／dev-test 292；唯一排除的是官方 reference 為空的 CRS `98-228`。
 - freeze 簽字前禁止 test split；目前只推進到「可以跑 test」的狀態，屆時停下等待批准。
 
+## 2026-08-09 full-dev selector checkpoint
+
+- Multi-News 的 `d2-selector-full-dev-v1` 已依事前提交的 14-candidate 規格完成；只讀
+  frozen dev 3,935 rows，`dev_test_accessed=false`、`test_split_accessed=false`。
+- 在固定 S02b routes／candidate pool／RRF salience／200–250 words 下，Greedy-TFIDF
+  anchor macro `0.328077` 仍是最佳。最佳新候選是 NSGA-II+TF-IDF `0.322615`，其次
+  MMR+TF-IDF λ=0.3 `0.321744`；最佳 SBERT-MMR 為 λ=0.7 `0.316612`，
+  NSGA-II+SBERT 為 `0.308827`。
+- NSGA-II+TF-IDF 選句耗時 `4690.7s`，約為最佳 TF-IDF-MMR 的 `31.5×`，仍低
+  Greedy `0.005462` macro；兩個 NSGA 候選都未達多 seed 觸發門檻。200-row pilot 的
+  「MMR provisional main」結論因此**不能外推到 full dev**；Multi-News 暫採 Greedy
+  作 deterministic anchor，MMR／NSGA-II 都不升格。GovReport 同規格仍待完成。
+
 ## 2026-08-06 selector-comparison checkpoint
 
 - 已新增同候選、同 SBERT salience/similarity/coverage、同 budget 的
@@ -29,8 +42,8 @@
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
-  Greedy、selection Jaccard 僅 `0.639`；因此 selector 已決定採 MMR，NSGA-II
-  降為 comparator。這是 diagnostic，不是 full-validation 結論。
+  Greedy、selection Jaccard 僅 `0.639`；當時因此暫定 MMR main、NSGA-II
+  comparator。這是 diagnostic；上方 2026-08-09 full-dev 結果已否定其外推性。
 - A1 兩資料集的 reference-only 統計與候選協定已在分數前預註冊；study runner 已
   版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。兩個 primary 的
   唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 與 Multi-News PLM

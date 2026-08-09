@@ -7,10 +7,14 @@
 > 並由該處重跑確認一致，但仍使用小樣本與非官方 oracle，維持 diagnostic 標籤。
 > 2026-08-06 更新：frozen 200-row matched-selector pilot 顯示 MMR 在 R-1／R-2
 > 顯著優於 Greedy；NSGA-II 五 seed mean 均低於 Greedy且選句 Jaccard 0.639。
-> selector 路線因此改為 MMR main／Greedy reference／NSGA-II comparator。這只是
+> selector 路線當時因此暫定為 MMR main／Greedy reference／NSGA-II comparator。這只是
 > selector gate；兩 primary 的 strongest non-PLM baseline 都已勝 proposed S02b。Multi-News
 > PLM 27/27 之後最強仍是 non-PLM PacSum P08；GovReport PLM winner MMR λ=0.9 只高
 > LexRank `0.001148`、卻高 S02b `0.034906`。是否值得投稿仍取決於 dev 優化與完整 paired gate。
+> 2026-08-09 full-dev D2 更正：Multi-News 3,935-row selector isolation 中，Greedy-TFIDF
+> macro `0.328077` 勝所有 MMR／NSGA-II；最佳新候選 NSGA-II+TF-IDF 為 `0.322615`，
+> 最佳 MMR+TF-IDF 為 `0.321744`。200-row pilot 的 MMR 優勢未外推，NSGA-II 的
+> 高成本也未換得品質。GovReport D2 完成前，final selector 不 freeze。
 
 ---
 

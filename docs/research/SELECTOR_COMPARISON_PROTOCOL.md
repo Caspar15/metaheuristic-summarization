@@ -197,8 +197,32 @@ pilot 前後 `git diff` 均無 tracked source 變更，selection code 綁定上�
 種不同集合。沒有任何 seed 的 corpus R-1 或 R-2 超過 Greedy；15 個
 seed×metric vs Greedy comparisons 經 Holm 校正後均不顯著優於 Greedy。
 
-因此 selector gate 的決策更新為：**MMR 是 main selector；Greedy 是相同
+因此 200-row pilot 當時的 selector gate 決策是：**MMR 是 provisional main selector；Greedy 是相同
 shared-objective 的 deterministic search reference；NSGA-II 是被否證的
 stochastic comparator，不再構成方法名稱或主貢獻。** 這個結論只處理 selector
 選擇；整個 proposed system 是否成立，仍取決於 MMR 對 full-source SBERT+MMR、
-PacSum 與兩個 primary datasets 的結果。
+PacSum 與兩個 primary datasets 的結果。此決策已由第 9 節 full-dev 結果更正。
+
+## 9. Frozen full-dev D2 結果（Multi-News；取代 pilot 外推）
+
+`d2-selector-full-dev-v1` 在任何新 selector score 前凍結 14 candidates／dataset；
+Multi-News 只讀 dev manifest 的 3,935 rows，study summary 明記
+`dev_test_accessed=false`、`test_split_accessed=false`。固定 S02b routes、candidate
+pool、RRF salience、200–250 words，只替換 selector 與 similarity representation。
+
+| selector | similarity | macro | R-1 | R-2 | R-Lsum | selection seconds |
+|---|---|---:|---:|---:|---:|---:|
+| Greedy anchor | TF-IDF | **0.328077** | **0.440759** | 0.139803 | **0.403670** | reused |
+| NSGA-II 64×80 | TF-IDF | 0.322615 | 0.433008 | 0.134434 | 0.400403 | 4690.7 |
+| MMR λ=0.3 | TF-IDF | 0.321744 | 0.438392 | 0.138005 | 0.388837 | 149.1 |
+| MMR λ=0.5 | TF-IDF | 0.321462 | 0.436943 | **0.139598** | 0.387846 | 145.0 |
+| MMR λ=0.7 | SBERT | 0.316612 | 0.430702 | 0.136888 | 0.382246 | 146.2 |
+| NSGA-II 64×80 | SBERT | 0.308827 | 0.417747 | 0.124633 | 0.384101 | 5519.0 |
+
+表中只列主要候選；完整 14-candidate evidence 在
+`runs_v2/d2_selector_full_dev_v1/multinews/dev/study_summary.json`。NSGA-II+TF-IDF
+比 Greedy 低 `0.005462` macro，且約為最佳 TF-IDF-MMR selection time 的 `31.5×`；
+兩個 NSGA 候選均未達「距最佳 deterministic ≤0.002 或勝任一 metric」的多 seed
+門檻。故本節**明確取代**第 8 節把 200-row MMR 優勢外推為 main-selector 決策的做法：
+Multi-News 暫採 Greedy anchor，MMR 與 NSGA-II 都不升格；GovReport 同規格完成前
+不 freeze final selector。第 8 節保留為研究歷史，不刪除。

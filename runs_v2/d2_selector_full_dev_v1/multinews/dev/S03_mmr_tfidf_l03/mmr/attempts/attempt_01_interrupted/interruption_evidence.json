@@ -1,0 +1,9 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T08:08:24.688343+00:00",
+  "status": "failed",
+  "failure_type": "external_runner_interruption",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "archived_run_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S03_mmr_tfidf_l03/mmr/attempts/attempt_01_interrupted"
+}

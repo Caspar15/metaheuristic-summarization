@@ -2,13 +2,20 @@
 
 ## 最新 checkpoint（2026-08-09）
 
+Multi-News full-dev D2 已依事前凍結規格完成 14/14 selector candidates，只讀 dev
+3,935 rows。固定 S02b 候選時 Greedy-TFIDF macro `0.328077` 勝 NSGA-II+TF-IDF
+`0.322615`、最佳 TF-IDF-MMR `0.321744` 與最佳 SBERT-MMR `0.316612`；200-row
+pilot 的 MMR 優勢未外推。NSGA-II 未達多 seed 門檻並維持退出核心；final selector
+等 GovReport D2 完成後再 freeze。完整 evidence 見
+`runs_v2/d2_selector_full_dev_v1/multinews/dev/study_summary.json`。
+
 `Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
 接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
 hash 全部相同；加入兩 primary partition／greedy-reference／GovReport data-layer／A1/D1/D2 runners／D1 inventory／document-aware position、Gate 2 audits 與 F-51～F-63 guards 後 409 tests passed。SBERT centroid-only 與 full-source SBERT-MMR
 baseline 亦已接入 shared baseline CLI。凍結的 200-row matched pilot 顯示 MMR
 相對 Greedy 的 R-1／R-2 分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；
 NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`；selector
-決策因此固定為 MMR main／Greedy reference／NSGA-II comparator。這仍是 diagnostic，
+當時決策因此暫定為 MMR main／Greedy reference／NSGA-II comparator；上方 D2 已更正。這仍是 diagnostic，
 兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與
 64-endpoint paired finalists 均已完成。S02b 對 Multi-News P08 macro `−0.003663`、對
 GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 quality gate 失敗，
@@ -41,6 +48,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | **baseline** | 🔴 **Gate 2 diagnosis 完成、quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；不得進 dev-test，回 dev redesign。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
+| D2 full-dev selector | 🟡 **Multi-News 14/14 完成、GovReport 待跑** —— Greedy-TFIDF `0.328077` 最佳；NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR `0.321744`、最佳 SBERT-MMR `0.316612`。200-row MMR 優勢未外推；未讀 dev-test/test |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
 | ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
 | 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |

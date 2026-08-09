@@ -11,6 +11,14 @@
 > S02b 平均 headroom `8.64%`、union recall `47–56%`、final recall `12–13%`，顯示
 > candidate coverage 與 selector/salience 都是瓶頸。Gate 2 quality gate 仍未通過。
 
+> **2026-08-09 Multi-News D2 update**：事前凍結的 14-candidate full-dev selector
+> isolation 已完成 3,935 rows。Greedy-TFIDF anchor macro `0.328077` 仍最佳；
+> NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR `0.321744`、最佳 SBERT-MMR
+> `0.316612`、NSGA-II+SBERT `0.308827`。NSGA-II+TF-IDF selection `4690.7s`，
+> 約為最佳 TF-IDF-MMR 的 `31.5×`，且未達多 seed 門檻。故 200-row pilot 的
+> MMR-main 判斷已降為被 full-dev 否定的早期 diagnostic；NSGA-II 退出核心的判斷保留。
+> final selector 等 GovReport 同規格 D2 完成後再 freeze。
+
 已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
 以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現
 `all-MiniLM-L6-v2` 的 mean pooling + Normalize，並以 SHA-256 證明三 selector
@@ -21,8 +29,8 @@ utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROU
 2026-08-06 frozen 200-row matched pilot 已提供第一個方向：candidate-matched MMR
 在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
 五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
-且選句 mean pairwise Jaccard 僅 0.639；selector 層因此確定以 MMR 為主線、
-Greedy 為 reference、NSGA-II 為 comparator。這不等於整個方法已成立：Multi-News
+且選句 mean pairwise Jaccard 僅 0.639；selector 層當時暫定以 MMR 為主線、
+Greedy 為 reference、NSGA-II 為 comparator；上方 D2 update 已更正此 pilot 外推。這不等於整個方法已成立：Multi-News
 frozen-dev non-PLM 23/23 與 PLM 27/27 已完成；PacSum TF-IDF P08 macro 仍比
 PLM winner 高 `0.000282`、比 proposed S02b 高 `0.003663`，而最佳 full-source
 SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍須完成
@@ -595,7 +603,7 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
    依句數、文件數、section 數、廉價 lexical redundancy／topic dispersion、cheap lexical graph density 與預估 route cost 決定各 route 的 K，並允許在容易文件跳過 PLM。不可用必須先執行昂貴 route 才能得到的 route agreement 作事前決策；routing policy 只能在 validation 設計與凍結。
 
 5. Selector competition  
-   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 與五 seed extension 已觸發去留規則：MMR 為 main、Greedy 為 reference、NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
+   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 暫支持 MMR，但 2026-08-09 Multi-News full-dev 已顯示該排序不能外推；Greedy 暫為 anchor，final selector 等 GovReport D2。NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
 
    Phase 1e 已完成工程前提：Greedy、GRASP、MMR、NSGA-II 共用 constraints 與 final evaluator；Greedy／NSGA-II 另嚴格共用同一 scalar objective，MMR 的 sequential rule 則明確分開標示。200-row paired selector comparison 與 NSGA 五 seed stability 已完成，證據不支持 NSGA-II；exact small-instance gap 只在仍需解釋 stochastic comparator 時補做，不再是 main architecture blocker。
 

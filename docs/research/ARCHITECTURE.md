@@ -14,9 +14,16 @@
 > 成立，仍須 full validation 與 full-source MMR baseline。
 
 > 五 seed extension 已進一步否證 NSGA-II：三個 ROUGE 的五 seed mean 均低於
-> Greedy，選句集合 mean pairwise Jaccard 僅 0.639。selector v1 因而固定為
-> **MMR main / Greedy reference / NSGA-II comparator**；後續不再替 NSGA-II
+> Greedy，選句集合 mean pairwise Jaccard 僅 0.639。selector v1 當時暫定為
+> **MMR main / Greedy reference / NSGA-II comparator**；下方 full-dev correction
+> 已撤回 MMR-main 外推，但後續仍不再替 NSGA-II
 > 擴張主架構，研究資源改用來驗證 candidate router 對 full-source MMR 的價值。
+
+> 2026-08-09 full-dev correction：上段只成立於 200-row pilot。固定 S02b 候選與
+> frozen Multi-News dev 3,935 rows 的 14-candidate D2 中，Greedy-TFIDF `0.328077`
+> 勝 NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR `0.321744` 與最佳 SBERT-MMR
+> `0.316612`。因此 final selector 尚未 freeze；Multi-News 暫以 Greedy 作 anchor，
+> MMR 不再因 pilot 自動成為 main。NSGA-II 退出核心的判斷反而獲得更強支持。
 
 > 狀態：**Target Architecture v1，尚未 freeze**  
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
@@ -31,8 +38,9 @@
 1. **完整輸入上的多路候選生成**：lexical、semantic、graph/structure 各自排名，不能先被共同 top-K 截斷。
 2. **provenance-aware candidate fusion**：保留每句來自哪一路、rank、校準分數與成本，不再只傳 index。
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
-4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；pilot 已
-   證實 MMR 較佳、NSGA-II 無獨立效益，因此主架構採 MMR，NSGA-II 退出核心與標題。
+4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
+   Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
+   NSGA-II 退出核心與標題；最終 selector 等 GovReport D2 後再定。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 
