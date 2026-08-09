@@ -357,7 +357,8 @@ evidence。它是 headroom／candidate-recall diagnostic，不是 baseline、ora
   --dataset multinews --target rouge1 --workers 2
 ```
 
-Runner 預設 2 workers，且最多只排隊同 worker 數量的 documents；這是 execution-only
+Runner 預設 2 workers，且最多只保留同 worker 數量的 pending documents；已完成的輕量
+row results 可等待 canonical 前方長尾而不阻塞 workers。這是 execution-only
 資源保護，避免 Python 3.12 `ProcessPoolExecutor.map` 預先序列化整個 GovReport 剩餘
 corpus。互動使用電腦時保留預設；明確提高 `--workers` 會成比例增加 CPU 與 process
 memory。ROUGE greedy search 是 CPU string/count/LCS 工作，這個 runner 沒有 GPU route。
@@ -384,3 +385,11 @@ union-cap-80／完整 route-top-40／final-selection recall。CLI 只有 dataset
 
 v1 曾把 total-cap 後 `candidate_records.selected_by_routes` 誤標成完整 route top-40；
 在任何 overlap score 前由 v2（SHA-256 `ef45c056...a3e39`）保留並 supersede。
+
+## Gate 2 paired finalists
+
+`analyze_gate2_paired_finalists.py` 讀取 S02b 與每個 primary 八個 baseline-family
+finalists 已存在的 frozen-dev per-example artifacts。比較集合與 multiplicity 已在任何
+paired resampling outcome 前凍結於 `gate2_paired_finalists_v1.json`。runner 沒有 split
+CLI，報 64-test Holm 與 12,896-opportunity selection-aware diagnostic，不能授權
+dev-test 或 test。

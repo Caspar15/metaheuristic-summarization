@@ -160,8 +160,10 @@ def _bounded_ordered_results(
     Python 3.12.  GovReport rows can be very large, so queuing the remaining
     corpus duplicates hundreds of megabytes of pickled task data.  Keeping at
     most ``workers`` tasks outstanding bounds that execution-only memory cost.
-    Completed rows are buffered only until the next canonical position is
-    available, preserving the exact-prefix checkpoint contract.
+    Completed row results are small and buffered only until the next canonical
+    position is available, preserving the exact-prefix checkpoint contract.
+    They do not count against the pending-task limit: otherwise one long early
+    document makes every other worker idle after completing a single row.
     """
 
     if workers < 1:
@@ -174,7 +176,7 @@ def _bounded_ordered_results(
 
     with ProcessPoolExecutor(max_workers=workers) as executor:
         while pending or not exhausted:
-            while not exhausted and len(pending) + len(buffered) < workers:
+            while not exhausted and len(pending) < workers:
                 try:
                     task = next(task_iterator)
                 except StopIteration:
@@ -259,16 +261,20 @@ def _log_interruption(
     rows_path: Path,
     rows: int,
     reason: str = "incomplete row checkpoint detected on explicit resume",
+    force_new: bool = False,
 ) -> None:
     attempt_root = rows_path.parent / "attempts"
     checkpoint_sha256 = sha256_file(str(rows_path))
-    for existing_path in attempt_root.glob("attempt_*_interrupted/interruption_evidence.json"):
-        existing = json.loads(existing_path.read_text(encoding="utf-8"))
-        if (
-            existing.get("checkpoint_sha256") == checkpoint_sha256
-            and existing.get("completed_prefix_rows") == rows
+    if not force_new:
+        for existing_path in attempt_root.glob(
+            "attempt_*_interrupted/interruption_evidence.json"
         ):
-            return
+            existing = json.loads(existing_path.read_text(encoding="utf-8"))
+            if (
+                existing.get("checkpoint_sha256") == checkpoint_sha256
+                and existing.get("completed_prefix_rows") == rows
+            ):
+                return
     attempt_number = len(list(attempt_root.glob("attempt_*_interrupted"))) + 1
     attempt_id = f"attempt_{attempt_number:02d}_interrupted"
     evidence = {

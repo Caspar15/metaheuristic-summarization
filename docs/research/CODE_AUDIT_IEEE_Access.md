@@ -2096,8 +2096,8 @@ checkpoint 是 exact frozen-dev prefix 257/681，completed evidence 不存在，
 當成完成 run，dev-test/test 均未讀。
 
 `run_gate2_greedy_reference.py` 現以 bounded submit/wait 取代 eager `executor.map`：
-outstanding tasks（pending + ordered buffer）不超過 worker 數，仍按 frozen manifest 順序
-flush。預設 worker 由 4 降為 2；明確提高 workers 仍屬 execution-only，scientific config
+pending tasks 不超過 worker 數，完成的輕量 row results 可等待前方長尾，仍按 frozen
+manifest 順序 flush。預設 worker 由 4 降為 2；明確提高 workers 仍屬 execution-only，scientific config
 hash、metric、長度與 selected-index 語義不變。toy corpus 的 spawn/order/equivalence 與
 runner governance 合計 15 tests 通過，完整回歸 399 passed。
 
@@ -2105,3 +2105,25 @@ GPU 不作為本 finding 的修正：目前內圈是 `rouge-score` 的 tokenizat
 n-gram count 與 R-Lsum union-LCS，沒有 PyTorch/CUDA tensor route。另寫 GPU evaluator
 反而需要完整 selected-index equivalence audit；RTX 4060 應用在 SBERT embedding 階段。
 R-Lsum 只在使用者允許重新佔用算力後，以 `--resume` 從 257/681 繼續。
+
+## F-61 — bounded ordered buffer 會在前方長尾時讓其餘 workers 閒置（已修正，run 進行中）
+
+**嚴重度：P1（execution throughput／失敗紀錄，不改科學協定）**
+
+F-60 第一版同時限制 `pending + completed-order-buffer <= workers`。GovReport R-Lsum
+從 257/681 以 16 workers resume 後，第一輪約 4,923 CPU-seconds即顯示 15 workers 已
+完成各自 row 並待機，只剩 position 257 長尾使用約一個 core；checkpoint 因 exact-prefix
+規則仍為 257。該 invocation 由 operator 在 prefix 未變時停止，runner 的
+`BrokenProcessPool` failure evidence/search-log 與人工說明的 `attempt_02_interrupted`
+均保留，沒有覆寫或假裝成功；dev-test/test 未讀。
+
+修正後只限制 pending tasks 不超過 worker 數；已完成 row result 只有 ID、indices、長度與
+三個 metrics，可在記憶體等待 canonical 前方長尾，其他 worker 繼續取新 document。
+第二次 16-worker resume 約 70 秒累積 1,043 CPU-seconds，接近 16-core 全速，working set
+約 3.18 GB。這是 execution-only scheduler change；exact-order flush、scientific config
+hash、selected indices 與 checkpoint contract 不變。scheduler targeted tests 8/8 通過；
+完整回歸待 CPU-heavy R-Lsum 完成後執行。
+
+同一 checkpoint 期間另凍結 `gate2_paired_finalists_v1.json`（在任何 paired resampling
+outcome 前，但 aggregate/per-example scores 已存在）並加入 analyzer；正式 paired run
+尚未執行。其 toy governance tests 4/4 通過。
