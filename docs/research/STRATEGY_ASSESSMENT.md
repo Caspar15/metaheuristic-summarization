@@ -255,7 +255,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 421 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a runners 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 424 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a runners 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -299,7 +299,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 421 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-66/D3a guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | canonical 主路徑的 424 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-66/D3a guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
 | Phase 3（方法實驗） | screens、matched route ablations 與 paired inference 已完成。12/12 route endpoints 通過 Holm p=`0.002400` 與 186-opportunity p=`0.037196`，semantic/graph 暫留；semantic-direct selector 刪除。Multi-News 主要是 selector/salience 瓶頸；GovReport 同時有 candidate coverage 與 selector bottleneck，下一步只用 dev redesign，不能 promotion |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |

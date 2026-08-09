@@ -190,7 +190,8 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    200-row reference-blind dev pilot、再依固定規則送最多四個非 anchor 到 full dev。
    28/28 pilot 已完成；Multi-News bigrams+position `+0.002559`，GovReport
    lexical×0.5 `+0.009648` 最佳。pilot 332-opportunity correction 未通過；版本化
-   analyzer 已固定兩邊 finalists，full-dev confirmation 尚待另行預註冊。weighted RRF
+   analyzer 已固定兩邊 finalists；28-endpoint full-dev confirmation 與 streaming runner
+   已在新分數前預註冊，尚未執行。weighted RRF
    預設仍為 equal weights，dev-test/test 無入口。若搜尋空間耗盡仍無
    顯著優勢，依停止條件寫重新定位建議。
 2. 完成 Multi-News main／frozen clean 的共同 5,549-row paired sensitivity，並整理一致的
