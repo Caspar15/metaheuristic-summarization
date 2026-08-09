@@ -41,7 +41,8 @@
 
 這只是 OFAT 優先序，不是 promotion 結論。後續已完成 31-config、兩資料集的
 capacity-matched route ablation 與 paired bootstrap；完整結果與多重比較限制見本文件後段，
-但 strong baseline matrix 尚未完成。
+後續 strong baseline matrix、greedy reference 與 paired finalists 亦已完成；S02b 對兩個
+primary 的 adversarial winner 均顯著落後，故本 D1 正訊號不能 promotion。
 
 ### 與便宜 baseline 的同協定脈絡
 
@@ -50,8 +51,9 @@ capacity-matched route ablation 與 paired bootstrap；完整結果與多重比�
   R-Lsum 是 `0.431657/0.135168/0.395911`；Lead 是
   `0.435033/0.148139/0.395701`。也就是 R-Lsum 僅微高，R-2 明顯不足。
 - Multi-News 正式 metric-specific greedy reference 與 v2 analysis 已完成：S02b/P08
-  平均 headroom capture `1.41%/3.30%`；S02b R2 為 `−4.23%`。GovReport 尚未完成，
-  因此不能把單一 primary 結論外推，也不得用「贏 Lead 幾分」取代 headroom。
+  平均 headroom capture `1.41%/3.30%`；S02b R2 為 `−4.23%`。GovReport 亦完成：
+  S02b／SBERT+MMR 平均 headroom capture `8.64%/22.98%`；不得用「贏 Lead 幾分」
+  取代 headroom。
 
 ### 品質與成本一起解讀
 
@@ -322,15 +324,14 @@ adaptive quality-cost 判斷。
   correction 在 10,000 resamples 下的最小可得 corrected p 是 `0.074393`，所以
   0/12 cheap-baseline endpoints 通過 strong rule。依「看到分數後不改顯著性方法」規則，
   不事後增加 resamples；只記錄解析度限制。
-- PacSum／SBERT+MMR／TextRank／LexRank 已在兩 primary 完成；greedy reference 目前只有
-  Multi-News 3/3、GovReport 0/3，
-  因此即使 route paired evidence 很強，仍不得進 dev-test。
+- PacSum／SBERT+MMR／TextRank／LexRank 與 greedy reference 6/6 已在兩 primary 完成；
+  64-endpoint paired finalists 顯示 S02b 對 Multi-News P08 macro `−0.003663`、對
+  GovReport SBERT+MMR `−0.034906`，兩者 Holm-significant，仍不得進 dev-test。
 
 ## 還沒做
 
-1. Gate 2：兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成；Multi-News P08
-   高 PLM winner `0.000282`、高 S02b `0.003663`，GovReport LexRank 高 `0.033758`。
-   GovReport MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。接著完成 Lead、Random 與
-   metric-specific greedy reference 的兩-primary frozen-dev 矩陣。
+1. Gate 2 dev diagnosis 已完成但 quality gate 失敗：兩 primary non-PLM 各 23/23、PLM
+   各 27/27、greedy reference 6/6 與 paired finalists 均完成；下一步是只用 dev 的
+   candidate coverage／fusion／selector／salience redesign。
 2. candidate recall/headroom、adaptive cost rule 與 selector Greedy/MMR/NSGA-II full-dev。
 3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。

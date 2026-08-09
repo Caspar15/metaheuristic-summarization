@@ -22,7 +22,8 @@
 - [x] A1 已完成兩 primary 的 reference-only 統計、預註冊、dev 與唯一一次 dev-test；
       Multi-News 依預註冊規則選定 200–250 words，GovReport 選定 500–650 words；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
-      partition freeze 已完成；Gate 2 baseline 矩陣與 dev search 尚未完成。
+      partition freeze、Gate 2 baseline／greedy／paired diagnosis 已完成；quality gate 失敗，
+      dev redesign/search 尚未完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
 - [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
       median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
@@ -178,7 +179,8 @@
       PLM winner `0.000282`、高 S02b `0.003663`；最佳 full-source SBERT-MMR 低 S02b
       `0.005496`。GovReport LexRank／TextRank 分別高 S02b `0.033758/0.013104`。
       GovReport PLM 27/27 亦完成：MMR λ=0.9 高 LexRank `0.001148`、高 S02b
-      `0.034906`，尚未 paired。greedy reference 與 paired matrix 尚未完成；test split 仍不得執行。
+      `0.034906`；後續 paired macro CI 全負、Holm `p=0.0128`。greedy reference 6/6 與
+      paired matrix 已完成；Gate 2 quality gate 失敗，test split 仍不得執行。
 
 > 這是**唯一的執行清單**。研究標準以 `paper_revision_plan_IEEE_Access.md` 為準；程式稽核與策略評估的結論全部收斂到這裡。
 > 每天工作看這份就好，需要理由再回去翻對應的分析文件。
@@ -417,46 +419,55 @@
       Multi-News TF-IDF 21-point OFAT 已完成，P08 勝出；beta=1 的 3,935 rows 全部退化，
       不得當 centrality 證據（F-47）；GovReport 21-point TF-IDF 亦完成，P07 勝出。
       Multi-News SBERT 21-point OFAT 已完成，P03 勝出但仍低 TF-IDF P08 `0.000282`；
-      GovReport SBERT 21-point OFAT 亦已完成，beta=0.5 最佳；paired matrix 尚未完成
+      GovReport SBERT 21-point OFAT 亦已完成，beta=0.5 最佳；64-endpoint paired
+      finalist diagnostic 已完成，S02b 對兩 primary adversarial winners 均顯著落後
 - [x] Gate 2 baseline dev 搜尋已在任何新 baseline 分數前預註冊：每資料集 50 個新 candidates
       （non-PLM 23、PLM 27），PacSum 採 21-point OFAT／representation、MMR 採 5 個 λ；
       exact tie 回 default，所有機會進 selection correction。runner 無 split 參數且明禁
       dev-test/test；見 `configs/preregistrations/gate2_baseline_matrix_v1.json`
 - [x] 在兩個 primary 跑 Sentence-BERT centroid + MMR：Multi-News 最佳 MMR λ=0.7
       macro `0.322581`；GovReport 最佳 MMR λ=0.9 macro `0.452768`，只高 LexRank
-      `0.001148`，仍待 paired inference
+      `0.001148`；paired finalists 已完成，S02b 對它顯著落後
 - [~] 兩個 primary 的 Random frozen-dev point estimate 已由 A1 固定 seed 產生：
       Multi-News `0.307098`、GovReport `0.408844`；仍須收斂進 Gate 2 governed matrix、
       paired significance 與共同 reporting artifact。
-- [ ] 在兩個 primary 跑 exact extractive oracle（可行時）或明確標示的 greedy reference（不可稱 upper bound）
+- [x] 在兩個 primary 跑明確標示的 metric-specific greedy reference（6/6；不是 exact upper bound）
 - [x] `gate2-greedy-reference-v1` 已在任何正式 greedy-reference score 前預註冊：兩
       primary × R1/R2/Lsum 各自最佳化共 6 configs，只讀 frozen dev；max_words 採 A1
       凍結上限，reference-aware diagnostic 不強迫填 floor，因無正增益自然停止並報實際長度。
-- [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport R1/R2 已完成、
-      R-Lsum 在 frozen-dev prefix 257/681 人為中斷；總計 5/6 完成。R-Lsum checkpoint
-      可 resume，但在使用者允許重新佔用算力前不得啟動；dev-test/test 均未讀。
-      Multi-News headroom/candidate recall 已完成；GovReport 尚待 R-Lsum 與三-target analysis。
+- [x] 6 個 governed greedy-reference runs：Multi-News 3/3、GovReport 3/3 全部完成；
+      GovReport R-Lsum 的 16-worker resume 經 F-60/F-61 scheduler 修正後完成 681/681。
+      三 target evidence、exact ID order、SHA 與 dev-test/test=false 均驗證。
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
-      evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 5/6。
+      evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 6/6。
 - [x] candidate recall/headroom 分析已在任何 overlap 數字前凍結；v1 把 retained
       route membership 誤標為完整 top-40，尚未計分即由 v2 明確 supersede：
       `gate2_greedy_reference_analysis_v2.json`（SHA-256 `ef45c056...a3e39`）；定義
       union-cap-80、route-top-40、final-selection 的 micro/macro recall、空集合處理與
-      `(system−Lead)/(greedy−Lead)`。Multi-News 已執行，GovReport 待 3 targets 完成。
+      `(system−Lead)/(greedy−Lead)`。Multi-News／GovReport 均已執行。
 - [x] Multi-News v2 analysis：S02b 三 metric mean headroom capture `1.41%`，P08
       `3.30%`；S02b R-2 capture `−4.23%`。union-cap-80 micro recall 為
       `85.89%/81.91%/84.39%`，final-selection 只有 `30.07%/29.63%/30.85%`；
       selector/salience 是主要瓶頸。graph route-top-40 三 target recall 均最高，semantic
       第二且有 exclusive hits，故兩 route 暫不觸發刪除。
+- [x] GovReport v2 analysis：S02b 三 metric mean headroom capture `8.64%`，SBERT+MMR
+      `22.98%`；union-pool micro recall 為 `56.21%/46.92%/53.86%`，final selection 僅
+      `12.36%/13.42%/12.32%`。GovReport 同時有 candidate coverage 與 selector/salience
+      瓶頸；semantic/graph 均有 exclusive hits，暫不刪除。
+- [x] Gate 2 paired finalists：在 paired outcome 前凍結 S02b 對每個 primary 八個 family
+      finalists、4 endpoints、10,000 resamples、64-test Holm 與 12,896 opportunity diagnostic。
+      Multi-News 對 P08 macro `−0.003663`，CI `[−0.005776,−0.001638]`、Holm `p=0.0216`；
+      GovReport 對 SBERT+MMR `−0.034906`，CI `[−0.038498,−0.031373]`、Holm `p=0.0128`。
+      selection-aware wins 0；本結果不能 promotion。
 - [ ] Multi-News main／clean sensitivity 對共同 5,549 rows 報 paired 差異；不得把 clean 分數取代 5,621-row main 結果
 - [x] SciTLDR 不屬 v1 Gate 2；不執行、不報新比較表。若日後重新納入，先修改本矩陣，再完成官方 `files2rouge`、單句限制、max-R1-reference 與 oracle R1 ≈ 52.4 conformance
 
 **Gate 2**：兩個 primary benchmark 的 baseline 在各自明確 evaluator 下跑出合理數字。v1 沒有 SciTLDR gate。
 
-> 2026-08-09 中途狀態：兩 primary non-PLM 各 23/23、PLM 各 27/27 完成，
-> 仍不等於 Gate 2 完成。詳細分數、
-> 退化端點與剩餘工作見 `GATE2_BASELINE_STATUS.md`。
+> 2026-08-09 最終狀態：兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference
+> 6/6 與 paired finalists 完成。Gate 2 diagnosis 完成但 quality gate 失敗；詳細分數、
+> 退化端點與 dev redesign 工作見 `GATE2_BASELINE_STATUS.md`。
 
 ---
 
@@ -586,8 +597,8 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 399 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-60 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
-| 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成，且 proposed S02b 仍輸 strongest completed baseline；greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 403 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-62 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
@@ -599,7 +610,7 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-53/F-55～F-59 為 **397 passed**。
+      F-51 當時 **386 passed**；目前含 F-53/F-55～F-62 為 **403 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、
@@ -611,5 +622,5 @@
 - [x] GovReport PLM family 27/27 completed；P06 外層中斷已依 F-48 封存並登錄，
       resume 成功。winner MMR λ=0.9 macro `0.452768`，只高 LexRank `0.001148`；
       27×681 cache row accesses 全數通過 F-53。
-- [ ] 兩 primary greedy reference 與 paired matrix尚未完成；Gate 2 未過，
-      dev-test/test 未讀。
+- [x] 兩 primary greedy reference 6/6 與 paired matrix 已完成；Gate 2 quality gate 未過，
+      dev-test/test 未讀，下一步回 frozen-dev redesign。

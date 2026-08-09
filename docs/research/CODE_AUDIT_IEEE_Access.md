@@ -26,8 +26,9 @@
 > enforcement；GovReport 資料層詳見 F-22。兩者均未讀取 test split。
 > **2026-08-08 D1 lexical evidence**：兩 primary 的 12-config lexical/objective dev
 > family 已完成。Multi-News 全文候選仍輸 Lead；GovReport 全文候選 macro
-> `0.415585`，dev point estimate 高於 Lead／Random，但尚無強 baseline、paired
-> significance 或 dev-test。F-30/F-31 另記 exact Greedy 效能修正與錯誤 runtime 外推。
+> `0.415585`，dev point estimate 高於 Lead／Random。後續 strong baseline／greedy reference／
+> paired finalists 已完成並顯示 S02b 對兩 primary adversarial winner 均顯著落後；見 F-62。
+> F-30/F-31 另記 exact Greedy 效能修正與錯誤 runtime 外推。
 
 ---
 
@@ -42,7 +43,7 @@
 
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
-| **F-0** | 系統未贏 Lead | 🔴 成立 | 🟡 **dev 部分回答** | 三 route 配置在兩個 primary 對 Random 的三個 metric CI 皆為正；Multi-News 對 Lead 的 R-2 顯著落後，GovReport 對 Lead 的 R-2 CI 跨 0。graph／semantic route paired evidence 已完成，但強 baseline 與 dev-test 未完成，go/no-go 尚未回答 |
+| **F-0** | 系統未贏 Lead | 🔴 成立 | 🔴 **Gate 2 dev 失敗** | route matched evidence 有正訊號，但正式 paired finalists 顯示 S02b 對 Multi-News P08 與 GovReport SBERT+MMR 的 macro CI 均全負；selection-aware wins 0。不得進 dev-test，見 F-62 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
 | F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
@@ -51,7 +52,7 @@
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
 | F-8 | SciTLDR 多重 reference 被串接 | 🔴 成立 | ✅ 已修 | `preprocess_scitldr.py` 改存 `references: list` |
-| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | 🟡 **部分解除** | baseline 程式已加入；兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27 已完成，strongest baseline 仍勝 proposed S02b。greedy reference 與完整 paired matrix 尚未完成，Gate 2 未通過 |
+| **F-9** | **repo 無任何 baseline 實作** | 🔴 成立 | ✅ **工程解除／品質失敗** | 兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後，見 F-62 |
 | F-10 | 圖模組 τ 套用不一致 | 🔴 成立 | ✅ 已修 | τ 已傳入 `feature_builder.py` 與 graph route |
 | **F-11** | `centrality` 與 `novelty` 完全反相關 | 🔴 成立 | 🔴 **仍然成立** | **未修**。新 MVP 兩者權重皆 0 所以不觸發,但退化仍存在 |
 | F-12 | 分句用純正則 | 🔴 成立 | 🟡 部分修 | Multi-News／GovReport canonical 已改 NLTK Punkt；**legacy `preprocess.py` 未動，CNN-DM 僅在 Gate 3 後納入時處理** |
@@ -59,8 +60,8 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🔴 **F-0 只在 dev 部分回答** —— route paired evidence 有正訊號，但 Multi-News 對 Lead 的 R-2 顯著落後；未對齊強 baseline，不等於方法已勝出
-2. 🔴 **F-9 baseline 矩陣仍不完整** —— 兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27 已完成，strongest baseline 仍勝 proposed S02b；greedy reference 與完整 Gate 2 paired matrix未完成，F-0 仍無法最終回答
+1. 🔴 **F-0／F-62：Gate 2 dev quality gate 失敗** —— S02b 對兩 primary adversarial winner 的 macro paired CI 均全負，selection-aware wins 0；不得進 dev-test
+2. ✅ **F-9 baseline 工程矩陣已完整** —— non-PLM、PLM、greedy reference 與 paired finalists 均完成；完成矩陣不等於方法有效，反而提供 redesign 的否證基準
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
 5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
@@ -1788,17 +1789,17 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**397 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**403 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
-兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27 已完成。greedy reference、paired
-significance、兩個 primary 的完整 baseline 矩陣與 proposed-method validation 仍未完成。
+兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired
+finalists 已完成；proposed S02b quality gate 失敗。clean sensitivity 與 redesign 尚未完成。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
 |---|---|---|---|
 | `src/eval/rouge.py` | ROUGE-Lsum；同一 reference 由最大 R1 選定；長度 mismatch fail；保留 legacy evaluator | F-2, F-8 | ✅ 兩個 5622 篇 artifacts 已重現 0.3857／0.3880；✅ regression tests；⏳ official files2rouge conformance（僅保留 SciTLDR 時） |
-| `src/eval/oracle.py` | metric-specific greedy reference；canonical fail-loud、source-order search、`max_words` 明確化 | F-1, F-21 | ✅ 46-test correctness suite；兩 primary partitioned Gate 2 run 尚未執行 |
+| `src/eval/oracle.py` | metric-specific greedy reference；canonical fail-loud、source-order search、`max_words` 明確化 | F-1, F-21 | ✅ correctness suite；兩 primary partitioned Gate 2 runs 6/6 完成 |
 | `src/features/graph.py` | thresholding 前先 `.copy()`，不再就地竄改呼叫端矩陣 | F-5 | ✅ 呼叫前後矩陣一致 |
 | `src/models/extractive/encoder_rank.py` | 模型快取、pinned revision、完整輸入 batch encode、截斷與成本 artifact | F-4 | ✅ CPU 與 3-row canonical smoke；⏳ 正式 cold/warm/GPU cost pilot |
 | `src/pipeline/optimizer_dispatch.py`、`src/objectives/evaluator.py` | `pop_size` / `n_gen` / `seed` 接線；移除 fallback；Greedy／GRASP／NSGA-II 共用 objective/constraints，保存 Pareto front | F-6, F-13f, F-3, F-7 | ✅ hand-computed、seed、no-fallback、pipeline regression；⏳ MMR/exact baseline 與 validation isolation |
@@ -1893,8 +1894,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-59 後為
-**397 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-62 後為
+**403 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2013,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **397 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **403 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2032,8 +2033,8 @@ selected-indices digest、dependency versions 與 dev-test/test=false。Lsum inv
 ordered tail cost；未因耗時排除。這些仍不是 exact upper bound，也未宣稱 significance。
 
 候選 overlap/headroom 公式已另在任何 recall 數字前凍結；v1 的 route-pool 結構錯誤
-依 F-58 在計分前由 v2 supersede。GovReport 0/3 與分析尚未完成，故 Gate 2 仍未通過；
-test 未讀。
+依 F-58 在計分前由 v2 supersede。GovReport 3/3 與分析後續亦完成；最終 Gate 2 結論見
+F-62。test 未讀。
 
 ## F-58 — candidate-record route membership 不等於完整 route top-40（分析前已修正）
 
@@ -2077,9 +2078,9 @@ Lead。舊約 2.4% 估計不再作現行結論。
 
 證據：`runs_v2/gate2_greedy_reference_v1/multinews/dev/analysis/analysis.json`
 （SHA-256 `921363be...bb027`）與 `evidence.json`；輸入 SHA、3,935-row ID alignment、
-route top-K/cap 與三 greedy evidence 全部 fail-loud 驗證。完整回歸 **397 passed**。
-這是 reference-aware diagnosis，不可拿 reference 特徵進實際 selector；GovReport 尚未完成，
-dev-test/test 未讀。
+route top-K/cap 與三 greedy evidence 全部 fail-loud 驗證。F-59 當時完整回歸 **397 passed**。
+這是 reference-aware diagnosis，不可拿 reference 特徵進實際 selector；GovReport 後續結果
+見 F-62，dev-test/test 未讀。
 
 ## F-60 — GovReport greedy R-Lsum 的 eager process queue 造成不必要的 CPU／memory 壓力（已修正，run 待續）
 
@@ -2099,7 +2100,7 @@ checkpoint 是 exact frozen-dev prefix 257/681，completed evidence 不存在，
 pending tasks 不超過 worker 數，完成的輕量 row results 可等待前方長尾，仍按 frozen
 manifest 順序 flush。預設 worker 由 4 降為 2；明確提高 workers 仍屬 execution-only，scientific config
 hash、metric、長度與 selected-index 語義不變。toy corpus 的 spawn/order/equivalence 與
-runner governance 合計 15 tests 通過，完整回歸 399 passed。
+runner governance 合計 15 tests 通過，F-60 當時完整回歸 399 passed。
 
 GPU 不作為本 finding 的修正：目前內圈是 `rouge-score` 的 tokenization、stemming、
 n-gram count 與 R-Lsum union-LCS，沒有 PyTorch/CUDA tensor route。另寫 GPU evaluator
@@ -2122,8 +2123,37 @@ F-60 第一版同時限制 `pending + completed-order-buffer <= workers`。GovRe
 第二次 16-worker resume 約 70 秒累積 1,043 CPU-seconds，接近 16-core 全速，working set
 約 3.18 GB。這是 execution-only scheduler change；exact-order flush、scientific config
 hash、selected indices 與 checkpoint contract 不變。scheduler targeted tests 8/8 通過；
-完整回歸待 CPU-heavy R-Lsum 完成後執行。
+完整回歸於 CPU-heavy R-Lsum 完成後為 403 passed。
 
 同一 checkpoint 期間另凍結 `gate2_paired_finalists_v1.json`（在任何 paired resampling
 outcome 前，但 aggregate/per-example scores 已存在）並加入 analyzer；正式 paired run
-尚未執行。其 toy governance tests 4/4 通過。
+其後完成，見 F-62。其 toy governance tests 4/4 通過。
+
+## F-62 — Gate 2 dev diagnosis 完成；S02b 對兩 primary adversarial winner 均顯著落後
+
+**嚴重度：P0（方法有效性／promotion gate）**
+
+GovReport R-Lsum 由 257/681 exact prefix 以修正後的 16-worker scheduler 安全完成；R1、
+R2、Lsum 三個 metric-specific greedy-reference target 分數分別為
+`0.726030/0.491599/0.704947`。三份 artifact 都有 681-row frozen ID order、input／manifest／
+policy／preregistration SHA 與 `dev_test_accessed=false`、`test_split_accessed=false`。
+GovReport S02b 對 Lead→greedy 的平均 headroom capture 是 `8.635%`，最強 SBERT+MMR 是
+`22.980%`；S02b union recall 為 `56.21%/46.92%/53.86%`，final recall 僅
+`12.36%/13.42%/12.32%`。因此 GovReport 不只 selector 弱，候選覆蓋也不足。semantic／
+graph 都有 exclusive hits，route deletion gate 尚未觸發。
+
+paired finalist protocol 在任何 resampling outcome 前凍結：2 datasets × 8 family finalists ×
+4 endpoints，共 64 個 Holm endpoints；另以 31 proposed search operations、每資料集 52 baseline
+candidates 計算 12,896-opportunity selection-aware Bonferroni diagnostic。10,000 bootstrap、
+seed 20260809 的正式結果為：
+
+- Multi-News adversarial winner PacSum TF-IDF P08：S02b macro delta `−0.003663`，95% CI
+  `[−0.005776, −0.001638]`，Holm `p=0.021598`。
+- GovReport adversarial winner SBERT+MMR λ=0.9：S02b macro delta `−0.034906`，95% CI
+  `[−0.038498, −0.031373]`，Holm `p=0.012799`。
+- selection-aware wins：`0`。
+
+證據為 `runs_v2/gate2_greedy_reference_v1/govreport/dev/analysis/analysis.json`（SHA-256
+`18e3c901...5a240`）與 `runs_v2/gate2_paired_finalists_v1/summary.json`（SHA-256
+`1781ebe5...0941`）；完整回歸 **403 passed**。這完成 Gate 2 的 dev diagnosis，但不是通過
+quality gate：S02b 不得晉級 dev-test。下一步只允許 frozen-dev redesign；test 仍鎖定。

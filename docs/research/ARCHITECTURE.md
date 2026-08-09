@@ -118,7 +118,7 @@ MVP 的通過條件沿用 §10 Freeze gate 的第一條，但只要求單一 pri
 
 | 角色 | 資料集 | 決策 | 原因與限制 |
 |---|---|---|---|
-| Primary A | **GovReport** | 保留；validation 資料層與 development partition 已凍結 | 使用作者官方 archive（非扁平 mirror）。官方 validation membership 974，空 reference 1 筆依 manifest 排除，canonical 973；dev 681／dev-test 292。nested section、paragraph position、archive/canonical SHA、CC-BY-4.0 與異常規則均已驗證。方法與 baseline 尚未跑。 |
+| Primary A | **GovReport** | 保留；validation 資料層與 development partition 已凍結 | 使用作者官方 archive（非扁平 mirror）。官方 validation membership 974，空 reference 1 筆依 manifest 排除，canonical 973；dev 681／dev-test 292。nested section、paragraph position、archive/canonical SHA、CC-BY-4.0 與異常規則均已驗證。frozen-dev baseline／greedy-reference／paired diagnosis 已完成，proposed quality gate 失敗。 |
 | Primary B | **Multi-News** | 保留；validation 已重建，其他 split 待補 | 官方 split 44,972/5,622/5,622，適合 cross-document coverage 與去重。pinned validation 已重建為 5,621 筆 structurally valid canonical rows，保存 document boundaries，並凍結 main／clean sensitivity policy；train/test 仍待生成，legacy 扁平資料不得用於正式結果。 |
 | Required data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | 必跑 validation paired sensitivity | 由 frozen 72-row manifest 從 5,621-row main 排除，得到 5,549 rows；只回答 replacement-character rows 是否改變結論，不等於 retrieval cleaning。main 結果仍是 primary。 |
 | Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v1 不跑 | 原版有錯誤 retrieval 與無關文件，但兩個外部 variant 的清理規則與現有 U+FFFD clean sensitivity 不同；若日後納入，必須另存 mapping、版本與移除規則。 |
@@ -284,7 +284,9 @@ CandidateRecord
 > `30.07%/29.63%/30.85%`。graph route-top-40 三項 recall 均最高，semantic 第二，
 > 且都有 exclusive greedy hits；因此 §5.3/§5.4 的刪除條件暫未觸發。這不支持繼續
 > 無限制擴 pool：主要下一步是固定 candidate evidence 下比較 Greedy/MMR/NSGA-II 並修
-> selector/salience。GovReport 尚未量，adaptive always-on 決策仍未凍結。
+> selector/salience。GovReport 後續量得 union recall `56.21%/46.92%/53.86%`、final
+> recall `12.36%/13.42%/12.32%`，顯示 candidate coverage 與 selector/salience 都是
+> 瓶頸；semantic/graph 仍有 exclusive hits，故 adaptive always-on 決策尚未凍結。
 
 輸入只能是 inference-time 可得的廉價特徵：
 
@@ -354,11 +356,12 @@ Phase 1e 已實作此工程契約：coverage 明確使用 `full source sentences
 > 已完成。Multi-News P08 macro 高 PLM winner `0.000282`、高 proposed S02b
 > `0.003663`；最佳 full-source SBERT-MMR λ=0.7 低 S02b `0.005496`。GovReport LexRank
 > 高 S02b `0.033758`；GovReport full-source MMR λ=0.9 又高 LexRank `0.001148`、高
-> S02b `0.034906`，但尚未 paired。PacSum
+> S02b `0.034906`。後續 64-endpoint paired analysis 顯示 S02b 對 Multi-News P08
+> macro `−0.003663`（Holm `p=0.021598`）、對 GovReport MMR λ=0.9
+> `−0.034906`（Holm `p=0.012799`），selection-aware wins 0。PacSum
 > 上游 repo／checkpoint 因缺授權與 digest 不直接 vendoring（F-45），改以論文公式實作並強制
-> 標示 protocol adaptation。greedy reference、paired
-> significance 及兩個 primary 的完整 baseline
-> 矩陣仍未完成。
+> 標示 protocol adaptation。greedy reference 6/6、paired finalists 與兩個 primary 的
+> dev baseline 矩陣均已完成；Gate 2 quality gate 失敗，不得晉級 dev-test。
 
 ### 7.2 NSGA-II selector
 

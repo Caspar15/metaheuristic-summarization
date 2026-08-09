@@ -1,0 +1,21 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T07:17:27.553770+00:00",
+  "status": "completed",
+  "study_id": "gate2-greedy-reference-analysis-v2",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "rows": 681,
+  "analysis_path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/analysis/analysis.json",
+  "analysis_sha256": "18e3c90168f526eaaf9c6dc4dcfc5f1a894bd4334846ec9962ea1a98d4e5a240",
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_analysis_v2.json",
+  "preregistration_sha256": "ef45c0562a29569709d2e7700da0f5570fe8c39b06ddb9b87166ca7fc66a3e39",
+  "input_sha256": {
+    "proposed_predictions": "93c2ce4fd01658751a60fe9dce5ad8f5ac13fbf736f70f6e32e7e5192a785db2",
+    "proposed_per_example": "b4aced12f386b3ba28f1c58e103cf223750f1004c68479ebc01567536390e257",
+    "strongest_baseline_per_example": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43",
+    "lead_metrics": "f981e81624ce6e812baaca92c3e41ab3b4dcf6bbb365100007c7e24e2901ab4a"
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

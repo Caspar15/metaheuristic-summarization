@@ -1,0 +1,248 @@
+{
+  "analysis_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T07:17:27.551769+00:00",
+  "study_id": "gate2-greedy-reference-analysis-v2",
+  "status": "completed",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "rows": 681,
+  "headroom": {
+    "systems": {
+      "S02b_three_route_capacity_80": {
+        "per_metric": {
+          "rouge1": {
+            "lead": 0.514532126840121,
+            "system": 0.5450909146198809,
+            "greedy_reference": 0.7260304736325203,
+            "available_headroom": 0.21149834679239932,
+            "captured_fraction": 0.1444871236263401,
+            "remaining_gap_to_greedy_reference": 0.18093955901263936
+          },
+          "rouge2": {
+            "lead": 0.1940318738091236,
+            "system": 0.1962274649010958,
+            "greedy_reference": 0.4915987266073717,
+            "available_headroom": 0.2975668527982481,
+            "captured_fraction": 0.0073784800670013695,
+            "remaining_gap_to_greedy_reference": 0.2953712617062759
+          },
+          "rougeLsum": {
+            "lead": 0.48913332338915916,
+            "system": 0.512267125214734,
+            "greedy_reference": 0.7049470692328558,
+            "available_headroom": 0.2158137458436966,
+            "captured_fraction": 0.10719336590510589,
+            "remaining_gap_to_greedy_reference": 0.19267994401812172
+          }
+        },
+        "mean_captured_fraction": 0.08635298986614913
+      },
+      "sbert_mmr_lambda_0.9": {
+        "per_metric": {
+          "rouge1": {
+            "lead": 0.514532126840121,
+            "system": 0.5750095558521074,
+            "greedy_reference": 0.7260304736325203,
+            "available_headroom": 0.21149834679239932,
+            "captured_fraction": 0.2859475259697864,
+            "remaining_gap_to_greedy_reference": 0.15102091778041282
+          },
+          "rouge2": {
+            "lead": 0.1940318738091236,
+            "system": 0.24157636022637533,
+            "greedy_reference": 0.4915987266073717,
+            "available_headroom": 0.2975668527982481,
+            "captured_fraction": 0.15977749527595111,
+            "remaining_gap_to_greedy_reference": 0.2500223663809964
+          },
+          "rougeLsum": {
+            "lead": 0.48913332338915916,
+            "system": 0.5417184342480906,
+            "greedy_reference": 0.7049470692328558,
+            "available_headroom": 0.2158137458436966,
+            "captured_fraction": 0.24365969208011573,
+            "remaining_gap_to_greedy_reference": 0.16322863498476514
+          }
+        },
+        "mean_captured_fraction": 0.22979490444195108
+      }
+    }
+  },
+  "candidate_recall": {
+    "rouge1": {
+      "rows": 681,
+      "nonempty_greedy_rows": 681,
+      "empty_greedy_rows": 0,
+      "greedy_selected_denominator": 11714,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.5621478572648113,
+          "macro_recall": 0.5782324775862029,
+          "complete_row_rate": 0.030837004405286344,
+          "hit_count": 6585
+        },
+        "lexical": {
+          "micro_recall": 0.2545671845654772,
+          "macro_recall": 0.26863425427963017,
+          "complete_row_rate": 0.0014684287812041115,
+          "hit_count": 2982
+        },
+        "semantic": {
+          "micro_recall": 0.36682602014683285,
+          "macro_recall": 0.3777125313899165,
+          "complete_row_rate": 0.004405286343612335,
+          "hit_count": 4297
+        },
+        "graph": {
+          "micro_recall": 0.3754481816629674,
+          "macro_recall": 0.3890091571743963,
+          "complete_row_rate": 0.0,
+          "hit_count": 4398
+        },
+        "selected_set": {
+          "micro_recall": 0.12361277104319618,
+          "macro_recall": 0.12834533999301287,
+          "complete_row_rate": 0.0014684287812041115,
+          "hit_count": 1448
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 949,
+        "semantic": 1170,
+        "graph": 1223
+      }
+    },
+    "rouge2": {
+      "rows": 681,
+      "nonempty_greedy_rows": 681,
+      "empty_greedy_rows": 0,
+      "greedy_selected_denominator": 13277,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.46915718912404913,
+          "macro_recall": 0.49513643807634006,
+          "complete_row_rate": 0.02936857562408223,
+          "hit_count": 6229
+        },
+        "lexical": {
+          "micro_recall": 0.12427506213753108,
+          "macro_recall": 0.14057569654431917,
+          "complete_row_rate": 0.004405286343612335,
+          "hit_count": 1650
+        },
+        "semantic": {
+          "micro_recall": 0.3228138886796716,
+          "macro_recall": 0.3450921768353918,
+          "complete_row_rate": 0.00881057268722467,
+          "hit_count": 4286
+        },
+        "graph": {
+          "micro_recall": 0.31618588536566994,
+          "macro_recall": 0.33617435038054666,
+          "complete_row_rate": 0.004405286343612335,
+          "hit_count": 4198
+        },
+        "selected_set": {
+          "micro_recall": 0.13421706710853357,
+          "macro_recall": 0.1433375658108942,
+          "complete_row_rate": 0.002936857562408223,
+          "hit_count": 1782
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 658,
+        "semantic": 1639,
+        "graph": 1649
+      }
+    },
+    "rougeLsum": {
+      "rows": 681,
+      "nonempty_greedy_rows": 681,
+      "empty_greedy_rows": 0,
+      "greedy_selected_denominator": 12236,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.5385746976135992,
+          "macro_recall": 0.555762094466347,
+          "complete_row_rate": 0.027900146842878122,
+          "hit_count": 6590
+        },
+        "lexical": {
+          "micro_recall": 0.2236024844720497,
+          "macro_recall": 0.2385164848139796,
+          "complete_row_rate": 0.002936857562408223,
+          "hit_count": 2736
+        },
+        "semantic": {
+          "micro_recall": 0.35379208891794706,
+          "macro_recall": 0.36661179726081156,
+          "complete_row_rate": 0.007342143906020558,
+          "hit_count": 4329
+        },
+        "graph": {
+          "micro_recall": 0.3663779012749264,
+          "macro_recall": 0.3808440948142815,
+          "complete_row_rate": 0.0014684287812041115,
+          "hit_count": 4483
+        },
+        "selected_set": {
+          "micro_recall": 0.12316116377901275,
+          "macro_recall": 0.1278940400442562,
+          "complete_row_rate": 0.002936857562408223,
+          "hit_count": 1507
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 870,
+        "semantic": 1221,
+        "graph": 1336
+      }
+    }
+  },
+  "score_sources": {
+    "lead": {
+      "rouge1": 0.514532126840121,
+      "rouge2": 0.1940318738091236,
+      "rougeLsum": 0.48913332338915916
+    },
+    "greedy_reference_metric_specific": {
+      "rouge1": 0.7260304736325203,
+      "rouge2": 0.4915987266073717,
+      "rougeLsum": 0.7049470692328558
+    },
+    "proposed": {
+      "rouge1": 0.5450909146198809,
+      "rouge2": 0.1962274649010958,
+      "rougeLsum": 0.512267125214734
+    },
+    "strongest_completed_baseline": {
+      "rouge1": 0.5750095558521074,
+      "rouge2": 0.24157636022637533,
+      "rougeLsum": 0.5417184342480906
+    }
+  },
+  "greedy_reference_evidence": {
+    "rouge1": {
+      "path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rouge1/evidence.json",
+      "sha256": "2351b2d1e2f070f92175bbd18b9dff43eb679f4a57f7326639251d207b7753db",
+      "rows_sha256": "6d17c2fdff593c78ab9ad9758d40a926649e0c7d278e4689e9d46f5572395802",
+      "selected_indices_sha256": "44d45f2f966f7413010c6855e240a7a618066b1ed8674a8211771253b81d3638"
+    },
+    "rouge2": {
+      "path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rouge2/evidence.json",
+      "sha256": "bc3a43c1a7569c735234c065c2c3fc68da2da600d6ff8222938b3cc17226da1b",
+      "rows_sha256": "5b136a46b066ec246024bc5fe64c385e94f117633ae095ef427cba2831c19cb4",
+      "selected_indices_sha256": "adaa9981ba74a1f1df12222f6a276a0d76059c844a806e086128cdc038b6a864"
+    },
+    "rougeLsum": {
+      "path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rougeLsum/evidence.json",
+      "sha256": "ac1952f0c7c474b9508b3f593b0fab21b271fe860342c63479af442686b13671",
+      "rows_sha256": "f51fbeaeca17f08b7a99a85ea1fd50fd196a638f97e13bdb59327195d73a18f3",
+      "selected_indices_sha256": "a1aee0aea2424d1b1dd3d2cb2ec698205c0a5381408ea976d2e9fb011bfa4360"
+    }
+  },
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_analysis_v2.json",
+  "preregistration_sha256": "ef45c0562a29569709d2e7700da0f5570fe8c39b06ddb9b87166ca7fc66a3e39",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
