@@ -435,10 +435,10 @@
 - [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport R1/R2 已完成、
       R-Lsum 在 frozen-dev prefix 257/681 人為中斷；總計 5/6 完成。R-Lsum checkpoint
       可 resume，但在使用者允許重新佔用算力前不得啟動；dev-test/test 均未讀。
-      3/6。Multi-News headroom/candidate recall 已完成；GovReport 尚未完成
+      Multi-News headroom/candidate recall 已完成；GovReport 尚待 R-Lsum 與三-target analysis。
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
-      evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 3/6。
+      evidence/search log；與原 corpus API exact-equivalence test 通過。目前完成 5/6。
 - [x] candidate recall/headroom 分析已在任何 overlap 數字前凍結；v1 把 retained
       route membership 誤標為完整 top-40，尚未計分即由 v2 明確 supersede：
       `gate2_greedy_reference_analysis_v2.json`（SHA-256 `ef45c056...a3e39`）；定義
