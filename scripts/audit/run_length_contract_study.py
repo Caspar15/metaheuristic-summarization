@@ -356,8 +356,24 @@ def _embedding_cache_summary(
     keyed_rows: list[dict[str, str]] = []
     for row in prediction_rows:
         diagnostics = row.get("baseline_diagnostics") or {}
-        representation = diagnostics.get("representation") or {}
-        cache = representation.get("embedding_cache")
+        representations = [
+            (diagnostics.get("representation") or {}),
+            ((row.get("selector_inputs") or {}).get("representation") or {}),
+            (
+                (row.get("optimizer_diagnostics") or {}).get(
+                    "selector_representation"
+                )
+                or {}
+            ),
+        ]
+        caches = [
+            representation.get("embedding_cache")
+            for representation in representations
+            if representation.get("embedding_cache") is not None
+        ]
+        cache = caches[0] if caches else None
+        if any(candidate != cache for candidate in caches[1:]):
+            raise ValueError("embedding cache provenance disagrees across row views")
         if cache is None:
             continue
         if not isinstance(cache, Mapping):
@@ -394,6 +410,7 @@ def _command_for_method(
     config_path: Path,
     input_path: Path,
     method_root: Path,
+    pipeline_selector: bool = False,
 ) -> list[str]:
     common = [
         "--config",
@@ -407,7 +424,7 @@ def _command_for_method(
         "--stamp",
         "run",
     ]
-    if method == "greedy":
+    if method == "greedy" or pipeline_selector:
         return [sys.executable, "-m", "src.pipeline.select_sentences", *common]
     command = [
         sys.executable,
@@ -435,6 +452,7 @@ def _run_method(
     gold: Mapping[str, Sequence[str]],
     study_context: Mapping[str, Any],
     subprocess_env: Mapping[str, str] | None = None,
+    pipeline_selector: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, float]]]:
     method_root = candidate_root / method
     run_path = method_root / "run"
@@ -445,6 +463,7 @@ def _run_method(
         config_path=config_path,
         input_path=input_path,
         method_root=method_root,
+        pipeline_selector=pipeline_selector,
     )
     started_at = _utc_now()
     execution_env = None

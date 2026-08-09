@@ -7,6 +7,7 @@ from scripts.audit.run_d2_selector_full_dev import (
     _validate_base,
     resolve_candidate,
 )
+from scripts.audit.run_length_contract_study import _command_for_method
 from src.utils.io import load_yaml
 
 
@@ -41,3 +42,15 @@ def test_d2_base_validation_rejects_candidate_budget_drift():
     bad["candidate_budget"]["total"] = 81
     with pytest.raises(ValueError, match="budget drift"):
         _validate_base(bad)
+
+
+def test_pipeline_selector_dispatches_mmr_through_canonical_pipeline(tmp_path):
+    command = _command_for_method(
+        "mmr",
+        config_path=tmp_path / "config.yaml",
+        input_path=tmp_path / "input.jsonl",
+        method_root=tmp_path / "run",
+        pipeline_selector=True,
+    )
+    assert command[1:3] == ["-m", "src.pipeline.select_sentences"]
+    assert "--baseline" not in command

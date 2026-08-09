@@ -1,0 +1,52 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T07:43:14.901717+00:00",
+  "started_at_utc": "2026-08-09T07:43:13.381236+00:00",
+  "status": "failed",
+  "test_split_accessed": false,
+  "method": "mmr",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "mmr",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d2_selector_full_dev_v1\\multinews\\dev\\S03_mmr_tfidf_l03\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d2_selector_full_dev_v1\\multinews\\dev\\S03_mmr_tfidf_l03\\mmr",
+    "--stamp",
+    "run"
+  ],
+  "return_code": 2,
+  "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S03_mmr_tfidf_l03/resolved_config.yaml",
+  "config_sha256": "fa94df68b97d4987c11211ac25be7d1fe266f31a00532eca5e72e4b071f49c40",
+  "study_id": "d2-selector-full-dev-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d2_selector_full_dev_v1.json",
+  "preregistration_sha256": "98d0093a7acb22cfbe43aa35bd5aed33fb7fbab85639ac1c920ee15ba8b11382",
+  "candidate": "S03_mmr_tfidf_l03",
+  "candidate_hash": "97f6a42ef5d00ad95f69dde85153625180ef7b82fd59350f36a4534afaa87d1a",
+  "declared_delta": {
+    "optimizer.lambda_relevance": 0.3
+  },
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "scientific_config_changed": false
+    }
+  },
+  "dev_test_accessed": false
+}

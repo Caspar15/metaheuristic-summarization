@@ -148,6 +148,36 @@ def _archive_incomplete(candidate_root: Path, method: str) -> None:
     )
 
 
+def _archive_failed_attempt(
+    candidate_root: Path, method: str, summary_path: Path
+) -> None:
+    run_path = candidate_root / method / "run"
+    attempts = candidate_root / method / "attempts"
+    attempts.mkdir(parents=True, exist_ok=True)
+    number = 1
+    while (attempts / f"attempt_{number:02d}_failed").exists():
+        number += 1
+    destination = attempts / f"attempt_{number:02d}_failed"
+    if run_path.exists():
+        shutil.move(str(run_path), str(destination))
+    else:
+        destination.mkdir(parents=True, exist_ok=False)
+    if summary_path.exists():
+        shutil.move(str(summary_path), str(destination / "candidate_summary.json"))
+    _write_json(
+        destination / "retry_evidence.json",
+        {
+            "evidence_schema_version": "1.0",
+            "measured_at_utc": _utc_now(),
+            "status": "failed_preserved_before_retry",
+            "reason": "runner postprocessing/dispatch correction; scientific candidate unchanged",
+            "dev_test_accessed": False,
+            "test_split_accessed": False,
+            "archived_attempt_path": _relative(destination),
+        },
+    )
+
+
 def _load_anchor(dataset_registration: Mapping[str, Any], expected_rows: int) -> dict[str, Any]:
     run_root = REPO_ROOT / str(dataset_registration["base_run"])
     metrics_path = run_root / "metrics.json"
@@ -256,14 +286,20 @@ def run(dataset: str, *, resume: bool = False, only: str | None = None) -> dict[
             prior = json.loads(summary_path.read_text(encoding="utf-8"))
             if prior.get("candidate_hash") != logical_hash:
                 raise ValueError(f"D2 resume hash drift for {candidate_id}")
-            results[candidate_id] = prior
-            continue
+            if str(prior.get("status", "")).startswith("completed"):
+                results[candidate_id] = prior
+                continue
+            _archive_failed_attempt(candidate_root, method, summary_path)
         if candidate_root.exists():
             if not resume:
                 raise ValueError(f"D2 candidate directory already exists: {candidate_root}")
             _archive_incomplete(candidate_root, method)
         else:
             candidate_root.mkdir(parents=True, exist_ok=False)
+        archived_attempts = list((candidate_root / method / "attempts").glob("attempt_*"))
+        run_attempt = (
+            "final" if not archived_attempts else f"retry_{len(archived_attempts):02d}"
+        )
         config_text = yaml.safe_dump(config, sort_keys=False, allow_unicode=True)
         if config_path.is_file():
             if config_path.read_text(encoding="utf-8") != config_text:
@@ -286,6 +322,7 @@ def run(dataset: str, *, resume: bool = False, only: str | None = None) -> dict[
             "candidate": candidate_id,
             "candidate_hash": logical_hash,
             "declared_delta": candidate["delta"],
+            "run_attempt": run_attempt,
             "execution_optimization": {
                 "embedding_cache": {
                     "enabled": True,
@@ -306,6 +343,7 @@ def run(dataset: str, *, resume: bool = False, only: str | None = None) -> dict[
                 gold=gold,
                 study_context=context,
                 subprocess_env={"META_SUM_EMBEDDING_CACHE_DIR": str(cache_root)},
+                pipeline_selector=True,
             )
             diagnostics = _candidate_diagnostics(
                 candidate_root / method / "run" / "predictions.jsonl"
@@ -346,7 +384,7 @@ def run(dataset: str, *, resume: bool = False, only: str | None = None) -> dict[
                 "candidate_hash": logical_hash,
                 "config_path": _relative(config_path),
                 "config_hash": config_sha,
-                "run_attempt": "final",
+                "run_attempt": run_attempt,
                 "dev_score": (
                     float(result["metrics"]["macro_rouge"])
                     if result["status"] == "completed"

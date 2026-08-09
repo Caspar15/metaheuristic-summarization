@@ -1,0 +1,35 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T07:43:25.636782+00:00",
+  "status": "failed",
+  "test_split_accessed": false,
+  "study_id": "d2-selector-full-dev-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d2_selector_full_dev_v1.json",
+  "preregistration_sha256": "98d0093a7acb22cfbe43aa35bd5aed33fb7fbab85639ac1c920ee15ba8b11382",
+  "candidate": "S10_mmr_sbert_l07",
+  "candidate_hash": "4d4c5e0c43115e2908a8ea4748809526a3b5b217e8576d54748d7f887277f163",
+  "declared_delta": {
+    "selector.similarity_source": "sbert",
+    "optimizer.lambda_relevance": 0.7
+  },
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "scientific_config_changed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "method": "mmr",
+  "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S10_mmr_sbert_l07/resolved_config.yaml",
+  "config_sha256": "4959547e2f78a5df1a3d4b13af90c3dea9d8b8767ea04a6d53ca87248dcb989e",
+  "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S10_mmr_sbert_l07/mmr/run/command.log"
+}

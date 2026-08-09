@@ -126,6 +126,27 @@ def test_embedding_cache_summary_rejects_partial_provenance():
         _embedding_cache_summary(rows)
 
 
+def test_embedding_cache_summary_accepts_pipeline_selector_provenance():
+    cache = {
+        "status": "hit",
+        "cache_key": "a" * 64,
+        "contract_version": "selector-cache-v1",
+    }
+    rows = [
+        {
+            "id": "row-1",
+            "selector_inputs": {"representation": {"embedding_cache": cache}},
+            "optimizer_diagnostics": {
+                "selector_representation": {"embedding_cache": cache}
+            },
+        }
+    ]
+    summary = _embedding_cache_summary(rows)
+    assert summary["rows"] == 1
+    assert summary["status_counts"] == {"hit": 1}
+    assert summary["contract_version"] == "selector-cache-v1"
+
+
 def test_interrupted_resume_is_written_to_search_log(monkeypatch):
     captured = []
     monkeypatch.setattr(runner, "_load_search_log", lambda: [])
