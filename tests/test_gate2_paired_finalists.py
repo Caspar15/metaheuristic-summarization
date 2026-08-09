@@ -17,7 +17,12 @@ def test_protocol_is_dev_only_and_has_frozen_64_endpoint_family():
     assert protocol["multiplicity"]["holm_family_size"] == 64
 
 
-def test_per_example_loader_requires_exact_order_and_builds_macro(tmp_path):
+def test_per_example_loader_requires_exact_order_and_builds_macro(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(
+        "scripts.audit.run_length_contract_study.REPO_ROOT", tmp_path
+    )
     path = tmp_path / "per_example.jsonl"
     rows = [
         {"id": "a", "rouge1": 0.3, "rouge2": 0.2, "rougeLsum": 0.1},
@@ -31,7 +36,10 @@ def test_per_example_loader_requires_exact_order_and_builds_macro(tmp_path):
         _load_per_example(path, ["b", "a"])
 
 
-def test_per_example_loader_rejects_nonfinite_metric(tmp_path):
+def test_per_example_loader_rejects_nonfinite_metric(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "scripts.audit.run_length_contract_study.REPO_ROOT", tmp_path
+    )
     path = tmp_path / "per_example.jsonl"
     path.write_text('{"id":"a","rouge1":NaN,"rouge2":0.2,"rougeLsum":0.1}\n', encoding="utf-8")
     with pytest.raises(ValueError, match="non-finite rouge1"):

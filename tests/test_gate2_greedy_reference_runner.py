@@ -70,6 +70,9 @@ def test_runner_defaults_to_two_resource_safe_workers():
 
 
 def test_interruption_logging_is_idempotent_for_same_checkpoint(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "scripts.audit.run_length_contract_study.REPO_ROOT", tmp_path
+    )
     rows_path = tmp_path / "run" / "rows.jsonl"
     rows_path.parent.mkdir(parents=True)
     rows_path.write_text('{"position": 0}\n', encoding="utf-8")

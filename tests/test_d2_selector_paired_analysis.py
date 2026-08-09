@@ -21,7 +21,12 @@ def test_protocol_freezes_dev_only_104_endpoint_family():
     assert "104 Holm endpoints" in protocol["measurement"]["family"]
 
 
-def test_per_example_loader_requires_exact_order_and_false_guards(tmp_path):
+def test_per_example_loader_requires_exact_order_and_false_guards(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(
+        "scripts.audit.run_length_contract_study.REPO_ROOT", tmp_path
+    )
     run_dir = tmp_path / "run"
     run_dir.mkdir()
     rows = [

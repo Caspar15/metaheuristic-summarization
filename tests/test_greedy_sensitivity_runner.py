@@ -63,7 +63,12 @@ def test_logical_hash_is_partition_independent_and_delta_sensitive():
     assert left_hash != right_hash
 
 
-def test_archive_interrupted_run_preserves_partial_and_writes_evidence(tmp_path):
+def test_archive_interrupted_run_preserves_partial_and_writes_evidence(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(
+        "scripts.audit.run_length_contract_study.REPO_ROOT", tmp_path
+    )
     candidate = tmp_path / "L00_base"
     run_path = candidate / "greedy" / "run"
     run_path.mkdir(parents=True)
