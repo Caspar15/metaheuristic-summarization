@@ -51,7 +51,7 @@
   保留於 `attempt_01_interrupted/`，resume 後的 final run 另存，不覆寫失敗紀錄。
 - GovReport 23 個 runs 全部一次完成；兩 family 的成功／失敗歷史都已寫入 registry。
 - family 彙整器會驗 candidate count、每個 evidence 的 partition guards、結果完整性，且
-  CLI 沒有 partition 參數。目前加入 F-51～F-59 guards 後完整本地回歸為 **397 passed**。
+  CLI 沒有 partition 參數。目前加入 F-51～F-60 guards 後完整本地回歸為 **399 passed**。
 - greedy-reference Multi-News R1 首次 Windows sandbox attempt 在 0 rows 失敗；之後外層
   terminate 未帶走子程序，造成雙 writer。F-56 已封存 295-row 污染檔、只保留驗證過的
   270-row exact prefix，並加入 OS-level single-writer lock；事故修復當時正式結果為
@@ -63,9 +63,20 @@
 reference，不是 exact upper bound。R1 target 得 `0.595288`、平均 `213.29` words；R2
 target 得 `0.345229`、平均 `170.51` words；Lsum target 得 `0.558596`、平均 `212.66`
 words。Lsum 16-worker invocation 為 `2,531.55 s`，極端長文件造成明顯 tail cost。
-三 target 的 dev-test/test guards 皆為 false。GovReport 0/3 尚未開始，因此總進度 3/6；
+三 target 的 dev-test/test guards 皆為 false。GovReport R1/R2 已完成，R-Lsum 在
+257/681 frozen-dev prefix 人為中斷，因此總進度為 5/6；
 Multi-News headroom/candidate recall 已依 v2 預註冊完成；GovReport 未完成，不能把本段
 當成 Gate 2 完成。
+
+### GovReport greedy-reference execution checkpoint（frozen dev）
+
+R1 與 R2 target 已各完成 681/681；R-Lsum 保留 257/681 exact-prefix checkpoint，尚無
+completed evidence，故不得引用其中途分數。2026-08-09 的 16-worker invocation 使 CPU
+接近滿載，且 Windows 外層中斷沒有帶走 Python process tree：16 workers 各約 0.16 GB
+working set／1.31 GB private bytes，另有 parent 約 0.60 GB working set。程序已按同一
+start-time/process tree 精準終止。F-60 將 runner 改為預設 2 workers 與 bounded pending
+window；這只影響 execution resource，不改 scientific config。ROUGE string/count/LCS
+search 沒有 GPU route；RTX 4060 留給 SBERT embedding。dev-test/test 未讀。
 
 ### Multi-News headroom 與 candidate recall
 

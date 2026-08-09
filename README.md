@@ -24,7 +24,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行完整測試為 **397 passed**。
+  現行完整測試為 **399 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -82,7 +82,7 @@
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | 🟠 舊碼用單序列 `rougeL`；已改為多句適用的 `rougeLsum` 並通過內部手算 golden，但與 published Perl ROUGE 的 parity 尚未驗證 |
-| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 23/23、PLM 27/27 均完成。Multi-News metric-specific greedy reference／candidate recall 已完成；GovReport greedy reference 尚為 0/3，故總進度 3/6。Multi-News S02b 只吃到平均 `1.41%` Lead→greedy headroom，P08 為 `3.30%`；union recall 約 `82–86%`，final-selection recall 僅約 `30%`，selector 是主要瓶頸。完整兩-primary分析與 paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
+| Baseline | 🟡 **Phase 2 進行中** —— 兩 primary 的 non-PLM 23/23、PLM 27/27 均完成。Multi-News metric-specific greedy reference／candidate recall 已完成；GovReport R1/R2 已完成，R-Lsum 保留 257/681 frozen-dev checkpoint，故總進度 5/6。Multi-News S02b 只吃到平均 `1.41%` Lead→greedy headroom，P08 為 `3.30%`；union recall 約 `82–86%`，final-selection recall 僅約 `30%`，selector 是主要瓶頸。完整兩-primary分析與 paired matrix 尚未完成，**Gate 2 未過**；見 `docs/research/GATE2_BASELINE_STATUS.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
 | 測試 | ✅ **397 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |

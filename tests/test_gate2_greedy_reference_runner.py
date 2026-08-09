@@ -1,14 +1,14 @@
 """Correctness and governance tests for the Gate 2 greedy-reference runner."""
 
-from concurrent.futures import ProcessPoolExecutor
-
 import pytest
 
 from scripts.audit.run_gate2_greedy_reference import (
     _aggregate,
+    _bounded_ordered_results,
     _checkpoint_prefix_length,
     _evaluate_row,
     _exclusive_run_lock,
+    _log_interruption,
     _load_protocol,
     _validate_checkpoint_prefix,
     build_parser,
@@ -59,10 +59,36 @@ def test_document_parallel_worker_is_spawn_safe_and_ordered():
         _row("b", ["one two", "two three"], "one two three"),
     ]
     tasks = [(index, row, "rouge1", 5) for index, row in enumerate(docs)]
-    with ProcessPoolExecutor(max_workers=2) as executor:
-        rows = list(executor.map(_evaluate_row, tasks, chunksize=1))
+    rows = list(_bounded_ordered_results(tasks, workers=2))
     assert [row["id"] for row in rows] == ["a", "b"]
     assert [row["position"] for row in rows] == [0, 1]
+
+
+def test_runner_defaults_to_two_resource_safe_workers():
+    args = build_parser().parse_args(["--dataset", "govreport", "--target", "rougeLsum"])
+    assert args.workers == 2
+
+
+def test_interruption_logging_is_idempotent_for_same_checkpoint(tmp_path, monkeypatch):
+    rows_path = tmp_path / "run" / "rows.jsonl"
+    rows_path.parent.mkdir(parents=True)
+    rows_path.write_text('{"position": 0}\n', encoding="utf-8")
+    logged = []
+    monkeypatch.setattr(
+        "scripts.audit.run_gate2_greedy_reference._append_search_log", logged.append
+    )
+    kwargs = {
+        "dataset_label": "Toy",
+        "target": "rougeLsum",
+        "config_hash": "abc",
+        "rows_path": rows_path,
+        "rows": 1,
+    }
+    _log_interruption(**kwargs)
+    _log_interruption(**kwargs)
+    evidence = list((rows_path.parent / "attempts").glob("*/interruption_evidence.json"))
+    assert len(evidence) == 1
+    assert len(logged) == 1
 
 
 def test_checkpoint_requires_exact_frozen_prefix_and_target():

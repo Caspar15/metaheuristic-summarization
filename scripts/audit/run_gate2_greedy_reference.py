@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 import json
 import os
 from pathlib import Path
@@ -151,6 +151,52 @@ def _evaluate_row(task: tuple[int, dict[str, Any], str, int]) -> dict[str, Any]:
     }
 
 
+def _bounded_ordered_results(
+    tasks: Iterable[tuple[int, dict[str, Any], str, int]], *, workers: int
+) -> Iterable[dict[str, Any]]:
+    """Evaluate a small task window while yielding canonical row order.
+
+    ``ProcessPoolExecutor.map`` eagerly submits the complete iterable on
+    Python 3.12.  GovReport rows can be very large, so queuing the remaining
+    corpus duplicates hundreds of megabytes of pickled task data.  Keeping at
+    most ``workers`` tasks outstanding bounds that execution-only memory cost.
+    Completed rows are buffered only until the next canonical position is
+    available, preserving the exact-prefix checkpoint contract.
+    """
+
+    if workers < 1:
+        raise ValueError("workers must be positive")
+    task_iterator = iter(tasks)
+    pending = {}
+    buffered: dict[int, dict[str, Any]] = {}
+    next_position: int | None = None
+    exhausted = False
+
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        while pending or not exhausted:
+            while not exhausted and len(pending) + len(buffered) < workers:
+                try:
+                    task = next(task_iterator)
+                except StopIteration:
+                    exhausted = True
+                    break
+                position = int(task[0])
+                if next_position is None:
+                    next_position = position
+                pending[executor.submit(_evaluate_row, task)] = position
+
+            if not pending:
+                break
+            completed_futures, _ = wait(pending, return_when=FIRST_COMPLETED)
+            for future in completed_futures:
+                position = pending.pop(future)
+                buffered[position] = future.result()
+
+            while next_position is not None and next_position in buffered:
+                yield buffered.pop(next_position)
+                next_position += 1
+
+
 def _checkpoint_rows(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
@@ -206,22 +252,36 @@ def _selected_indices_digest(rows: Iterable[Mapping[str, Any]]) -> str:
 
 
 def _log_interruption(
-    *, dataset_label: str, target: str, config_hash: str, rows_path: Path, rows: int
+    *,
+    dataset_label: str,
+    target: str,
+    config_hash: str,
+    rows_path: Path,
+    rows: int,
+    reason: str = "incomplete row checkpoint detected on explicit resume",
 ) -> None:
     attempt_root = rows_path.parent / "attempts"
+    checkpoint_sha256 = sha256_file(str(rows_path))
+    for existing_path in attempt_root.glob("attempt_*_interrupted/interruption_evidence.json"):
+        existing = json.loads(existing_path.read_text(encoding="utf-8"))
+        if (
+            existing.get("checkpoint_sha256") == checkpoint_sha256
+            and existing.get("completed_prefix_rows") == rows
+        ):
+            return
     attempt_number = len(list(attempt_root.glob("attempt_*_interrupted"))) + 1
     attempt_id = f"attempt_{attempt_number:02d}_interrupted"
     evidence = {
         "evidence_schema_version": "1.0",
         "measured_at_utc": _utc_now(),
         "status": "interrupted",
-        "reason": "incomplete row checkpoint detected on explicit resume",
+        "reason": reason,
         "dataset": dataset_label,
         "partition": "dev",
         "optimization_target": target,
         "completed_prefix_rows": rows,
         "checkpoint_path": _relative(rows_path),
-        "checkpoint_sha256": sha256_file(str(rows_path)),
+        "checkpoint_sha256": checkpoint_sha256,
         "dev_test_accessed": False,
         "test_split_accessed": False,
     }
@@ -334,11 +394,10 @@ def _run_configuration_locked(
     try:
         with rows_path.open("a", encoding="utf-8", newline="\n") as stream:
             if remaining:
-                with ProcessPoolExecutor(max_workers=workers) as executor:
-                    for row_result in executor.map(_evaluate_row, remaining, chunksize=1):
-                        stream.write(json.dumps(row_result, ensure_ascii=False) + "\n")
-                        stream.flush()
-                        completed.append(row_result)
+                for row_result in _bounded_ordered_results(remaining, workers=workers):
+                    stream.write(json.dumps(row_result, ensure_ascii=False) + "\n")
+                    stream.flush()
+                    completed.append(row_result)
     except Exception as error:
         failure = {
             "evidence_schema_version": "1.0",
@@ -460,7 +519,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", required=True, choices=("multinews", "govreport"))
     parser.add_argument("--target", required=True, choices=DEFAULT_METRICS)
-    parser.add_argument("--workers", type=int, default=max(1, min(4, (os.cpu_count() or 2) - 1)))
+    parser.add_argument("--workers", type=int, default=max(1, min(2, (os.cpu_count() or 2) - 1)))
     parser.add_argument("--resume", action="store_true")
     return parser
 

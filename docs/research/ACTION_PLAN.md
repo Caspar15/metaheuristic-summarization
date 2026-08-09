@@ -432,7 +432,9 @@
 - [x] `gate2-greedy-reference-v1` 已在任何正式 greedy-reference score 前預註冊：兩
       primary × R1/R2/Lsum 各自最佳化共 6 configs，只讀 frozen dev；max_words 採 A1
       凍結上限，reference-aware diagnostic 不強迫填 floor，因無正增益自然停止並報實際長度。
-- [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport 0/3；總計
+- [ ] 6 個 governed greedy-reference runs：Multi-News 3/3 已完成，GovReport R1/R2 已完成、
+      R-Lsum 在 frozen-dev prefix 257/681 人為中斷；總計 5/6 完成。R-Lsum checkpoint
+      可 resume，但在使用者允許重新佔用算力前不得啟動；dev-test/test 均未讀。
       3/6。Multi-News headroom/candidate recall 已完成；GovReport 尚未完成
 - [x] governed runner 已實作：CLI 無 split、manifest/policy/input SHA fail-loud、逐列
       checkpoint／exact-prefix resume、文件級 process parallelism、ordered assembly、
@@ -584,7 +586,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 397 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-59 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 399 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-60 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | | 兩 primary non-PLM 各 23/23、PLM 各 27/27 已完成，且 proposed S02b 仍輸 strongest completed baseline；greedy reference、clean sensitivity 與完整 paired matrix 尚未完成，Gate 2 未過 |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |

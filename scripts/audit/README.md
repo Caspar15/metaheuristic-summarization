@@ -354,8 +354,13 @@ evidence。它是 headroom／candidate-recall diagnostic，不是 baseline、ora
 
 ```powershell
 .venv\Scripts\python.exe -m scripts.audit.run_gate2_greedy_reference `
-  --dataset multinews --target rouge1 --workers 4
+  --dataset multinews --target rouge1 --workers 2
 ```
+
+Runner 預設 2 workers，且最多只排隊同 worker 數量的 documents；這是 execution-only
+資源保護，避免 Python 3.12 `ProcessPoolExecutor.map` 預先序列化整個 GovReport 剩餘
+corpus。互動使用電腦時保留預設；明確提高 `--workers` 會成比例增加 CPU 與 process
+memory。ROUGE greedy search 是 CPU string/count/LCS 工作，這個 runner 沒有 GPU route。
 
 預註冊：`configs/preregistrations/gate2_greedy_reference_v1.json`。不得用舊
 `src.eval.oracle --limit` CLI 產生正式 Gate 2 數字。

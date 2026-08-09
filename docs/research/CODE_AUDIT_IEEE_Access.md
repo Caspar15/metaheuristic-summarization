@@ -2080,3 +2080,28 @@ Lead。舊約 2.4% 估計不再作現行結論。
 route top-K/cap 與三 greedy evidence 全部 fail-loud 驗證。完整回歸 **397 passed**。
 這是 reference-aware diagnosis，不可拿 reference 特徵進實際 selector；GovReport 尚未完成，
 dev-test/test 未讀。
+
+## F-60 — GovReport greedy R-Lsum 的 eager process queue 造成不必要的 CPU／memory 壓力（已修正，run 待續）
+
+**嚴重度：P1（execution safety／可恢復性，不改科學協定）**
+
+2026-08-09 的 GovReport R-Lsum invocation 明確指定 16 workers。canonical validation
+檔為 222.1 MB；Python 3.12 `ProcessPoolExecutor.map` 會預先提交剩餘 iterable，將大型
+document tasks 序列化進 process queue。實測 CPU 超過 90%；外層工作被強制中斷後，
+Python parent 與 16 workers 仍存活。每個 worker 約 0.16 GB working set／1.31 GB
+private bytes，parent 約 0.60 GB working set。這些 child processes 在工作管理員可能被
+歸在 Codex 啟動的 process tree 下，但 Codex 本體當時約 0.21 GB working set，並非主要
+RAM 消耗者。已依相同 2026-08-09 09:09:53–09:09:57 start time 精準終止 17 個程序；
+checkpoint 是 exact frozen-dev prefix 257/681，completed evidence 不存在，沒有把部分結果
+當成完成 run，dev-test/test 均未讀。
+
+`run_gate2_greedy_reference.py` 現以 bounded submit/wait 取代 eager `executor.map`：
+outstanding tasks（pending + ordered buffer）不超過 worker 數，仍按 frozen manifest 順序
+flush。預設 worker 由 4 降為 2；明確提高 workers 仍屬 execution-only，scientific config
+hash、metric、長度與 selected-index 語義不變。toy corpus 的 spawn/order/equivalence 與
+runner governance 合計 15 tests 通過，完整回歸 399 passed。
+
+GPU 不作為本 finding 的修正：目前內圈是 `rouge-score` 的 tokenization、stemming、
+n-gram count 與 R-Lsum union-LCS，沒有 PyTorch/CUDA tensor route。另寫 GPU evaluator
+反而需要完整 selected-index equivalence audit；RTX 4060 應用在 SBERT embedding 階段。
+R-Lsum 只在使用者允許重新佔用算力後，以 `--resume` 從 257/681 繼續。
