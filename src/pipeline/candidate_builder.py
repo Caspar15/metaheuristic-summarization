@@ -5,6 +5,8 @@ route failure is a failed run: this module never replaces missing scores with
 zeros and never silently switches to another route.
 """
 
+import math
+
 from typing import Any, Dict, List, Mapping, Optional, Set, Tuple
 
 from src.data.schemas import validate_candidate_record
@@ -267,6 +269,29 @@ def _resolve_min_per_route(
     return resolved
 
 
+def _resolve_route_weights(
+    value: Optional[Mapping[str, float]], routes: List[str]
+) -> Dict[str, float]:
+    """Resolve positive RRF weights without accepting hidden/disabled routes."""
+
+    resolved = {route: 1.0 for route in routes}
+    if value is None:
+        return resolved
+    if not isinstance(value, Mapping):
+        raise ValueError("candidates.route_weights must be an object")
+    for raw_route, raw_weight in value.items():
+        route = _canonical_route_name(str(raw_route))
+        if route not in resolved:
+            raise ValueError(
+                f"fusion weight configured for disabled route {raw_route!r}"
+            )
+        weight = float(raw_weight)
+        if not math.isfinite(weight) or weight <= 0.0:
+            raise ValueError("candidate route fusion weights must be finite and positive")
+        resolved[route] = weight
+    return resolved
+
+
 def build_candidate_pool(
     sentence_records: List[Dict],
     base_scores: List[float],
@@ -280,6 +305,7 @@ def build_candidate_pool(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    route_weights: Optional[Mapping[str, float]] = None,
     precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Build route proposals, reservations, guards, and one capped final pool.
@@ -368,6 +394,9 @@ def build_candidate_pool(
     requested_route_minimums = _resolve_min_per_route(
         min_per_route, list(route_values), configured_quota
     )
+    resolved_route_weights = _resolve_route_weights(
+        route_weights, list(route_values)
+    )
     # A reservation is a guarantee over evidence that actually exists, not a
     # requirement that every document contain at least the configured number
     # of sentences. Keep configuration validation tied to the configured
@@ -383,7 +412,8 @@ def build_candidate_pool(
 
     fusion_scores = {
         index: sum(
-            1.0 / (rrf_constant + route_ranks[route][index])
+            resolved_route_weights[route]
+            / (rrf_constant + route_ranks[route][index])
             for route in route_values
         )
         for index in range(n)
@@ -545,6 +575,9 @@ def build_candidate_pool(
             "underfilled_by": underfilled_by,
             "selected_proposals_by_route": reservation_counts,
             "dropped_proposals_by_route": dropped_by_route,
+            "fusion_method": "weighted_rrf",
+            "rrf_constant": int(rrf_constant),
+            "route_weights": resolved_route_weights,
         },
     }
 
@@ -562,6 +595,7 @@ def build_candidate_records(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    route_weights: Optional[Mapping[str, float]] = None,
     precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> List[Dict]:
     """Backward-compatible record-only view of :func:`build_candidate_pool`."""
@@ -578,6 +612,7 @@ def build_candidate_records(
         route_config=route_config,
         coverage_guard=coverage_guard,
         rrf_constant=rrf_constant,
+        route_weights=route_weights,
         precomputed_route_data=precomputed_route_data,
     )["records"]
 

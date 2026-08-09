@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d3a-router-fusion-screen-v1",
+  "registered_at_utc": "2026-08-09T13:38:13.0023015Z",
+  "implementation_parent_commit": "4485c188e2aa91a9562898f709b20634ab5cac31",
+  "registration_timing": "after D2 full-dev paired outcomes and before any route-weighted or D3 candidate score",
+  "test_split_prohibited": true,
+  "dev_test_access": "none",
+  "question": "Can bounded candidate-capacity, lexical salience, or explicit weighted-RRF changes close the adversarial-baseline gap while preserving the D2 task-profile selector policy?",
+  "known_before_registration": {
+    "Multi-News": {
+      "D2_anchor_macro": 0.32807720596074463,
+      "adversarial_PacSum_gap": -0.0036626976801281933,
+      "D1_signals": "route_top_k 80 and total 80 were small positive OFAT changes; bigrams and position were positive only in the lexical context"
+    },
+    "GovReport": {
+      "D2_anchor_macro": 0.4461536662357012,
+      "adversarial_SBERT_MMR_gap": -0.006613664948574481,
+      "D1_signals": "candidate pools saturated the cap and full-source lexical routing showed substantial headroom; bigrams and position were positive only in the lexical context"
+    },
+    "route_weighted_scores_observed": false
+  },
+  "datasets": {
+    "Multi-News": {
+      "task_profile": "multi_document + multi_sentence",
+      "selector_policy": {"method": "greedy", "similarity": "pipeline_similarity"},
+      "full_dev_rows": 3935,
+      "pilot_manifest": "configs/pilot_manifests/multinews_selector_pilot_v1.json",
+      "pilot_manifest_sha256": "b0562eb4fe33b59f460c47e7b2db0bf0a3d2778687695422027bf33ed1c31b2e",
+      "pilot_rows": 200,
+      "base_config": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "b1a0de3218c19c0aeed751299d57ad9345556eeaf0dc3a489d6381e276055186",
+      "anchor_run": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run"
+    },
+    "GovReport": {
+      "task_profile": "single_document + multi_sentence",
+      "selector_policy": {"method": "mmr", "similarity": "pipeline_similarity", "lambda_relevance": 0.7},
+      "full_dev_rows": 681,
+      "pilot_manifest": "configs/pilot_manifests/govreport_router_pilot_v1.json",
+      "pilot_manifest_sha256": "c9a0954de4143f6e28b87b38fc31006ed2b2066d56c75fd6b3b42fa95676053f",
+      "pilot_rows": 200,
+      "base_config": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/resolved_config.yaml",
+      "base_config_sha256": "9d2918bfd936b8db8b75ee13b853ef2ed58214ecc8a6f470ada8c6b5bb48d910",
+      "anchor_run": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/mmr/run"
+    }
+  },
+  "fixed_contract": {
+    "routes": ["lexical", "semantic", "graph"],
+    "length_policy": "dataset-specific A1 frozen policy",
+    "selector": "D2 task-profile policy; selector is not searched again",
+    "semantic_model_and_revision": "all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "salience_source": "normalized weighted RRF",
+    "output_order": "canonical source order"
+  },
+  "candidates": [
+    {"id": "R00_anchor", "family": "anchor", "delta": {}},
+    {"id": "R01_total120", "family": "capacity", "delta": {"candidate_budget.total": 120}},
+    {"id": "R02_k80_total80", "family": "capacity", "delta": {"candidate_budget.route_top_k": 80}},
+    {"id": "R03_k80_total120", "family": "capacity", "delta": {"candidate_budget.route_top_k": 80, "candidate_budget.total": 120}},
+    {"id": "R04_k120_total160", "family": "capacity", "delta": {"candidate_budget.route_top_k": 120, "candidate_budget.total": 160}},
+    {"id": "R05_bigrams", "family": "lexical_salience", "delta": {"features.tf_isf.use_bigrams": true}},
+    {"id": "R06_position02", "family": "lexical_salience", "delta": {"features.weights.position": 0.2}},
+    {"id": "R07_bigrams_position02", "family": "lexical_salience", "delta": {"features.tf_isf.use_bigrams": true, "features.weights.position": 0.2}},
+    {"id": "R08_lexical_x2", "family": "route_weight", "delta": {"candidates.route_weights": {"lexical": 2.0}}},
+    {"id": "R09_semantic_x2", "family": "route_weight", "delta": {"candidates.route_weights": {"semantic": 2.0}}},
+    {"id": "R10_graph_x2", "family": "route_weight", "delta": {"candidates.route_weights": {"graph": 2.0}}},
+    {"id": "R11_lexical_x05", "family": "route_weight", "delta": {"candidates.route_weights": {"lexical": 0.5}}},
+    {"id": "R12_semantic_x05", "family": "route_weight", "delta": {"candidates.route_weights": {"semantic": 0.5}}},
+    {"id": "R13_graph_x05", "family": "route_weight", "delta": {"candidates.route_weights": {"graph": 0.5}}}
+  ],
+  "execution": {
+    "pilot": "run all 14 candidates on each reference-blind 200-row validation pilot",
+    "workers_requested": 16,
+    "worker_policy": "up to 16 bounded row workers; never launch 16 whole-dataset model-bearing candidate processes",
+    "embedding_cache": "F-51-audited Gate 2 cache; scientific outputs must match uncached execution",
+    "resume": "completed candidates immutable; failed/interrupted attempts preserved"
+  },
+  "measurement": {
+    "primary": "macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "paired": "10,000 paired bootstrap resamples, seed 20260809",
+    "pilot_holm_family": "2 datasets x 13 non-anchor candidates x 4 endpoints = 104",
+    "selection_opportunities_after_screen": "57 prior proposed configurations + 26 D3a configurations = 83"
+  },
+  "selection_rule": {
+    "pilot_is_not_evidence_of_final_superiority": true,
+    "full_dev_finalists_per_dataset": "anchor plus at most four non-anchor candidates: each family winner, then remaining candidates with pilot macro gain >=0.002, ordered by gain; ties choose lower pool cost and then lower ID",
+    "task_profile_policy": "finalists and later combinations may differ only by declared input/output task profile, never by dataset-name lookup",
+    "promotion": "no D3 candidate can access dev-test unless its full-dev result beats the dataset's adversarial baseline and passes the preregistered paired multiplicity gate"
+  },
+  "stopping_and_deletion": {
+    "capacity": "do not expand past route_top_k 120 / total 160 in D3a; if R04 is still improving, preregister a separate cost-bounded follow-up",
+    "route_weight": "drop a direction if neither task profile improves over equal-weight RRF on full dev",
+    "lexical_salience": "do not infer a combination benefit from OFAT; only R07 is a preregistered interaction",
+    "next_stage": "after D3a full-dev finalists, preregister at most one D3b combination grid before observing its scores"
+  }
+}

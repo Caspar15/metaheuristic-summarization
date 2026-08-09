@@ -186,8 +186,10 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 
 1. selector-only D2 已完成：Multi-News 採 Greedy，GovReport 採 TF-IDF-MMR λ=0.7；
    兩者仍低 adversarial winner，沒有 dev-test promotion。下一輪只在 dev 搜尋尚未掃完的
-   candidate-budget／fusion／salience；若搜尋空間耗盡仍無顯著優勢，依停止條件寫
-   重新定位建議。
+   candidate-budget／fusion／salience。D3a 已在分數前凍結為每 profile 14 案、先
+   200-row reference-blind dev pilot、再依固定規則送最多四個非 anchor 到 full dev；
+   weighted RRF 預設仍為 equal weights，dev-test/test 無入口。若搜尋空間耗盡仍無
+   顯著優勢，依停止條件寫重新定位建議。
 2. 完成 Multi-News main／frozen clean 的共同 5,549-row paired sensitivity，並整理一致的
    quality-cost reporting artifact；不得把 clean 取代 main。
 3. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；

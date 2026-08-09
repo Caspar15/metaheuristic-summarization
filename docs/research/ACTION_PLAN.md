@@ -508,6 +508,12 @@
 ### 3c. Validation 實驗
 
 - [ ] K、graph threshold τ、fusion weights、population/generation 的 sensitivity
+- [~] D3a candidate-router／fusion screen 已在任何 weighted-RRF 分數前預註冊：兩個
+      task profile 各 14 案，以 reference-blind 200-row dev pilot 初篩，再依明文規則
+      每邊最多送四個非 anchor 到 full dev。容量上限為 route top-K 120／total 160；
+      route weights 僅作既有三路 RRF 的顯式正值權重。runner 最多使用 16 個 bounded
+      row workers、每 worker 一個 BLAS thread；dev-test/test 均無入口。目前狀態：
+      **實作與 prereg 完成，尚未產生 D3a 分數**。
 - [~] Selector isolation：frozen 200-row + NSGA 五 seed已完成；完整 frozen-dev S02b
       selector screen 已在任何新 selector-swap score 前凍結為 14 candidates／dataset：
       Greedy、MMR（TF-IDF/SBERT × λ 0.1–0.9）、NSGA-II 64×80 單一 frozen seed。
@@ -611,7 +617,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 412 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2 runners 與 F-51～F-65 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 419 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2/D3a runners 與 F-51～F-66 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
 | 3 方法開發 | `[~]` | selector sub-gate完成、promotion失敗 | 兩 primary D2 各 14/14 與 104-endpoint paired analysis 完成；multi-document→Greedy、single-document multi-sentence→TF-IDF-MMR λ=0.7。兩者仍輸 adversarial baseline，不進 dev-test；NSGA-II 維持 comparator，candidate-router／salience redesign 尚待完成 |
 | 4 正式 test | `[ ]` | | |
@@ -624,7 +630,7 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-65/D2 paired guards 為 **412 passed**。
+      F-51 當時 **386 passed**；目前含 F-66/D3a guards 為 **419 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、

@@ -384,6 +384,7 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             route_config=cfg.get("routes", {}) or {},
             coverage_guard=cfg.get("coverage_guard", {}) or {},
             rrf_constant=int(cand_cfg.get("rrf_constant", 60)),
+            route_weights=cand_cfg.get("route_weights"),
             precomputed_route_data=precomputed_route_data,
         )
         if use_cand

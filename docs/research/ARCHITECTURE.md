@@ -321,6 +321,10 @@ CandidateRecord
   `min_per_route=20`、`total=60` 與 RRF constant 不會改變 membership/rank（F-26）；
   D1 因此在 lexical+graph 兩路 context 測量這些項目。
 - route-exclusive reservations 與 coverage guards 先進池，剩餘空位才用 RRF；RRF 僅能在 proposal union 加 guards 內選，不可從全文任意補句。union 小於 cap 時允許 underfill 並記錄原因。
+- D3a 在不改預設行為下加入顯式 `candidates.route_weights`：equal-weight contract 仍是每路
+  `1.0`，只允許 enabled route 的有限正值，解析後權重／RRF constant／fusion method
+  一併寫入 allocation。這只把既有 provenance fusion 變成可稽核的 weighted RRF，
+  不是 learned router；是否有品質增益須依 `d3a-router-fusion-screen-v1` 驗證。
 
 ## 6. Objective factory
 

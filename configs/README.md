@@ -135,6 +135,7 @@ python -m src.pipeline.select_sentences \
 | `candidate_budget.min_per_route` | total cap 前優先保留的 route evidence；全域值不得大於 configured `route_top_k`，短文件逐列 clamp 並在 artifact 保存 requested/effective/shortfall |
 | `candidate_budget.total` | selector pool 的上限，不從 proposal union／coverage guard 外補句；union 小於上限時允許誠實 underfill |
 | `selector.salience_source` | `rrf_fusion` 會把 normalized provenance fusion 實際送入 selector；`membership_only` 僅供消融 |
+| `candidates.route_weights` | weighted RRF 的顯式 route 權重；未設定時每路皆為 `1.0`，只接受已啟用 route 的有限正值，實際解析值寫入 candidate allocation |
 | `compute_budget.mode / enabled_routes` | 目前只實作 validation-frozen `fixed`；宣告 `adaptive` 會直接失敗 |
 | `length_control.min_words` | requested lower bound；逐文件依完整來源在 `max_words/max_sentences` 下的精確可達上限產生 `effective_min_words`。只有 source-intrinsic shortfall 可調降；candidate pool 若達不到 effective bound 必須報錯。兩者與 relaxation reason 均寫入 artifact |
 | `routes.semantic.*` | sentence encoder 名稱、固定 revision、batch size、`max_model_tokens`；輸出記錄實際 revision 與截斷率 |

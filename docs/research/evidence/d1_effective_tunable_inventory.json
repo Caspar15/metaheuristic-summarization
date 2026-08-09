@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "audited_at_utc": "2026-08-08T06:17:02.0757877Z",
-  "implementation_commit": "ee8beb829ea36f727ce859d1176e3b66e9eae372",
+  "audited_at_utc": "2026-08-09T13:38:13.0023015Z",
+  "implementation_commit": "4485c188e2aa91a9562898f709b20634ab5cac31",
   "scope": "canonical select_sentences pipeline and optimizer dispatch",
   "sources": [
     "src/pipeline/select_sentences.py",
@@ -19,7 +19,7 @@
     {"group": "representation", "paths": ["representations.use", "representations.method"], "disposition": "fixed true/tfidf; current SentenceVectors formal fit_transform only supports tfidf"},
     {"group": "length", "paths": ["length_control.unit", "length_control.max_tokens", "length_control.max_words", "length_control.max_sentences", "length_control.min_words", "length_control.require_nonempty"], "disposition": "dataset-specific A1 policy frozen; not searched"},
     {"group": "objectives", "paths": ["objectives.importance_aggregation", "objectives.coverage_method", "objectives.lambda_importance", "objectives.lambda_coverage", "objectives.lambda_redundancy", "objectives.group_coverage"], "disposition": "aggregation and three weights screened; max fixed because set is equivalent and diversity invalid; group coverage unimplemented"},
-    {"group": "candidate_switches", "paths": ["candidates.use", "candidates.mode", "candidates.soft_boost", "candidates.rrf_constant", "candidates.recall_target"], "disposition": "use/mode/RRF screened in an active context; soft_boost later only if soft survives; recall_target forbidden"},
+    {"group": "candidate_switches", "paths": ["candidates.use", "candidates.mode", "candidates.soft_boost", "candidates.rrf_constant", "candidates.route_weights", "candidates.recall_target"], "disposition": "use/mode/RRF screened in an active context; explicit weighted-RRF route weights added and preregistered for D3a; soft_boost later only if soft survives; recall_target forbidden"},
     {"group": "candidate_budget", "paths": ["candidate_budget.route_top_k", "candidate_budget.per_route", "candidate_budget.min_per_route", "candidate_budget.total", "candidates.k", "candidates.total_budget"], "disposition": "canonical route_top_k/min_per_route/total screened with two routes; other paths are compatibility aliases"},
     {"group": "route_gate", "paths": ["compute_budget.mode", "compute_budget.enabled_routes"], "disposition": "fixed mode only; lexical anchor plus graph/semantic gates screened"},
     {"group": "lexical_route", "paths": ["routes.lexical.revision"], "disposition": "provenance identifier fixed"},

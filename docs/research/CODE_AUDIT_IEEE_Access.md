@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**412 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**419 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1895,7 +1895,7 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 ### 驗證狀態
 
 F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-63 與 D2 runner 後為
-**412 passed**。預註冊
+**419 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **412 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **419 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2217,3 +2217,20 @@ multi-sentence→TF-IDF-MMR λ=0.7。這不是 hidden dataset switch。
 但 promotion gate 仍失敗：Multi-News winner 低 P08 `0.003663`；GovReport winner 低
 full-source SBERT+MMR `0.006614`。`promotion_eligible=false`，dev-test/test 皆未讀。
 完整證據：`runs_v2/d2_selector_full_dev_v1/analysis/paired_summary.json`。
+
+## F-66 — Equal-weight RRF 無 route calibration；D3a 以 fail-loud weighted RRF 接線並在分數前凍結
+
+**嚴重度：P1（provenance fusion／方法搜尋治理）**
+
+D2 的 `rrf_fusion` 雖確實送入 selector，但三路固定等權；route raw score 尺度不可比，
+目前也沒有證據證明 lexical／semantic／graph 應等權。這不是 correctness bug，卻是仍未
+搜尋的架構假設。新接線 `candidates.route_weights` 只在 RRF contribution 上套顯式正值，
+未設定時三路仍精確為 `1.0`，因此舊配置語義不變。disabled route、零、負值或非有限值
+全部 fail loud；實際 weights、RRF constant 與 fusion method 寫入 candidate allocation。
+
+任何 weighted-RRF 分數前，`d3a-router-fusion-screen-v1` 已凍結兩 profile 各 14 案：
+equal-weight anchor、四個 bounded capacity 案、三個 lexical-salience 案與六個單一路權重
+案。先用 reference-blind 200-row dev pilot 初篩，再依固定 family／effect 門檻每 profile
+最多送四個非 anchor 到 full dev。執行器只接受 dev pilot manifest，worker 上限 16 且
+每 worker 一個 BLAS thread；dev-test/test 無 CLI 入口。此條目前只代表實作與治理完成，
+**不代表 weighted RRF 有效**。

@@ -114,6 +114,44 @@ def test_total_budget_uses_fused_rank_not_original_order():
     assert all(candidate["inclusion_reasons"] for candidate in candidates)
 
 
+def test_weighted_rrf_changes_fused_order_and_records_contract():
+    records = two_document_records()
+    pool = build_candidate_pool(
+        records,
+        base_scores=[0.1, 0.9, 0.8, 0.2],
+        k=2,
+        sources=["lexical", "position"],
+        min_per_route=0,
+        total_budget=1,
+        route_weights={"lexical": 4.0, "position_guard": 1.0},
+    )
+    assert [row["original_index"] for row in pool["records"]] == [1]
+    assert pool["allocation"]["fusion_method"] == "weighted_rrf"
+    assert pool["allocation"]["route_weights"] == {
+        "lexical": 4.0,
+        "position_guard": 1.0,
+    }
+
+
+@pytest.mark.parametrize(
+    "weights,match",
+    [
+        ({"lexical": 0.0}, "finite and positive"),
+        ({"semantic": 1.0}, "disabled route"),
+    ],
+)
+def test_invalid_weighted_rrf_contract_fails_loudly(weights, match):
+    records = two_document_records()
+    with pytest.raises(ValueError, match=match):
+        build_candidate_pool(
+            records,
+            base_scores=[0.1, 0.9, 0.8, 0.2],
+            k=2,
+            sources=["lexical", "position"],
+            route_weights=weights,
+        )
+
+
 def test_total_cap_never_admits_sentences_outside_route_union():
     records = two_document_records()
     pool = build_candidate_pool(
