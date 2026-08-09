@@ -393,3 +393,19 @@ finalists 已存在的 frozen-dev per-example artifacts。比較集合與 multip
 paired resampling outcome 前凍結於 `gate2_paired_finalists_v1.json`。runner 沒有 split
 CLI，報 64-test Holm 與 12,896-opportunity selection-aware diagnostic，不能授權
 dev-test 或 test。
+
+## D2 full-dev selector screen
+
+`run_d2_selector_full_dev.py` 固定 S02b 的三 routes、candidate cap、RRF salience、A1 長度與
+輸出規則，只替換 Greedy／MMR／NSGA-II，以及 selector similarity 的 TF-IDF／pinned
+SBERT。預註冊共 14 candidates／dataset；CLI 只有 dataset、resume 與已凍結 candidate ID，
+沒有 split。F-51 已驗等價的 Gate 2 embedding cache 只作 execution optimization。
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_d2_selector_full_dev `
+  --dataset multinews --resume
+```
+
+MMR λ 網格為 0.1/0.3/0.5/0.7/0.9；NSGA-II 固定 64×80、seed 3407。只有 NSGA-II
+距最佳 deterministic selector 不超過 0.002 macro 或贏任一 metric，才執行五個 full-dev
+seeds。不得用 200-row pilot 直接宣稱 MMR 已在完整 dev 勝出。

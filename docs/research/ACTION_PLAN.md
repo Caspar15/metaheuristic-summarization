@@ -477,7 +477,9 @@
 
 ### 3a. 先看兩個先行指標（比 ROUGE 更早給訊號）
 
-- [ ] 🔴 **候選池對 validated oracle／greedy reference 的 recall@K** —— legacy 值為 **22.8%**，須以 validated oracle 重做
+- [x] **候選池對 metric-specific greedy reference 的 recall** —— 兩 primary 已依 v2
+      protocol 重做：Multi-News union `82–86%`／final 約 `30%`；GovReport union
+      `47–56%`／final `12–13%`。greedy reference 不是 exact oracle。
 - [ ] 🔴 **選句位置分布與 Lead 的重疊率** —— legacy 值為 **61.7%**
 
 量測工具已存在，改完架構後直接對新 run 重跑同一支腳本即可比較：
@@ -494,18 +496,22 @@
 
 ### 3b. 方法設計
 
-- [ ] Provenance-preserving fusion（用 route rank/score，不是只看有沒有進 union）
+- [x] Provenance-preserving RRF fusion 已把 route rank/score 傳入 selector；Gate 2 顯示它仍
+      不足，後續可比較 unique-preserving fusion，但不得退回 index-only membership
 - [ ] Budget-aware adaptive routing（依文件特性決定要不要啟用 PLM）
 - [ ] 重新設計 `position` 特徵（legacy greedy-reference 位置中位數探索值為 **0.46**；須在 validation 重做）
-- [ ] Objective 正規化：`imp` 不再使用未正規化總和；平均或 length-normalized aggregation 由 validation pilot 決定
+- [x] profiled multi-sentence objective 已禁止 raw sum，D1 採 length-normalized；後續只在
+      預註冊搜尋中比較，不再沿用 legacy raw-sum
 - [ ] 依 `ARCHITECTURE.md` 跑 task-profile/objective 啟用矩陣，不按 dataset 名稱偷換公式
 - [ ] 明確的 Pareto 選解規則（knee point / reference point，權重只能在 validation 定）
 
 ### 3c. Validation 實驗
 
 - [ ] K、graph threshold τ、fusion weights、population/generation 的 sensitivity
-- [~] Selector isolation：Greedy / MMR / NSGA-II 的 frozen 200-row + NSGA 五 seed
-      已完成並決定 MMR main；GRASP 若保留只作 optional comparator，不阻塞主線
+- [~] Selector isolation：frozen 200-row + NSGA 五 seed已完成；完整 frozen-dev S02b
+      selector screen 已在任何新 selector-swap score 前凍結為 14 candidates／dataset：
+      Greedy、MMR（TF-IDF/SBERT × λ 0.1–0.9）、NSGA-II 64×80 單一 frozen seed。
+      預註冊：`d2_selector_full_dev_v1.json`；尚未完成，不能假設 200-row MMR 結論外推
 - [ ] Ablation：No-statistical / No-graph / No-PLM / No-provenance / No-routing
 - [ ] Route utility：各路 unique candidate recall、quality delta、latency 與 peak memory；無增量效果的 route 刪除
 - [ ] 原版 Multi-News main 與 frozen 5,549-row U+FFFD clean sensitivity 作 paired validation 分析；bad-retrieval-removed／Multi-News+ 是未排程的另一種 retrieval-contamination 研究，不得混稱
@@ -597,7 +603,7 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 403 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2 runners 與 F-51～F-62 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 406 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2 runners 與 F-51～F-62 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
 | 3 方法開發 | `[~]` | selector sub-gate ✅ | matched selector pilot 與 NSGA 五 seed stability 已完成；MMR main／Greedy reference／NSGA-II comparator。candidate-router 與 route utility gate 尚未完成 |
 | 4 正式 test | `[ ]` | | |
@@ -610,7 +616,7 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-53/F-55～F-62 為 **403 passed**。
+      F-51 當時 **386 passed**；目前含 D2 runner guards 為 **406 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、

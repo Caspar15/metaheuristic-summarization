@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d2-selector-full-dev-v1",
+  "registered_at_utc": "2026-08-09T07:33:10.3346486Z",
+  "implementation_parent_commit": "674ac6480590a9a30d3e82c80b3d739e006ebc5c",
+  "registration_timing": "after Gate 2 aggregate/per-example and paired outcomes, before any full-dev S02b selector-swap score",
+  "scores_known_at_registration": {
+    "S02b_greedy_tfidf_macro": {"Multi-News": 0.32807720596074463, "GovReport": 0.4178618349119039},
+    "matched_200_row_pilot": "MMR improved R1/R2 over Greedy; NSGA-II five-seed mean was below Greedy",
+    "Gate2_adversarial_gap": {"Multi-News_vs_P08": -0.003663, "GovReport_vs_SBERT_MMR": -0.034906}
+  },
+  "test_split_prohibited": true,
+  "dev_test_access": "none",
+  "partition": "dev",
+  "question": "With the S02b routes, pool, length contract and RRF salience fixed, does a full-dev selector-only swap to MMR improve over Greedy, and does NSGA-II add anything beyond the deterministic selectors?",
+  "datasets": {
+    "Multi-News": {
+      "rows": 3935,
+      "base_config": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "b1a0de3218c19c0aeed751299d57ad9345556eeaf0dc3a489d6381e276055186",
+      "base_run": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run"
+    },
+    "GovReport": {
+      "rows": 681,
+      "base_config": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "f3cf22b9fdd2ea7b2457cfd34f66ba0c71b4faaac6fd1aa6479099c82a7c42d2",
+      "base_run": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/greedy/run"
+    }
+  },
+  "fixed_contract": {
+    "routes": ["lexical", "semantic", "graph"],
+    "candidate_budget": {"route_top_k": 40, "min_per_route": 20, "total": 80},
+    "coverage_guard_max_items": 20,
+    "salience_source": "rrf_fusion",
+    "length_policy": "dataset-specific A1 frozen policy",
+    "output_order": "canonical source order",
+    "semantic_model_and_revision": "all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf"
+  },
+  "candidates": [
+    {"id": "S00_greedy_tfidf_anchor", "reuse_base_run": true, "method": "greedy", "delta": {}},
+    {"id": "S01_greedy_sbert", "method": "greedy", "delta": {"selector.similarity_source": "sbert"}},
+    {"id": "S02_mmr_tfidf_l01", "method": "mmr", "delta": {"optimizer.lambda_relevance": 0.1}},
+    {"id": "S03_mmr_tfidf_l03", "method": "mmr", "delta": {"optimizer.lambda_relevance": 0.3}},
+    {"id": "S04_mmr_tfidf_l05", "method": "mmr", "delta": {"optimizer.lambda_relevance": 0.5}},
+    {"id": "S05_mmr_tfidf_l07", "method": "mmr", "delta": {"optimizer.lambda_relevance": 0.7}},
+    {"id": "S06_mmr_tfidf_l09", "method": "mmr", "delta": {"optimizer.lambda_relevance": 0.9}},
+    {"id": "S07_mmr_sbert_l01", "method": "mmr", "delta": {"selector.similarity_source": "sbert", "optimizer.lambda_relevance": 0.1}},
+    {"id": "S08_mmr_sbert_l03", "method": "mmr", "delta": {"selector.similarity_source": "sbert", "optimizer.lambda_relevance": 0.3}},
+    {"id": "S09_mmr_sbert_l05", "method": "mmr", "delta": {"selector.similarity_source": "sbert", "optimizer.lambda_relevance": 0.5}},
+    {"id": "S10_mmr_sbert_l07", "method": "mmr", "delta": {"selector.similarity_source": "sbert", "optimizer.lambda_relevance": 0.7}},
+    {"id": "S11_mmr_sbert_l09", "method": "mmr", "delta": {"selector.similarity_source": "sbert", "optimizer.lambda_relevance": 0.9}},
+    {"id": "S12_nsga2_tfidf_seed3407", "method": "nsga2", "delta": {"optimizer.pop_size": 64, "optimizer.n_gen": 80}},
+    {"id": "S13_nsga2_sbert_seed3407", "method": "nsga2", "delta": {"selector.similarity_source": "sbert", "optimizer.pop_size": 64, "optimizer.n_gen": 80}}
+  ],
+  "execution": {
+    "embedding_cache": "execution-only; use each Gate 2 dataset cache after F-51 exact-equivalence audit",
+    "candidate_parallelism": "at most 2 concurrent candidates; do not map 16 model-bearing processes merely because 16 CPU workers are available",
+    "resume": "completed candidates immutable; failed/interrupted attempts preserved before retry"
+  },
+  "measurement": {
+    "primary": "all-row macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "paired": "10,000 paired bootstrap resamples, seed 20260809",
+    "family": "2 datasets x 13 non-anchor candidates x 4 endpoints = 104 Holm endpoints",
+    "selection_opportunities": "31 prior proposed configs + 26 new non-anchor full-dev configs = 57 proposed search operations"
+  },
+  "selection_rule": {
+    "mmr_winner": "highest macro within dataset; exact tie chooses lambda 0.7, then TF-IDF similarity for lower cost",
+    "cross_dataset": "prefer one shared selector if macro delta versus the dataset-specific winner is <=0.001 on both datasets; otherwise declare a pre-existing task-profile-specific selector policy, never a hidden dataset-name switch",
+    "nsga_followup": "run five full-dev seeds only if the single frozen seed is within 0.002 macro of the best deterministic selector or wins any metric",
+    "promotion": "no candidate can reach dev-test unless it beats the adversarial baseline under the later multiplicity-corrected paired gate"
+  },
+  "deletion_rules": {
+    "nsga2": "remain comparator only; if it misses the follow-up rule, do not spend five full-dev seeds and retain the existing negative 200-row stability evidence",
+    "sbert_selector_similarity": "drop from the proposed selector if neither dataset gains over matched TF-IDF similarity after correction",
+    "mmr": "do not assume the 200-row pilot generalizes; retain as main selector only with full-dev evidence"
+  },
+  "scores_observed_after_registration": false
+}
