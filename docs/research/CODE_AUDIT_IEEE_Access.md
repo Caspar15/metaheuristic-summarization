@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，目前
-**431 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**431 local tests 全過且 PR #16 Linux CI 綠燈（2026-08-10）**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -2314,3 +2314,23 @@ search-log record 已保留於 `govreport/attempts/attempt_01_sandbox_permission
 在 sandbox 外依同一 scientific config 執行，沒有覆寫失敗 evidence。完整回歸目前為
 **431 passed**。完整 paired evidence：
 `runs_v2/d3b_cross_profile_combination_v1/analysis/paired_summary.json`。
+
+## F-70 — PR #16 暴露 CI dependency 與 pytest temp-path 的隱性本機假設
+
+**嚴重度：P1（跨平台可重現性／CI correctness）**
+
+PR #16 第一個 Linux run `31322928718` 在 collection 階段出現 5 個 error；共同原因不是
+五個程式缺陷，而是 `requirements-ci.txt` 仍聲稱測試不需 PLM dependencies，但新增的
+encoder cache、PacSum-SBERT 與 integration tests 已在 module scope 使用 `torch`。
+CI 現在從 PyTorch CPU index 安裝 `torch==2.8.0`，並明列 `transformers==4.56.0`；
+測試只使用小型 tensor 與 mocked checkpoint，不下載模型或 CUDA runtime。
+
+依賴修正後的 run `31323125422` 已完成 421 passed／5 skipped，但另有 5 failures：
+pytest 的 Linux `tmp_path` 位於 repo 外的 `/tmp`，而相關測試沒有宣告測試用 repo root，
+觸發 production `_relative()` 的 repo-bound evidence guard。本機先前固定 `--basetemp`
+於 workspace，因而遮蔽此假設。修正沒有放寬 production guard；五個 tests 改為將各自
+`tmp_path` 明確注入為測試用 `REPO_ROOT`。以 Windows workspace 外 TEMP 重跑相關
+22 tests 與完整套件分別為 22 passed、431 passed。
+
+GitHub Linux run `31323270403` 最終 **pytest pass**（54 秒）。本修正沒有執行資料實驗，
+也沒有存取 dev-test/test；只更正 CI dependency contract 與跨平台 test fixture。

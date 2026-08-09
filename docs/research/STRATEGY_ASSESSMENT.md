@@ -265,7 +265,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 431 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 431 local tests、PR #16 Linux CI（含 pinned CPU encoder dependencies 與外部 tmp portability）、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -309,7 +309,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 431 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-69/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | canonical 主路徑的 431 local tests、PR #16 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-70/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
 | Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
