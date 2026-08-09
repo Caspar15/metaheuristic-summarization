@@ -1,0 +1,67 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:51:14.816909+00:00",
+  "started_at_utc": "2026-08-09T14:48:58.715706+00:00",
+  "status": "completed",
+  "study_id": "d3b-cross-profile-combination-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "candidate": "C01_combined_salience_route_weight",
+  "candidate_hash": "ed82a03ea64de76434062561c081207316872285c2a1b41885f82fdc003293bf",
+  "declared_delta": {
+    "features.tf_isf.use_bigrams": true,
+    "features.weights.position": 0.2,
+    "candidates.route_weights": {
+      "graph": 2.0
+    }
+  },
+  "config_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+  "config_sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f",
+  "implementation_commit": "ebd6306d958b136fd008d0ec3f355dd3ec8e26e2",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "streamed_predictions": true,
+    "elapsed_seconds": 136.1656780000776,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+  },
+  "anchor_candidate": "R07_bigrams_position02",
+  "anchor_summary_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/candidate_summary.json",
+  "anchor_summary_sha256": "45a79a9063311471343f9e8a6f953d0d59f864d2434d1f345e37355c2dbf4ecd",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4432527036299506,
+      "rouge2": 0.14149904700354837,
+      "rougeLsum": 0.4065002365636674
+    },
+    "macro_rouge": 0.33041732906572213,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.4510800508259,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/predictions.jsonl",
+  "predictions_sha256": "1403a48396712b4db837af21ced66c97b79a1254863d4b9afaebd38576643e5d",
+  "selected_indices_sha256": "ba2dc982ddc3a6ba6dfe85741caaa8a2e50678e2eaaa605011af3758f57e1f62",
+  "per_example_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/per_example.jsonl",
+  "per_example_sha256": "ecad45591e2b0dce4c71b08ed8899a7b099c652af7ab770bdccef37a97fff2e2",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
