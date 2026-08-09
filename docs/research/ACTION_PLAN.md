@@ -515,7 +515,11 @@
       anchor macro `0.328077` 最佳；NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR
       `0.321744`、最佳 SBERT-MMR `0.316612`、NSGA-II+SBERT `0.308827`。兩個
       NSGA 候選均未達多 seed 門檻；200-row MMR 排序未外推。第一次 attempt 的 F-63
-      failed/interrupted attempts 全保留；GovReport 14-candidate screen 尚未完成。
+      failed/interrupted attempts 全保留。GovReport 14/14 亦完成：TF-IDF-MMR λ=0.7
+      macro `0.446154`，對 Greedy `+0.028293`，四 endpoints 通過 Holm `0.020798`
+      與 228-opportunity correction `0.045595`；但仍低 adversarial baseline `0.006614`。
+      兩資料集無共同近最優 selector，依預註冊採 task-profile policy；promotion=false，
+      不進 dev-test。
 - [ ] Ablation：No-statistical / No-graph / No-PLM / No-provenance / No-routing
 - [ ] Route utility：各路 unique candidate recall、quality delta、latency 與 peak memory；無增量效果的 route 刪除
 - [ ] 原版 Multi-News main 與 frozen 5,549-row U+FFFD clean sensitivity 作 paired validation 分析；bad-retrieval-removed／Multi-News+ 是未排程的另一種 retrieval-contamination 研究，不得混稱
@@ -607,9 +611,9 @@
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 409 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2 runners 與 F-51～F-63 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 412 local tests（2026-08-09）、PR #15 Linux CI、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2 runners 與 F-51～F-65 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
 | 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
-| 3 方法開發 | `[~]` | selector sub-gate進行中 | Multi-News full-dev D2 14/14 已完成，Greedy anchor 勝 MMR／NSGA-II；GovReport D2 待完成。NSGA-II 維持 comparator，final selector 未 freeze；candidate-router 與 route utility gate 尚未完成 |
+| 3 方法開發 | `[~]` | selector sub-gate完成、promotion失敗 | 兩 primary D2 各 14/14 與 104-endpoint paired analysis 完成；multi-document→Greedy、single-document multi-sentence→TF-IDF-MMR λ=0.7。兩者仍輸 adversarial baseline，不進 dev-test；NSGA-II 維持 comparator，candidate-router／salience redesign 尚待完成 |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
 | 6 投稿稽核 | `[ ]` | | |
@@ -620,7 +624,7 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-63/D2 runner guards 為 **409 passed**。
+      F-51 當時 **386 passed**；目前含 F-65/D2 paired guards 為 **412 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、

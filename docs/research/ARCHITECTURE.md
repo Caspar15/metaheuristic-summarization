@@ -23,7 +23,11 @@
 > frozen Multi-News dev 3,935 rows 的 14-candidate D2 中，Greedy-TFIDF `0.328077`
 > 勝 NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR `0.321744` 與最佳 SBERT-MMR
 > `0.316612`。因此 final selector 尚未 freeze；Multi-News 暫以 Greedy 作 anchor，
-> MMR 不再因 pilot 自動成為 main。NSGA-II 退出核心的判斷反而獲得更強支持。
+> MMR 不再因 pilot 自動成為 main。GovReport D2 其後支持 TF-IDF-MMR λ=0.7，
+> 但跨資料集沒有共同近最優 selector；依預註冊採 task-profile policy：
+> multi-document→Greedy-TFIDF，single-document multi-sentence→TF-IDF-MMR λ=0.7。
+> 兩邊仍輸 adversarial baseline，故這是下一輪 dev 架構，不是 dev-test promotion。
+> NSGA-II 退出核心的判斷反而獲得更強支持。
 
 > 狀態：**Target Architecture v1，尚未 freeze**  
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
@@ -40,7 +44,8 @@
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
 4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
-   NSGA-II 退出核心與標題；最終 selector 等 GovReport D2 後再定。
+   NSGA-II 退出核心與標題；GovReport D2 後採上述 task-profile policy，但尚未通過
+   adversarial-baseline promotion gate。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 

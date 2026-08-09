@@ -224,5 +224,17 @@ pool、RRF salience、200–250 words，只替換 selector 與 similarity repres
 比 Greedy 低 `0.005462` macro，且約為最佳 TF-IDF-MMR selection time 的 `31.5×`；
 兩個 NSGA 候選均未達「距最佳 deterministic ≤0.002 或勝任一 metric」的多 seed
 門檻。故本節**明確取代**第 8 節把 200-row MMR 優勢外推為 main-selector 決策的做法：
-Multi-News 暫採 Greedy anchor，MMR 與 NSGA-II 都不升格；GovReport 同規格完成前
-不 freeze final selector。第 8 節保留為研究歷史，不刪除。
+Multi-News 暫採 Greedy anchor，MMR 與 NSGA-II 都不升格。GovReport 同規格其後完成：
+TF-IDF-MMR λ=0.7 macro `0.446154`，對 Greedy macro `+0.028293`，95% CI
+`[+0.024725,+0.031910]`；104-endpoint Holm `p=0.020798`、228-opportunity correction
+`p=0.045595`，四個 endpoints 全通過。然而它仍低 full-source SBERT+MMR adversarial
+baseline `0.006614`；Multi-News Greedy 也仍低 P08 `0.003663`。
+
+沒有任何 shared deterministic selector 在兩資料集都距各自 winner ≤`0.001`。依事前
+規則，下一輪採顯式 task-profile policy，而不是 dataset-name switch：
+
+- `multi_document + multi_sentence` → Greedy-TFIDF；
+- `single_document + multi_sentence` → TF-IDF-MMR λ=0.7。
+
+`promotion_eligible=false`，所以不讀 dev-test。第 8 節保留為研究歷史，不刪除；
+paired evidence 為 `runs_v2/d2_selector_full_dev_v1/analysis/paired_summary.json`。

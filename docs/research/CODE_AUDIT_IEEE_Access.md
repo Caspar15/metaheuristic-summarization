@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**409 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**412 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1895,7 +1895,7 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 ### 驗證狀態
 
 F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-63 與 D2 runner 後為
-**409 passed**。預註冊
+**412 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **409 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **412 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2196,5 +2196,24 @@ F-63 修正後，事前提交的 `d2-selector-full-dev-v1` 在 Multi-News frozen
 NSGA-II+TF-IDF selection `4690.7s`，約為最佳 TF-IDF-MMR 的 `31.5×`，但比 Greedy
 低 `0.005462` macro；SBERT NSGA 更低。兩個 NSGA 候選均未達預註冊多 seed 門檻，
 因此不追加 seed。200-row pilot 的「MMR main」只能保留為早期 diagnostic，不能再當
-full-dev 架構決策；Multi-News 暫以 Greedy 為 anchor，final selector 等 GovReport D2。
-這加強 §7.3 將 NSGA-II 移出核心與標題的依據，但還不能跨資料集宣布最終刪除 MMR。
+full-dev 架構決策；Multi-News 暫以 Greedy 為 anchor。這加強 §7.3 將 NSGA-II 移出
+核心與標題的依據，但當時還不能跨資料集宣布最終 selector；後續見 F-65。
+
+## F-65 — D2 跨資料集要求 task-profile selector；GovReport MMR 顯著改善仍未勝強 baseline
+
+**嚴重度：P0（方法有效性／promotion gate）**
+
+GovReport 14/14 selector candidates 完成；TF-IDF-MMR λ=0.7 macro `0.446154` 最佳，
+對 Greedy anchor `+0.028293`。事前凍結的 104-endpoint paired bootstrap 中，其 R1／
+R2／R-Lsum／macro CI 全正；Holm `p=0.020798`、以 57 search operations × 4 endpoints
+計算的 228-opportunity correction `p=0.045595`，四項均通過。NSGA-II+TF-IDF 僅
+`0.426844`、selection `1708.5s`；MMR λ=0.7 selection `87.9s`，NSGA 約 `19.4×`
+仍較差。NSGA-II+SBERT 更低至 `0.371552`，兩者均不觸發多 seed。
+
+跨資料集沒有 shared selector 在兩邊都距 winner ≤`0.001`。依預註冊採顯式
+task-profile policy：multi-document multi-sentence→Greedy-TFIDF；single-document
+multi-sentence→TF-IDF-MMR λ=0.7。這不是 hidden dataset switch。
+
+但 promotion gate 仍失敗：Multi-News winner 低 P08 `0.003663`；GovReport winner 低
+full-source SBERT+MMR `0.006614`。`promotion_eligible=false`，dev-test/test 皆未讀。
+完整證據：`runs_v2/d2_selector_full_dev_v1/analysis/paired_summary.json`。

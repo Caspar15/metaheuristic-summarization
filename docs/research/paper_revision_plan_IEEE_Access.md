@@ -17,7 +17,11 @@
 > `0.316612`、NSGA-II+SBERT `0.308827`。NSGA-II+TF-IDF selection `4690.7s`，
 > 約為最佳 TF-IDF-MMR 的 `31.5×`，且未達多 seed 門檻。故 200-row pilot 的
 > MMR-main 判斷已降為被 full-dev 否定的早期 diagnostic；NSGA-II 退出核心的判斷保留。
-> final selector 等 GovReport 同規格 D2 完成後再 freeze。
+> GovReport 同規格 D2 其後完成：TF-IDF-MMR λ=0.7 macro `0.446154`，對 Greedy
+> `+0.028293`，104-endpoint Holm `0.020798`、228-opportunity correction `0.045595`；
+> 但仍低 full-source SBERT+MMR `0.006614`。兩資料集無共同近最優 selector，依預註冊
+> 採 task-profile policy（multi-document→Greedy；single-document multi-sentence→
+> TF-IDF-MMR λ=0.7）。兩者仍輸 adversarial baseline，不進 dev-test。
 
 已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
 以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現
@@ -603,7 +607,7 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
    依句數、文件數、section 數、廉價 lexical redundancy／topic dispersion、cheap lexical graph density 與預估 route cost 決定各 route 的 K，並允許在容易文件跳過 PLM。不可用必須先執行昂貴 route 才能得到的 route agreement 作事前決策；routing policy 只能在 validation 設計與凍結。
 
 5. Selector competition  
-   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 暫支持 MMR，但 2026-08-09 Multi-News full-dev 已顯示該排序不能外推；Greedy 暫為 anchor，final selector 等 GovReport D2。NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
+   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 暫支持 MMR，但 Multi-News full-dev 顯示該排序不能外推；GovReport 則支持 TF-IDF-MMR λ=0.7。依預註冊採 task-profile policy，並因兩 profile 都輸 adversarial baseline而禁止 promotion。NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
 
    Phase 1e 已完成工程前提：Greedy、GRASP、MMR、NSGA-II 共用 constraints 與 final evaluator；Greedy／NSGA-II 另嚴格共用同一 scalar objective，MMR 的 sequential rule 則明確分開標示。200-row paired selector comparison 與 NSGA 五 seed stability 已完成，證據不支持 NSGA-II；exact small-instance gap 只在仍需解釋 stochastic comparator 時補做，不再是 main architecture blocker。
 

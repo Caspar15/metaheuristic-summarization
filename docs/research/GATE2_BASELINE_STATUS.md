@@ -178,14 +178,16 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - GovReport greedy analysis：`runs_v2/gate2_greedy_reference_v1/govreport/dev/analysis/analysis.json`
 - paired finalists：`runs_v2/gate2_paired_finalists_v1/summary.json`
 - paired 預註冊：`configs/preregistrations/gate2_paired_finalists_v1.json`
+- D2 selector evidence：`runs_v2/d2_selector_full_dev_v1/analysis/paired_summary.json`
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
 ### 尚未完成（下一步）
 
-1. 針對 Multi-News 與 GovReport 都顯著輸 adversarial winner 的現況，在 dev 做已預註冊的
-   candidate-budget／fusion／selector／salience
-   搜尋；若搜尋空間耗盡仍無顯著優勢，依停止條件寫重新定位建議。
+1. selector-only D2 已完成：Multi-News 採 Greedy，GovReport 採 TF-IDF-MMR λ=0.7；
+   兩者仍低 adversarial winner，沒有 dev-test promotion。下一輪只在 dev 搜尋尚未掃完的
+   candidate-budget／fusion／salience；若搜尋空間耗盡仍無顯著優勢，依停止條件寫
+   重新定位建議。
 2. 完成 Multi-News main／frozen clean 的共同 5,549-row paired sensitivity，並整理一致的
    quality-cost reporting artifact；不得把 clean 取代 main。
 3. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
