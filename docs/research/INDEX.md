@@ -19,11 +19,13 @@ confirmation 與 streaming 16-worker runner 已在分數前凍結並完成。Mul
 仍低 PacSum `0.002036`；GovReport winner 高 SBERT+MMR `0.003655`、CI 全正且 Holm-28
 通過，但 selection correction 未通過。兩 profile 均不得 promotion；dev-test/test 未讀。
 
-D3b 是停止條件前最後一個 dev 實驗，且已在任何組合分數前凍結。每個 task profile
-只有一個 cross-profile-evidence combination：Multi-News bigrams+position+graph×2；
-GovReport bigrams+position+lexical×0.5。正式 gate 固定為 100,000 次 paired bootstrap、
-8-endpoint Holm 與 340-opportunity correction；兩邊都通過才建議 freeze，任一失敗即
-寫重新定位建議並停止，不新增 grid、不讀 dev-test/test。
+D3b 是停止條件前最後一個 dev 實驗，且已在任何組合分數前凍結並完成。GovReport
+bigrams+position+lexical×0.5 macro `0.457404`，對 SBERT+MMR `+0.004636`，
+95% CI `[+0.002507,+0.006745]`、Holm-8 `p=0.000240`、Bonferroni-340
+`p=0.013600`，通過全部條件。Multi-News bigrams+position+graph×2 macro
+`0.330417`，仍低 PacSum `0.001323`；R-2 `−0.008565` 且 CI 全負。雙 primary
+promotion 因此失敗，配置搜尋已停止；不得新增 grid 或讀 dev-test/test。下一個人工作業
+是審核 `REPOSITIONING_RECOMMENDATION.md` 的 GovReport-centered claim matrix。
 
 `Greedy / candidate-matched SBERT-MMR / NSGA-II` 的 selector swap 已完成第一版
 接線與 3-row 真實資料 smoke，三者逐列 candidate、salience、similarity、coverage
@@ -60,7 +62,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route 獨立排名、provenance 進 selector、shared objective/constraint evaluator、source-vs-candidate length feasibility、Pareto artifact、兩 primary canonical/frozen-policy/dev-partition 已完成；published-protocol parity、正式成本 pilot 與 validation-frozen output policy 仍未完成；CNN/DailyMail 是 Gate 3 後的 optional 工作；見 `ACTION_PLAN.md` Phase 1 |
-| 測試 | ✅ **429 local tests 全過**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
+| 測試 | ✅ **431 local tests 全過**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 已接 GitHub Actions |
 | **baseline** | 🔴 **Gate 2 diagnosis 完成、quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；不得進 dev-test，回 dev redesign。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
@@ -72,7 +74,8 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | D1 敏感度 | 🟡 原 screens／matched route ablations／paired analysis 完成。12/12 route endpoints 通過 Holm 與 186-opportunity correction，semantic/graph 暫留；但 Multi-News 對 Lead R-2 顯著 `−0.008336`，GovReport 對 Lead R-2 CI 跨 0，且強 baseline 未齊。10k resamples 對 372 correction 解析度不足，不事後改協定；本階段不看 dev-test |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
-> validation pilot，但目前沒有任何新配置通過 Gate 2 或取得可投論文的正式證據。
+> validation pilot；D3b 已在 GovReport 取得 multiplicity-corrected 正證據，但
+> Multi-News 未通過，因此仍不能解鎖 protected split 或宣稱跨資料集方法有效。
 > 每個 route 的刪除條件（`ARCHITECTURE.md` §5.3／§5.4／§7.3）都仍然有效。
 >
 > 各項稽核發現的 legacy／新 pipeline 現況對照見
@@ -102,6 +105,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | `CODE_AUDIT_IEEE_Access.md` | 已驗證的程式缺陷 + 實測數字 + 已套用的修正 | 需要證據、需要引用數字 |
 | `GATE2_BASELINE_STATUS.md` | 最新 baseline family 分數、證據與未完成項目 | 追 Gate 2 進度時 |
 | `STRATEGY_ASSESSMENT.md` | 可行性評估、病因診斷、資料集選擇、兩份計畫對照 | 需要判斷「還有沒有救、主場選哪裡」 |
+| `REPOSITIONING_RECOMMENDATION.md` | D3b 停止決策、凍結數字與投稿選項 | **下一個需老師／作者簽字的文件** |
 | `REPO_CLEANUP.md` | 專案整理 | Phase 0 |
 
 ### 文件權威順序

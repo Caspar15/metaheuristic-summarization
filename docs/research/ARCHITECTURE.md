@@ -29,7 +29,14 @@
 > 兩邊仍輸 adversarial baseline，故這是下一輪 dev 架構，不是 dev-test promotion。
 > NSGA-II 退出核心的判斷反而獲得更強支持。
 
-> 狀態：**Target Architecture v1，尚未 freeze**  
+> 2026-08-09 D3b final correction：最後一個 cross-profile combination 已完成。
+> GovReport 對 strongest baseline macro `+0.004636` 且 Holm-8／Bonferroni-340 通過；
+> Multi-News 仍 `−0.001323`，R-2 `−0.008565` 且 CI 全負。架構因此沒有取得
+> cross-profile freeze 資格；配置搜尋停止。可保留的候選定位是 GovReport-centered、
+> training-free、provenance-preserving long-document summarization，須待作者批准新的
+> claim matrix；詳見 `REPOSITIONING_RECOMMENDATION.md`。
+
+> 狀態：**Target Architecture v1，雙 primary freeze 失敗／等待重新定位決策**
 > freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。
 
@@ -44,8 +51,8 @@
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
 4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
-   NSGA-II 退出核心與標題；GovReport D2 後採上述 task-profile policy，但尚未通過
-   adversarial-baseline promotion gate。
+   NSGA-II 退出核心與標題；GovReport D3b 已通過 adversarial-baseline gate，但
+   Multi-News 未通過，故 task-profile system 整體仍不能 freeze。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 
@@ -324,7 +331,8 @@ CandidateRecord
 - D3a 在不改預設行為下加入顯式 `candidates.route_weights`：equal-weight contract 仍是每路
   `1.0`，只允許 enabled route 的有限正值，解析後權重／RRF constant／fusion method
   一併寫入 allocation。這只把既有 provenance fusion 變成可稽核的 weighted RRF，
-  不是 learned router；是否有品質增益須依 `d3a-router-fusion-screen-v1` 驗證。
+  不是 learned router。D3a/D3b 顯示其增益具有 task-profile dependence：GovReport
+  最終組合通過 strongest-baseline gate，Multi-News 則因 R-2 明確落後而失敗。
 
 ## 6. Objective factory
 

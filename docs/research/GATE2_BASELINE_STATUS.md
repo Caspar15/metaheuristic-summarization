@@ -10,7 +10,17 @@
   GovReport adversarial winner SBERT+MMR λ=0.9 為 `−0.034906`，95% CI
   `[−0.038498, −0.031373]`、Holm `p=0.012799`。selection-aware wins 為 0。
 - Gate 2 的工程／診斷矩陣已完成，但 proposed quality gate 明確失敗；S02b 不得晉級
-  dev-test。下一步是在 dev 做預註冊 redesign/search；test 仍鎖定。
+  dev-test。後續 D2/D3a/D3b redesign 已完成；最終結果見下一節，test 仍鎖定。
+
+## 2026-08-09 D3b final checkpoint：GovReport 通過、雙 primary gate 失敗
+
+- GovReport D3b macro `0.457404`，對本文件 strongest baseline SBERT+MMR
+  `+0.004636`；100,000-resample CI `[+0.002507,+0.006745]`、Holm-8
+  `p=0.000240`、Bonferroni-340 `p=0.013600`，通過。
+- Multi-News D3b macro `0.330417`，仍低 PacSum P08 `0.001323`；macro CI 跨 0，
+  R-2 `−0.008565` 且 CI 全負，未通過。
+- 預註冊要求兩個 profiles 都通過，故停止配置搜尋並寫
+  `REPOSITIONING_RECOMMENDATION.md`；dev-test/test 均未讀。
 
 ## 2026-08-09 checkpoint：GovReport PLM 27/27 完成
 
@@ -182,7 +192,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
-### 尚未完成（下一步）
+### 停止後待作者決策
 
 1. selector-only D2 已完成：Multi-News 採 Greedy，GovReport 採 TF-IDF-MMR λ=0.7；
    兩者仍低 adversarial winner，沒有 dev-test promotion。下一輪只在 dev 搜尋尚未掃完的
@@ -196,8 +206,9 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    未通過。weighted RRF 預設仍為 equal weights，dev-test/test 無入口。依原規則只剩
    一個 D3b combination follow-up；該案已在任何結果前固定為每 profile 一個組合、
    100,000 次 paired bootstrap、Holm-8 與 340-opportunity correction。任一 profile
-   未過 gate 即依停止條件寫重新定位建議。
-2. 完成 Multi-News main／frozen clean 的共同 5,549-row paired sensitivity，並整理一致的
-   quality-cost reporting artifact；不得把 clean 取代 main。
-3. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
-   test 仍鎖定至 freeze 簽字。
+   未過 gate 即依停止條件寫重新定位建議。D3b 現已完成：GovReport 通過，但
+   Multi-News 失敗，`all_profiles_eligible=false`。
+2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。若作者批准
+   GovReport-centered claim matrix，須先正式修改 data policy 並另行預註冊；否則接受
+   IEEE Access 方法稿 No-Go。
+3. `dev-test` 與 `test` 仍鎖定；目前沒有符合規則的解鎖條件。

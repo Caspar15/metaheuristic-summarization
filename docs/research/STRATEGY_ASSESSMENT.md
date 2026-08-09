@@ -226,6 +226,16 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 **第 3 點和第 4 點最有機會形成 IEEE Access 的方法敘事**，但目前只是待驗證的架構假設；仍需消融、matched baseline 與使用情境證明。
 
+### 3.4 D3b 後的實證修正（2026-08-09）
+
+現在不能再概括說「品質最好」，但第 3.3 節的定位在 GovReport 得到第一個正式支持。
+D3b 在 GovReport 對 full-source SBERT+MMR macro `+0.004636`，100k paired CI
+`[+0.002507,+0.006745]`，Holm-8 與 Bonferroni-340 均通過；這支持長篇單文件、
+training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低 PacSum
+`0.001323`，且 R-2 `−0.008565` 的 CI 全負；因此它同時否定跨 multi-document profile
+的普遍 superiority claim。策略不再是繼續調參，而是由作者決定是否批准
+`REPOSITIONING_RECOMMENDATION.md` 的 GovReport-centered claim matrix。
+
 ---
 
 ## 4. 文件整合與證據分工
@@ -255,7 +265,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 426 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a runners 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 431 local tests、PR #15 Linux CI、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -299,9 +309,9 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 429 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-68/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | canonical 主路徑的 431 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-69/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
-| Phase 3（方法實驗） | D3a full-dev 已使 GovReport 首次顯著高 strongest baseline（macro `+0.003655`、Holm-28 `p=0.023798`），但 selection correction 未過；Multi-News 仍低 PacSum `0.002036` 且 R-2 顯著落後。最後一個 D3b 已在分數前固定為每 profile 一案與 100k bootstrap；結果前不能 promotion |
+| Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 
@@ -315,12 +325,17 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 ## 6. 最後的總體判斷
 
-**還有沒有機會投 IEEE Access？有，但不是現在，而且不能只補實驗。**
+**還有沒有機會投 IEEE Access？有條件，而且不是以原本的跨資料集 superiority 主張。**
 
 - **現在直接投** → 我判斷**幾乎確定被拒**。test-set 調參（P0-01）+ 輸給 Lead（F-0）任一被抓到就結束
 - **只修 evaluator、補 baseline、改寫文字後投** → 仍然 No-Go。因為修正後會**更清楚地顯示輸給 Lead**
-- **照合併計畫執行（含打破 lead bias 的核心改動）** → **有實質機會**。前提是中途檢查點通過
+- **改採 GovReport-centered 的長篇單文件／可審計 training-free 定位** → 有條件的機會；
+  必須先由老師與作者批准新的 claim matrix，再補 evaluator parity、成本/scaling 與寫作證據
+- **保留兩 primary 都須勝 strongest baseline 的原 gate** → D3b 已判定 No-Go，不應再跑同一搜尋空間
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
-**最後一句實話**：核心概念仍有價值，但最新證據更嚴格：S02b 在 Multi-News 輸 P08 `0.003663`，在 GovReport 輸 MMR λ=0.9 `0.034906`；兩個 macro loss 的 paired CI 全負且 Holm-significant。semantic／graph matched 增量雖成立，整體方法仍弱於 strongest baseline。現在必須在 dev 優化 Multi-News 的 selector/salience，以及 GovReport 的 candidate coverage + selector；若搜尋空間掃完仍無顯著優勢，就依停止條件重新定位，不能直接投稿。
+**最後一句實話**：核心概念在 GovReport 已有 multiplicity-corrected 正證據，但
+Multi-News 的 R-2 缺陷仍明確，跨資料集主張已失敗。現在不能再優化同一 dev 搜尋空間，
+也不能直接投稿；應先由老師與作者審核 `REPOSITIONING_RECOMMENDATION.md`，決定縮窄為
+GovReport-centered 修訂稿，或接受 IEEE Access 方法稿 No-Go。

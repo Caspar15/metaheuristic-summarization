@@ -31,9 +31,11 @@
 > 然而 D3a 的 10k bootstrap 在 332-way correction 下最小可達 p 僅 `0.066393`，
 > Gov winner selection-adjusted `p=0.464754`，仍依原規則不 promotion。只允許最後一個
 > 在分數前凍結、提高 resampling resolution 的 D3b cross-profile combination；若
-> Multi-News 仍未過 adversarial gate，應寫重新定位建議而非進 dev-test。D3b 現已固定
-> 為每個 profile 一個組合、100,000 次 paired bootstrap、Holm-8 與 340-opportunity
-> correction；兩個 profile 都須通過，且 runner 沒有 dev-test/test 入口。
+> Multi-News 仍未過 adversarial gate，應寫重新定位建議而非進 dev-test。D3b 已按
+> 每個 profile 一個組合、100,000 次 paired bootstrap、Holm-8 與 340-opportunity
+> correction 完成。GovReport 對 strongest baseline `+0.004636` 且全部 gate 通過；
+> Multi-News 仍 `−0.001323`，R-2 `−0.008565` 且 CI 全負。雙 primary gate 失敗，
+> 搜尋停止；`REPOSITIONING_RECOMMENDATION.md` 已建立，dev-test/test 保持鎖定。
 
 已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
 以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現

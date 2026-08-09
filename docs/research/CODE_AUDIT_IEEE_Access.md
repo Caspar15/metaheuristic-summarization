@@ -1788,13 +1788,14 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 
 ## 附錄 A：本次已直接修改的程式碼
 
-以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**426 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，目前
+**431 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
 兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired
-finalists 已完成；proposed S02b quality gate 失敗。clean sensitivity 與 redesign 尚未完成。
+finalists 與 D2/D3a/D3b redesign 已完成。GovReport D3b 通過 strongest-baseline gate，
+Multi-News 未通過，故雙 primary promotion 失敗；clean sensitivity 暫停，等待重新定位決策。
 
 | 檔案 | 修改內容 | 對應發現 | 驗證 |
 |---|---|---|---|
@@ -1894,8 +1895,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-68 與 D2/D3 runners 後為
-**429 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-69 與 D2/D3 runners/analyzers 後為
+**431 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2015,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **429 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **431 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2281,5 +2282,35 @@ bigrams+position 與 graph×2 合併；GovReport 將 bigrams+position 與 lexica
 兩個 profile 均須 macro point estimate 為正、macro CI lower > 0、Holm-8 與
 Bonferroni-340 均 ≤ 0.05，且不得有 component CI 全負。全部通過才寫 freeze 建議；
 任一失敗就寫重新定位建議並停止。runner 只接受 frozen dev，最多 16 個 bounded row
-workers、每 worker 一個 BLAS thread，沒有 dev-test/test CLI 入口。完整回歸
+workers、每 worker 一個 BLAS thread，沒有 dev-test/test CLI 入口。當時完整回歸
 **429 passed**；此時尚未觀察任何 D3b 組合分數。
+
+## F-69 — D3b：GovReport 通過，Multi-News R-2 明確失敗；觸發重新定位停止條件
+
+**嚴重度：P0（方法有效性／投稿決策）**
+
+D3b 兩個單一組合都以 16 workers 完成 frozen dev。GovReport 681/681 rows、0
+infeasible，macro `0.457404`，相對 D3a anchor `+0.000981`，相對 strongest
+full-source SBERT+MMR `+0.004636`。正式 macro CI
+`[+0.002507,+0.006745]`、Holm-8 `p=0.000240`、Bonferroni-340
+`p=0.013600`；R-1／R-2 亦為正，故該 task profile 通過全部 preregistered checks。
+
+Multi-News 3,935/3,935 rows，其中 3,930 feasible、5 個依既有 F-17 contract 記為
+infeasible。macro `0.330417`，相對 D3a anchor `+0.000714`，但仍低 PacSum P08
+`0.001323`；macro CI `[−0.003372,+0.000697]`。component 顯示 R-1
+`+0.000391`、R-Lsum `+0.004207`，但 R-2 `−0.008565`、CI
+`[−0.010924,−0.006221]` 全負。因此不是只有總平均 power 不足；方法的 multi-document
+局部 bigram precision 仍有明確缺陷。
+
+預註冊要求兩個 task profiles 都通過，故 `all_profiles_eligible=false`。搜尋依停止條件
+結束，不得新增 dev grid、不得讀 dev-test/test。已寫
+`REPOSITIONING_RECOMMENDATION.md`，建議將可辯護主張縮為 training-free、
+provenance-preserving 的長篇單文件框架，並把 Multi-News 作為適用邊界；若要改 frozen
+data policy／claim matrix，必須由老師與作者另行簽字。
+
+第一次 GovReport invocation 因 Codex Windows sandbox 對 child process 的
+`PermissionError` 在未完成前失敗，沒有可用分數；原始 summary、暫存 prediction 與
+search-log record 已保留於 `govreport/attempts/attempt_01_sandbox_permission/`。成功重試
+在 sandbox 外依同一 scientific config 執行，沒有覆寫失敗 evidence。完整回歸目前為
+**431 passed**。完整 paired evidence：
+`runs_v2/d3b_cross_profile_combination_v1/analysis/paired_summary.json`。

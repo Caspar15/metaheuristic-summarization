@@ -1,0 +1,290 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:53:53.585427+00:00",
+  "status": "completed_repositioning_required",
+  "study_id": "d3b-cross-profile-combination-v1",
+  "preregistration_path": "configs/preregistrations/d3b_cross_profile_combination_v1.json",
+  "preregistration_sha256": "58c6c98c1953416463bf000c102d351a320ef3634be91d3fd478827ac12bc112",
+  "paired_contract": {
+    "formal_resamples": 100000,
+    "descriptive_resamples": 10000,
+    "base_seed_formal": 20260809,
+    "holm_endpoints": 8,
+    "selection_opportunities": 85,
+    "selection_endpoints": 340,
+    "finite_bootstrap_minimum_two_sided_p": 1.999980000199998e-05,
+    "minimum_possible_bonferroni_340": 0.006799932000679994
+  },
+  "datasets": {
+    "Multi-News": {
+      "rows": 3935,
+      "combination": {
+        "macro": 0.33041732906572213,
+        "macro_delta_vs_D3a_anchor": 0.0007135322776622988,
+        "per_example": {
+          "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/per_example.jsonl",
+          "sha256": "ecad45591e2b0dce4c71b08ed8899a7b099c652af7ab770bdccef37a97fff2e2",
+          "rows": 3935
+        }
+      },
+      "D3a_anchor": {
+        "candidate": "R07_bigrams_position02",
+        "macro": 0.32970379678805983,
+        "per_example": {
+          "path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/per_example.jsonl",
+          "sha256": "64409ff5197c5aad01c8359b89aa9c07750951e2f5d63c68672ecaf1e543e3d0",
+          "rows": 3935
+        }
+      },
+      "adversarial_baseline": {
+        "label": "PacSum TF-IDF P08",
+        "macro": 0.33173990364087286,
+        "per_example": {
+          "path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+          "sha256": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e",
+          "rows": 3935
+        }
+      },
+      "macro_delta_vs_adversarial": -0.0013225745751507256,
+      "versus_D3a_anchor_descriptive": {
+        "rouge1": {
+          "n_pairs": 3935,
+          "n_resamples": 10000,
+          "seed": 20270809,
+          "confidence": 0.95,
+          "mean_difference": 0.0005885075258695879,
+          "ci_lower": -8.893655525904793e-06,
+          "ci_upper": 0.0012169300778716926,
+          "p_value_two_sided": 0.05419458054194581
+        },
+        "rouge2": {
+          "n_pairs": 3935,
+          "n_resamples": 10000,
+          "seed": 20270810,
+          "confidence": 0.95,
+          "mean_difference": 0.00040596787119807806,
+          "ci_lower": -0.0003284618446253826,
+          "ci_upper": 0.0011579846169582212,
+          "p_value_two_sided": 0.2833716628337166
+        },
+        "rougeLsum": {
+          "n_pairs": 3935,
+          "n_resamples": 10000,
+          "seed": 20270811,
+          "confidence": 0.95,
+          "mean_difference": 0.0011461214359190892,
+          "ci_lower": 0.0005246074079552902,
+          "ci_upper": 0.0017895247624243225,
+          "p_value_two_sided": 0.0007999200079992001
+        },
+        "macro_rouge": {
+          "n_pairs": 3935,
+          "n_resamples": 10000,
+          "seed": 20270812,
+          "confidence": 0.95,
+          "mean_difference": 0.0007135322776622515,
+          "ci_lower": 9.801747713538098e-05,
+          "ci_upper": 0.0013253209491424878,
+          "p_value_two_sided": 0.021597840215978402
+        }
+      },
+      "versus_adversarial_formal": {
+        "rouge1": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20260809,
+          "confidence": 0.95,
+          "mean_difference": 0.0003905309533152375,
+          "ci_lower": -0.0016208133520753166,
+          "ci_upper": 0.002391761544835458,
+          "p_value_two_sided": 0.7054729452705473,
+          "p_value_selection_bonferroni_340": 1.0,
+          "p_value_holm_8": 0.7054729452705473
+        },
+        "rouge2": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20260810,
+          "confidence": 0.95,
+          "mean_difference": -0.008565164650189774,
+          "ci_lower": -0.010923867338876877,
+          "ci_upper": -0.006220504231011972,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_selection_bonferroni_340": 0.006799932000679994,
+          "p_value_holm_8": 0.00015999840001599985
+        },
+        "rougeLsum": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20260811,
+          "confidence": 0.95,
+          "mean_difference": 0.004206909971421393,
+          "ci_lower": 0.002192493092579791,
+          "ci_upper": 0.006202589122943084,
+          "p_value_two_sided": 5.999940000599994e-05,
+          "p_value_selection_bonferroni_340": 0.02039979600203998,
+          "p_value_holm_8": 0.0002999970000299997
+        },
+        "macro_rouge": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20260812,
+          "confidence": 0.95,
+          "mean_difference": -0.001322574575151049,
+          "ci_lower": -0.003372069802058594,
+          "ci_upper": 0.0006966886309465427,
+          "p_value_two_sided": 0.2063979360206398,
+          "p_value_selection_bonferroni_340": 1.0,
+          "p_value_holm_8": 0.4127958720412796
+        }
+      },
+      "promotion": {
+        "eligible": false,
+        "checks": {
+          "macro_point_positive": false,
+          "macro_ci_lower_positive": false,
+          "macro_holm_8_le_005": false,
+          "macro_selection_bonferroni_340_le_005": false,
+          "no_component_ci_entirely_negative": false
+        }
+      }
+    },
+    "GovReport": {
+      "rows": 681,
+      "combination": {
+        "macro": 0.45740372774920507,
+        "macro_delta_vs_D3a_anchor": 0.0009806757730965732,
+        "per_example": {
+          "path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/per_example.jsonl",
+          "sha256": "9538f20d53b5374c0e0006b6f38ac1a3a0e882067d77210ad468e1b8530e486d",
+          "rows": 681
+        }
+      },
+      "D3a_anchor": {
+        "candidate": "R11_lexical_x05",
+        "macro": 0.4564230519761085,
+        "per_example": {
+          "path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R11_lexical_x05/per_example.jsonl",
+          "sha256": "51bc7878e6e3417a3c957502e55d266a3c2e58f0e6ea82d3a595e13675f6ff29",
+          "rows": 681
+        }
+      },
+      "adversarial_baseline": {
+        "label": "full-source SBERT+MMR lambda 0.9",
+        "macro": 0.4527681167755245,
+        "per_example": {
+          "path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+          "sha256": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43",
+          "rows": 681
+        }
+      },
+      "macro_delta_vs_adversarial": 0.004635610973680593,
+      "versus_D3a_anchor_descriptive": {
+        "rouge1": {
+          "n_pairs": 681,
+          "n_resamples": 10000,
+          "seed": 20270813,
+          "confidence": 0.95,
+          "mean_difference": 0.0007498614824277262,
+          "ci_lower": -7.657903770292581e-05,
+          "ci_upper": 0.001652889526905431,
+          "p_value_two_sided": 0.07839216078392161
+        },
+        "rouge2": {
+          "n_pairs": 681,
+          "n_resamples": 10000,
+          "seed": 20270814,
+          "confidence": 0.95,
+          "mean_difference": 0.001143931420936685,
+          "ci_lower": 0.00015348249856914642,
+          "ci_upper": 0.0021854662705164513,
+          "p_value_two_sided": 0.0225977402259774
+        },
+        "rougeLsum": {
+          "n_pairs": 681,
+          "n_resamples": 10000,
+          "seed": 20270815,
+          "confidence": 0.95,
+          "mean_difference": 0.0010482344159252423,
+          "ci_lower": 0.00018437619657954733,
+          "ci_upper": 0.001977311373664166,
+          "p_value_two_sided": 0.017198280171982803
+        },
+        "macro_rouge": {
+          "n_pairs": 681,
+          "n_resamples": 10000,
+          "seed": 20270816,
+          "confidence": 0.95,
+          "mean_difference": 0.000980675773096552,
+          "ci_lower": 0.00013802090291300034,
+          "ci_upper": 0.001901536089900854,
+          "p_value_two_sided": 0.020597940205979402
+        }
+      },
+      "versus_adversarial_formal": {
+        "rouge1": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20260813,
+          "confidence": 0.95,
+          "mean_difference": 0.004096761108631279,
+          "ci_lower": 0.0020856399383677006,
+          "ci_upper": 0.006114412905370309,
+          "p_value_two_sided": 9.99990000099999e-05,
+          "p_value_selection_bonferroni_340": 0.03399966000339996,
+          "p_value_holm_8": 0.0003999960000399996
+        },
+        "rouge2": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20260814,
+          "confidence": 0.95,
+          "mean_difference": 0.007803649509281565,
+          "ci_lower": 0.005225773288659042,
+          "ci_upper": 0.010400691786115268,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_selection_bonferroni_340": 0.006799932000679994,
+          "p_value_holm_8": 0.00015999840001599985
+        },
+        "rougeLsum": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20260815,
+          "confidence": 0.95,
+          "mean_difference": 0.002006422303129156,
+          "ci_lower": -0.00011897059013312274,
+          "ci_upper": 0.004157982936419142,
+          "p_value_two_sided": 0.06381936180638194,
+          "p_value_selection_bonferroni_340": 1.0,
+          "p_value_holm_8": 0.19145808541914583
+        },
+        "macro_rouge": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20260816,
+          "confidence": 0.95,
+          "mean_difference": 0.004635610973680667,
+          "ci_lower": 0.002506653717325565,
+          "ci_upper": 0.006744759965547671,
+          "p_value_two_sided": 3.999960000399996e-05,
+          "p_value_selection_bonferroni_340": 0.013599864001359988,
+          "p_value_holm_8": 0.00023999760002399976
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "checks": {
+          "macro_point_positive": true,
+          "macro_ci_lower_positive": true,
+          "macro_holm_8_le_005": true,
+          "macro_selection_bonferroni_340_le_005": true,
+          "no_component_ci_entirely_negative": true
+        }
+      }
+    }
+  },
+  "all_profiles_eligible": false,
+  "decision": "stop search and write repositioning recommendation; no dev-test/test",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
