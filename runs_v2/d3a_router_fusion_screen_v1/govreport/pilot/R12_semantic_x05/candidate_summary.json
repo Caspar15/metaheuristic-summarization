@@ -1,0 +1,79 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:03:36.602768+00:00",
+  "started_at_utc": "2026-08-09T14:02:57.839403+00:00",
+  "status": "completed",
+  "study_id": "d3a-router-fusion-screen-v1",
+  "dataset": "GovReport",
+  "partition": "dev_pilot",
+  "pilot_rows": 200,
+  "candidate": "R12_semantic_x05",
+  "candidate_hash": "90561cfea7d10a788a883b86f70bfe6122c1f0ac76360180f7bb9de52090c339",
+  "declared_delta": {
+    "candidates.route_weights": {
+      "semantic": 0.5
+    }
+  },
+  "config_path": "runs_v2/d3a_router_fusion_screen_v1/govreport/pilot/R12_semantic_x05/resolved_config.yaml",
+  "config_sha256": "77b0ced0139ea40274b57c5144e689b3fd356ea75702b66f4e2ec94cc61bae8d",
+  "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/govreport/pilot/R12_semantic_x05/predictions.jsonl",
+  "predictions_sha256": "6f3168f6c9aef51f553047233cebca978c89c66ce02790e00101ca92d3ff3b0a",
+  "selected_indices_sha256": "06f50175e7753a48837d9437136b8e562357f39363bd8b5a8854daf92d12de8c",
+  "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "execution": {
+    "workers": 16,
+    "worker_kind": "bounded_row_processes",
+    "omp_threads_per_worker": 1,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+    "elapsed_seconds": 15.768066799966618
+  },
+  "dataset_preflight": {
+    "valid": true,
+    "policy_id": "govreport-validation-v1",
+    "policy_path": "configs/data_policies/govreport_validation_v1.json",
+    "policy_file_sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e",
+    "analysis": "main",
+    "analysis_role": "primary_validation",
+    "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "input_file_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+    "dataset_fingerprint": "4f2506cb94ce65882b6e5f176c27cb471a08c60a75f21b5383dc9cfc90cfad7d",
+    "rows": 973,
+    "dataset_revision": "official-author-archive-2021-04-01",
+    "replacement_character_rows": 0,
+    "replacement_characters": 0,
+    "replacement_manifest_file_sha256": "92fda0df5f4d9d8e632766a930e91a3137a1d9c22e6e5b6bbb2fbe85fbcd18a6",
+    "canonical_exclusion_manifest_file_sha256": "59e6107a2f3ac93fc9bd8e8b3c20e6e6d225250ad9cf9c11e8a47cb72a9dc041"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 200,
+    "rouge": {
+      "rouge1": 0.5651482986511307,
+      "rouge2": 0.22983154011627846,
+      "rougeLsum": 0.5273071685330057
+    },
+    "macro_rouge": 0.44076233576680496,
+    "feasible_rows": 200,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 647.125,
+      "min": 635,
+      "max": 650
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
