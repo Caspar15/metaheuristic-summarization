@@ -46,6 +46,16 @@
   SBERT+MMR macro `+0.003655`、CI `[+0.001446,+0.005876]`、Holm-28
   `p=0.023798`，但 332-opportunity `p=0.464754`，兩者均不得 promotion。
 
+## 2026-08-09 D3b final-combination preregistration
+
+- 最後允許的 dev 搜尋已在任何 D3b 分數前凍結為每個 task profile **一個**組合：
+  Multi-News 使用 bigrams+position+graph×2；GovReport 保留 TF-IDF-MMR λ=0.7，使用
+  bigrams+position+lexical×0.5。不得再建立新 grid。
+- 正式判定固定為 100,000 次 paired bootstrap、8-endpoint Holm 與 340-opportunity
+  selection correction；兩個 profile 都通過才可寫 freeze 建議，任一失敗即寫重新定位
+  建議並停止。runner 只接受 frozen dev、最多 16 workers、每 worker 一個 BLAS thread，
+  dev-test/test 均無入口。
+
 ## 2026-08-06 selector-comparison checkpoint
 
 - 已新增同候選、同 SBERT salience/similarity/coverage、同 budget 的
@@ -61,7 +71,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行完整測試為 **426 passed**。
+  現行完整測試為 **429 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於

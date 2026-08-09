@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d3b-cross-profile-combination-v1",
+  "registered_at_utc": "2026-08-09T14:36:55.1196163Z",
+  "implementation_parent_commit": "b618011f53829e2b7ca6dff5672382641e9f941e",
+  "registration_timing": "after D3a full-dev paired outcomes and before either D3b combination score",
+  "source_analysis": "runs_v2/d3a_router_fusion_full_dev_v1/analysis/paired_summary.json",
+  "source_analysis_sha256": "6a698abfee5707169baf6884e953236bea0969d5c666b926c6dccf77a610e882",
+  "partition": "dev",
+  "dev_test_access": "none",
+  "test_split_prohibited": true,
+  "question": "Does the cross-profile-positive lexical salience interaction add to each task profile's best route-weight direction enough to beat the frozen adversarial baseline?",
+  "known_before_registration": {
+    "Multi-News": {
+      "best_D3a": "R07_bigrams_position02",
+      "best_D3a_macro": 0.32970379678805983,
+      "best_D3a_minus_adversarial": -0.0020361068528130244,
+      "route_weight_followup": "R10_graph_x2 was the route-weight family winner and independently positive versus D2 anchor"
+    },
+    "GovReport": {
+      "best_D3a": "R11_lexical_x05",
+      "best_D3a_macro": 0.4564230519761085,
+      "best_D3a_minus_adversarial": 0.0036549352005840197,
+      "lexical_salience_followup": "R07_bigrams_position02 was independently positive and generalized from pilot to full dev"
+    },
+    "combination_scores_observed": false
+  },
+  "datasets": {
+    "Multi-News": {
+      "task_profile": "multi_document + multi_sentence",
+      "rows": 3935,
+      "base_config": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "b1a0de3218c19c0aeed751299d57ad9345556eeaf0dc3a489d6381e276055186",
+      "anchor_candidate": "R07_bigrams_position02",
+      "anchor_summary": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/candidate_summary.json",
+      "combination_delta": {
+        "features.tf_isf.use_bigrams": true,
+        "features.weights.position": 0.2,
+        "candidates.route_weights": {"graph": 2.0}
+      },
+      "adversarial_baseline": "PacSum TF-IDF P08",
+      "adversarial_per_example": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+      "adversarial_per_example_sha256": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e"
+    },
+    "GovReport": {
+      "task_profile": "single_document + multi_sentence",
+      "rows": 681,
+      "base_config": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/resolved_config.yaml",
+      "base_config_sha256": "9d2918bfd936b8db8b75ee13b853ef2ed58214ecc8a6f470ada8c6b5bb48d910",
+      "anchor_candidate": "R11_lexical_x05",
+      "anchor_summary": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R11_lexical_x05/candidate_summary.json",
+      "combination_delta": {
+        "features.tf_isf.use_bigrams": true,
+        "features.weights.position": 0.2,
+        "candidates.route_weights": {"lexical": 0.5}
+      },
+      "adversarial_baseline": "full-source SBERT+MMR lambda 0.9",
+      "adversarial_per_example": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+      "adversarial_per_example_sha256": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43"
+    }
+  },
+  "candidate": {
+    "id": "C01_combined_salience_route_weight",
+    "family": "single_preregistered_cross_profile_combination"
+  },
+  "execution": {
+    "workers_requested": 16,
+    "worker_policy": "up to 16 bounded row workers, one BLAS/OMP thread each; datasets run sequentially",
+    "embedding_cache": "F-51-audited Gate 2 cache",
+    "streaming": "atomic full prediction stream; no full provenance collection in RAM"
+  },
+  "measurement": {
+    "primary": "all-row macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "formal_paired": "100,000 paired bootstrap resamples, seed 20260809",
+    "descriptive_vs_D3a_anchor": "10,000 paired bootstrap resamples",
+    "holm_family": "2 task-profile combinations x 4 endpoints = 8",
+    "selection_opportunities": "85 proposed configurations x 4 endpoints = 340",
+    "resolution_check": "finite minimum two-sided p=2/100001; Bonferroni-340 minimum=0.006799932000679993"
+  },
+  "decision_rule": {
+    "per_profile": "combination macro must exceed adversarial baseline, macro CI lower >0, Holm-8 p<=0.05, Bonferroni-340 p<=0.05, and no component metric may have CI upper below zero",
+    "overall": "both primary task profiles must pass to recommend configuration freeze",
+    "if_pass": "stop before dev-test/test and write freeze recommendation for human signature",
+    "if_fail": "write repositioning recommendation and stop; do not create another search grid or access dev-test/test"
+  },
+  "scores_observed_after_registration": false
+}

@@ -299,9 +299,9 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 426 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-67/D3a guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | canonical 主路徑的 429 local tests、PR #15 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-68/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
-| Phase 3（方法實驗） | D3a full-dev 已使 GovReport 首次顯著高 strongest baseline（macro `+0.003655`、Holm-28 `p=0.023798`），但 selection correction 未過；Multi-News 仍低 PacSum `0.002036` 且 R-2 顯著落後。只允許最後一個 D3b cross-profile combination；不能 promotion |
+| Phase 3（方法實驗） | D3a full-dev 已使 GovReport 首次顯著高 strongest baseline（macro `+0.003655`、Holm-28 `p=0.023798`），但 selection correction 未過；Multi-News 仍低 PacSum `0.002036` 且 R-2 顯著落後。最後一個 D3b 已在分數前固定為每 profile 一案與 100k bootstrap；結果前不能 promotion |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 

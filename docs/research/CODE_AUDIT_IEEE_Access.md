@@ -1894,8 +1894,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-63 與 D2 runner 後為
-**426 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-68 與 D2/D3 runners 後為
+**429 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **426 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **429 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2264,3 +2264,22 @@ winner 實際 macro raw p `0.001400`、selection-adjusted `0.464754`，仍依原
 不得事後增加 D3a resamples。下一個且最後允許的 D3b combination 必須在任何分數前
 凍結足夠的 resampling resolution。Multi-News 與 GovReport 均未讀 dev-test/test。
 完整 evidence：`runs_v2/d3a_router_fusion_full_dev_v1/analysis/paired_summary.json`。
+
+## F-68 — D3b 最終組合在分數前凍結；提高 bootstrap resolution 並綁定終止決策
+
+**嚴重度：P0（研究治理／停止條件）**
+
+D3a 只留下兩個可交叉組合、且在各自 profile 上有獨立正訊號的方向。因此 D3b 不再開新
+grid，而是在任何 D3b 分數前固定每個 profile 一案：Multi-News 將
+bigrams+position 與 graph×2 合併；GovReport 將 bigrams+position 與 lexical×0.5
+合併。預註冊檔 SHA-256 為
+`58c6c98c1953416463bf000c102d351a320ef3634be91d3fd478827ac12bc112`。
+
+正式比較固定為 100,000 次 paired bootstrap、2 profiles × 4 endpoints 的 Holm-8，
+並保留歷次 85 configurations × 4 endpoints 的 Bonferroni-340。有限樣本雙尾 p 值最小
+為 `2/100001`，乘 340 後為 `0.00679993`，因此不會重現 F-67 的數學不可能 gate。
+兩個 profile 均須 macro point estimate 為正、macro CI lower > 0、Holm-8 與
+Bonferroni-340 均 ≤ 0.05，且不得有 component CI 全負。全部通過才寫 freeze 建議；
+任一失敗就寫重新定位建議並停止。runner 只接受 frozen dev，最多 16 個 bounded row
+workers、每 worker 一個 BLAS thread，沒有 dev-test/test CLI 入口。完整回歸
+**429 passed**；此時尚未觀察任何 D3b 組合分數。

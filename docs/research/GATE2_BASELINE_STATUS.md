@@ -194,8 +194,9 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    已在新分數前預註冊並完成。Multi-News winner 對 PacSum `−0.002036`；GovReport
    winner 對 SBERT+MMR `+0.003655`、CI 全正、Holm-28 通過，但 selection correction
    未通過。weighted RRF 預設仍為 equal weights，dev-test/test 無入口。依原規則只剩
-   一個 D3b combination follow-up；若仍無顯著優勢，依停止條件寫
-   顯著優勢，依停止條件寫重新定位建議。
+   一個 D3b combination follow-up；該案已在任何結果前固定為每 profile 一個組合、
+   100,000 次 paired bootstrap、Holm-8 與 340-opportunity correction。任一 profile
+   未過 gate 即依停止條件寫重新定位建議。
 2. 完成 Multi-News main／frozen clean 的共同 5,549-row paired sensitivity，並整理一致的
    quality-cost reporting artifact；不得把 clean 取代 main。
 3. 只有完成上述項目、決定 proposed selector／route 後，才可依事前規則做一次 dev-test；
