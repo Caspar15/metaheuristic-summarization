@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**424 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**426 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1895,7 +1895,7 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 ### 驗證狀態
 
 F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-63 與 D2 runner 後為
-**424 passed**。預註冊
+**426 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **424 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **426 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2244,3 +2244,23 @@ macro CI 全正且 Holm-104 `p=0.020798`，但以 83 configurations × 4 endpoin
 後續 7 個非 anchor finalists × 4 endpoints 的 full-dev confirmation 亦已在任何該層
 分數前凍結；runner 以 16 個 bounded row workers 串流寫 predictions，只在記憶體保留
 summary／selected-index digest，避免重現整批 provenance RAM spike。此處仍未讀 dev-test/test。
+
+## F-67 — D3a full dev：GovReport 首次勝 strongest baseline；Multi-News 仍敗，且 10k bootstrap 無法解析 332-way gate
+
+**嚴重度：P0（方法有效性／統計治理）**
+
+事前由 pilot rule 選出的 7 個 non-anchor finalists 已在完整 frozen dev 跑完。Multi-News
+最佳 bigrams+position macro `0.329704`，比 D2 anchor `+0.001627`，但對 PacSum P08
+仍 `−0.002036`；正式 paired R-2 `−0.008971`、CI `[−0.011306,−0.006592]`，因此
+不是只差 power。GovReport lexical×0.5 macro `0.456423`，比 D2 anchor `+0.010269`，
+並高 full-source SBERT+MMR `+0.003655`；macro CI `[+0.001446,+0.005876]`、
+Holm-28 `p=0.023798`，R-1/R-2 亦為正，沒有 component CI 全負。這是 proposed method
+第一次在 full frozen dev 對 strongest local baseline 得到正式正證據。
+
+但 D3a 預註冊同時要求 83 configurations × 4 endpoints 的 332-way Bonferroni。
+10,000-resample finite-corrected two-sided bootstrap 的最小 p 是 `2/10001=0.00019998`；
+乘 332 後理論下限就是 `0.066393`，故此 gate 在數學上不可能到 0.05。GovReport
+winner 實際 macro raw p `0.001400`、selection-adjusted `0.464754`，仍依原規則判失敗；
+不得事後增加 D3a resamples。下一個且最後允許的 D3b combination 必須在任何分數前
+凍結足夠的 resampling resolution。Multi-News 與 GovReport 均未讀 dev-test/test。
+完整 evidence：`runs_v2/d3a_router_fusion_full_dev_v1/analysis/paired_summary.json`。

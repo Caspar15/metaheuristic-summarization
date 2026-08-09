@@ -1,0 +1,62 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:31:23.232566+00:00",
+  "started_at_utc": "2026-08-09T14:29:06.635901+00:00",
+  "status": "completed",
+  "study_id": "d3a-router-fusion-full-dev-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "candidate": "R10_graph_x2",
+  "candidate_hash": "2143e595b1b63843810a7a6cfd8768ae69666fcd430d9bb2aa9def784469ea44",
+  "declared_delta": {
+    "candidates.route_weights": {
+      "graph": 2.0
+    }
+  },
+  "config_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R10_graph_x2/resolved_config.yaml",
+  "config_sha256": "e770db4f6c01af2dd70b8c459f6e7e6da4532e95681934c656ff38c72ee38790",
+  "implementation_commit": "b956f7cb9769f0fdb8c5d9716eb4cbdab1b413eb",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "worker_kind": "bounded_row_processes",
+    "threads_per_worker": 1,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+    "streamed_predictions": true
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.44182995219032795,
+      "rouge2": 0.14037020371592765,
+      "rougeLsum": 0.40511305708828965
+    },
+    "macro_rouge": 0.32910440433151505,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.43761118170266,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R10_graph_x2/predictions.jsonl",
+  "predictions_sha256": "6516f88ee0d7c917aab23c6f2176bcc84d82a616117f2f02b73e412b9204a999",
+  "selected_indices_sha256": "d6494d024e2a7e8c83e643b83a0fe540866eedfa6d3f684c9eed69fc8ce6c057",
+  "per_example_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R10_graph_x2/per_example.jsonl",
+  "per_example_sha256": "1bdfffbd18a488182dc45432f4bb0b6d556c3c8fe51c635801eeb350c506e654",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

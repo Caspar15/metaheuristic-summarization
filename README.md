@@ -41,8 +41,10 @@
 - `candidates.route_weights` 未設定時三路皆為 `1.0`，不改舊配置；非法／disabled route
   權重 fail loud，解析值寫入 artifact。runner 可用 16 個 bounded row workers，但每個
   worker 限一個 BLAS thread。dev-test/test 沒有入口。full-dev finalists 已由版本化
-  analyzer 固定；full-dev confirmation 已另行預註冊並以 streaming runner 接線，
-  尚未產生 finalist full-dev 分數。
+  analyzer 固定；full-dev confirmation 兩邊皆已完成。Multi-News bigrams+position
+  對 PacSum macro `−0.002036`（R-2 `−0.008971`）；GovReport lexical×0.5 對
+  SBERT+MMR macro `+0.003655`、CI `[+0.001446,+0.005876]`、Holm-28
+  `p=0.023798`，但 332-opportunity `p=0.464754`，兩者均不得 promotion。
 
 ## 2026-08-06 selector-comparison checkpoint
 
@@ -59,7 +61,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行完整測試為 **424 passed**。
+  現行完整測試為 **426 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -120,7 +122,7 @@
 | Baseline | 🟠 **Gate 2 診斷完成但未通過** —— 兩 primary non-PLM 23/23、PLM 27/27、metric-specific greedy reference 6/6 與 64-endpoint paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`、union recall `82–86%`、final recall約 `30%`；對 P08 macro `−0.003663`，Holm `p=0.0216`。GovReport S02b 平均 headroom `8.64%`、union recall `47–56%`、final recall `12–13%`；對 SBERT+MMR macro `−0.034906`，Holm `p=0.0128`。selection-aware wins 0，回 Phase 3 redesign；見 `docs/research/GATE2_BASELINE_STATUS.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟠 correctness contract 已完成：完整輸入排名、route proposals/reservations、RRF selector salience、total cap 與 coverage guard；實際效益仍待 validation pilot |
-| 測試 | ✅ **424 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
+| 測試 | ✅ **426 local tests passed**（2026-08-09）；PR #15 Linux CI 綠燈（2026-08-05），CI 維持 push／PR 自動執行 |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

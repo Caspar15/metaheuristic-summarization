@@ -1,0 +1,61 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:29:06.563252+00:00",
+  "started_at_utc": "2026-08-09T14:26:50.376971+00:00",
+  "status": "completed",
+  "study_id": "d3a-router-fusion-full-dev-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "candidate": "R07_bigrams_position02",
+  "candidate_hash": "ae4532d5494e85ed685a6071cc87fc6043d11e761cbb167a229372e791ba57c0",
+  "declared_delta": {
+    "features.tf_isf.use_bigrams": true,
+    "features.weights.position": 0.2
+  },
+  "config_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/resolved_config.yaml",
+  "config_sha256": "4317e4ab0cc92e454157981250053c47ac048916dd44794ea14c91b08f25959d",
+  "implementation_commit": "b956f7cb9769f0fdb8c5d9716eb4cbdab1b413eb",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "worker_kind": "bounded_row_processes",
+    "threads_per_worker": 1,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+    "streamed_predictions": true
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4426641961040807,
+      "rouge2": 0.14109307913235022,
+      "rougeLsum": 0.40535411512774855
+    },
+    "macro_rouge": 0.32970379678805983,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.6053367217281,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/predictions.jsonl",
+  "predictions_sha256": "f5218d2ce80057dabf127c6c3a2832316168e0c4dbac5f8bec2084f597d4e67d",
+  "selected_indices_sha256": "b16766b0bc3138ed9cecaf4833c31448b5d06bb74ab2698b21be948c833e48bd",
+  "per_example_path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/per_example.jsonl",
+  "per_example_sha256": "64409ff5197c5aad01c8359b89aa9c07750951e2f5d63c68672ecaf1e543e3d0",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
