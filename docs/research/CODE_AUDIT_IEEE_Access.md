@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，2026-08-05 的 master
-**408 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
+**409 local tests 全過（2026-08-09）且 PR #15 Linux CI 綠燈**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1895,7 +1895,7 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 ### 驗證狀態
 
 F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-63 與 D2 runner 後為
-**408 passed**。預註冊
+**409 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2014,7 +2014,7 @@ fail loud；改以允許 process workers 的環境 resume 後，為提高 CPU �
 永久修正是在每個 dataset/target 外包 OS-level non-blocking lock；即使 wrapper 消失，
 仍存活的 Python parent 會持鎖，第二個 writer 必須 fail loud。另加 longest-exact-prefix
 與 duplicate-writer regression；greedy-reference 相關測試 13 passed，完整回歸
-F-56 當時完整回歸 **394 passed**；目前為 **408 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
+F-56 當時完整回歸 **394 passed**；目前為 **409 passed**（2026-08-09）。後續不得再用外層 terminate 調整 worker 數；讓 invocation
 正常完成或由 runner 的既有 checkpoint/resume 處理真實外部中斷。
 
 ## F-57 — Multi-News metric-specific greedy reference 完成，舊單一 R-1 診斷不足
@@ -2169,6 +2169,11 @@ attempt 中，`_run_method()` 對所有非 `greedy` 名稱都呼叫 `src.baselin
 `baseline_diagnostics.representation` 尋找 cache provenance，沒有讀 canonical pipeline 的
 `selector_inputs.representation`／`optimizer_diagnostics.selector_representation`，因此在
 ROUGE 計算前 fail loud。沒有任何 D2 quality score 被讀取或寫入。
+
+第一次修正後，Greedy+SBERT retry 成功；TF-IDF-similarity MMR 又顯示 semantic route 的
+cache provenance 只存在 `candidate_records[*].route_scores.semantic.metadata`，並非 selector
+representation。S02 selection 完成但仍在 ROUGE 前 fail loud；S03 partial 由精確辨識的
+runner/child process tree 停止，避免其餘候選重複浪費。兩次失敗都保留且不計品質。
 
 修正為 `_run_method(..., pipeline_selector=True)` 時 Greedy/MMR/NSGA-II 全走 canonical
 `src.pipeline.select_sentences`，method 身分仍取 frozen config；cache summarizer 同時支援

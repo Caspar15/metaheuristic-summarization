@@ -371,6 +371,11 @@ def _embedding_cache_summary(
             for representation in representations
             if representation.get("embedding_cache") is not None
         ]
+        for record in row.get("candidate_records") or []:
+            semantic = (record.get("route_scores") or {}).get("semantic") or {}
+            route_cache = (semantic.get("metadata") or {}).get("embedding_cache")
+            if route_cache is not None:
+                caches.append(route_cache)
         cache = caches[0] if caches else None
         if any(candidate != cache for candidate in caches[1:]):
             raise ValueError("embedding cache provenance disagrees across row views")

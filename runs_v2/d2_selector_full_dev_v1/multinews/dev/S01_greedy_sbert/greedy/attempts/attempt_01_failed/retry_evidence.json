@@ -1,0 +1,9 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T07:47:51.234934+00:00",
+  "status": "failed_preserved_before_retry",
+  "reason": "runner postprocessing/dispatch correction; scientific candidate unchanged",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "archived_attempt_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S01_greedy_sbert/greedy/attempts/attempt_01_failed"
+}

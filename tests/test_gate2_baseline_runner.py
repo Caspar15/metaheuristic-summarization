@@ -147,6 +147,35 @@ def test_embedding_cache_summary_accepts_pipeline_selector_provenance():
     assert summary["contract_version"] == "selector-cache-v1"
 
 
+def test_embedding_cache_summary_accepts_semantic_route_provenance():
+    cache = {
+        "status": "hit",
+        "cache_key": "b" * 64,
+        "contract_version": "route-cache-v1",
+    }
+    rows = [
+        {
+            "id": "row-1",
+            "candidate_records": [
+                {
+                    "route_scores": {
+                        "semantic": {"metadata": {"embedding_cache": cache}}
+                    }
+                },
+                {
+                    "route_scores": {
+                        "semantic": {"metadata": {"embedding_cache": cache}}
+                    }
+                },
+            ],
+        }
+    ]
+    summary = _embedding_cache_summary(rows)
+    assert summary["rows"] == 1
+    assert summary["status_counts"] == {"hit": 1}
+    assert summary["contract_version"] == "route-cache-v1"
+
+
 def test_interrupted_resume_is_written_to_search_log(monkeypatch):
     captured = []
     monkeypatch.setattr(runner, "_load_search_log", lambda: [])

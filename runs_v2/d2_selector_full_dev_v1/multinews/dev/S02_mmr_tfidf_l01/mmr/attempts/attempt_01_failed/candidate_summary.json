@@ -1,6 +1,6 @@
 {
   "evidence_schema_version": "1.0",
-  "measured_at_utc": "2026-08-09T07:55:35.507196+00:00",
+  "measured_at_utc": "2026-08-09T07:43:13.362863+00:00",
   "status": "failed",
   "test_split_accessed": false,
   "study_id": "d2-selector-full-dev-v1",
@@ -19,7 +19,6 @@
   "declared_delta": {
     "optimizer.lambda_relevance": 0.1
   },
-  "run_attempt": "retry_01",
   "execution_optimization": {
     "embedding_cache": {
       "enabled": true,
@@ -31,5 +30,5 @@
   "method": "mmr",
   "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S02_mmr_tfidf_l01/resolved_config.yaml",
   "config_sha256": "abe7cc431c975bca940390fca1a02af00d9dd2bb9f4b87264ab48bb776315d4d",
-  "failure": "ValueError: PLM execution declared an embedding cache but predictions have no per-row cache provenance"
+  "failure": "RuntimeError: mmr failed with exit code 2; see runs_v2/d2_selector_full_dev_v1/multinews/dev/S02_mmr_tfidf_l01/mmr/run/command.log"
 }

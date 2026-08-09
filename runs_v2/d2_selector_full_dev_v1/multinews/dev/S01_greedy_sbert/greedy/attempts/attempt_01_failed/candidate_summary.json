@@ -1,7 +1,7 @@
 {
   "evidence_schema_version": "1.0",
-  "measured_at_utc": "2026-08-09T07:52:12.308152+00:00",
-  "status": "completed",
+  "measured_at_utc": "2026-08-09T07:43:11.423678+00:00",
+  "status": "failed",
   "test_split_accessed": false,
   "study_id": "d2-selector-full-dev-v1",
   "dataset": "Multi-News",
@@ -19,7 +19,6 @@
   "declared_delta": {
     "selector.similarity_source": "sbert"
   },
-  "run_attempt": "retry_01",
   "execution_optimization": {
     "embedding_cache": {
       "enabled": true,
@@ -31,41 +30,5 @@
   "method": "greedy",
   "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S01_greedy_sbert/resolved_config.yaml",
   "config_sha256": "01bd48d3aa1b7d5d713809c083a0a2077bc89c261462f3922787997afae44476",
-  "metrics": {
-    "evaluation_protocol": "multisentence_lsum",
-    "rows": 3935,
-    "rouge": {
-      "rouge1": 0.41561289559874764,
-      "rouge2": 0.1232113439877697,
-      "rougeLsum": 0.3786961899544784
-    },
-    "macro_rouge": 0.3058401431803319,
-    "feasible_rows": 3931,
-    "infeasible_rows": 4,
-    "summary_words": {
-      "mean": 243.58907242693775,
-      "min": 36,
-      "max": 250
-    }
-  },
-  "candidate_diagnostics": {
-    "diagnostics_schema_version": "2.0",
-    "rows": 3935,
-    "candidate_size_mean": 52.086658195679796,
-    "selector_candidate_size_mean": 52.086658195679796,
-    "selector_candidate_size_p95": 80.0,
-    "selector_candidate_size_max": 80,
-    "provenance_candidate_size_mean": 52.086658195679796,
-    "route_agreement_mean": 2.267925369892448,
-    "unique_candidate_mean_by_route": {
-      "graph": 5.912833545108005,
-      "lexical": 7.343583227445998,
-      "semantic": 5.079288437102923
-    },
-    "unique_selected_mean_by_route": {
-      "graph": 2.363151207115629,
-      "lexical": 2.4165184243964424,
-      "semantic": 0.4627700127064803
-    }
-  }
+  "failure": "ValueError: PLM execution declared an embedding cache but predictions have no per-row cache provenance"
 }
