@@ -32,12 +32,13 @@
 > 2026-08-09 D3b final correction：最後一個 cross-profile combination 已完成。
 > GovReport 對 strongest baseline macro `+0.004636` 且 Holm-8／Bonferroni-340 通過；
 > Multi-News 仍 `−0.001323`，R-2 `−0.008565` 且 CI 全負。架構因此沒有取得
-> cross-profile freeze 資格；配置搜尋停止。可保留的候選定位是 GovReport-centered、
-> training-free、provenance-preserving long-document summarization，須待作者批准新的
-> claim matrix；詳見 `REPOSITIONING_RECOMMENDATION.md`。
+> cross-profile freeze 資格；配置搜尋停止。2026-08-10 作者端已定案
+> GovReport-centered、training-free、provenance-preserving long-document summarization；
+> Multi-News 保留為 boundary condition。權威主張見 `GOVREPORT_CLAIM_MATRIX_V2.md`。
 
-> 狀態：**Target Architecture v1，雙 primary freeze 失敗／等待重新定位決策**
-> freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
+> 狀態：**Target Architecture v2（GovReport-centered），方向已定案／final freeze 尚未簽字**
+> freeze 條件：完成 official evaluator parity、cost/scaling、final route/provenance ablation
+> 與 extension audit；沒有任何新的品質導向調參。
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。
 
 ## 0. 結論
@@ -52,7 +53,8 @@
 4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
    NSGA-II 退出核心與標題；GovReport D3b 已通過 adversarial-baseline gate，但
-   Multi-News 未通過，故 task-profile system 整體仍不能 freeze。
+   Multi-News 未通過，故 v1 雙-primary system 沒有取得 freeze 資格；v2 已縮窄為
+   GovReport-centered，但仍須 E1～E3 evidence 與 final signature。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 
@@ -138,8 +140,8 @@ MVP 的通過條件沿用 §10 Freeze gate 的第一條，但只要求單一 pri
 
 | 角色 | 資料集 | 決策 | 原因與限制 |
 |---|---|---|---|
-| Primary A | **GovReport** | 保留；validation 資料層與 development partition 已凍結 | 使用作者官方 archive（非扁平 mirror）。官方 validation membership 974，空 reference 1 筆依 manifest 排除，canonical 973；dev 681／dev-test 292。nested section、paragraph position、archive/canonical SHA、CC-BY-4.0 與異常規則均已驗證。frozen-dev baseline／greedy-reference／paired diagnosis 已完成，proposed quality gate 失敗。 |
-| Primary B | **Multi-News** | 保留；validation 已重建，其他 split 待補 | 官方 split 44,972/5,622/5,622，適合 cross-document coverage 與去重。pinned validation 已重建為 5,621 筆 structurally valid canonical rows，保存 document boundaries，並凍結 main／clean sensitivity policy；train/test 仍待生成，legacy 扁平資料不得用於正式結果。 |
+| Primary quality domain | **GovReport** | 保留；作為 v2 唯一主要品質資料集 | 使用作者官方 archive（非扁平 mirror）。validation canonical 973；dev 681／dev-test 292。D3b frozen dev 對 strongest baseline 有正證據，但 official evaluator 與 test 仍鎖定。 |
+| Boundary condition | **Multi-News** | 保留既有 negative evidence，不再是 v2 共同 promotion gate | Frozen dev 仍低於 PacSum，R-2 CI 全負。不新增 grid、dev-test 或 test；該結果用來定義適用邊界，不得隱藏。 |
 | Required data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | 必跑 validation paired sensitivity | 由 frozen 72-row manifest 從 5,621-row main 排除，得到 5,549 rows；只回答 replacement-character rows 是否改變結論，不等於 retrieval cleaning。main 結果仍是 primary。 |
 | Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v1 不跑 | 原版有錯誤 retrieval 與無關文件，但兩個外部 variant 的清理規則與現有 U+FFFD clean sensitivity 不同；若日後納入，必須另存 mapping、版本與移除規則。 |
 | Optional sanity | CNN/DailyMail | Gate 3 後才決定，v1 不阻塞 | 官方 test 11,490；lead bias 強、文件較短。只有兩個 primary 已過 gate 且資源允許，才以 frozen method 跑 appendix sanity，不用它調參或支撐核心主張。 |
@@ -183,7 +185,7 @@ flowchart LR
 - candidate、feature 與 graph 路徑仍有吞掉例外後回傳空值／fallback 的情況。
 - 單句與多句任務共用三目標 formulation，objective semantics 不成立。
 
-## 3. Target Architecture v1
+## 3. Target Architecture v2
 
 ```mermaid
 flowchart TD
@@ -491,7 +493,13 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 
 ### Freeze gate
 
-- 兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。
+> 下列第一條是 v1 雙-primary gate 的歷史規格，已失敗；v2 不刪除這個結果，但改以
+> GovReport official-evaluator parity、cost/scaling、route/provenance ablation 與 final
+> signature 作解鎖條件。機器可讀規格見 GovReport-centered 兩份 preregistration。
+
+- **v1 歷史（已失敗）**：兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。
+- **v2 現行**：GovReport frozen candidate 在 official evaluator 下維持預註冊比較方向；
+  E2 cost/scaling 與 E3 five-ablation package 完成；老師／完整作者群簽字前不解鎖 test。
 
 Gate 2 的 baseline tuning 不得在看分數後臨時擴張。`gate2-baseline-matrix-v1` 已固定每資料集
 50 個新 dev candidates：TextRank、LexRank、SBERT centroid、5 個 MMR λ、TF-IDF／SBERT

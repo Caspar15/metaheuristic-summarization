@@ -13,6 +13,10 @@
 - **ICACT**：已投稿，獲 outstanding paper award
 - **ICT Express**：已被拒（ICTE-D-26-00238），四位審稿人
 - **現在目標**：修正後改投 **IEEE Access**
+- **目前定案（2026-08-10）**：GovReport 是唯一 primary quality domain；Multi-News
+  只保留既有負結果作 boundary evidence。作者端已核准方向，但 official evaluator、
+  cost/scaling、route/provenance ablation 與老師／完整作者群 final freeze 尚未完成。
+  dev-test/test 仍禁止存取。
 
 這個檔案位於研究 repo 根目錄；程式碼在 `src/`。
 
@@ -144,8 +148,9 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 
 ### 已套用並通過 regression tests
 
-以下 patch 已接線。`pytest` 已加入依賴；2026-08-05 的 master（PR #12 合併後）
-目前 **261 tests 全過**。這是 correctness checkpoint，不是方法效果證據；
+以下 patch 已接線。GovReport-centered 分支目前 **457 tests 全過**（2026-08-11）；
+PR #16 Linux CI 綠燈，另增的 4 個 freeze-package guards 也已納入全量回歸。這是 correctness
+checkpoint，不是方法效果證據；
 SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress test 時才是必要驗收，不阻塞 GovReport + Multi-News 主線：
 
 | 檔案 | 修正 |
@@ -159,7 +164,7 @@ SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress 
 | `src/pipeline/select_sentences.py` | MVP selector 明確使用 normalized RRF salience；`validation_pilot_only` 在 runtime 禁止 test split；正式輸出前依 frozen data policy 核對 canonical fingerprint、file/manifest SHA、row/revision/U+FFFD counts 並保存 `dataset_preflight.json`；`min_words` 只在完整來源本身不可達時以 exact capacity 逐列調降，candidate-induced infeasibility 仍 fail loud，超過 active output budget 的句子不得消耗 candidate quota |
 | `src/data/policy.py` | frozen data policy 的執行點：核對 policy SHA-256、row count、dataset revision、content fingerprint、file/manifest SHA 與 U+FFFD 計數；debug subset 一律拒絕。實測三種竄改（改 policy 檔、換資料檔、analysis 錯配）都會 fail loud |
 | `src/eval/oracle.py` | 新增 greedy oracle reference；不是 exact upper bound。SciTLDR official oracle 僅在保留 optional stress test 時實作／重現 |
-| `src/baselines/contract.py`、`lead.py`、`cli.py` | PR #10 已加入 governed Lead baseline 與三種 ordering，共用資料 preflight／長度上限並保存 output-budget provenance；兩個 primary 尚未跑完，TextRank／LexRank／PacSum／sentence-encoder／Random 仍未進 master，Gate 2 未通過 |
+| `src/baselines/contract.py`、`lead.py`、`cli.py` | governed Lead、Random、TextRank、LexRank、PacSum 與 sentence-encoder baselines 已完成 frozen-dev matrix；v1 Gate 2 quality gate 未通過，v2 只在 GovReport 補 official-evaluator parity，不得重新搜尋 baseline |
 
 - 🚫 **絕對不要再加 `except Exception: fallback to greedy`**。研究模式必須 fail loud
 - 🚫 不要在 config 加了鍵值卻沒接線（`pop_size` 就發生過，實際跑的一直是預設 100/100）
@@ -237,10 +242,11 @@ python -m scripts.audit.lead_vs_system --data <data.jsonl> --pred <run>/predicti
 | `README.md`（repo 根目錄） | 程式碼總覽、安裝、狀態聲明 |
 | `docs/research/INDEX.md` | 研究文件總索引 + 關鍵數字速查 ← 先看這個 |
 | `docs/research/ACTION_PLAN.md` | **要做什麼、什麼順序** ← 日常執行看這份 |
-| `docs/research/ARCHITECTURE.md` | Target Architecture v1、schema、objective 啟用矩陣、freeze gate；validation pilot 前尚未凍結 |
+| `docs/research/ARCHITECTURE.md` | Target Architecture v2、schema、objective 啟用矩陣、GovReport-centered freeze gate |
 | `docs/research/paper_revision_plan_IEEE_Access.md` | 研究流程治理、投稿合規 |
 | `docs/research/CODE_AUDIT_IEEE_Access.md` | 已驗證的程式缺陷 + 實測數字 |
 | `docs/research/STRATEGY_ASSESSMENT.md` | 可行性評估、資料集選擇 |
+| `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md` | 現行可寫／不可寫主張與證據門檻 |
 | `docs/research/REPO_CLEANUP.md` | 專案整理計畫 |
 | `docs/research/COMPUTE_ENVIRONMENT.md` | hardware/software manifest；sumy word-only tokenizer、dependency pin 與 baseline 成本限制 |
 

@@ -1,5 +1,25 @@
 # IEEE Access 全面修訂計畫
 
+## 2026-08-10 GovReport-centered v2 定案（取代後文的現行雙-primary 排程）
+
+作者端已核准 `REPOSITIONING_RECOMMENDATION.md` 的選項 A：**GovReport 是唯一 primary
+quality domain，Multi-News 只保留既有 D3b 負結果作 boundary-condition evidence**。
+這是 ICT Express 拒稿後對原 ICACT／ICT Express 系統的縮窄修訂，不是另換一個無關方法。
+
+權威增補如下：
+
+- role/claim policy：`configs/data_policies/govreport_centered_repositioning_v2.json`
+- 人可讀主張：`GOVREPORT_CLAIM_MATRIX_V2.md`
+- freeze 前證據：`configs/preregistrations/govreport_centered_evidence_completion_v1.json`
+- final protocol：`configs/preregistrations/govreport_centered_final_evaluation_v1.json`
+  （目前 `execution_status=locked`，且 test data policy 尚未建立）
+- ICACT 延伸：`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`
+
+後文「兩個 primary」與 Multi-News official test 的文字保留為 v1 歷史規格，用來解釋
+A1～D3b 決策，不再授權新的 Multi-News dev-test/test。下一步固定為 GovReport official
+evaluator parity、cold/warm runtime-memory-scaling、route/provenance ablation；完成後才交老師與
+完整作者群簽署 final freeze。**在此之前不准讀 test。**
+
 ## 2026-08-06 selector-comparison update
 
 > **2026-08-09 governed headroom update**：Multi-News frozen-dev 的三個 metric-specific
@@ -584,19 +604,19 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
 | Dataset | 與核心多目標方法的適配 | 建議角色 | 原因 |
 |---|---|---|---|
-| Multi-News（原版） | 高 | 主要 benchmark | 多文件、多句、長 budget，coverage、cross-document redundancy、route cost 都有實際意義；保留原版才能與既有文獻直接比較，但必須重建 document boundaries。 |
-| Multi-News frozen U+FFFD clean | 高 | v1 必跑 paired sensitivity | 在共同 5,549 rows 比較 main／clean，只回答 replacement-character rows 的影響；不得取代 5,621-row main。 |
+| Multi-News（原版） | 高 | **v2 boundary evidence** | 保留既有 D3b 負結果來限制跨 multi-document claim；不再跑新搜尋、dev-test 或 test。 |
+| Multi-News frozen U+FFFD clean | 高 | v1 歷史計畫；v2 不執行 | 不得用 clean subset 改寫或翻轉既有 D3b boundary 結論。 |
 | Multi-News bad-retrieval-removed / Multi-News+ | 高 | reserve，v1 不跑 | 可檢查 irrelevant-document contamination，但與 frozen U+FFFD clean 是不同問題；不得混成同一 sensitivity。 |
-| GovReport | 高 | 建議新增的第二主要 benchmark | 長單文件、summary 也長，重要資訊分散，適合測 adaptive routing、全局 coverage 與長度擴展性。 |
+| GovReport | 高 | **v2 唯一 primary quality domain** | 長單文件、summary 也長，重要資訊分散；目前 D3b 有 multiplicity-corrected 正證據，仍須 official evaluator、成本與消融確認。 |
 | CNN/DailyMail | 中低 | Gate 3 後 optional sanity | lead bias 強、文件相對短；不阻塞核心 Gate，不用於方法選擇。 |
 | SciTLDR-AIC | 低 | v1 排除 | 官方主設定只抽一個 source sentence，redundancy objective 幾乎恆為零，多目標搜尋退化；與核心多句方法不匹配。 |
 | Multi-XScience | 中 | 科學多文件的可選外部驗證 | 題目與 graph/cross-document 關係相符，但資料與 reference 偏 abstractive，不能取代 extractive-aligned 主 benchmark。 |
 
-資源有限時的推薦配置：
+v2 定案後的配置：
 
-1. 兩個 primary datasets：GovReport（長單文件）與原版 Multi-News（多文件）；frozen U+FFFD clean 作必跑 paired sensitivity。bad-retrieval-removed／Multi-News+ 不屬 v1。
-2. CNN/DailyMail 不列入核心 Gate；只有兩個 primary 已通過 validation Gate 3 且計算資源允許，才以 frozen method 跑官方 test 11,490 作次表／supplement sanity。
-3. SciTLDR 不列入 v1 執行矩陣，不產生新結果表。若投稿前要恢復，必須在看結果前修改 `ACTION_PLAN.md` §2.0，並先通過 official evaluator conformance。
+1. GovReport 是唯一 primary；freeze 前只完成已預註冊的 E1～E3 evidence。
+2. Multi-News 是 boundary evidence；保留 D3b 負結果，不新增結果表或 protected-split run。
+3. CNN/DailyMail、SciTLDR 與其他 reserve 均不列入 v2。若投稿前要恢復，必須先修改已凍結 dataset matrix；不能由執行者自行擴張。
 
 若不想新增資料集，最低可行配置是 Multi-News 為主、CNN/DailyMail 為次、SciTLDR 降為 stress test；但對 IEEE Access 的說服力低於加入一個真正的長文件 benchmark。
 
@@ -604,7 +624,9 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
 ### 3.6 可救的新架構
 
-完整 schema、模組介面、task-profile objective matrix、route 刪除條件與 freeze gate，以 `ARCHITECTURE.md` 的 Target Architecture v1 為技術規格。該規格在兩個 primary validation pilots 通過前仍是候選架構，不得在論文中寫成已證實貢獻。
+完整 schema、模組介面、task-profile objective matrix、route 刪除條件與 freeze gate，以
+`ARCHITECTURE.md` 的 Target Architecture v2 為技術規格。現行 final candidate 已凍結；
+route/provenance 是否能寫成貢獻，仍須通過 v2 E3 ablation，不得因架構存在就宣稱有效。
 
 建議把「three-stage fusion」改成「cost-aware provenance-preserving multi-objective extraction」：
 
@@ -639,7 +661,8 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
 ### 3.7 先做可行性 pilot，再決定是否投入完整重構
 
-不得直接跑 test。先在兩個 primary validation splits 做小型 pilot：
+不得直接跑 test。以下是 v1 pilot 的歷史設計；v2 的剩餘 validation 工作已縮限為
+`govreport_centered_evidence_completion_v1.json` 的 E1～E3，不得再增加搜尋候選：
 
 - 正確 evaluator、Lead、LexRank/TextRank、PACSUM、sentence-encoder+MMR。
 - independent routes 與 candidate recall@K。
@@ -891,15 +914,14 @@ Feasibility／denominator policy（F-17）：
 - 驗證 route rank、union provenance、length、metric 與 manifest。
 - 不用來選研究結論。
 
-### E1. Main results
+### E1. Main results（v1 歷史；v2 由本文件開頭 addendum 取代）
 
-- 兩個 primary datasets（GovReport、原版 Multi-News）的完整 official test。
+- v2 最終只允許 GovReport official test；必須先完成 E1～E3 evidence 與 final freeze 簽字，現在仍鎖定。
 - 分組報 sanity、no-task-training、supervised reference、LLM。
 - 所有本地 baseline 使用同一 evaluator。
 - 所有方法的 primary table 使用完整 official split 的同一 denominator；另列
   infeasibility rate，不能各自刪除失敗文件後比較 ROUGE。
-- Multi-News main 是 primary 結果；frozen clean sensitivity 只在共同 rows 報 paired 差異。
-- CNN/DailyMail 只有在 Gate 3 後預先納入才追加 frozen official-test sanity；SciTLDR-AIC v1 不跑。
+- Multi-News 只報既有 frozen-dev boundary result，不跑新的 protected split；CNN/DailyMail 與 SciTLDR-AIC v2 不跑。
 
 ### E2. Optimizer isolation
 
@@ -1156,7 +1178,7 @@ IEEE Access 的 reproducibility guidance 特別要求 artifact dependencies、in
 
 ### Phase 2：data/baseline validation，1 週
 
-- 重建兩個 primary datasets；CNN/DailyMail 僅為 Gate 3 後 optional sanity，SciTLDR v1 不跑。
+- v1 已完成 GovReport／Multi-News data layers；v2 以 GovReport 為唯一 primary，Multi-News 只保留 boundary evidence，其他資料集不跑。
 - 跑 Lead、TextRank、LexRank、PacSum、Sentence-BERT centroid。
 - 驗證 official split；多句資料採明確保留句界的 ROUGE-Lsum；只有保留 SciTLDR 時，才用官方 files2rouge、單句與 max-R1-reference 協定重現官方 oracle。
 
@@ -1172,7 +1194,7 @@ IEEE Access 的 reproducibility guidance 特別要求 artifact dependencies、in
 
 ### Phase 4：locked test，約 1 週計算時間
 
-- 兩個 frozen primary datasets、全 seeds；只追加已在 test 前預先納入的 optional sanity。
+- 只在 final freeze 簽字後依鎖定 protocol 一次性執行 GovReport official test；不得追加資料集或配置。
 - paired statistics。
 - runtime/memory。
 - 生成 immutable artifacts。
@@ -1203,13 +1225,13 @@ IEEE Access 的 reproducibility guidance 特別要求 artifact dependencies、in
 - [x] 新 canonical pipeline 的 Stage 2 使用真實、可追溯的 PLM/graph/statistical route scores；route 效果仍待 validation ablation。
 - [x] 新 canonical pipeline 的 NSGA effective parameters、seed、objective 與 Pareto artifact 可追溯；最終 output policy 仍待 validation freeze。
 - [x] 新 canonical pipeline 的 candidate／feature／optimizer failure 無 silent fallback；legacy 路徑不得產生新稿結果。
-- [ ] GovReport／Multi-News 的 ROUGE-Lsum、共用 Punkt sentence boundaries 與 published-protocol parity 全部驗證；SciTLDR 不屬 v1。
+- [ ] GovReport official Stanza + Perl ROUGE-1.5.5 parity 完成並成為主文權威；內部 ROUGE-Lsum 只作 secondary diagnostic。Multi-News 不新增 v2 evaluation。
 - [x] 強 baseline 已在兩 primary frozen dev、同一 evaluator／長度協定下重跑；Gate 2 quality gate 失敗。
 - [ ] 5 至 10 seeds、paired 95% CI、multiple-comparison correction。
 - [ ] full pipeline runtime、memory、hardware 完整。
-- [ ] Full、No-PLM、No-Graph 的結論符合 CI。
+- [ ] frozen full 與五個事前指定 route/provenance ablations 的結論符合 100k paired CI／Holm-20。
 - [ ] 論文沒有 global optimum、coherence、speedup 等 unsupported claim。
-- [ ] ICACT 被引用，extension 與 similarity 合規。
+- [~] ICACT extension matrix 草案已建立；仍須 camera-ready 頁碼／原表格核對、正式引用與 similarity 合規。
 - [ ] code/data artifact 可由第三人重現。
 - [ ] AI-assisted text 依 IEEE 規定揭露。
 - [ ] 主文、supplement、code、tables 的數字逐項一致。

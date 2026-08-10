@@ -192,7 +192,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
-### 停止後待作者決策
+### 停止後的 v2 決策與待辦
 
 1. selector-only D2 已完成：Multi-News 採 Greedy，GovReport 採 TF-IDF-MMR λ=0.7；
    兩者仍低 adversarial winner，沒有 dev-test promotion。下一輪只在 dev 搜尋尚未掃完的
@@ -208,7 +208,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    100,000 次 paired bootstrap、Holm-8 與 340-opportunity correction。任一 profile
    未過 gate 即依停止條件寫重新定位建議。D3b 現已完成：GovReport 通過，但
    Multi-News 失敗，`all_profiles_eligible=false`。
-2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。若作者批准
-   GovReport-centered claim matrix，須先正式修改 data policy 並另行預註冊；否則接受
-   IEEE Access 方法稿 No-Go。
+2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。作者端已批准
+   GovReport-centered claim matrix；data-policy addendum 與 evidence/final preregistrations
+   已版本化。下一步是 official evaluator、成本/scaling、route/provenance ablation，不是搜尋。
 3. `dev-test` 與 `test` 仍鎖定；目前沒有符合規則的解鎖條件。

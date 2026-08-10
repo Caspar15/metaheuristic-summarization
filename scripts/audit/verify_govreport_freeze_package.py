@@ -1,0 +1,264 @@
+"""Verify the GovReport-centered repositioning package without reading data.
+
+This audit hashes only versioned policies, manifests, configs, preregistrations,
+and already-produced dev evidence.  It must never open a protected dataset.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Any, Mapping
+
+import yaml
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from src.data.policy import sha256_file
+
+
+ADDENDUM = Path("configs/data_policies/govreport_centered_repositioning_v2.json")
+EVIDENCE_PREREG = Path(
+    "configs/preregistrations/govreport_centered_evidence_completion_v1.json"
+)
+FINAL_PREREG = Path(
+    "configs/preregistrations/govreport_centered_final_evaluation_v1.json"
+)
+
+
+class FreezePackageError(RuntimeError):
+    """The frozen governance package is internally inconsistent."""
+
+
+def _load_json(root: Path, relative: Path) -> dict[str, Any]:
+    path = root / relative
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise FreezePackageError(f"cannot load {relative}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise FreezePackageError(f"{relative}: top level must be an object")
+    return value
+
+
+def _require_sha(root: Path, path: str, expected: str, label: str) -> None:
+    if not re.fullmatch(r"[0-9a-f]{64}", expected):
+        raise FreezePackageError(f"{label}: malformed expected SHA-256 {expected!r}")
+    target = root / path
+    if not target.is_file():
+        raise FreezePackageError(f"{label}: pinned file is missing: {path}")
+    actual = sha256_file(str(target))
+    if actual != expected:
+        raise FreezePackageError(
+            f"{label}: {path} SHA-256 is {actual}, expected {expected}"
+        )
+
+
+def _require_false(value: Any, label: str) -> None:
+    if value is not False:
+        raise FreezePackageError(f"{label} must be exactly false, got {value!r}")
+
+
+def _assert_decision_contract(addendum: Mapping[str, Any]) -> None:
+    if addendum.get("status") != "requesting_author_approved_teacher_signature_pending":
+        raise FreezePackageError("repositioning approval status drifted")
+    roles = addendum.get("dataset_roles", {})
+    if roles.get("primary_quality_domain", {}).get("dataset") != "GovReport":
+        raise FreezePackageError("GovReport is not the sole primary quality domain")
+    if roles.get("boundary_condition", {}).get("dataset") != "Multi-News":
+        raise FreezePackageError("Multi-News is not preserved as the boundary condition")
+    protected = addendum.get("protected_split_policy", {})
+    if protected.get("further_dev_test_access") != "forbidden":
+        raise FreezePackageError("further dev-test access is not forbidden")
+    _require_false(protected.get("test_policy_materialized"), "test_policy_materialized")
+    _require_false(protected.get("test_split_accessed"), "test_split_accessed")
+    _require_false(addendum.get("approval", {}).get("protected_splits_unlocked"), "protected_splits_unlocked")
+
+
+def _assert_lock_contract(
+    evidence: Mapping[str, Any], final: Mapping[str, Any], root: Path
+) -> None:
+    if evidence.get("partition") != "GovReport frozen dev only":
+        raise FreezePackageError("evidence completion is not restricted to frozen dev")
+    if evidence.get("further_dev_test_access") != "forbidden":
+        raise FreezePackageError("evidence preregistration permits dev-test access")
+    _require_false(
+        evidence.get("dev_test_accessed_by_this_study"),
+        "evidence.dev_test_accessed_by_this_study",
+    )
+    if evidence.get("test_split_prohibited") is not True:
+        raise FreezePackageError("evidence preregistration does not prohibit test")
+    _require_false(evidence.get("test_split_accessed"), "evidence.test_split_accessed")
+
+    protected = final.get("protected_split", {})
+    if protected.get("execution_locked") is not True:
+        raise FreezePackageError("final evaluation is not execution-locked")
+    for key in (
+        "test_membership_accessed",
+        "test_payload_accessed",
+        "test_references_accessed",
+        "test_scores_accessed",
+    ):
+        _require_false(protected.get(key), f"final.{key}")
+    _require_false(
+        final.get("execution", {}).get("test_split_accessed"),
+        "final.execution.test_split_accessed",
+    )
+    if final.get("execution", {}).get("one_shot") is not True:
+        raise FreezePackageError("final evaluation is not declared one-shot")
+
+    future_test_policy = root / protected.get("canonical_policy_path", "")
+    if future_test_policy.is_file():
+        raise FreezePackageError(
+            "locked preregistration says the test policy is not materialized, "
+            f"but it exists: {future_test_policy}"
+        )
+
+
+def validate_freeze_package(root: Path = REPO_ROOT) -> dict[str, Any]:
+    addendum = _load_json(root, ADDENDUM)
+    evidence = _load_json(root, EVIDENCE_PREREG)
+    final = _load_json(root, FINAL_PREREG)
+    _assert_decision_contract(addendum)
+    _assert_lock_contract(evidence, final, root)
+
+    _require_sha(
+        root,
+        str(ADDENDUM).replace("\\", "/"),
+        evidence["repositioning_addendum"]["sha256"],
+        "evidence repositioning addendum",
+    )
+    _require_sha(
+        root,
+        str(ADDENDUM).replace("\\", "/"),
+        final["repositioning_addendum"]["sha256"],
+        "final repositioning addendum",
+    )
+    _require_sha(
+        root,
+        str(EVIDENCE_PREREG).replace("\\", "/"),
+        final["evidence_completion_preregistration"]["sha256"],
+        "final evidence-completion preregistration",
+    )
+
+    for name, pin in addendum["source_policies"].items():
+        _require_sha(root, pin["path"], pin["sha256"], f"source policy {name}")
+    partition = addendum["frozen_development_identity"]["govreport_partition"]
+    _require_sha(
+        root,
+        partition["path"],
+        partition["lf_canonical_sha256"],
+        "GovReport dev partition",
+    )
+    length_policy = addendum["frozen_development_identity"][
+        "govreport_length_policy"
+    ]
+    _require_sha(
+        root,
+        length_policy["path"],
+        length_policy["sha256"],
+        "GovReport length policy",
+    )
+    for name in ("d3b_preregistration", "d3b_paired_summary"):
+        pin = addendum["evidence_basis"][name]
+        _require_sha(root, pin["path"], pin["sha256"], name)
+    candidate = addendum["frozen_candidate"]
+    _require_sha(
+        root,
+        candidate["config_path"],
+        candidate["config_sha256"],
+        "frozen candidate config",
+    )
+
+    inputs = evidence["frozen_inputs"]
+    _require_sha(root, inputs["policy"]["path"], inputs["policy"]["sha256"], "evidence policy")
+    _require_sha(
+        root,
+        inputs["partition_manifest"]["path"],
+        inputs["partition_manifest"]["lf_canonical_sha256"],
+        "evidence partition",
+    )
+    _require_sha(
+        root,
+        inputs["length_policy"]["path"],
+        inputs["length_policy"]["sha256"],
+        "evidence length policy",
+    )
+    proposed = inputs["proposed"]
+    for field, sha_field in (
+        ("config_path", "config_sha256"),
+        ("predictions_path", "predictions_sha256"),
+    ):
+        _require_sha(root, proposed[field], proposed[sha_field], f"proposed {field}")
+    _require_sha(
+        root,
+        "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/"
+        "C01_combined_salience_route_weight/per_example.jsonl",
+        proposed["per_example_sha256"],
+        "proposed per-example",
+    )
+    selection = inputs["baseline_selection_evidence"]
+    _require_sha(
+        root,
+        selection["preregistration_path"],
+        selection["preregistration_sha256"],
+        "baseline selection preregistration",
+    )
+    _require_sha(
+        root,
+        selection["paired_summary_path"],
+        selection["paired_summary_sha256"],
+        "baseline selection summary",
+    )
+    for name, pair in evidence["work_packages"]["E1_published_evaluator"][
+        "systems"
+    ].items():
+        _require_sha(root, pair[0], pair[1], f"published-evaluator input {name}")
+
+    final_selection = final["frozen_baselines"]["selection_source"]
+    _require_sha(
+        root,
+        final_selection["path"],
+        final_selection["sha256"],
+        "final baseline selection source",
+    )
+    final_candidate = final["frozen_proposed_system"]
+    _require_sha(
+        root,
+        final_candidate["source_config_path"],
+        final_candidate["source_config_sha256"],
+        "final source config",
+    )
+
+    config = yaml.safe_load((root / candidate["config_path"]).read_text(encoding="utf-8"))
+    if config.get("experiment", {}).get("status") != "validation_pilot_only":
+        raise FreezePackageError("frozen source config is not validation-only")
+    if config.get("experiment_partition", {}).get("name") != "dev":
+        raise FreezePackageError("frozen source config is not pinned to dev")
+    if config.get("optimizer", {}).get("method") != "mmr":
+        raise FreezePackageError("frozen source selector is no longer MMR")
+    if float(config.get("optimizer", {}).get("lambda_relevance")) != 0.7:
+        raise FreezePackageError("frozen MMR lambda drifted")
+
+    return {
+        "status": "pass",
+        "policy_id": addendum["policy_id"],
+        "evidence_study_id": evidence["study_id"],
+        "final_study_id": final["study_id"],
+        "primary_dataset": "GovReport",
+        "boundary_dataset": "Multi-News",
+        "protected_splits_unlocked": False,
+        "test_split_accessed": False,
+    }
+
+
+def main() -> None:
+    print(json.dumps(validate_freeze_package(), indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()

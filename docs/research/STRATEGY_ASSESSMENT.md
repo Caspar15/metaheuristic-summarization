@@ -233,8 +233,9 @@ D3b 在 GovReport 對 full-source SBERT+MMR macro `+0.004636`，100k paired CI
 `[+0.002507,+0.006745]`，Holm-8 與 Bonferroni-340 均通過；這支持長篇單文件、
 training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低 PacSum
 `0.001323`，且 R-2 `−0.008565` 的 CI 全負；因此它同時否定跨 multi-document profile
-的普遍 superiority claim。策略不再是繼續調參，而是由作者決定是否批准
-`REPOSITIONING_RECOMMENDATION.md` 的 GovReport-centered claim matrix。
+的普遍 superiority claim。作者端已於 2026-08-10 批准 GovReport-centered 選項 A；
+策略不再是繼續調參，而是按已凍結 preregistration 補 official evaluator、成本／scaling
+與 route/provenance ablation，再交老師與完整作者群作 final freeze 簽字。
 
 ---
 
@@ -265,7 +266,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 453 local tests、PR #16 Linux CI（含 pinned CPU encoder dependencies、pytest invocation/tmp portability 與 CRLF-era pin errata）、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 457 local tests（2026-08-11）、PR #16 Linux CI、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 4 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -309,11 +310,11 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 453 local tests、PR #16 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-71/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | 457 local tests、PR #16 Linux CI、snapshot、shared objectives、historical frozen-policy preflight、partition enforcement、exact batched Greedy 與 F-51～F-72/D3a/D3b guards 已完成；published-protocol parity 與 final-output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
 | Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
-| Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
-| Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
+| v2 dataset role | GovReport 是唯一 primary；Multi-News 只保留既有 D3b boundary evidence，不執行新 dev-test/test；其他資料集不納入 |
+| locked test 之前 | 完成 E1 official evaluator、E2 cost/scaling、E3 ablation，且老師／完整作者群簽署 final freeze；否則不解鎖 test |
 
 ### 最重要的一個中途檢查點
 
@@ -330,12 +331,13 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 - **現在直接投** → 我判斷**幾乎確定被拒**。test-set 調參（P0-01）+ 輸給 Lead（F-0）任一被抓到就結束
 - **只修 evaluator、補 baseline、改寫文字後投** → 仍然 No-Go。因為修正後會**更清楚地顯示輸給 Lead**
 - **改採 GovReport-centered 的長篇單文件／可審計 training-free 定位** → 有條件的機會；
-  必須先由老師與作者批准新的 claim matrix，再補 evaluator parity、成本/scaling 與寫作證據
+  作者端已批准新的 claim matrix，下一關是 evaluator parity、成本/scaling、route/provenance
+  ablation 與老師／完整作者群 final freeze 簽字
 - **保留兩 primary 都須勝 strongest baseline 的原 gate** → D3b 已判定 No-Go，不應再跑同一搜尋空間
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
 **最後一句實話**：核心概念在 GovReport 已有 multiplicity-corrected 正證據，但
 Multi-News 的 R-2 缺陷仍明確，跨資料集主張已失敗。現在不能再優化同一 dev 搜尋空間，
-也不能直接投稿；應先由老師與作者審核 `REPOSITIONING_RECOMMENDATION.md`，決定縮窄為
-GovReport-centered 修訂稿，或接受 IEEE Access 方法稿 No-Go。
+也不能直接投稿；GovReport-centered 方向已定案，現在須如實完成已預註冊證據。若 official
+evaluator 使排名反轉或 route/provenance 不支持貢獻，應撤回對應 claim，而不是再調參。

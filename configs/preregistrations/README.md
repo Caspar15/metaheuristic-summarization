@@ -11,3 +11,12 @@ protocol 在候選 system score 前凍結；若已看過歷史 diagnostic，必�
 primary 八個 baseline-family finalists 的 post-score dev diagnostic。它誠實標註 aggregate
 與 per-example scores 已存在，固定 64-endpoint Holm family，另報 12,896 個搜尋機會的
 selection-aware Bonferroni；結果不得授權 dev-test/test。
+
+`govreport_centered_evidence_completion_v1.json` 在新 official-evaluator score、受控成本量測
+或 final GovReport ablation 前，凍結 E1 evaluator parity、E2 cold/warm cost/scaling
+與 E3 route/provenance ablation。這三組是 evidence completion，不是新的方法搜尋；
+只能用 frozen GovReport dev，dev-test/test 仍禁止。
+
+`govreport_centered_final_evaluation_v1.json` 預先凍結 one-shot GovReport final protocol，
+但狀態明確為 execution locked。在 E1–E3、GovReport test policy、exact commit/environment
+與老師／完整作者群簽字全部完成前，不得建立 test run。

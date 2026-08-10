@@ -15,6 +15,9 @@
 > 部分為抽樣、且未做 paired significance test，標籤維持 diagnostic。
 > 少數分析（如 370/500 換行雜訊統計）尚未版本化，仍須重做。
 > 後續修正狀態以 §0.0、`ACTION_PLAN.md` 與目前測試結果為準；下方 legacy 敘述不會隨 working tree 改寫。
+> **2026-08-11 v2 freeze-package 覆核**：作者端已核准 GovReport-centered 定位；
+> GovReport 是唯一 primary，Multi-News 是 boundary evidence。F-72 登錄官方 evaluator
+> mismatch risk；457 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
 > **2026-08-06 selector evidence**：200-row reference-blind matched pilot 與五 seed
 > NSGA-II stability extension 已完成。MMR 對 Greedy 的 R-1/R-2 paired gain 為
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
@@ -60,11 +63,13 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🔴 **F-0／F-62：Gate 2 dev quality gate 失敗** —— S02b 對兩 primary adversarial winner 的 macro paired CI 均全負，selection-aware wins 0；不得進 dev-test
+1. 🟡 **v1 Gate 2／D3b 雙-primary gate 失敗；v2 evidence 待補** —— 後續 D3b GovReport
+   已對 strongest baseline 顯著勝出，但 Multi-News 仍低且 R-2 顯著較差；作者端已核准
+   GovReport-centered 縮窄，不得再搜尋或進 protected split
 2. ✅ **F-9 baseline 工程矩陣已完整** —— non-PLM、PLM、greedy reference 與 paired finalists 均完成；完成矩陣不等於方法有效，反而提供 redesign 的否證基準
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
-5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
+5. 🔴 **F-72 GovReport official evaluator parity**；🟡 **F-4 正式 cold/warm timing、memory、scaling**
 6. 🟡 **F-14 的 legacy_unprofiled raw-sum 例外**與 **F-15 的 legacy unmatched ablation**；兩者不得被誤當成新 canonical pipeline 的 matched evidence
 
 ---
@@ -2360,3 +2365,38 @@ preregistration、evidence 或實驗數字，也未存取 dev-test/test。Window
 system-temp basetemp 後，bare `pytest` 完整回歸為 **453 passed**，全樹
 `compileall -f src tests scripts` 亦通過。此修正只修復 provenance/CI
 portability，不構成新的方法效果證據。
+
+## F-72 — GovReport 內部 evaluator 尚未證明等同 published official protocol
+
+**嚴重度：P0（claim validity／final-evaluation governance）**
+
+2026-08-10 檢查 GovReport 論文與作者官方 repository 後，確認官方評測不是本 repo
+目前的 Google `rouge_score` + 共用 Punkt ROUGE-Lsum 路徑。官方
+`LongDocSum` repository（檢查 commit
+`ee0dd33f2fde9d19b9a15d81884418d68320e5ca`）在 `Model/eval_model.py` 使用
+Stanza `Pipeline(lang='en', processors='tokenize,mwt')`，把 token 以空白連接、句子以換行
+連接；`Model/evaluate.py` 再透過 `pyrouge.Rouge155` 呼叫 Perl ROUGE-1.5.5，參數含
+`-c 95 -r 1000 -n 2 -m`。因此目前 D3b 的內部 evaluator 結果可作 development evidence，
+但在 parity 完成前不能直接稱為 GovReport published-protocol main result。
+
+**修正／守門：**
+
+- 新增 `configs/preregistrations/govreport_centered_evidence_completion_v1.json`，固定在已
+  凍結 GovReport dev outputs 上重算 proposed 與八個 baselines；official protocol 為
+  manuscript authoritative，內部 evaluator 只作 secondary diagnostic。
+- 若 official protocol 使 proposed 與預指定 strongest baseline 的排序反轉，立即撤回
+  GovReport quality-superiority claim；不得再調 selector、route、budget 或 weights。
+- 新增 `configs/preregistrations/govreport_centered_final_evaluation_v1.json`，但 execution
+  維持 `locked`，且不建立 test data policy；老師／完整作者群簽字前不可執行。
+- 新增 `scripts/audit/verify_govreport_freeze_package.py` 與 4 個 regression guards，驗證
+  dataset role、frozen config、protected-split lock 與 final execution lock。此 verifier
+  只雜湊版本化 metadata 與既有 dev evidence，不開啟任何 dataset split。
+
+**重現來源：** GovReport paper `https://arxiv.org/abs/2104.02112`；官方程式
+`https://github.com/luyang-huang96/LongDocSum`。本條沒有產生新的 ROUGE 分數，也沒有
+存取 dev-test/test；它只登錄 evaluator mismatch risk 與 freeze 前必做的驗證。
+
+驗證結果（2026-08-11）：freeze-package targeted 4/4、完整 pytest **457 passed**、
+`compileall -f src tests scripts` 通過，provenance audit 為
+`468 checked / 468 legacy / 0 fail`；freeze verifier 回報 protected splits locked、
+`test_split_accessed=false`。

@@ -45,3 +45,11 @@ GovReport preprocessing reads validation membership only. Its streaming tar
 pass can encounter other archive member names, but does not read test
 membership or test payload bytes. Do not change the policy or inspect the test
 split before the human freeze decision.
+
+`govreport_centered_repositioning_v2.json` is an additive **role/claim-policy
+addendum**, not a replacement canonical-data policy.  It records the
+2026-08-10 author-side decision to use GovReport as the sole primary quality
+domain and Multi-News as a frozen boundary condition.  It pins the v1
+validation policies, manifests, length policy, D3b evidence, and final dev
+candidate.  It does not change any row, split, or existing result, and it keeps
+all protected splits locked until evidence completion and full human sign-off.

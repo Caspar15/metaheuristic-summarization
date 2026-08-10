@@ -14,6 +14,22 @@ ROUGE-2，而不是所有指標都退步。
 完整機器可讀證據：
 `runs_v2/d3b_cross_profile_combination_v1/analysis/paired_summary.json`。
 
+## 定案記錄（2026-08-10 作者端決策）
+
+**選項 A 已由提出請求的作者端定案**：GovReport 改為 IEEE Access
+修訂稿的唯一主要品質資料集，Multi-News 保留為 boundary-condition
+dataset。這不改寫原雙-primary gate 的失敗，也不解鎖 protected split。
+老師／完整作者群的 final freeze 簽字仍待完成。
+
+已新增：
+
+- `configs/data_policies/govreport_centered_repositioning_v2.json`：機器可讀角色與主張 addendum。
+- `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md`：人可讀 claim matrix。
+- `configs/preregistrations/govreport_centered_evidence_completion_v1.json`：official evaluator、成本／scaling、route/provenance ablation 的非搜尋預註冊。
+- `configs/preregistrations/govreport_centered_final_evaluation_v1.json`：仍鎖定的 one-shot final protocol。
+
+現在的下一步是完成預註冊 evidence，不是再選資料集或繼續調參。
+
 ## 凍結證據
 
 | Primary profile | D3b macro | Strongest local baseline | Δ macro | 95% CI | Holm-8 | Bonferroni-340 | 決策 |
@@ -98,12 +114,11 @@ provenance/route 消融的最終表格、限制與威脅、以及 ICACT extensio
 規則判定 No-Go。此時應停止投入同一搜尋空間，將工程與負面結果整理為技術報告、資料／
 重現性資源，或等待真正不同的研究假設；不能再從同一 dev 反覆找組合。
 
-## 需要作者簽字的下一個決策
+## 下一個人工簽字點
 
-本輪自主任務到此停止。下一步不是直接跑 test，而是由老師與作者在下列兩者中選一個：
+資料集方向已定案，不再重選 A/B/C。下一個簽字點是：當 official
+evaluator parity、cold/warm cost/scaling、route/provenance ablation 與 ICACT extension
+matrix 完成後，由老師與完整作者群檢查 final freeze package，決定是否
+解鎖 GovReport official test 的唯一次執行。
 
-1. 批准選項 A，正式修改 frozen data policy／claim matrix，另行預註冊 GovReport-centered
-   evaluation 與必要的非搜尋實驗；或
-2. 保留原本雙 primary superiority gate，接受 No-Go，不再推進 IEEE Access 方法稿。
-
-在這個決策完成前，**dev-test 與 test 都維持鎖定**。
+在該簽字完成前，**dev-test 與 test 都維持鎖定**。
