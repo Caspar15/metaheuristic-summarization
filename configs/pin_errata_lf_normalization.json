@@ -9,13 +9,14 @@
   ],
   "note": "No preregistration, evidence file, or experimental record was modified. This errata is additive. The errata file itself is intentionally not pinned to avoid a circular dependency.",
   "schema_note": "Matching is by the legacy_crlf_sha256/lf_canonical_sha256 pair only (see verify_pin() in src/data/policy.py). content_id, representative_path, and reference_count are documentation only and never participate in matching -- a single legacy-era content blob can legitimately be copied to well over a hundred different paths, so the file's path cannot be part of the safety condition.",
+  "reference_count_scope": "Raw textual occurrences in the PR #16 repository snapshot on 2026-08-10, excluding this errata file, .git, .venv, data, and pytest temporary directories. Counts are audit metadata, not a verification condition. The 19 hashes occur 1,709 times across 1,134 unique files.",
   "equivalences": [
     {
       "content_id": "Multi-News validation dev/dev-test reference-blind partition manifest",
       "representative_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
       "legacy_crlf_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
       "lf_canonical_sha256": "6652bc9912ca96060ecd463b7c27cb5fac707679181437f8a1ba1bad4f192d4b",
-      "reference_count": 507,
+      "reference_count": 628,
       "referenced_by": [
         "configs/preregistrations/f51_embedding_cache_equivalence_v1.json:13",
         "configs/preregistrations/gate2_greedy_reference_v1.json:15",
@@ -29,7 +30,7 @@
       "representative_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
       "legacy_crlf_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
       "lf_canonical_sha256": "c37b9507da30d1579e799c39d72fb56d7695d9fa36f004c6352d6426667977ff",
-      "reference_count": 468,
+      "reference_count": 592,
       "referenced_by": [
         "configs/preregistrations/a1_length_contract_govreport_v1.json:12",
         "configs/preregistrations/gate2_greedy_reference_v1.json:26",
@@ -43,7 +44,7 @@
       "representative_path": "configs/pilot_manifests/multinews_selector_pilot_v1.json",
       "legacy_crlf_sha256": "b0562eb4fe33b59f460c47e7b2db0bf0a3d2778687695422027bf33ed1c31b2e",
       "lf_canonical_sha256": "f29d2d280e32c37a745d38b2b7620d14c93feeef724aa620a654d634f9e1e5bb",
-      "reference_count": 3,
+      "reference_count": 4,
       "referenced_by": [
         "configs/preregistrations/d3a_router_fusion_screen_v1.json:29"
       ]
@@ -105,7 +106,7 @@
       "representative_path": "runs_v2/gate2_lexrank_multinews_validation_offline_v1/dataset_preflight.json",
       "legacy_crlf_sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7",
       "lf_canonical_sha256": "241d3a8e5c045faf88eeeda6fb6ad0edcb30d7ca4f9566568e6a3d991ed3c911",
-      "reference_count": 2
+      "reference_count": 4
     },
     {
       "content_id": "Multi-News Gate2 Lead/TextRank/LexRank config_used.json",

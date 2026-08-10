@@ -17,11 +17,12 @@ _CHUNK_SIZE = 1024 * 1024
 def sha256_file(path: str) -> str:
     """Hash a text provenance artifact after normalizing CRLF to LF.
 
-    Every artifact this project points at ``sha256_file`` is JSON, JSONL,
-    or YAML written by this project's own tooling. In any such file, a
-    literal CR byte (0x0D) can only ever be a line terminator: a CR that is
-    genuine string *content* must be JSON/YAML-escaped as the two-byte
-    sequence ``\\r`` (0x5C 0x72), never emitted as a raw control byte.
+    Every current caller points ``sha256_file`` at a UTF-8 text provenance
+    artifact (JSON, JSONL, YAML, plain text, or pinned Python source). In the
+    structured artifacts written by this project's own tooling, a literal CR
+    byte (0x0D) can only ever be a line terminator: a CR that is genuine
+    string *content* must be escaped as the two-byte sequence ``\\r``
+    (0x5C 0x72), never emitted as a raw control byte.
     ``pathlib.Path.write_text()`` performs universal-newline translation by
     default, so the same call writes ``\n`` on Linux/macOS but ``\r\n`` on
     Windows (PR #16's CRLF pin audit: the value frozen into every

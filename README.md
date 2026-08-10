@@ -78,7 +78,7 @@
   不可作論文品質結論。200-row reference-blind pilot manifest 已在看分數前凍結。
   加上兩 primary partition、greedy-reference correctness、GovReport data layer、A1 runner、
   D1 inventory、document-aware position、可恢復 runner 與 diagnostics regression 後，
-  現行完整測試為 **431 passed**。
+  現行完整測試為 **453 passed**。
 - frozen 200-row pilot 已完成：candidate-matched MMR 對 Greedy 的 R-1／R-2
   分別 `+0.01488`／`+0.01472` 且 Holm 校正後顯著；NSGA-II 單 seed 無顯著改善，
   總時間約為 Greedy `4.6×`。五 seed extension 的 NSGA-II mean 三指標均低於
@@ -139,7 +139,7 @@
 | Baseline／最終方法 gate | 🔴 **D3b 雙 primary gate 未通過** —— GovReport 對 SBERT+MMR macro `+0.004636`，100k bootstrap、Holm-8 與 Bonferroni-340 全部通過；Multi-News 仍低 PacSum `0.001323`，且 R-2 顯著低 `0.008565`。依停止條件不進 dev-test/test，改做 GovReport-centered 重新定位；見 `docs/research/REPOSITIONING_RECOMMENDATION.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **431 local tests passed**；PR #16 Linux CI 綠燈（2026-08-10）。CI 已明確安裝 pinned CPU torch/transformers，且 tests 不再依賴 repo-local pytest temp path |
+| 測試 | ✅ **453 local tests passed**；PR #16 Linux CI 綠燈（2026-08-10）。CI 已明確安裝 pinned CPU torch/transformers，pytest invocation/import 與 temp-path portability 已納入 contract；CRLF-era pins 以 fail-loud errata 驗證（F-70/F-71） |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

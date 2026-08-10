@@ -1789,7 +1789,7 @@ matrix，再依預註冊 dev search 優化 selector/salience；若搜尋空間�
 ## 附錄 A：本次已直接修改的程式碼
 
 以下是初次 audit patch 與目前狀態的對照。pytest 已安裝，目前
-**431 local tests 全過且 PR #16 Linux CI 綠燈（2026-08-10）**；這只代表 correctness regression、10-document snapshot、內部
+**453 local tests 全過且 PR #16 Linux CI 綠燈（2026-08-10）**；這只代表 correctness regression、10-document snapshot、內部
 hand-calculated golden 與 Lead plumbing 受測，不代表方法效果或 published-protocol parity 已通過。
 Sentence-BERT production route、canonical NLTK segmentation、shared objective/selector
 contract 與 Lead／Random／TextRank／LexRank／SBERT centroid／MMR baseline 已接線；centrality offline hotfix 與
@@ -1895,8 +1895,8 @@ python -m src.pipeline.evaluate --pred runs/full_benchmark_result/final_summary/
 
 ### 驗證狀態
 
-F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-69 與 D2/D3 runners/analyzers 後為
-**431 passed**。預註冊
+F-51 實作當時完整回歸為 **386 passed**；目前加入 F-53/F-55～F-71 與 D2/D3 runners/analyzers 後為
+**453 passed**。預註冊
 `configs/preregistrations/f51_embedding_cache_equivalence_v1.json`（SHA-256
 `ccdd5a66...66d98`）後，以既有 uncached full-dev SBERT-centroid 為基準完成 cold-populate
 與 warm-hit：兩次皆為 3,935/3,935 rows，`selected_indices`、summary、feasibility、eligible
@@ -2334,3 +2334,29 @@ pytest 的 Linux `tmp_path` 位於 repo 外的 `/tmp`，而相關測試沒有宣
 
 GitHub Linux run `31323270403` 最終 **pytest pass**（54 秒）。本修正沒有執行資料實驗，
 也沒有存取 dev-test/test；只更正 CI dependency contract 與跨平台 test fixture。
+
+## F-71 — CRLF-era SHA-256 pins 在 clean Linux checkout 失效（已以 fail-loud errata 修正）
+
+**嚴重度：P0（provenance correctness／跨平台可重現性）**
+
+PR #16 review 發現 19 組 text-provenance SHA-256 pins 是對 Windows `CRLF` bytes
+計算，但 Git checkout 的 canonical content 為 `LF`；其中兩個 validation partition
+manifests 與兩個 D3a pilot manifests 會讓 clean Linux/macOS checkout 在正式 runner
+入口就 fail loud。三方 `selected_ids_sha256`（manifest、committed file、歷史
+`partition_preflight.json`）與 reference-blind partition 重建均一致；這是換行字節
+identity 問題，不是 dev/dev-test row assignment 或科學內容變更。
+
+`sha256_file()` 現對 UTF-8 text provenance 正規化 `CRLF→LF`，並以 NUL guard
+防止誤用在 binary artifact；GovReport archive 改用 raw-byte
+`sha256_binary_file()`。`configs/pin_errata_lf_normalization.json` 以 legacy/canonical
+雙 hash 同時符合才回報 `legacy`，單邊符合仍失敗。19/19 representative
+files 已機械驗證 CRLF/LF 雙向 digest；同一 snapshot 的 19 個 legacy hashes 共
+1,709 次 textual occurrences、分布於 1,134 個 unique files。
+
+`scripts/audit/verify_provenance.py` 對 `runs_v2` 實測為
+`468 legacy / 0 fail`。朋友的三個修正 commits 未改任何既有
+preregistration、evidence 或實驗數字，也未存取 dev-test/test。Windows sandbox
+內的 pytest temp ACL 會產生大量 setup errors；改用明確的 sandbox 外
+system-temp basetemp 後，bare `pytest` 完整回歸為 **453 passed**，全樹
+`compileall -f src tests scripts` 亦通過。此修正只修復 provenance/CI
+portability，不構成新的方法效果證據。
