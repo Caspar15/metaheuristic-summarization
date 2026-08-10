@@ -148,8 +148,8 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 
 ### 已套用並通過 regression tests
 
-以下 patch 已接線。GovReport-centered 分支目前 **457 tests 全過**（2026-08-11）；
-PR #16 Linux CI 綠燈，另增的 4 個 freeze-package guards 也已納入全量回歸。這是 correctness
+以下 patch 已接線。GovReport-centered 分支目前 **459 tests 全過**（2026-08-11）；
+PR #16 Linux CI 綠燈，另增的 6 個 freeze-package guards 也已納入全量回歸。這是 correctness
 checkpoint，不是方法效果證據；
 SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress test 時才是必要驗收，不阻塞 GovReport + Multi-News 主線：
 

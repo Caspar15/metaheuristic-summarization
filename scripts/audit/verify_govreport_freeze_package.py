@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -45,17 +46,34 @@ def _load_json(root: Path, relative: Path) -> dict[str, Any]:
     return value
 
 
-def _require_sha(root: Path, path: str, expected: str, label: str) -> None:
+def _require_sha(
+    root: Path,
+    path: str,
+    expected: str,
+    label: str,
+    *,
+    allow_missing: bool = False,
+) -> bool:
+    """Verify a pinned file and return whether it was present.
+
+    ``allow_missing`` is only for deliberately untracked local run artifacts.
+    A present artifact is always hashed, and committed metadata always uses the
+    default fail-loud behavior.
+    """
+
     if not re.fullmatch(r"[0-9a-f]{64}", expected):
         raise FreezePackageError(f"{label}: malformed expected SHA-256 {expected!r}")
     target = root / path
     if not target.is_file():
+        if allow_missing:
+            return False
         raise FreezePackageError(f"{label}: pinned file is missing: {path}")
     actual = sha256_file(str(target))
     if actual != expected:
         raise FreezePackageError(
             f"{label}: {path} SHA-256 is {actual}, expected {expected}"
         )
+    return True
 
 
 def _require_false(value: Any, label: str) -> None:
@@ -119,7 +137,9 @@ def _assert_lock_contract(
         )
 
 
-def validate_freeze_package(root: Path = REPO_ROOT) -> dict[str, Any]:
+def validate_freeze_package(
+    root: Path = REPO_ROOT, *, require_local_evidence: bool = False
+) -> dict[str, Any]:
     addendum = _load_json(root, ADDENDUM)
     evidence = _load_json(root, EVIDENCE_PREREG)
     final = _load_json(root, FINAL_PREREG)
@@ -189,13 +209,36 @@ def validate_freeze_package(root: Path = REPO_ROOT) -> dict[str, Any]:
         "evidence length policy",
     )
     proposed = inputs["proposed"]
-    for field, sha_field in (
-        ("config_path", "config_sha256"),
-        ("predictions_path", "predictions_sha256"),
-    ):
-        _require_sha(root, proposed[field], proposed[sha_field], f"proposed {field}")
     _require_sha(
         root,
+        proposed["config_path"],
+        proposed["config_sha256"],
+        "proposed config_path",
+    )
+
+    local_checked: list[str] = []
+    local_deferred: list[str] = []
+    local_seen: set[str] = set()
+
+    def check_local(path: str, expected: str, label: str) -> None:
+        if path in local_seen:
+            return
+        local_seen.add(path)
+        present = _require_sha(
+            root,
+            path,
+            expected,
+            label,
+            allow_missing=not require_local_evidence,
+        )
+        (local_checked if present else local_deferred).append(path)
+
+    check_local(
+        proposed["predictions_path"],
+        proposed["predictions_sha256"],
+        "proposed predictions_path",
+    )
+    check_local(
         "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/"
         "C01_combined_salience_route_weight/per_example.jsonl",
         proposed["per_example_sha256"],
@@ -217,7 +260,7 @@ def validate_freeze_package(root: Path = REPO_ROOT) -> dict[str, Any]:
     for name, pair in evidence["work_packages"]["E1_published_evaluator"][
         "systems"
     ].items():
-        _require_sha(root, pair[0], pair[1], f"published-evaluator input {name}")
+        check_local(pair[0], pair[1], f"published-evaluator input {name}")
 
     final_selection = final["frozen_baselines"]["selection_source"]
     _require_sha(
@@ -253,11 +296,35 @@ def validate_freeze_package(root: Path = REPO_ROOT) -> dict[str, Any]:
         "boundary_dataset": "Multi-News",
         "protected_splits_unlocked": False,
         "test_split_accessed": False,
+        "local_evidence_status": (
+            "complete" if not local_deferred else "deferred_missing_untracked_artifacts"
+        ),
+        "local_evidence_checked": len(local_checked),
+        "local_evidence_deferred": len(local_deferred),
+        "deferred_paths": local_deferred,
     }
 
 
 def main() -> None:
-    print(json.dumps(validate_freeze_package(), indent=2, sort_keys=True))
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--require-local-evidence",
+        action="store_true",
+        help=(
+            "fail when gitignored predictions/per-example dev artifacts are absent; "
+            "present artifacts are always verified even without this flag"
+        ),
+    )
+    args = parser.parse_args()
+    print(
+        json.dumps(
+            validate_freeze_package(
+                require_local_evidence=args.require_local_evidence
+            ),
+            indent=2,
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":

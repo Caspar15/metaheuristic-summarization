@@ -7,6 +7,7 @@ from scripts.audit.verify_govreport_freeze_package import (
     REPO_ROOT,
     _assert_decision_contract,
     _assert_lock_contract,
+    _require_sha,
     validate_freeze_package,
 )
 
@@ -42,6 +43,10 @@ def test_committed_govreport_freeze_package_is_internally_consistent():
     assert report["boundary_dataset"] == "Multi-News"
     assert report["protected_splits_unlocked"] is False
     assert report["test_split_accessed"] is False
+    assert report["local_evidence_status"] in {
+        "complete",
+        "deferred_missing_untracked_artifacts",
+    }
 
 
 def test_lock_contract_rejects_test_score_access():
@@ -76,3 +81,24 @@ def test_decision_contract_rejects_primary_dataset_drift():
     drifted["dataset_roles"]["primary_quality_domain"]["dataset"] = "Multi-News"
     with pytest.raises(FreezePackageError, match="sole primary"):
         _assert_decision_contract(drifted)
+
+
+def test_optional_untracked_evidence_can_be_explicitly_deferred(tmp_path):
+    present = _require_sha(
+        tmp_path,
+        "missing.jsonl",
+        "0" * 64,
+        "gitignored dev artifact",
+        allow_missing=True,
+    )
+    assert present is False
+
+
+def test_strict_local_evidence_mode_rejects_missing_artifact(tmp_path):
+    with pytest.raises(FreezePackageError, match="pinned file is missing"):
+        _require_sha(
+            tmp_path,
+            "missing.jsonl",
+            "0" * 64,
+            "gitignored dev artifact",
+        )

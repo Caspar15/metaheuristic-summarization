@@ -266,7 +266,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 457 local tests（2026-08-11）、PR #16 Linux CI、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 4 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
+| **Phase 1 canonical 主路徑已重構** | 459 local tests（2026-08-11）、PR #16 Linux CI、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 6 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -310,7 +310,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | 457 local tests、PR #16 Linux CI、snapshot、shared objectives、historical frozen-policy preflight、partition enforcement、exact batched Greedy 與 F-51～F-72/D3a/D3b guards 已完成；published-protocol parity 與 final-output policy仍未完成 |
+| Phase 1（correctness refactor） | 459 local tests、PR #16 Linux CI、snapshot、shared objectives、historical frozen-policy preflight、partition enforcement、exact batched Greedy 與 F-51～F-72/D3a/D3b guards 已完成；PR #17 clean-clone CI 修正待 rerun，published-protocol parity 與 final-output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
 | Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
 | v2 dataset role | GovReport 是唯一 primary；Multi-News 只保留既有 D3b boundary evidence，不執行新 dev-test/test；其他資料集不納入 |

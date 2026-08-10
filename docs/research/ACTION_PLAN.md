@@ -664,7 +664,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag 與 invalid-run 標記均已版本化；final execution freeze 仍屬 Phase 3d |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 457 local tests（2026-08-11）與 PR #16 Linux CI、snapshot、shared objectives、兩套歷史 policies/partitions、A1～D3b 與 F-51～F-72 guards 已完成。official evaluator、正式成本 pilot 與 final-output policy 仍待補 |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 459 local tests（2026-08-11）與 PR #16 Linux CI、snapshot、shared objectives、兩套歷史 policies/partitions、A1～D3b 與 F-51～F-72 guards 已完成；PR #17 clean-clone CI 修正待 rerun。official evaluator、正式成本 pilot 與 final-output policy 仍待補 |
 | 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
 | 3 方法開發 | `[~]` | ❌ v1 雙-primary gate；🟡 v2 evidence gate 尚未完成 | D3b 後停止配置搜尋；作者端已核准 GovReport-centered 選項 A。E1 official evaluator、E2 cost/scaling、E3 ablation 與完整作者群簽字尚未完成；不進 dev-test/test |
 | 4 正式 test | `[ ]` | | |
@@ -678,7 +678,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
       F-51 當時 **386 passed**；PR #16 含 F-70/F-71 跨平台與 provenance guards 為
-      **453 passed**；v2 另增 4 個 freeze-package guards，現行完整回歸為 **457 passed**。
+      **453 passed**；v2 另增 6 個 freeze-package guards，現行完整回歸為 **459 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、

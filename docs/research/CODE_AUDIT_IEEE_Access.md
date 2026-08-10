@@ -17,7 +17,7 @@
 > 後續修正狀態以 §0.0、`ACTION_PLAN.md` 與目前測試結果為準；下方 legacy 敘述不會隨 working tree 改寫。
 > **2026-08-11 v2 freeze-package 覆核**：作者端已核准 GovReport-centered 定位；
 > GovReport 是唯一 primary，Multi-News 是 boundary evidence。F-72 登錄官方 evaluator
-> mismatch risk；457 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
+> mismatch risk；459 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
 > **2026-08-06 selector evidence**：200-row reference-blind matched pilot 與五 seed
 > NSGA-II stability extension 已完成。MMR 對 Greedy 的 R-1/R-2 paired gain 為
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
@@ -2388,15 +2388,18 @@ Stanza `Pipeline(lang='en', processors='tokenize,mwt')`，把 token 以空白連
   GovReport quality-superiority claim；不得再調 selector、route、budget 或 weights。
 - 新增 `configs/preregistrations/govreport_centered_final_evaluation_v1.json`，但 execution
   維持 `locked`，且不建立 test data policy；老師／完整作者群簽字前不可執行。
-- 新增 `scripts/audit/verify_govreport_freeze_package.py` 與 4 個 regression guards，驗證
-  dataset role、frozen config、protected-split lock 與 final execution lock。此 verifier
-  只雜湊版本化 metadata 與既有 dev evidence，不開啟任何 dataset split。
+- 新增 `scripts/audit/verify_govreport_freeze_package.py` 與 regression guards，驗證
+  dataset role、frozen config、protected-split lock 與 final execution lock。clean clone
+  一律嚴格驗 committed metadata；gitignored dev artifacts 若存在就驗 SHA，若不存在則
+  明列 deferred。研究工作站可用 `--require-local-evidence` 要求全部本地 evidence 存在。
+  此 verifier 不開啟任何 dataset split。
 
 **重現來源：** GovReport paper `https://arxiv.org/abs/2104.02112`；官方程式
 `https://github.com/luyang-huang96/LongDocSum`。本條沒有產生新的 ROUGE 分數，也沒有
 存取 dev-test/test；它只登錄 evaluator mismatch risk 與 freeze 前必做的驗證。
 
-驗證結果（2026-08-11）：freeze-package targeted 4/4、完整 pytest **457 passed**、
+驗證結果（2026-08-11）：freeze-package targeted 6/6、完整 pytest **459 passed**、
+strict local-evidence mode 驗 10 個 artifacts／0 deferred；
 `compileall -f src tests scripts` 通過，provenance audit 為
 `468 checked / 468 legacy / 0 fail`；freeze verifier 回報 protected splits locked、
 `test_split_accessed=false`。
