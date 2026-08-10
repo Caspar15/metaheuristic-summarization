@@ -1,0 +1,27 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T04:49:22.399353+00:00",
+  "scope": "reference_lengths_only_no_system_scores",
+  "test_split_accessed": false,
+  "dataset": "GovReport",
+  "base_split": "validation",
+  "partition": "dev",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "rows": 681,
+  "word_count_rule": "len(reference.split()) on the single canonical reference",
+  "distribution": {
+    "mean": 567.0837004405287,
+    "median": 572.0,
+    "p10": 394.0,
+    "p25": 500.0,
+    "p50": 572.0,
+    "p75": 653.0,
+    "p90": 716.0,
+    "min": 56,
+    "max": 1424
+  }
+}

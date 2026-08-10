@@ -1,0 +1,39 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:18:24.564640+00:00",
+  "status": "failed",
+  "failure_type": "external_runner_interruption",
+  "failure": "Incomplete run preserved before an explicit --resume retry.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "archived_run_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P06_previous_-0.6/pacsum_sbert/attempts/attempt_01_interrupted",
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "plm",
+  "candidate": "pacsum_sbert_P06_previous_-0.6",
+  "candidate_hash": "4825a68efacb9ccb21407183d30a6c3ef831ab11bbed38fb2eae3454cc0c6dfb",
+  "declared_variant": {
+    "id": "pacsum_sbert_P06_previous_-0.6",
+    "method": "pacsum_sbert",
+    "pacsum": {
+      "beta": 0.0,
+      "lambda_previous": -0.6,
+      "lambda_following": 0.4
+    }
+  },
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+      "contract_version": "sbert_mean_pool_l2_npz_v1",
+      "scientific_config_unchanged": true
+    }
+  }
+}

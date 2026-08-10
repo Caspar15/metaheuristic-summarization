@@ -1,0 +1,78 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T15:26:23.245906+00:00",
+  "started_at_utc": "2026-08-08T15:14:13.070847+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "lexrank",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "lexrank",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\non_plm\\lexrank\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\non_plm\\lexrank\\lexrank",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "c049221f40919320b0e28ce2b50fbcc96f488181",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/resolved_config.yaml",
+  "config_sha256": "b12ac5ba46b1766da24b97ce3f2540f2c517e65486a3ebd0c55b8510ff2aaf48",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/lexrank/run/predictions.jsonl",
+  "predictions_sha256": "194fd68d640fbe144eb617c58d9061e5b088e3a62243483472db41789293fd33",
+  "selected_indices_sha256": "52c4f799a27acd2642c13f315179dace24a300d908ade1f1339984fd7d4562ca",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4317264223765229,
+      "rouge2": 0.13714661646397844,
+      "rougeLsum": 0.3906334133457057
+    },
+    "macro_rouge": 0.319835484062069,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.21880559085133,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "non_plm",
+  "candidate": "lexrank",
+  "candidate_hash": "cb6efa0e4ff23a9d23466025fa5db9eabe27987b59357c9259bc72f6a8ed0f0f",
+  "declared_variant": {
+    "id": "lexrank",
+    "method": "lexrank"
+  },
+  "dev_test_accessed": false
+}

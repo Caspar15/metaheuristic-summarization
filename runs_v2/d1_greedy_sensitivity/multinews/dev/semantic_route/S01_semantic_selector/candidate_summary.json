@@ -1,0 +1,58 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "semantic_route",
+  "candidate": "S01_semantic_selector",
+  "candidate_hash": "f66ce6b554d10dbed3dc527c6e2ebe44e6f68201ea64ed533907d66249a16e60",
+  "declared_delta": {
+    "selector.salience_source": "semantic_raw",
+    "selector.similarity_source": "sbert"
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/semantic_route/S01_semantic_selector/resolved_config.yaml",
+  "config_sha256": "14c8862183f4934683c8bfa8ec04f8bcf2525fb5d8fc77ce087a3889f049fc12",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4090845946987434,
+      "rouge2": 0.1176132501002357,
+      "rougeLsum": 0.3722037956365609
+    },
+    "macro_rouge": 0.29963388014518,
+    "feasible_rows": 3931,
+    "infeasible_rows": 4,
+    "summary_words": {
+      "mean": 241.7989834815756,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 45.68360864040661,
+    "selector_candidate_size_mean": 45.68360864040661,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 45.68360864040661,
+    "route_agreement_mean": 1.627300141283807,
+    "unique_candidate_mean_by_route": {
+      "lexical": 10.50241423125794,
+      "semantic": 10.484371029224905
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 4.287166454891995,
+      "semantic": 1.9857687420584498
+    }
+  }
+}

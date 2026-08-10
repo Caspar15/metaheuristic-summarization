@@ -1,0 +1,73 @@
+{
+  "preregistration_schema_version": "1.0",
+  "status": "frozen_before_candidate_system_scores",
+  "frozen_at_utc": "2026-08-08T04:49:48.4390959Z",
+  "implementation_parent_commit": "51c17b8977ed6e93db662908c6ca7099ef58cdb5",
+  "study_id": "a1-length-contract-govreport-v1",
+  "parent_study_id": "a1-length-contract-v1",
+  "test_split_prohibited": true,
+  "govreport_dev_reference_evidence": {
+    "path": "docs/research/evidence/a1_govreport_dev_reference_lengths.json",
+    "file_sha256": "30e886ff1e880e65f742929656b8233d0225a7d50af78bd6bc78b5021c602ef7",
+    "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+    "rows": 681,
+    "mean_words": 567.0837004405287,
+    "median_words": 572.0,
+    "p25_words": 500.0,
+    "p75_words": 653.0
+  },
+  "external_prior": {
+    "source": "https://aclanthology.org/2021.naacl-main.112/",
+    "reported_full_dataset_mean_summary_words": 553,
+    "extractive_word_cap_reported": false,
+    "rule": "Do not reinterpret abstractive generation token limits as an extractive word cap."
+  },
+  "candidates": {
+    "dev_iqr_band_500_650": {
+      "min_words": 500,
+      "max_words": 650,
+      "role": "floor-bearing control analogous to the historical Multi-News band"
+    },
+    "median_cap_570": {
+      "min_words": 0,
+      "max_words": 570,
+      "role": "rounded frozen-dev median cap"
+    },
+    "paper_mean_cap_550": {
+      "min_words": 0,
+      "max_words": 550,
+      "role": "rounded paper-reported full-dataset mean; external pre-score prior"
+    },
+    "p75_cap_650": {
+      "min_words": 0,
+      "max_words": 650,
+      "role": "rounded frozen-dev p75 cap"
+    }
+  },
+  "rounding_rule": "Round distribution-derived word caps to the nearest ten words; Python half-to-even does not affect the observed values.",
+  "cheap_methods": [
+    "Lead document_order",
+    "Random seed 3407",
+    "lexical-only provenance-aware deterministic Greedy with length_normalized importance"
+  ],
+  "controlled_components": [
+    "same 681 frozen GovReport dev IDs",
+    "same evaluator and all-row denominator",
+    "same candidate/objective settings within Greedy",
+    "only min_words/max_words differ across protocols"
+  ],
+  "selection_rule": {
+    "dev": "Run all four protocols and all three methods; rank by the mean across methods of per-document macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum).",
+    "dev_test": "Evaluate every still-valid protocol exactly once on the 292 frozen dev-test IDs. Select the highest mean cross-method macro ROUGE only if paired 95% bootstrap differences versus every alternative exclude zero after Holm correction.",
+    "tie": "If no protocol has a multiplicity-corrected advantage, freeze median_cap_570 because GovReport has no historical extractive word ceiling and this is the simplest no-floor contract aligned to frozen development references.",
+    "rejection": "Reject row loss, schema drift, upper-budget violation, or denominator changes. Source-intrinsic minimum shortfall is recorded under the already-frozen F-17 policy; no other fail-loud relaxation is permitted."
+  },
+  "parent_underspecification_resolution": "The parent preregistration allowed a historical official cap if one existed but did not state the fallback when none exists. This addendum resolves that gap before system scores: use the paper mean as the external-prior candidate and the frozen dev median as the tie winner.",
+  "multiple_comparisons": {
+    "candidate_protocols": 4,
+    "method_families": 3,
+    "primary_pairwise_family": "winner versus three alternatives",
+    "correction": "Holm"
+  },
+  "scores_observed_at_freeze": false
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d1-capacity-matched-route-ablation-v1",
+  "registered_at_utc": "2026-08-08T13:13:07.2027531Z",
+  "registration_timing": "after aggregate D1/S02b dev scores, before any capacity-matched ablation run or per-example paired result",
+  "scores_observed_at_registration": {
+    "Multi-News_S02b_macro": 0.32807720596074463,
+    "GovReport_S02b_macro": 0.4178618349119039
+  },
+  "test_split_prohibited": true,
+  "dev_test_access": "none",
+  "base_split": "validation",
+  "partition": "dev",
+  "question": "At the successful S02b capacity and guard contract, does each expensive route add value beyond the remaining routes?",
+  "datasets": {
+    "Multi-News": {
+      "rows": 3935,
+      "base_config": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "b1a0de3218c19c0aeed751299d57ad9345556eeaf0dc3a489d6381e276055186"
+    },
+    "GovReport": {
+      "rows": 681,
+      "base_config": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "f3cf22b9fdd2ea7b2457cfd34f66ba0c71b4faaac6fd1aa6479099c82a7c42d2"
+    }
+  },
+  "fixed_contract": {
+    "candidate_budget.route_top_k": 40,
+    "candidate_budget.min_per_route": 20,
+    "candidate_budget.total": 80,
+    "coverage_guard.max_items": 20,
+    "selector": "greedy",
+    "salience_source": "rrf_fusion"
+  },
+  "candidates": [
+    {
+      "id": "A01_without_semantic",
+      "delta": {
+        "compute_budget.enabled_routes": ["lexical", "graph"]
+      },
+      "comparison": "S02b minus semantic route"
+    },
+    {
+      "id": "A02_without_graph",
+      "delta": {
+        "compute_budget.enabled_routes": ["lexical", "semantic"]
+      },
+      "comparison": "S02b minus graph route"
+    }
+  ],
+  "success_contract": {
+    "all_frozen_dev_rows_present": true,
+    "max_candidate_pool": 80,
+    "dev_test_accessed": false,
+    "test_split_accessed": false,
+    "primary_measure": "all-row macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "paired_followup_required": true
+  },
+  "route_rule": "A route is retained only if S02b has a reproducible paired benefit over the corresponding route-removed candidate, or a predeclared quality-cost/adaptive subgroup benefit. Unique provenance alone is insufficient.",
+  "comparison_family_size_after_ablation": 31
+}

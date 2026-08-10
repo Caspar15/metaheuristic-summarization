@@ -1,4 +1,62 @@
-# IEEE Access 全面重建計畫
+# IEEE Access 全面修訂計畫
+
+## 2026-08-06 selector-comparison update
+
+> **2026-08-09 governed headroom update**：Multi-News frozen-dev 的三個 metric-specific
+> greedy references 已完成。S02b 對 Lead→greedy headroom 的 R1/R2/Lsum capture 為
+> `3.57%/−4.23%/4.89%`，平均僅 `1.41%`；strongest P08 平均 `3.30%`。
+> S02b union-cap-80 recall 約 82–86%，final-selection recall 僅約 30%，因此現階段優先
+> 修 selector/salience，而不是擴大候選模組。graph top-40 三項 recall 均最高、semantic
+> 第二且都有 exclusive hits，兩 route 暫不刪。GovReport 後續完成 3/3 greedy references：
+> S02b 平均 headroom `8.64%`、union recall `47–56%`、final recall `12–13%`，顯示
+> candidate coverage 與 selector/salience 都是瓶頸。Gate 2 quality gate 仍未通過。
+
+> **2026-08-09 Multi-News D2 update**：事前凍結的 14-candidate full-dev selector
+> isolation 已完成 3,935 rows。Greedy-TFIDF anchor macro `0.328077` 仍最佳；
+> NSGA-II+TF-IDF `0.322615`、最佳 TF-IDF-MMR `0.321744`、最佳 SBERT-MMR
+> `0.316612`、NSGA-II+SBERT `0.308827`。NSGA-II+TF-IDF selection `4690.7s`，
+> 約為最佳 TF-IDF-MMR 的 `31.5×`，且未達多 seed 門檻。故 200-row pilot 的
+> MMR-main 判斷已降為被 full-dev 否定的早期 diagnostic；NSGA-II 退出核心的判斷保留。
+> GovReport 同規格 D2 其後完成：TF-IDF-MMR λ=0.7 macro `0.446154`，對 Greedy
+> `+0.028293`，104-endpoint Holm `0.020798`、228-opportunity correction `0.045595`；
+> 但仍低 full-source SBERT+MMR `0.006614`。兩資料集無共同近最優 selector，依預註冊
+> 採 task-profile policy（multi-document→Greedy；single-document multi-sentence→
+> TF-IDF-MMR λ=0.7）。兩者仍輸 adversarial baseline，不進 dev-test。
+
+> **2026-08-09 D3a router/fusion update**：分數前凍結的 28/28 reference-blind pilots、
+> mechanical finalists 與兩 primary full-dev confirmation 已完成。Multi-News
+> bigrams+position macro `0.329704`，仍低 PacSum `0.002036`，且 R-2 paired
+> `−0.008971`；GovReport lexical×0.5 macro `0.456423`，高 full-source SBERT+MMR
+> `0.003655`，macro CI `[+0.001446,+0.005876]`、Holm-28 `p=0.023798`。
+> 然而 D3a 的 10k bootstrap 在 332-way correction 下最小可達 p 僅 `0.066393`，
+> Gov winner selection-adjusted `p=0.464754`，仍依原規則不 promotion。只允許最後一個
+> 在分數前凍結、提高 resampling resolution 的 D3b cross-profile combination；若
+> Multi-News 仍未過 adversarial gate，應寫重新定位建議而非進 dev-test。D3b 已按
+> 每個 profile 一個組合、100,000 次 paired bootstrap、Holm-8 與 340-opportunity
+> correction 完成。GovReport 對 strongest baseline `+0.004636` 且全部 gate 通過；
+> Multi-News 仍 `−0.001323`，R-2 `−0.008565` 且 CI 全負。雙 primary gate 失敗，
+> 搜尋停止；`REPOSITIONING_RECOMMENDATION.md` 已建立，dev-test/test 保持鎖定。
+
+已完成可執行的 Greedy／candidate-matched SBERT-MMR／NSGA-II selector swap，
+以及 full-source SBERT centroid-only／SBERT-MMR baselines。新 pipeline 會重現
+`all-MiniLM-L6-v2` 的 mean pooling + Normalize，並以 SHA-256 證明三 selector
+收到相同候選與數值輸入。真實 Multi-News 3-row smoke 的 shared-objective 平均
+utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROUGE，
+只能證明 NSGA-II 不會因較昂貴就自然優於 Greedy，不能作品質結論。正式去留須
+依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation
+2026-08-06 frozen 200-row matched pilot 已提供第一個方向：candidate-matched MMR
+在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
+五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
+且選句 mean pairwise Jaccard 僅 0.639；selector 層當時暫定以 MMR 為主線、
+Greedy 為 reference、NSGA-II 為 comparator；上方 D2 update 已更正此 pilot 外推。這不等於整個方法已成立：Multi-News
+frozen-dev non-PLM 23/23 與 PLM 27/27 已完成；PacSum TF-IDF P08 macro 仍比
+PLM winner 高 `0.000282`、比 proposed S02b 高 `0.003663`，而最佳 full-source
+SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍須完成
+  GovReport PLM 亦已完成：MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。
+  64-endpoint paired finalists 隨後確認 S02b 對 Multi-News P08 macro `−0.003663`
+  （Holm `p=0.021598`）、對 GovReport MMR λ=0.9 `−0.034906`
+  （Holm `p=0.012799`），selection-aware wins 0。candidate router 目前不足以形成可投稿
+  貢獻，必須回 frozen dev redesign。
 
 版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果
@@ -17,7 +75,10 @@
 4. 用一致的程式在本地重跑所有 baseline、ablation 與 proposed variants。
 5. 只有當預先定義的效果、統計顯著性與 quality-cost Pareto gate 通過，才開始寫 IEEE Access 主文。
 
-這不是「補實驗」而是一次 research reset。若不做 reset，高機率再次被拒，而且下一次 reviewer 可能會把問題定性為實驗有效性與研究可重現性不足。
+這不是只「補幾個實驗」，而是對 ICACT／ICT Express 既有研究問題做受控的全面修訂：
+保留原本的 zero-training、多訊號候選生成與 selector 問題，重做不可信的資料治理、
+實驗與必要實作。它不是另起一篇全新方法。若不做這層修訂，高機率再次被拒，而且
+下一次 reviewer 可能會把問題定性為實驗有效性與研究可重現性不足。
 
 目前唯一完成獨立重算的 F-0 是 legacy Multi-News 診斷：ExpB（K=20 Coverage）在相同 5,622 筆資料與目前的內部 evaluator 下為 R1/R2/R-Lsum = 0.4352/0.1405/0.3880；同一 245-whitespace-word 上限的 Lead prefix 為 0.4331/0.1453/0.3901。這表示舊系統只在 R1 高 0.0021，R2 與 R-Lsum 反而較低。這批 ExpB 是在 test set 選出的設定，故只能證明舊設計未通過 reality check，不能作為新稿結果。CNN/DailyMail 舊系統是 validation split，而文獻 Lead 是 test split，尚不能宣稱誰勝誰負。
 
@@ -64,23 +125,68 @@
 | P0-07 | NSGA-II 參數與 config 不一致 | ✅ **已修** | `pop_size`/`n_gen`/`seed` 已接線、移除靜默 fallback、有 regression test |
 | P0-08 | 公式與實作多處不一致 | 🟡 **部分修** | 已修：TF-ISF v2 改用非負平滑、graph 不再就地竄改、τ 已接線。**仍未修：`length_scores` 除以「文件內觀察最大值」而非論文的 `min(len/40,1)`；`centrality` 與 `novelty` 完全反相關** |
 | P0-09 | Runtime protocol 不可重現 | 🟡 **程式已修，數字待重測** | `load_encoder()` 模型快取已修。**正式計時必須依鎖定 protocol 重測**（載入佔比在兩次量測間為 78% 與 93%，不穩定） |
-| P0-10 | Data integrity 與 preprocessing | 🟡 **Multi-News validation 已修；其餘待補** | validation 的 canonical schema、pinned revision、health report、fingerprint、frozen main/clean policy 與防竄改守門已完成；Multi-News train/test、GovReport 與可選 CNN/DM 尚未完成 |
+| P0-10 | Data integrity 與 preprocessing | 🟡 **兩 primary validation 已修；freeze 後 splits 尚未讀取** | Multi-News 與 GovReport validation 的 canonical schema、pinned revision、health report、fingerprint、frozen policy、development partition 與防竄改守門已完成。test split 在人員簽署 freeze 前禁止；CNN/DM 是 Gate 3 後的條件式工作 |
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **Baseline Gate 2 尚未通過** —— Lead、Random、TextRank／LexRank 程式已進
-   master，但 centrality offline tokenizer hotfix 與正式重跑尚未完成；PacSum、
-   SBERT+MMR、GovReport 及兩個 primary 的完整 baseline 矩陣仍缺。程式基礎完成不能
-   替代兩個 primary 的實測，見 §9 Go/No-Go
-2. 🔴 **第二個 primary benchmark GovReport 尚未建立**；Multi-News 也只有 validation 完成，train/test 尚未生成
+1. 🔴 **Baseline matrix 已完成，但 Gate 2 quality gate 明確失敗** —— 兩 primary
+   frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists
+   均完成。S02b 對 Multi-News P08 macro `−0.003663`、對 GovReport MMR λ=0.9
+   `−0.034906`，兩個 paired CI 均全負且 Holm-significant；不得進 dev-test。
+2. 🔴 **方法 redesign 尚未完成** —— Multi-News 主要是 selector/salience bottleneck；
+   GovReport 同時有 candidate coverage 與 selector/salience bottleneck。必須只用 frozen dev
+   預註冊搜尋，若耗盡仍無顯著優勢則依停止條件重新定位。
 3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
 4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張
 5. 🟡 P0-01 的 legacy artifact 永久作廢（不是待修，是既成事實）
 6. 🟡 P0-06 的 published-protocol parity、P0-09 的正式計時，以及 validation-frozen Pareto/output policy
 
 > ⚠️ **「P0 修好」不等於「可以投稿」。** §9 的 Go 條件要求相對強 baseline 有一致正向效果，
-> 而目前只有 Lead 程式存在、沒有兩個 primary 的 governed baseline 結果，因此 F-0
->（系統是否勝過 Lead）**在新 pipeline 上仍未被回答**。
+> D1 的兩個 lexical/objective cells 顯示明確 domain difference：Multi-News 全文候選
+> macro `0.320912` 仍低於 Lead `0.326291`；GovReport 全文候選 `0.415585` 高於
+> Lead `0.399232` 與 Random `0.408844` 的 dev point estimate。這支持候選召回是主要
+> 病因，但全文 dense 搜尋不是 final architecture，且尚無 strong-baseline／paired
+> significance。新增的 Multi-News cheap-multiroute 證據顯示 sparse graph G02 以
+> mean/max `48.03/60` 的受控 pool 達到 macro `0.324305`，相對純 lexical base
+> `+0.013952`、也高於全文 lexical，但仍低 Lead `0.001986`，主要缺口在 R-2。
+> 後續 GovReport cap-aware、兩資料集 semantic、greedy reference 與 governed Gate 2
+> 均已完成；正式結論是 proposed S02b 對兩個 adversarial winner 顯著落後，不能投稿。
+
+> GovReport cheap-multiroute 隨後完成 11 個有效 runs；G02 hard pool macro `0.404282`
+> 高於 Lead、低於 Random。G07 full/soft pool `0.414831` 但成本約 G00 `13.28×`，且仍
+> 略低全文 lexical L10。uncapped section guard 因 mandatory 77 > cap 60 正確失敗；
+> 原 failure 保留，容量推導的 cap-aware G11b 已獨立預註冊，不能覆寫原配置。
+> G11b 隨後在 prereg commit 後完成 681/681 rows，pool max 60、macro `0.404182`；它只
+> 證明 cap-aware section guard 可行且點估計小幅正向，不構成 promotion。
+
+> Multi-News semantic S00 隨後得到 macro `0.322404`：有 semantic unique candidates，
+> 但仍低 graph G02 `0.001900`，selection 成本約 graph G00 `10.37×`；S01 直接 semantic
+> selector 更低 `0.022771`，該接法刪除。原 S02 因三路 reservations + guard 超過 cap
+> 失敗；容量推導的兩-primary S02b 已在 GovReport semantic 分數前獨立預註冊。
+> Multi-News S02b 隨後完成：macro `0.328077`，相對 graph G02 `+0.003772`、Lead
+> `+0.001786`，pool mean/max `52.09/80`。這是首次受控池配置在該 dev 點估計高於 Lead，
+> 但 S02b 同時改 total/guard cap、R-2 仍落後，尚不能把提升歸因 semantic 或宣稱勝出。
+>
+> GovReport semantic 原 family 也已完成：S00 macro `0.407203`，比 graph G02 高
+> `0.002921`，但仍低 Random `0.001641`、全文 lexical L10 `0.008382`，selection 約
+> graph G00 `15.15×`。S01 又比 S00 低 `0.057371`，因此 semantic-direct selector
+> 接法已有跨資料集刪除證據；整條 semantic route 只因 S02b 正訊號暫留，仍需 paired
+> evidence 與 capacity-matched route ablation。後續兩者均已完成，route 暫留但不代表
+> always-on policy 已成立。
+> GovReport S02b 隨後得到 macro `0.417862`，高全文 lexical L10 `0.002277`、graph
+> G07 `0.003031` 與 Random `0.009018`。兩 primary 的 S02b 都是目前 proposed 最高
+> point estimate，支持繼續做 paired/matched ablation；但 GovReport 成本約 graph G00
+> `18.28×`，後續又顯著輸 strong baseline，不能凍結成最終架構。
+> Multi-News capacity-matched route removal 隨後得到：S02b 相對移除 semantic
+> `+0.003868`、相對移除 graph `+0.005358`。這排除「只因 cap 變大」的完整解釋，
+> GovReport 同比較為 `+0.014268/+0.011481`，兩路跨資料集 point estimate 同號；
+> 後續 31-config multiplicity-corrected paired inference 已完成並支持兩 route 暫留。GovReport 無 semantic 只需
+> `163.77 s`、完整 S02b `1,106.27 s`，semantic 必須另證明 quality-cost 值得 always-on。
+> 預註冊 paired analysis 進一步確認四個 route comparisons × 三 metrics 的 12/12 CI
+> 全正，Holm `0.002400`、31-config selection correction `0.037196`，所以 graph/semantic
+> 暫不刪除。然而 Multi-News 對 Lead 的 R-2 為 `−0.008336` 且 CI 全負；GovReport 對
+> Lead 的 R-2 CI 跨 0。後續 Gate 2 顯示 S02b 對兩 primary adversarial winner 均顯著
+> 落後；這不是可投結果，必須回 dev redesign。
 
 ### P0-01. Multi-News 在 test set 上調參與選模型
 
@@ -232,7 +338,7 @@
 - 至少報 R1、R2、RL，並保存每篇、每個 reference 的原始分數及最後 aggregation 結果。
 - extractive oracle 必須在和系統相同的句數或 token budget 下定義：
   - 小文件可 exhaustive best subset；
-  - 大文件可 greedy oracle，但名稱必須寫 greedy oracle，不得稱 exact upper bound；
+  - 大文件可使用 greedy reference，但名稱不得含 oracle，也不得稱 exact upper bound；
   - 若 dataset 提供 oracle labels，優先遵循官方 protocol。
 - 將 full-source score 改名為 full-source baseline，或直接刪除。
 
@@ -240,7 +346,7 @@
 
 - 系統不可能超過同一 metric、同一 budget 下的 exact extractive oracle。
 - reference 數量與官方資料一致。
-- 論文清楚區分 exact oracle、greedy oracle 與 full-source baseline。
+- 論文清楚區分 exhaustive exact oracle、metric-specific greedy reference 與 full-source baseline。
 - official test split 上重現 AIC one-sentence oracle R1 約 52.4；若無法在合理 rounding tolerance 內重現，SciTLDR 實驗不得進主文。
 - proposed method 在相同 no-task-training 條件下至少不低於重跑的 PACSUM；否則 SciTLDR 不得支持「跨領域有效」或「具競爭力」主張。
 
@@ -515,14 +621,14 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
    依句數、文件數、section 數、廉價 lexical redundancy／topic dispersion、cheap lexical graph density 與預估 route cost 決定各 route 的 K，並允許在容易文件跳過 PLM。不可用必須先執行昂貴 route 才能得到的 route agreement 作事前決策；routing policy 只能在 validation 設計與凍結。
 
 5. Selector competition  
-   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。NSGA-II 只有在 quality-cost、hypervolume 或可控 trade-off 上穩定勝出才成為主方法，否則降為比較組。
+   在完全相同 candidate、feature、budget 下比較 greedy、MMR、GRASP、NSGA-II；小實例另以 exhaustive/ILP 解驗證 optimality gap。2026-08-06 matched pilot 暫支持 MMR，但 Multi-News full-dev 顯示該排序不能外推；GovReport 則支持 TF-IDF-MMR λ=0.7。依預註冊採 task-profile policy，並因兩 profile 都輸 adversarial baseline而禁止 promotion。NSGA-II 降為比較組；GRASP 是 optional comparator，不再阻塞主線。
 
-   Phase 1e 已完成工程前提：Greedy、GRASP、NSGA-II 現在共用同一 salience／facility coverage／redundancy evaluator 與 non-empty／min-max length constraints，final evaluation 與 NSGA-II Pareto front 會寫入 artifact。這只是 correctness，不代表 NSGA-II 已證明有效；MMR、exact small-instance gap 與 paired validation comparison 仍未完成。
+   Phase 1e 已完成工程前提：Greedy、GRASP、MMR、NSGA-II 共用 constraints 與 final evaluator；Greedy／NSGA-II 另嚴格共用同一 scalar objective，MMR 的 sequential rule 則明確分開標示。200-row paired selector comparison 與 NSGA 五 seed stability 已完成，證據不支持 NSGA-II；exact small-instance gap 只在仍需解釋 stochastic comparator 時補做，不再是 main architecture blocker。
 
-   新 shared objective 的 3-row correctness smoke 也揭露：若 multi-sentence mean-salience 只有 max budget、沒有 lower length bound，deterministic greedy 三筆皆退化為單句（41–88 words）。因此 Multi-News MVP 暫以 requested 200–250 words 作 length-matched validation band；逐列 effective minimum 只能在完整來源於相同 upper constraints 下本身不可達時調降，且 requested/effective/source capacity/reason 全部保存。全文可達但 candidate pool 不可達時必須報錯，不能以第二次 clamp 掩蓋候選設計缺陷。此值與 objective form 仍須在 validation 凍結，不能依 test 表現選擇。這個結果再次說明「修正公式」不等於「效果自然會變好」。
+   新 shared objective 的 3-row correctness smoke 也揭露：若 multi-sentence mean-salience 只有 max budget、沒有 lower length bound，deterministic greedy 三筆皆退化為單句（41–88 words）。逐列 effective minimum 只能在完整來源於相同 upper constraints 下本身不可達時調降，且 requested/effective/source capacity/reason 全部保存。全文可達但 candidate pool 不可達時必須報錯，不能以第二次 clamp 掩蓋候選設計缺陷。2026-08-08 的 frozen A1 最終依兩資料集各自的一次 dev-test 與預註冊 paired-bootstrap/Holm 規則，將 Multi-News 凍結為 200–250 words（cross-method macro 0.310382），GovReport 凍結為 500–650（0.393415）；兩者相對三案的 adjusted p 均為 0.000600。Multi-News Greedy 仍有 3/1,686 floor shortfalls，必須原樣報告。GovReport 的 no-floor Greedy 只輸出約 181–202 words；floor-bound Greedy 雖到 637.1 words，macro 0.375048 仍低於 Lead 0.394815 與 Random 0.410382，證明長度修正不能替代 salience 改進。這個結果再次說明「修正公式」不等於「效果自然會變好」。
 
-6. Explicit Pareto output policy  
-   不再把 Pareto front 最後任意 scalarize。預先固定 knee point、reference point 或使用者偏好；報整個 front 的 hypervolume 與穩定性。
+6. Pareto output policy（comparator only）
+   不再把 Pareto front 最後任意 scalarize。若最終稿仍報 NSGA-II comparator，須預先固定 knee point、reference point 或使用者偏好，並報 front 的穩定性；不得再將它升格為主方法。
 
    現行程式的 `weighted_sum_on_shared_objectives` 僅是 provisional engineering policy；必須在 validation 改為並凍結預先指定的 policy，否則不可作 test 或論文主結果。
 
@@ -546,7 +652,8 @@ Pilot 通過條件：
 - full method 在至少一個主要資料集明顯優於強 no-task-training baseline，另一個至少不劣或形成清楚的 cost Pareto 優勢。
 - graph 與 semantic route 至少有一個產生非零且可重現的 unique oracle-candidate recall；否則刪除無效 route。
 - adaptive router 相對 always-on full method 降低至少一項完整成本，且 quality loss 在預先定義的 non-inferiority margin 內。
-- NSGA-II 相對 deterministic selector 有穩定增益；否則從標題與主貢獻移除 meta-heuristic。
+- [已觸發] NSGA-II 相對 deterministic selector 沒有穩定增益，已從標題與主貢獻
+  移除 meta-heuristic；後續只作 comparator。
 
 若 pilot 全數失敗，停止以「新摘要方法」投稿。可改寫為嚴謹的 negative-result／empirical study，但必須有具普遍性的分析發現，不能只是報告本系統失敗。
 
@@ -625,7 +732,7 @@ Prediction record：
 - candidate top-K rank preservation tests。
 - Stage-2 provenance score fusion tests。
 - sentence/word/token budget boundary tests。
-- exact/greedy oracle tests。
+- exact-search（若實作）／metric-specific greedy-reference tests。
 - multi-reference evaluation tests。
 - rougeL 與 rougeLsum golden tests。
 - NSGA-II parameter propagation、seed determinism、no-fallback tests。
@@ -1097,7 +1204,7 @@ IEEE Access 的 reproducibility guidance 特別要求 artifact dependencies、in
 - [x] 新 canonical pipeline 的 NSGA effective parameters、seed、objective 與 Pareto artifact 可追溯；最終 output policy 仍待 validation freeze。
 - [x] 新 canonical pipeline 的 candidate／feature／optimizer failure 無 silent fallback；legacy 路徑不得產生新稿結果。
 - [ ] GovReport／Multi-News 的 ROUGE-Lsum、共用 Punkt sentence boundaries 與 published-protocol parity 全部驗證；SciTLDR 不屬 v1。
-- [ ] 強 baseline 在同一 evaluator 下重跑。
+- [x] 強 baseline 已在兩 primary frozen dev、同一 evaluator／長度協定下重跑；Gate 2 quality gate 失敗。
 - [ ] 5 至 10 seeds、paired 95% CI、multiple-comparison correction。
 - [ ] full pipeline runtime、memory、hardware 完整。
 - [ ] Full、No-PLM、No-Graph 的結論符合 CI。

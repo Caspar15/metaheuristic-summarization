@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "audited_at_utc": "2026-08-09T13:38:13.0023015Z",
+  "implementation_commit": "4485c188e2aa91a9562898f709b20634ab5cac31",
+  "scope": "canonical select_sentences pipeline and optimizer dispatch",
+  "sources": [
+    "src/pipeline/select_sentences.py",
+    "src/pipeline/feature_builder.py",
+    "src/pipeline/candidate_builder.py",
+    "src/pipeline/optimizer_dispatch.py",
+    "src/objectives/factory.py"
+  ],
+  "groups": [
+    {"group": "governance", "paths": ["experiment.status", "experiment.dataset", "data_policy.policy_path", "data_policy.policy_sha256", "data_policy.analysis", "experiment_partition.manifest_path", "experiment_partition.manifest_sha256", "experiment_partition.name"], "disposition": "fixed_governance"},
+    {"group": "randomness", "paths": ["seed"], "disposition": "fixed_3407_for_greedy_screen"},
+    {"group": "tf_isf", "paths": ["features.tf_isf.version", "features.tf_isf.use_stopwords", "features.tf_isf.use_sublinear_tf", "features.tf_isf.use_bigrams"], "disposition": "v2_fixed_for_correctness; three boolean leaves screened"},
+    {"group": "position", "paths": ["features.position.version", "features.position.method", "features.position.decay", "features.position.scope"], "disposition": "document scope correctness precondition; one enablement screen; method/decay only if promoted"},
+    {"group": "feature_fusion", "paths": ["features.fusion.version", "features.fusion.interactions", "features.weights.importance", "features.weights.length", "features.weights.position", "features.weights.graph", "features.weights.centrality", "features.weights.novelty"], "disposition": "fusion v2 and document position screened; invalid, dense, duplicate or degenerate legacy dimensions excluded with reasons"},
+    {"group": "representation", "paths": ["representations.use", "representations.method"], "disposition": "fixed true/tfidf; current SentenceVectors formal fit_transform only supports tfidf"},
+    {"group": "length", "paths": ["length_control.unit", "length_control.max_tokens", "length_control.max_words", "length_control.max_sentences", "length_control.min_words", "length_control.require_nonempty"], "disposition": "dataset-specific A1 policy frozen; not searched"},
+    {"group": "objectives", "paths": ["objectives.importance_aggregation", "objectives.coverage_method", "objectives.lambda_importance", "objectives.lambda_coverage", "objectives.lambda_redundancy", "objectives.group_coverage"], "disposition": "aggregation and three weights screened; max fixed because set is equivalent and diversity invalid; group coverage unimplemented"},
+    {"group": "candidate_switches", "paths": ["candidates.use", "candidates.mode", "candidates.soft_boost", "candidates.rrf_constant", "candidates.route_weights", "candidates.recall_target"], "disposition": "use/mode/RRF screened in an active context; explicit weighted-RRF route weights added and preregistered for D3a; soft_boost later only if soft survives; recall_target forbidden"},
+    {"group": "candidate_budget", "paths": ["candidate_budget.route_top_k", "candidate_budget.per_route", "candidate_budget.min_per_route", "candidate_budget.total", "candidates.k", "candidates.total_budget"], "disposition": "canonical route_top_k/min_per_route/total screened with two routes; other paths are compatibility aliases"},
+    {"group": "route_gate", "paths": ["compute_budget.mode", "compute_budget.enabled_routes"], "disposition": "fixed mode only; lexical anchor plus graph/semantic gates screened"},
+    {"group": "lexical_route", "paths": ["routes.lexical.revision"], "disposition": "provenance identifier fixed"},
+    {"group": "tfidf_centroid_route", "paths": ["routes.tfidf_centroid.sublinear_tf", "routes.tfidf_centroid.ngram_range"], "disposition": "route gate screened once; internals searched only if route survives"},
+    {"group": "graph_route", "paths": ["routes.graph.implementation", "routes.graph.n_neighbors", "routes.graph.min_similarity", "routes.graph.alpha", "routes.graph.max_iter", "routes.graph.tol", "routes.graph.representation", "graph_params.threshold"], "disposition": "sparse implementation fixed; neighbors/min_similarity/alpha screened; convergence controls fixed; graph_params threshold is legacy/dense fallback"},
+    {"group": "semantic_route", "paths": ["routes.semantic.model_name", "routes.semantic.revision", "routes.semantic.device", "routes.semantic.batch_size", "routes.semantic.max_model_tokens"], "disposition": "route gate and semantic-selector use screened; checkpoint frozen; device/batch engineering; max tokens fixed after truncation preflight"},
+    {"group": "coverage_guards", "paths": ["coverage_guard.enabled", "coverage_guard.document", "coverage_guard.section", "coverage_guard.position", "coverage_guard.max_items"], "disposition": "document default fixed, position screened, task-valid document/section ablation screened, max_items only if guards overflow cap"},
+    {"group": "selector_inputs", "paths": ["selector.salience_source", "selector.similarity_source"], "disposition": "RRF versus membership screened in multiroute context; semantic raw/SBERT screened once"},
+    {"group": "selector", "paths": ["optimizer.method", "optimizer.lambda_relevance", "optimizer.pop_size", "optimizer.n_gen", "grasp.iters", "grasp.rcl_ratio"], "disposition": "greedy fixed in D1; MMR/NSGA-II handled by later matched-selector protocol, not this screen"},
+    {"group": "legacy_dispatch", "paths": ["redundancy.lambda", "bert.model_name", "bert.device", "bert.batch_size", "bert.max_model_tokens", "bert.revision", "fusion.w_base", "fusion.w_bert", "fusion.w_plm"], "disposition": "legacy branches excluded from target architecture"}
+  ],
+  "contextual_inactivity": [
+    {"context": "A1 lexical-only base", "paths": ["candidate_budget.min_per_route", "candidate_budget.total", "candidates.rrf_constant"], "reason": "one route with route_top_k=40 yields at most 40 proposals, so min_per_route=20 and total=60 cannot change membership; RRF is monotonic in the sole route rank"},
+    {"context": "base feature weights all zero except importance", "paths": ["features.position.version", "features.position.method", "features.position.decay", "features.fusion.interactions", "graph_params.threshold"], "reason": "the controlling feature weights or graph route are disabled"}
+  ],
+  "test_split_accessed": false
+}

@@ -1,0 +1,83 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T15:35:23.893629+00:00",
+  "started_at_utc": "2026-08-08T15:33:04.596190+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "pacsum_tfidf",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.baselines.cli",
+    "--baseline",
+    "pacsum_tfidf",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\non_plm\\pacsum_tfidf_B03_beta_0.3\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\gate2_baseline_matrix_v1\\multinews\\dev\\non_plm\\pacsum_tfidf_B03_beta_0.3\\pacsum_tfidf",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "c049221f40919320b0e28ce2b50fbcc96f488181",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B03_beta_0.3/resolved_config.yaml",
+  "config_sha256": "86689b590af5d7c88d0f6026ccac0ca6c1dd4cf8140bbdef96794ddb53fe6c70",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "dataset_preflight_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+  "partition_preflight_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+  "predictions_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B03_beta_0.3/pacsum_tfidf/run/predictions.jsonl",
+  "predictions_sha256": "46bae423623004df31b147aec1f4e5eee7ad2dd7fe08e32902249869b885bbdb",
+  "selected_indices_sha256": "3035d53f60880475e5c8e22d7f0b815e4788f98522011ad08a20dce0ffd8f32d",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4204040477464151,
+      "rouge2": 0.13878730161619007,
+      "rougeLsum": 0.3764647190714036
+    },
+    "macro_rouge": 0.31188535614466956,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.39415501905972,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "study_id": "gate2-baseline-matrix-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "family": "non_plm",
+  "candidate": "pacsum_tfidf_B03_beta_0.3",
+  "candidate_hash": "a09794e4452550d302a884818ce41d78f96e8f9e3ee26c3914be46da1f1a8045",
+  "declared_variant": {
+    "id": "pacsum_tfidf_B03_beta_0.3",
+    "method": "pacsum_tfidf",
+    "pacsum": {
+      "beta": 0.3,
+      "lambda_previous": 0.0,
+      "lambda_following": 1.0
+    }
+  },
+  "dev_test_accessed": false
+}

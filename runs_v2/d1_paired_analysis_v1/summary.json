@@ -1,0 +1,539 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T14:42:08.711017+00:00",
+  "status": "completed_dev_only_not_promotion",
+  "study_id": "d1-paired-analysis-v1",
+  "preregistration_path": "configs/preregistrations/d1_paired_analysis_v1.json",
+  "preregistration_sha256": "54f12bdd5fafaff7cce40c3884f819ead70825dcbd4b26683e32d99bee83bf14",
+  "implementation_commit": "3fb33aec46c8249121b2cdab7d9cf982bf8828bb",
+  "partition": "dev",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20260808,
+    "confidence": 0.95
+  },
+  "multiplicity": {
+    "holm_route_family": "2 datasets x 2 route removals x 3 metrics = 12 observed tests",
+    "holm_cheap_baseline_family": "2 datasets x 2 baselines x 3 metrics = 12 observed tests",
+    "selection_aware_route_bonferroni_opportunities": 186,
+    "selection_aware_route_derivation": "31 searched configurations x 2 datasets x 3 metrics",
+    "selection_aware_baseline_bonferroni_opportunities": 372,
+    "selection_aware_baseline_derivation": "31 searched configurations x 2 datasets x 2 cheap baselines x 3 metrics"
+  },
+  "datasets": {
+    "multinews": {
+      "dataset": "Multi-News",
+      "partition": "dev",
+      "rows": 3935,
+      "dataset_provenance": {
+        "manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+        "manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+        "selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+        "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+        "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1"
+      },
+      "runs": {
+        "s02b": {
+          "path": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run/predictions.jsonl",
+          "sha256": "a39b5dbcfdde0553889efefe9de1069f30f836cb754ba5166d16087d5308e38e",
+          "rows": 3935,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/multinews/s02b/per_example.jsonl",
+          "per_example_sha256": "1e52be52eab75ef2d7520a1a40f2e5bc346ecfd9dc7ef4e4293881c89b2bd831",
+          "means": {
+            "rouge1": 0.4407588844212616,
+            "rouge2": 0.13980293788831197,
+            "rougeLsum": 0.4036697955726604
+          }
+        },
+        "without_semantic": {
+          "path": "runs_v2/d1_capacity_matched_route_ablation/multinews/dev/A01_without_semantic/greedy/run/predictions.jsonl",
+          "sha256": "230237c9139d1fddd6a920b2121b150cb6cd3538c0cd5dd7f28569f6f2a4dae9",
+          "rows": 3935,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/multinews/without_semantic/per_example.jsonl",
+          "per_example_sha256": "e46e5fc3addf283803b64fc6e207fd02c07f90a37e55897326c0455ac633a1c5",
+          "means": {
+            "rouge1": 0.43676492089750063,
+            "rouge2": 0.1370986469247251,
+            "rougeLsum": 0.3987642779675781
+          }
+        },
+        "without_graph": {
+          "path": "runs_v2/d1_capacity_matched_route_ablation/multinews/dev/A02_without_graph/greedy/run/predictions.jsonl",
+          "sha256": "fa05886b8f68b2b162c7b07dcbbaf274d21e8dab47f83928ec521638c37d823b",
+          "rows": 3935,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/multinews/without_graph/per_example.jsonl",
+          "per_example_sha256": "4b7c2bce9bb88db67431868d20c281d4a7f3e608c4c02156b00e7d0a952a476e",
+          "means": {
+            "rouge1": 0.4354525629859021,
+            "rouge2": 0.1361161377349454,
+            "rougeLsum": 0.39658863056673416
+          }
+        },
+        "lead": {
+          "path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/lead/run/predictions.jsonl",
+          "sha256": "b485167098de2b827e9b7ce59e063e28c1e7541308bd57cbd350662507e52ffa",
+          "rows": 3935,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/multinews/lead/per_example.jsonl",
+          "per_example_sha256": "dce41ac45cb0cdbb96653c7e109aed67063a17d54add541255c4c9de67adaeab",
+          "means": {
+            "rouge1": 0.43503283092084166,
+            "rouge2": 0.148138832947838,
+            "rougeLsum": 0.39570096591010867
+          }
+        },
+        "random": {
+          "path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/random/run/predictions.jsonl",
+          "sha256": "f35078e5449880d6bde1a4fd142d8ae68f256fdf2a6774f3e8d1748c2b1a7892",
+          "rows": 3935,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/multinews/random/per_example.jsonl",
+          "per_example_sha256": "ca06537ee88c555f6680db8159f9930a5c83a2243eab551c9088d0823706d55b",
+          "means": {
+            "rouge1": 0.4179007958181792,
+            "rouge2": 0.12328876864885509,
+            "rougeLsum": 0.3801038161786124
+          }
+        }
+      }
+    },
+    "govreport": {
+      "dataset": "GovReport",
+      "partition": "dev",
+      "rows": 681,
+      "dataset_provenance": {
+        "manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+        "manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+        "selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+        "input_path": "data/processed/govreport_validation_canonical.jsonl",
+        "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678"
+      },
+      "runs": {
+        "s02b": {
+          "path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/greedy/run/predictions.jsonl",
+          "sha256": "93c2ce4fd01658751a60fe9dce5ad8f5ac13fbf736f70f6e32e7e5192a785db2",
+          "rows": 681,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/govreport/s02b/per_example.jsonl",
+          "per_example_sha256": "b4aced12f386b3ba28f1c58e103cf223750f1004c68479ebc01567536390e257",
+          "means": {
+            "rouge1": 0.545090914619881,
+            "rouge2": 0.19622746490109597,
+            "rougeLsum": 0.5122671252147345
+          }
+        },
+        "without_semantic": {
+          "path": "runs_v2/d1_capacity_matched_route_ablation/govreport/dev/A01_without_semantic/greedy/run/predictions.jsonl",
+          "sha256": "d6e5a99b7f96d64f18f7ad6be0c77efadcdf59a34b0a3f5c5067c6c88ae33de4",
+          "rows": 681,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/govreport/without_semantic/per_example.jsonl",
+          "per_example_sha256": "10a8131d40f4deadea791e888e0d881466f58e8f27d1cea75ae21669548daad0",
+          "means": {
+            "rouge1": 0.5295224269130595,
+            "rouge2": 0.18426641819529135,
+            "rougeLsum": 0.4969928524105012
+          }
+        },
+        "without_graph": {
+          "path": "runs_v2/d1_capacity_matched_route_ablation/govreport/dev/A02_without_graph/greedy/run/predictions.jsonl",
+          "sha256": "80fca14b576e462976d1b8ab555e30fcb0b9618364334c72004ec894a33441cd",
+          "rows": 681,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/govreport/without_graph/per_example.jsonl",
+          "per_example_sha256": "d8421ab80791ba0c4ee58beaee4f4ecc048a2c58dc7e72cfceaf129062832c6f",
+          "means": {
+            "rouge1": 0.5335532202771303,
+            "rouge2": 0.1861191185089455,
+            "rougeLsum": 0.49947099551183477
+          }
+        },
+        "lead": {
+          "path": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run/predictions.jsonl",
+          "sha256": "4a24a4cfedda60bd094cc9a4563d78fc7f965d7686474e8610f822d166337215",
+          "rows": 681,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/govreport/lead/per_example.jsonl",
+          "per_example_sha256": "2fd8bb8dee43d985b1af195f8d6647460553d671fd96fd60ea1c27a919367ffc",
+          "means": {
+            "rouge1": 0.514532126840121,
+            "rouge2": 0.1940318738091236,
+            "rougeLsum": 0.48913332338915916
+          }
+        },
+        "random": {
+          "path": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/random/run/predictions.jsonl",
+          "sha256": "76fa5233fe851ea922b6d30106a99fc685bfaf0608726524c6beeadf4d959b81",
+          "rows": 681,
+          "per_example_path": "runs_v2/d1_paired_analysis_v1/govreport/random/per_example.jsonl",
+          "per_example_sha256": "28725f1d08c8cacb50b003a3b82fe1a27d65326ad44f160ca3a9dc4b84a12c39",
+          "means": {
+            "rouge1": 0.5381127179321233,
+            "rouge2": 0.18160334442850887,
+            "rougeLsum": 0.5068160545277651
+          }
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "route": {
+      "multinews:s02b_vs_without_semantic": {
+        "interpretation": "semantic marginal contribution",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260808,
+            "confidence": 0.95,
+            "mean_difference": 0.00399396352375993,
+            "ci_lower": 0.003126348685908564,
+            "ci_upper": 0.004854094428239668,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rouge2": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260809,
+            "confidence": 0.95,
+            "mean_difference": 0.0027042909635869375,
+            "ci_lower": 0.001717406948817268,
+            "ci_upper": 0.0036750436793112043,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rougeLsum": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260810,
+            "confidence": 0.95,
+            "mean_difference": 0.004905517605081708,
+            "ci_lower": 0.004029001057090008,
+            "ci_upper": 0.0057648998358201696,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          }
+        }
+      },
+      "multinews:s02b_vs_without_graph": {
+        "interpretation": "graph marginal contribution",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260811,
+            "confidence": 0.95,
+            "mean_difference": 0.005306321435358952,
+            "ci_lower": 0.004395928905579419,
+            "ci_upper": 0.006188500896094454,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rouge2": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260812,
+            "confidence": 0.95,
+            "mean_difference": 0.0036868001533660456,
+            "ci_lower": 0.0026161749031119634,
+            "ci_upper": 0.004772898889074419,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rougeLsum": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260813,
+            "confidence": 0.95,
+            "mean_difference": 0.007081165005927381,
+            "ci_lower": 0.006156465221271511,
+            "ci_upper": 0.008001734684220253,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          }
+        }
+      },
+      "govreport:s02b_vs_without_semantic": {
+        "interpretation": "semantic marginal contribution",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260814,
+            "confidence": 0.95,
+            "mean_difference": 0.015568487706821411,
+            "ci_lower": 0.01398469297161583,
+            "ci_upper": 0.017162571501910567,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rouge2": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260815,
+            "confidence": 0.95,
+            "mean_difference": 0.011961046705804553,
+            "ci_lower": 0.010018596977518132,
+            "ci_upper": 0.01386545446868692,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rougeLsum": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260816,
+            "confidence": 0.95,
+            "mean_difference": 0.015274272804233123,
+            "ci_lower": 0.013683616175337128,
+            "ci_upper": 0.016915288335272886,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          }
+        }
+      },
+      "govreport:s02b_vs_without_graph": {
+        "interpretation": "graph marginal contribution",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260817,
+            "confidence": 0.95,
+            "mean_difference": 0.01153769434275036,
+            "ci_lower": 0.009862597008666207,
+            "ci_upper": 0.013192923400390499,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rouge2": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260818,
+            "confidence": 0.95,
+            "mean_difference": 0.010108346392150374,
+            "ci_lower": 0.007862434631672844,
+            "ci_upper": 0.012289389376282111,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          },
+          "rougeLsum": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260819,
+            "confidence": 0.95,
+            "mean_difference": 0.012796129702898253,
+            "ci_lower": 0.011053751051662654,
+            "ci_upper": 0.01455636341579149,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.037196280371962806,
+            "strong_endpoint_win": true
+          }
+        }
+      }
+    },
+    "cheap_baseline": {
+      "multinews:s02b_vs_lead": {
+        "interpretation": "interim Lead comparison",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260820,
+            "confidence": 0.95,
+            "mean_difference": 0.005726053500421155,
+            "ci_lower": 0.0033207128196327744,
+            "ci_upper": 0.00808686166966899,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rouge2": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260821,
+            "confidence": 0.95,
+            "mean_difference": -0.008335895059526031,
+            "ci_lower": -0.010951166356082252,
+            "ci_upper": -0.005706389162373863,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rougeLsum": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260822,
+            "confidence": 0.95,
+            "mean_difference": 0.007968829662552314,
+            "ci_lower": 0.00559163056546515,
+            "ci_upper": 0.010309372272423178,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          }
+        }
+      },
+      "multinews:s02b_vs_random": {
+        "interpretation": "interim Random comparison",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260823,
+            "confidence": 0.95,
+            "mean_difference": 0.02285808860308293,
+            "ci_lower": 0.021232838310757708,
+            "ci_upper": 0.02447855974220387,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rouge2": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260824,
+            "confidence": 0.95,
+            "mean_difference": 0.016514169239456904,
+            "ci_lower": 0.014663741782476824,
+            "ci_upper": 0.018352745074239427,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rougeLsum": {
+            "n_pairs": 3935,
+            "n_resamples": 10000,
+            "seed": 20260825,
+            "confidence": 0.95,
+            "mean_difference": 0.02356597939404798,
+            "ci_lower": 0.02195007500703713,
+            "ci_upper": 0.025151296107380483,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          }
+        }
+      },
+      "govreport:s02b_vs_lead": {
+        "interpretation": "interim Lead comparison",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260826,
+            "confidence": 0.95,
+            "mean_difference": 0.03055878777976061,
+            "ci_lower": 0.02471677141961203,
+            "ci_upper": 0.036236753947646964,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rouge2": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260827,
+            "confidence": 0.95,
+            "mean_difference": 0.0021955910919723687,
+            "ci_lower": -0.0055308013286378644,
+            "ci_upper": 0.009607957168643653,
+            "p_value_two_sided": 0.5487451254874512,
+            "p_value_holm": 0.5487451254874512,
+            "p_value_selection_bonferroni": 1.0,
+            "strong_endpoint_win": false
+          },
+          "rougeLsum": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260828,
+            "confidence": 0.95,
+            "mean_difference": 0.023133801825574788,
+            "ci_lower": 0.017300802071081266,
+            "ci_upper": 0.028852235927692003,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          }
+        }
+      },
+      "govreport:s02b_vs_random": {
+        "interpretation": "interim Random comparison",
+        "metrics": {
+          "rouge1": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260829,
+            "confidence": 0.95,
+            "mean_difference": 0.006978196687757705,
+            "ci_lower": 0.004299578820612295,
+            "ci_upper": 0.009733049102455189,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rouge2": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260830,
+            "confidence": 0.95,
+            "mean_difference": 0.014624120472587153,
+            "ci_lower": 0.011274971516900762,
+            "ci_upper": 0.017866510229067788,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          },
+          "rougeLsum": {
+            "n_pairs": 681,
+            "n_resamples": 10000,
+            "seed": 20260831,
+            "confidence": 0.95,
+            "mean_difference": 0.005451070686969078,
+            "ci_lower": 0.0026936169636798827,
+            "ci_upper": 0.008237217997207356,
+            "p_value_two_sided": 0.00019998000199980003,
+            "p_value_holm": 0.0023997600239976003,
+            "p_value_selection_bonferroni": 0.07439256074392561,
+            "strong_endpoint_win": false
+          }
+        }
+      }
+    }
+  },
+  "environment": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "rouge-score": "0.1.2"
+  },
+  "interpretation": "Paired frozen-dev evidence only. Strong baselines and greedy reference remain incomplete, so this analysis cannot authorize dev-test or test."
+}

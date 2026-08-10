@@ -1,0 +1,73 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T13:25:58.541255+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "study_id": "d2-selector-full-dev-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d2_selector_full_dev_v1.json",
+  "preregistration_sha256": "98d0093a7acb22cfbe43aa35bd5aed33fb7fbab85639ac1c920ee15ba8b11382",
+  "candidate": "S13_nsga2_sbert_seed3407",
+  "candidate_hash": "ba3fcce97b899d895f9ac6e58ecbcf4cd62d307e1f3529f6fe0c3e8b47d7625e",
+  "declared_delta": {
+    "selector.similarity_source": "sbert",
+    "optimizer.pop_size": 64,
+    "optimizer.n_gen": 80
+  },
+  "run_attempt": "final",
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+      "scientific_config_changed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "method": "nsga2",
+  "config_path": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S13_nsga2_sbert_seed3407/resolved_config.yaml",
+  "config_sha256": "f6856b2be83ecee01113097f4b5147f0570f8ae7c393c66840724e776ffe09e5",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.49529114635259436,
+      "rouge2": 0.15677111569056967,
+      "rougeLsum": 0.46259224437259633
+    },
+    "macro_rouge": 0.37155150213858673,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 578.704845814978,
+      "min": 500,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 78.73861967694567,
+    "selector_candidate_size_mean": 78.73861967694567,
+    "selector_candidate_size_p95": 80.0,
+    "selector_candidate_size_max": 80,
+    "provenance_candidate_size_mean": 78.73861967694567,
+    "route_agreement_mean": 1.329200812515543,
+    "unique_candidate_mean_by_route": {
+      "graph": 18.41850220264317,
+      "lexical": 20.65051395007342,
+      "semantic": 18.19970631424376
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 7.096916299559472,
+      "lexical": 8.58590308370044,
+      "semantic": 1.2011747430249633
+    }
+  }
+}

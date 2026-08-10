@@ -1,0 +1,33 @@
+{
+  "total_count": 3935,
+  "feasible_count": 3933,
+  "infeasible_count": 2,
+  "infeasible_ids": [
+    {
+      "id": "validation_4066",
+      "infeasible_code": "baseline_min_words_shortfall",
+      "violations": {
+        "nonempty": -13.0,
+        "min_words": 15.0,
+        "max_length": -65.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "sbert_mmr could not reach effective_min_words (shortfall=15 words); selection kept as-is",
+      "selected_words": 185,
+      "effective_min_words": 200
+    },
+    {
+      "id": "validation_4495",
+      "infeasible_code": "baseline_min_words_shortfall",
+      "violations": {
+        "nonempty": -6.0,
+        "min_words": 14.0,
+        "max_length": -64.0,
+        "max_sentences": 0.0
+      },
+      "infeasible_reason": "sbert_mmr could not reach effective_min_words (shortfall=14 words); selection kept as-is",
+      "selected_words": 186,
+      "effective_min_words": 200
+    }
+  ]
+}

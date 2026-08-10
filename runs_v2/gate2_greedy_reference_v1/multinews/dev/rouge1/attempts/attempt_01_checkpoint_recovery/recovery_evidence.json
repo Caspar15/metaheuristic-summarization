@@ -1,0 +1,21 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:46:45.100641+00:00",
+  "status": "invalidated_and_recovered",
+  "finding": "F-56",
+  "reason": "concurrent Windows process trees wrote the same checkpoint",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "optimization_target": "rouge1",
+  "original_rows": 295,
+  "valid_prefix_rows": 270,
+  "discarded_rows": 25,
+  "original_rows_sha256": "b5357d171a2d80899a4494c35fa386d31d9b6eed7335cbe8dbab45cc705a7883",
+  "archived_rows_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rouge1/attempts/attempt_01_checkpoint_recovery/rows_corrupt.jsonl",
+  "recovered_rows_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rouge1/rows.jsonl",
+  "recovered_rows_sha256": "f294388ec136843033b71c28f22c8eefe0dce5745459f2f1a75801e91104bce6",
+  "scientific_config_sha256": "cadf512ee380a288ab81312d5c367e1002b21dac8d9ad4a72ec7bfbe3e4c9779",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

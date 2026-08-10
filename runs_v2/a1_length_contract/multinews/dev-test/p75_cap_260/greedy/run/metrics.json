@@ -1,0 +1,17 @@
+{
+  "evaluation_protocol": "multisentence_lsum",
+  "rows": 1686,
+  "rouge": {
+    "rouge1": 0.38224117436165445,
+    "rouge2": 0.11650436613040553,
+    "rougeLsum": 0.34249499949929696
+  },
+  "macro_rouge": 0.28041351333045234,
+  "feasible_rows": 1686,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 211.23962040332148,
+    "min": 1,
+    "max": 260
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T08:20:14.917234+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "study_id": "d2-selector-full-dev-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d2_selector_full_dev_v1.json",
+  "preregistration_sha256": "98d0093a7acb22cfbe43aa35bd5aed33fb7fbab85639ac1c920ee15ba8b11382",
+  "candidate": "S05_mmr_tfidf_l07",
+  "candidate_hash": "fb1902a077fccf526a218ec97e557d8454ae235ac0602adbe9edd69eca740297",
+  "declared_delta": {
+    "optimizer.lambda_relevance": 0.7
+  },
+  "run_attempt": "retry_01",
+  "execution_optimization": {
+    "embedding_cache": {
+      "enabled": true,
+      "root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "scientific_config_changed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "method": "mmr",
+  "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S05_mmr_tfidf_l07/resolved_config.yaml",
+  "config_sha256": "02450fff7087839a7b13fe5d2f91eed979696c2a8f5ab24cf4923b3cf9618e10",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.434549744842919,
+      "rouge2": 0.13932589136020523,
+      "rougeLsum": 0.3860858845448773
+    },
+    "macro_rouge": 0.31998717358266715,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.0579415501906,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 52.086658195679796,
+    "selector_candidate_size_mean": 52.086658195679796,
+    "selector_candidate_size_p95": 80.0,
+    "selector_candidate_size_max": 80,
+    "provenance_candidate_size_mean": 52.086658195679796,
+    "route_agreement_mean": 2.267925369892448,
+    "unique_candidate_mean_by_route": {
+      "graph": 5.912833545108005,
+      "lexical": 7.343583227445998,
+      "semantic": 5.079288437102923
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 0.22109275730622618,
+      "lexical": 0.021346886912325287,
+      "semantic": 0.12655654383735704
+    }
+  }
+}

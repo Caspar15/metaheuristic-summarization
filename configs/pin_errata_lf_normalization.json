@@ -1,0 +1,168 @@
+{
+  "errata_version": "1.0",
+  "date": "2026-08-10",
+  "root_cause": "Pins were computed on Windows where Path.write_text() emits CRLF; git normalizes to LF on commit, so the pinned bytes never existed in the repository. The pinned content itself is unchanged.",
+  "evidence_content_unchanged": [
+    "three-way selected_ids_sha256 agreement across manifest, committed file, and historical partition_preflight.json",
+    "field-by-field match when re-running freeze_validation_partition_manifest() from canonical data",
+    "11 PREREGISTRATION_SHA256 constants remain raw-match, unaffected"
+  ],
+  "note": "No preregistration, evidence file, or experimental record was modified. This errata is additive. The errata file itself is intentionally not pinned to avoid a circular dependency.",
+  "schema_note": "Matching is by the legacy_crlf_sha256/lf_canonical_sha256 pair only (see verify_pin() in src/data/policy.py). content_id, representative_path, and reference_count are documentation only and never participate in matching -- a single legacy-era content blob can legitimately be copied to well over a hundred different paths, so the file's path cannot be part of the safety condition.",
+  "reference_count_scope": "Raw textual occurrences in the PR #16 repository snapshot on 2026-08-10, excluding this errata file, .git, .venv, data, and pytest temporary directories. Counts are audit metadata, not a verification condition. The 19 hashes occur 1,709 times across 1,134 unique files.",
+  "equivalences": [
+    {
+      "content_id": "Multi-News validation dev/dev-test reference-blind partition manifest",
+      "representative_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "legacy_crlf_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "lf_canonical_sha256": "6652bc9912ca96060ecd463b7c27cb5fac707679181437f8a1ba1bad4f192d4b",
+      "reference_count": 628,
+      "referenced_by": [
+        "configs/preregistrations/f51_embedding_cache_equivalence_v1.json:13",
+        "configs/preregistrations/gate2_greedy_reference_v1.json:15",
+        "scripts/audit/run_gate2_baseline_matrix.py:49",
+        "scripts/audit/run_greedy_sensitivity.py:46",
+        "scripts/audit/run_length_contract_study.py:49"
+      ]
+    },
+    {
+      "content_id": "GovReport validation dev/dev-test reference-blind partition manifest",
+      "representative_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "legacy_crlf_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "lf_canonical_sha256": "c37b9507da30d1579e799c39d72fb56d7695d9fa36f004c6352d6426667977ff",
+      "reference_count": 592,
+      "referenced_by": [
+        "configs/preregistrations/a1_length_contract_govreport_v1.json:12",
+        "configs/preregistrations/gate2_greedy_reference_v1.json:26",
+        "scripts/audit/run_gate2_baseline_matrix.py:56",
+        "scripts/audit/run_greedy_sensitivity.py:55",
+        "scripts/audit/run_length_contract_study.py:59"
+      ]
+    },
+    {
+      "content_id": "Multi-News D3a router-fusion reference-blind 200-row pilot manifest",
+      "representative_path": "configs/pilot_manifests/multinews_selector_pilot_v1.json",
+      "legacy_crlf_sha256": "b0562eb4fe33b59f460c47e7b2db0bf0a3d2778687695422027bf33ed1c31b2e",
+      "lf_canonical_sha256": "f29d2d280e32c37a745d38b2b7620d14c93feeef724aa620a654d634f9e1e5bb",
+      "reference_count": 4,
+      "referenced_by": [
+        "configs/preregistrations/d3a_router_fusion_screen_v1.json:29"
+      ]
+    },
+    {
+      "content_id": "GovReport D3a router-fusion reference-blind 200-row pilot manifest",
+      "representative_path": "configs/pilot_manifests/govreport_router_pilot_v1.json",
+      "legacy_crlf_sha256": "c9a0954de4143f6e28b87b38fc31006ed2b2066d56c75fd6b3b42fa95676053f",
+      "lf_canonical_sha256": "79815df41930bc15487ade5d3f9fbbcae3e8769d965dbca57dd5e9c0efb27f3f",
+      "reference_count": 2,
+      "referenced_by": [
+        "configs/preregistrations/d3a_router_fusion_screen_v1.json:40"
+      ]
+    },
+    {
+      "content_id": "Multi-News A1 length-contract dataset_preflight.json (legacy_floor_200_cap_250 family)",
+      "representative_path": "runs_v2/a1_length_contract/multinews/dev-test/legacy_floor_200_cap_250/greedy/run/dataset_preflight.json",
+      "legacy_crlf_sha256": "d0209d2d3f17f7bd707072db7cc379cfa719a6f480e37646eee3a03bc6d5a6da",
+      "lf_canonical_sha256": "737f56ad374ab2b9a791556a77158651bcf1d0bca592d3fb4f631906590d7452",
+      "reference_count": 118
+    },
+    {
+      "content_id": "GovReport A1 length-contract dataset_preflight.json (dev_iqr_band_500_650 family)",
+      "representative_path": "runs_v2/a1_length_contract/govreport/dev-test/dev_iqr_band_500_650/greedy/run/dataset_preflight.json",
+      "legacy_crlf_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+      "lf_canonical_sha256": "01843737f73c1f01d694061bc4b9adbc43131cbd234b5a00470fcefa4faf6c44",
+      "reference_count": 116
+    },
+    {
+      "content_id": "Multi-News A1 length-contract partition_preflight.json (dev partition, legacy_floor_200_cap_250 family)",
+      "representative_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/greedy/run/partition_preflight.json",
+      "legacy_crlf_sha256": "47f8ee9f83ac984c65da1733d3cd8b9af001f1be0fa4dbbdb5283add20cc9ad8",
+      "lf_canonical_sha256": "426382b3eddd606d9b87f9a5e81537642a007a800e1f3f2bd145919efa2d65df",
+      "reference_count": 106
+    },
+    {
+      "content_id": "GovReport A1 length-contract partition_preflight.json (dev partition, dev_iqr_band_500_650 family)",
+      "representative_path": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/greedy/run/partition_preflight.json",
+      "legacy_crlf_sha256": "719b521d4c7567b238e95e79ac9de6bf5219dad00c720d9975dd1fbcd3e915d3",
+      "lf_canonical_sha256": "33824694f76666936e111e7fc1589fee0bda87da4895a1859cd950f2db289ecc",
+      "reference_count": 104
+    },
+    {
+      "content_id": "GovReport A1 length-contract partition_preflight.json (dev-test partition, dev_iqr_band_500_650 family)",
+      "representative_path": "runs_v2/a1_length_contract/govreport/dev-test/dev_iqr_band_500_650/greedy/run/partition_preflight.json",
+      "legacy_crlf_sha256": "5232207c0d70a7bb03744107fb508b06a6b6420e6067a188fb6dec4996aec6d4",
+      "lf_canonical_sha256": "3a43e4d2343c7bd219d91c5eb12abcb9fd2634b69316b2ba5e20387b1a7e50ba",
+      "reference_count": 12
+    },
+    {
+      "content_id": "Multi-News A1 length-contract partition_preflight.json (dev-test partition, legacy_floor_200_cap_250 family)",
+      "representative_path": "runs_v2/a1_length_contract/multinews/dev-test/legacy_floor_200_cap_250/greedy/run/partition_preflight.json",
+      "legacy_crlf_sha256": "4a671a77e0e908b68d0b2a0ad0bbdd4f72f417776904313c98a6e116050ece84",
+      "lf_canonical_sha256": "e53ad1699ff2af95fafabeb266bc794ec285bda5f6e6147bd417bf6b9476e543",
+      "reference_count": 12
+    },
+    {
+      "content_id": "Multi-News Gate2 TextRank/LexRank offline-tokenizer dataset_preflight.json",
+      "representative_path": "runs_v2/gate2_lexrank_multinews_validation_offline_v1/dataset_preflight.json",
+      "legacy_crlf_sha256": "3225b6535553ad04a884dfe82a425fd5ff7e4f59d81475e3e39a3b12085c15e7",
+      "lf_canonical_sha256": "241d3a8e5c045faf88eeeda6fb6ad0edcb30d7ca4f9566568e6a3d991ed3c911",
+      "reference_count": 4
+    },
+    {
+      "content_id": "Multi-News Gate2 Lead/TextRank/LexRank config_used.json",
+      "representative_path": "runs_v2/gate2_lead_document_order_validation/config_used.json",
+      "legacy_crlf_sha256": "973844b2d5bace665091c792712efd600c0f9ef392e23f7917544b23a5eb943a",
+      "lf_canonical_sha256": "c0f67786f87b991d015c3390c5e66ffffd35f96888541efc981a57ef5d201686",
+      "reference_count": 3
+    },
+    {
+      "content_id": "Multi-News Gate2 TextRank/LexRank offline-tokenizer feasibility_report.json",
+      "representative_path": "runs_v2/gate2_lexrank_multinews_validation_offline_v1/feasibility_report.json",
+      "legacy_crlf_sha256": "89c009f21dacd6ddb757f41a25377109ab8a9416af8fd1cae32a41cde2d670be",
+      "lf_canonical_sha256": "47680c7744073b349cb43fbc688fee3f7316a42939667a363efe35f4ec5cfcb7",
+      "reference_count": 2
+    },
+    {
+      "content_id": "GovReport A1 dev reference-length distribution report (reference_length_distribution.py output)",
+      "representative_path": "docs/research/evidence/a1_govreport_dev_reference_lengths.json",
+      "legacy_crlf_sha256": "30e886ff1e880e65f742929656b8233d0225a7d50af78bd6bc78b5021c602ef7",
+      "lf_canonical_sha256": "35a65be8d4845d51e1139439ae247dcfed0728dc3a30cdc2e9ab54ee065a5b81",
+      "reference_count": 1
+    },
+    {
+      "content_id": "Multi-News A1 dev reference-length distribution report (reference_length_distribution.py output)",
+      "representative_path": "docs/research/evidence/a1_multinews_dev_reference_lengths.json",
+      "legacy_crlf_sha256": "50fd51a03e6c58765dc16f961b520487d836aa42d1c7e2e3894b3d82ee935967",
+      "lf_canonical_sha256": "ca47d6212520aa2c9b84ed5f307d8e8056bd8ff209d786b06a570a29c924243f",
+      "reference_count": 1
+    },
+    {
+      "content_id": "src/baselines/centrality.py source file identity (pinned by F-19 final-pipeline evidence)",
+      "representative_path": "src/baselines/centrality.py",
+      "legacy_crlf_sha256": "b1cdad03fc4fdbb901ced0c34d5163df7fe22d0475ff9d923bd013081e14e1c0",
+      "lf_canonical_sha256": "059d1e961da8d141d25bc0b0364de8bf2c8446c44f5fc50c61e6f272810ba9bd",
+      "reference_count": 1
+    },
+    {
+      "content_id": "Multi-News Gate2 TextRank offline-tokenizer baseline_run.json",
+      "representative_path": "runs_v2/gate2_textrank_multinews_validation_offline_v1/baseline_run.json",
+      "legacy_crlf_sha256": "6b79a890eb6f97fa8a5b830462f1abeb94feb7996004c3c2d3de23320d7dd480",
+      "lf_canonical_sha256": "5ca980fd01e63ca21e123acd608a24574cc9c99b3ad7c8249d66a92dfb38e31e",
+      "reference_count": 1
+    },
+    {
+      "content_id": "Multi-News Gate2 LexRank offline-tokenizer baseline_run.json",
+      "representative_path": "runs_v2/gate2_lexrank_multinews_validation_offline_v1/baseline_run.json",
+      "legacy_crlf_sha256": "286757eca617425869b128ef8e051cba6cc71ae9e9f4626893f69ce6f2f69ba8",
+      "lf_canonical_sha256": "50172e75bdf419b6166cf932862ba512ba1d05bfbb6b5d684ee3dc010e32a6fe",
+      "reference_count": 1
+    },
+    {
+      "content_id": "src/data/sentence_split.py source file identity (pinned by nltk_391_310_sentence_split_parity evidence)",
+      "representative_path": "src/data/sentence_split.py",
+      "legacy_crlf_sha256": "b7527d9677ea514bf3da023b5cf0cb06c1d4459780fd9885b36e00e80b4dad29",
+      "lf_canonical_sha256": "e019f4b52c5184b83b9f1af8e645ccca0d640eea7335e00f70f7ba2978522246",
+      "reference_count": 1
+    }
+  ]
+}

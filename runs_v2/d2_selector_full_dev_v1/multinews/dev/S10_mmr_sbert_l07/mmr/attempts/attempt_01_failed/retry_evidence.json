@@ -1,0 +1,9 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T08:37:11.595388+00:00",
+  "status": "failed_preserved_before_retry",
+  "reason": "runner postprocessing/dispatch correction; scientific candidate unchanged",
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "archived_attempt_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S10_mmr_sbert_l07/mmr/attempts/attempt_01_failed"
+}

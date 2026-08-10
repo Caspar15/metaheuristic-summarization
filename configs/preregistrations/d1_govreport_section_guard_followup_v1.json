@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d1-govreport-section-guard-followup-v1",
+  "registered_at_utc": "2026-08-08T10:39:42.8264803Z",
+  "registration_time_semantics": "System UTC time queried after the triggering G11 failure and before the follow-up is executed.",
+  "trigger": {
+    "candidate": "G11_dataset_structure_guard",
+    "evidence": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G11_dataset_structure_guard/greedy/run/evidence.json",
+    "failure": "candidate total cap 60 cannot fit 77 mandatory route/guard reservations"
+  },
+  "prior_authorization": {
+    "inventory": "docs/research/evidence/d1_effective_tunable_inventory.json",
+    "path": "coverage_guard.max_items",
+    "disposition": "max_items only if guards overflow cap"
+  },
+  "dataset": "GovReport",
+  "base_split": "validation",
+  "partition": "dev",
+  "partition_manifest": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "parent_config": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G11_dataset_structure_guard/resolved_config.yaml",
+  "candidate": {
+    "id": "G11b_section_guard_cap20",
+    "delta": {
+      "coverage_guard.max_items": 20
+    },
+    "derivation": "candidate total 60 minus worst-case disjoint reservations for two active routes at min_per_route 20 leaves 20 guard slots",
+    "score_used_to_choose_delta": false
+  },
+  "success_contract": {
+    "expected_rows": 681,
+    "max_candidate_pool": 60,
+    "dev_test_accessed": false,
+    "test_split_accessed": false,
+    "interpretation": "Correctness/feasibility follow-up only; report quality but do not promote from this run alone. Original G11 remains failed."
+  },
+  "multiple_comparison_count_after_followup": 28
+}

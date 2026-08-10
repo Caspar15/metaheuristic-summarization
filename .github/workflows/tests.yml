@@ -32,10 +32,14 @@ jobs:
       - name: Install unit-test dependencies
         run: |
           python -m pip install --upgrade pip
+          # The representation/cache contract tests exercise tensor operations
+          # without downloading a model.  Use the CPU wheel explicitly so CI
+          # does not pull CUDA runtime packages from the default index.
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0
           python -m pip install -r requirements-ci.txt
 
       - name: Compile Python sources
-        run: python -m compileall -q src tests scripts/0_download_data.py
+        run: python -m compileall -q src tests scripts
 
       - name: Run unit tests
         run: python -m pytest -q

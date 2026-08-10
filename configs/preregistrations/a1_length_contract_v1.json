@@ -1,0 +1,58 @@
+{
+  "preregistration_schema_version": "1.0",
+  "status": "frozen_before_candidate_system_scores",
+  "frozen_at_utc": "2026-08-08T04:13:09.6460214Z",
+  "implementation_parent_commit": "3b29912d027336aba401d6de2143b1d19cc41d24",
+  "study_id": "a1-length-contract-v1",
+  "test_split_prohibited": true,
+  "question": "Which output-length contract is robust across cheap method families without using a method-specific floor to hide selector collapse?",
+  "multi_news_dev_reference_evidence": {
+    "path": "docs/research/evidence/a1_multinews_dev_reference_lengths.json",
+    "file_sha256": "50fd51a03e6c58765dc16f961b520487d836aa42d1c7e2e3894b3d82ee935967",
+    "rows": 3935,
+    "mean_words": 215.52426937738247,
+    "median_words": 218.0,
+    "p75_words": 260.0
+  },
+  "multi_news_candidates": {
+    "legacy_floor_200_cap_250": {"min_words": 200, "max_words": 250},
+    "median_cap_220": {"min_words": 0, "max_words": 220},
+    "max_only_250": {"min_words": 0, "max_words": 250},
+    "p75_cap_260": {"min_words": 0, "max_words": 260}
+  },
+  "candidate_rationale": [
+    "legacy_floor_200_cap_250 is the historical control and is not presumed valid.",
+    "median_cap_220 rounds the frozen dev median to an explainable ten-word cap.",
+    "max_only_250 isolates removal of the method-specific floor while preserving the historical ceiling.",
+    "p75_cap_260 uses the exact frozen dev p75 and tests whether the 250 ceiling is unnecessarily restrictive."
+  ],
+  "cheap_methods": [
+    "Lead document_order",
+    "Random seed 3407",
+    "lexical-only provenance-aware deterministic Greedy with length_normalized importance"
+  ],
+  "controlled_components": [
+    "same canonical rows and frozen partition",
+    "same evaluator and all-row denominator",
+    "same candidate/objective settings within the Greedy method",
+    "only min_words/max_words differ across protocols"
+  ],
+  "selection_rule": {
+    "dev": "Run all four protocols and all three methods; rank by the mean across methods of per-document macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum).",
+    "dev_test": "Evaluate every still-valid protocol exactly once. Select the highest mean cross-method macro ROUGE only if paired 95% bootstrap differences versus every alternative exclude zero after Holm correction.",
+    "tie": "If no protocol has a multiplicity-corrected advantage, freeze max_only_250 because it changes only the unjustified lower floor and preserves the established, easily explained upper ceiling.",
+    "rejection": "Reject any protocol with row loss, schema drift, upper-budget violation, or different evaluation denominator. Report infeasibility rather than relaxing fail-loud."
+  },
+  "govreport": {
+    "status": "pending_data_layer",
+    "rule": "After canonical GovReport validation and its partition are frozen, instantiate the same four protocol roles using that dataset's frozen dev median/p75 and historical official cap if one exists. Do not transplant Multi-News word values.",
+    "finalization": "A1 is not globally complete until GovReport runs the same preregistered rule. Dataset-specific numeric caps are allowed; the rule family must remain fixed."
+  },
+  "multiple_comparisons": {
+    "candidate_protocols": 4,
+    "method_families": 3,
+    "primary_pairwise_family": "winner versus three alternatives",
+    "correction": "Holm"
+  },
+  "scores_observed_at_freeze": false
+}

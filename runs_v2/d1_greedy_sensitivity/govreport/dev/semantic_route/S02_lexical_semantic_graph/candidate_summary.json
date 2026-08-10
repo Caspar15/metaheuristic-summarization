@@ -1,0 +1,27 @@
+{
+  "status": "failed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "semantic_route",
+  "candidate": "S02_lexical_semantic_graph",
+  "candidate_hash": "3ada7b28d3a7deaec51f7f295435cb371d7b81ccccf8924947d8b8a1f696a59d",
+  "declared_delta": {
+    "compute_budget.enabled_routes": [
+      "lexical",
+      "semantic",
+      "graph"
+    ]
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/semantic_route/S02_lexical_semantic_graph/resolved_config.yaml",
+  "config_sha256": "50d31843eca09c6545a47be59ac80edb70a06665148971b8643da5df0bd68c3e",
+  "failure": "RuntimeError: greedy failed with exit code 1; see runs_v2/d1_greedy_sensitivity/govreport/dev/semantic_route/S02_lexical_semantic_graph/greedy/run/command.log"
+}

@@ -1,0 +1,33 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T14:54:50.4704590Z",
+  "audit_type": "upstream_source_and_checkpoint_redistribution_review",
+  "upstream": {
+    "repository": "https://github.com/mswellhao/PacSum",
+    "paper": "https://aclanthology.org/P19-1628/",
+    "commit": "67cc8ad370eac160ede997b7c32eb74907728bf8",
+    "tree": "013a5e07e16c0d4a3d8e07f0b4c48adee7149443",
+    "readme_sha256": "06c9da70f60cb3e992af0715952bfe8d756765740930fe569e3475d82d0e8d99"
+  },
+  "findings": {
+    "repository_license_file_present": false,
+    "repository_notice_file_present": false,
+    "checkpoint_link_present": true,
+    "checkpoint_license_stated_in_repository": false,
+    "checkpoint_sha256_stated_in_repository": false,
+    "upstream_tie_break_uses_unseeded_random_shuffle": true,
+    "declared_runtime": "Python 3.6, pytorch >= 1.0, numpy, gensim, pyrouge",
+    "upstream_code_copied_into_project": false
+  },
+  "decision": {
+    "vendor_upstream_code": false,
+    "vendor_upstream_checkpoint": false,
+    "implementation": [
+      "clean-room pacsum_tfidf protocol adaptation",
+      "clean-room pacsum_sbert protocol adaptation with the project's pinned encoder"
+    ],
+    "required_reporting_label": "clean_room_protocol_adaptation",
+    "reason": "The paper equations are reproducible, but the released repository and checkpoint do not provide enough licensing and integrity metadata for redistribution or a bit-exact reproduction claim."
+  },
+  "test_split_accessed": false
+}

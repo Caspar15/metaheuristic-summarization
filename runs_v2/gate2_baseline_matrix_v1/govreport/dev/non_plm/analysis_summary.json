@@ -1,0 +1,296 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T17:26:10.428222+00:00",
+  "study_id": "gate2-baseline-matrix-v1-family-analysis",
+  "implementation_commit": "abc5da3c5ad121ab26cadf4600190470a9517017",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "family": "non_plm",
+  "candidate_count": 23,
+  "family_summary_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/family_summary.json",
+  "family_summary_sha256": "304da21f77adf2ecce399a36fea6bc489c9f1400113f697cbfa1c5634a9188b2",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "winner": {
+    "candidate": "lexrank",
+    "method": "lexrank",
+    "macro_rouge": 0.45162046949124957,
+    "rouge": {
+      "rouge1": 0.5725166576773526,
+      "rouge2": 0.24100441405745845,
+      "rougeLsum": 0.5413403367389378
+    }
+  },
+  "ranking": [
+    {
+      "candidate": "lexrank",
+      "method": "lexrank",
+      "macro_rouge": 0.45162046949124957,
+      "rouge": {
+        "rouge1": 0.5725166576773526,
+        "rouge2": 0.24100441405745845,
+        "rougeLsum": 0.5413403367389378
+      }
+    },
+    {
+      "candidate": "textrank",
+      "method": "textrank",
+      "macro_rouge": 0.4309655579704364,
+      "rouge": {
+        "rouge1": 0.5524374382590861,
+        "rouge2": 0.22346557434868816,
+        "rougeLsum": 0.5169936613035351
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P07_previous_-0.7",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41716666801551466,
+      "rouge": {
+        "rouge1": 0.5369441555291385,
+        "rouge2": 0.20819239650055174,
+        "rougeLsum": 0.5063634520168537
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P05_previous_-0.5",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4162926533880403,
+      "rouge": {
+        "rouge1": 0.537066324271973,
+        "rouge2": 0.20715575534960556,
+        "rougeLsum": 0.5046558805425422
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P08_previous_-0.8",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4162314400954859,
+      "rouge": {
+        "rouge1": 0.53516407817706,
+        "rouge2": 0.20712472525640058,
+        "rougeLsum": 0.5064055168529971
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P06_previous_-0.6",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41612887677949173,
+      "rouge": {
+        "rouge1": 0.5366361998039815,
+        "rouge2": 0.2067561131673057,
+        "rougeLsum": 0.504994317367188
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P03_previous_-0.3",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4151253157464807,
+      "rouge": {
+        "rouge1": 0.5368635194586923,
+        "rouge2": 0.2053104918300294,
+        "rougeLsum": 0.5032019359507206
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P04_previous_-0.4",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4150403708627439,
+      "rouge": {
+        "rouge1": 0.5363171048709902,
+        "rouge2": 0.20559454760600035,
+        "rougeLsum": 0.5032094601112413
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P02_previous_-0.2",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41400735873632993,
+      "rouge": {
+        "rouge1": 0.536062521596593,
+        "rouge2": 0.20407372623622716,
+        "rougeLsum": 0.5018858283761695
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P01_previous_-0.1",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41333111390801847,
+      "rouge": {
+        "rouge1": 0.5355161036464076,
+        "rouge2": 0.20345023868590778,
+        "rougeLsum": 0.5010269993917399
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B00_default",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41240217563470694,
+      "rouge": {
+        "rouge1": 0.534998453460837,
+        "rouge2": 0.202191216598538,
+        "rougeLsum": 0.500016856844746
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P09_previous_-0.9",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.41182618799304044,
+      "rouge": {
+        "rouge1": 0.5303892841213989,
+        "rouge2": 0.2008661616389498,
+        "rougeLsum": 0.5042231182187726
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B01_beta_0.1",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4085574372236022,
+      "rouge": {
+        "rouge1": 0.5297921437737741,
+        "rouge2": 0.20155580988018185,
+        "rougeLsum": 0.49432435801685054
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B05_beta_0.5",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40575162355004896,
+      "rouge": {
+        "rouge1": 0.5241005372115712,
+        "rouge2": 0.20003919040667859,
+        "rougeLsum": 0.4931151430318971
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B06_beta_0.6",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40518498371566186,
+      "rouge": {
+        "rouge1": 0.5229479507846069,
+        "rouge2": 0.19926771833614246,
+        "rougeLsum": 0.49333928202623645
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B02_beta_0.2",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40504116604390944,
+      "rouge": {
+        "rouge1": 0.524334517763725,
+        "rouge2": 0.20076067031922362,
+        "rougeLsum": 0.49002831004877967
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B07_beta_0.7",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4049754853014431,
+      "rouge": {
+        "rouge1": 0.5221627366425556,
+        "rouge2": 0.19885991766705347,
+        "rougeLsum": 0.4939038015947203
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B04_beta_0.4",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40470422469284034,
+      "rouge": {
+        "rouge1": 0.5235916154539024,
+        "rouge2": 0.19936104812404923,
+        "rougeLsum": 0.49116001050056957
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B08_beta_0.8",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40410155381632923,
+      "rouge": {
+        "rouge1": 0.520811161120096,
+        "rouge2": 0.1977744415613061,
+        "rougeLsum": 0.49371905876758565
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B03_beta_0.3",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40318366606158246,
+      "rouge": {
+        "rouge1": 0.522033945193905,
+        "rouge2": 0.19846822364329542,
+        "rougeLsum": 0.4890488293475471
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B09_beta_0.9",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.4027874706294627,
+      "rouge": {
+        "rouge1": 0.5191541229644686,
+        "rouge2": 0.19673817690265988,
+        "rougeLsum": 0.49247011202125945
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_B10_beta_1.0",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.40062075263285246,
+      "rouge": {
+        "rouge1": 0.5159922803450571,
+        "rouge2": 0.19487626303133804,
+        "rougeLsum": 0.49099371452216234
+      }
+    },
+    {
+      "candidate": "pacsum_tfidf_P10_previous_-1.0",
+      "method": "pacsum_tfidf",
+      "macro_rouge": 0.3980342592511708,
+      "rouge": {
+        "rouge1": 0.5153340383529593,
+        "rouge2": 0.186425292936081,
+        "rougeLsum": 0.49234344646447215
+      }
+    }
+  ],
+  "frozen_lead": {
+    "macro_rouge": 0.39923244134613456,
+    "rouge": {
+      "rouge1": 0.514532126840121,
+      "rouge2": 0.1940318738091236,
+      "rougeLsum": 0.48913332338915916
+    }
+  },
+  "winner_minus_frozen_lead_macro": 0.052388028145115006,
+  "prediction_diagnostics": {
+    "lexrank": {
+      "rows": 681,
+      "score_degenerate_rows": 0,
+      "score_degenerate_rate": 0.0,
+      "predictions_sha256": "c2e17bcf31f90f2d8ece3edcfede77620886b57a1566f0e1df7cd66f3c69da47"
+    },
+    "pacsum_tfidf_B10_beta_1.0": {
+      "rows": 681,
+      "score_degenerate_rows": 681,
+      "score_degenerate_rate": 1.0,
+      "predictions_sha256": "4aa77a9bc18ff0bc295571f575329d2306b8dd3687699609fe0cd0b5f814c613"
+    }
+  },
+  "selection_comparisons": {
+    "lexrank_vs_frozen_lead": {
+      "rows": 681,
+      "exact_selected_indices_rows": 0,
+      "exact_selected_indices_rate": 0.0,
+      "mean_selected_indices_jaccard": 0.059721555380043576
+    },
+    "pacsum_tfidf_B10_beta_1.0_vs_frozen_lead": {
+      "rows": 681,
+      "exact_selected_indices_rows": 34,
+      "exact_selected_indices_rate": 0.049926578560939794,
+      "mean_selected_indices_jaccard": 0.9076106324193992
+    }
+  },
+  "interpretation_guard": "Ranking is descriptive frozen-dev evidence only. A score-degenerate PacSum endpoint is a canonical-order skip-tolerant control, not evidence that directed centrality contributes. No candidate is promoted until both families and both primary datasets are complete.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

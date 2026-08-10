@@ -1,0 +1,73 @@
+# A1 cheap length-contract study base. The runner injects only the frozen
+# partition and preregistered min_words/max_words pair.
+experiment:
+  status: validation_pilot_only
+  dataset: GovReport
+
+data_policy:
+  policy_path: configs/data_policies/govreport_validation_v1.json
+  policy_sha256: 0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e
+  analysis: main
+
+seed: 3407
+
+features:
+  tf_isf:
+    version: v2
+    use_stopwords: true
+    use_sublinear_tf: true
+    use_bigrams: false
+  weights:
+    importance: 1.0
+    length: 0.0
+    position: 0.0
+    graph: 0.0
+    centrality: 0.0
+    novelty: 0.0
+
+representations:
+  use: true
+  method: tfidf
+
+compute_budget:
+  mode: fixed
+  enabled_routes: [lexical]
+
+candidate_budget:
+  route_top_k: 40
+  min_per_route: 20
+  total: 60
+
+candidates:
+  use: true
+  mode: hard
+  rrf_constant: 60
+
+selector:
+  salience_source: rrf_fusion
+  similarity_source: pipeline_similarity
+
+objectives:
+  importance_aggregation: length_normalized
+  coverage_method: max
+  lambda_importance: 1.0
+  lambda_coverage: 0.8
+  lambda_redundancy: 0.7
+
+routes:
+  lexical:
+    revision: tf_isf_v2:smooth_nonnegative_sublinear_unigram
+
+coverage_guard:
+  enabled: true
+  document: true
+  section: false
+  position: false
+
+optimizer:
+  method: greedy
+
+length_control:
+  unit: words
+  require_nonempty: true
+

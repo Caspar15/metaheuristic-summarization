@@ -1,0 +1,748 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T21:25:30.391041+00:00",
+  "status": "completed",
+  "study_id": "gate2-baseline-matrix-v1",
+  "implementation_commit": "2a86dec75154a40c4305eedbfb60557a82d4b77e",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "family": "plm",
+  "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+  "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+  "candidate_count": 27,
+  "completed_count": 27,
+  "failed_count": 0,
+  "results": {
+    "sbert_centroid": {
+      "status": "completed",
+      "candidate": "sbert_centroid",
+      "method": "sbert_centroid",
+      "candidate_hash": "e6c524a5c7c9ea7e848d4f355b3435f41b796657c735331060c1bdae686c5ecf",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_centroid/resolved_config.yaml",
+      "config_sha256": "202e064e78c674d02152e270b83029ab607aea94f7a716163dcc5daf5f143ba4",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5729608378976003,
+          "rouge2": 0.2417493997481238,
+          "rougeLsum": 0.539613646791139
+        },
+        "macro_rouge": 0.45144129481228773,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6769456681351,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "sbert_mmr_lambda_0.1": {
+      "status": "completed",
+      "candidate": "sbert_mmr_lambda_0.1",
+      "method": "sbert_mmr",
+      "candidate_hash": "e3dc14fea93384f6d01e2b0bd22a32c8a69a52304d9ef7c720b6febcff5a4a40",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.1/resolved_config.yaml",
+      "config_sha256": "d9a36eda678c371e11790f8e9b3dbf426cf9a4762c5104c6ebcf7b757e892c1b",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.474933927199239,
+          "rouge2": 0.1282668711710404,
+          "rougeLsum": 0.44752118974960764
+        },
+        "macro_rouge": 0.350240662706629,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.3083700440528,
+          "min": 638,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "sbert_mmr_lambda_0.3": {
+      "status": "completed",
+      "candidate": "sbert_mmr_lambda_0.3",
+      "method": "sbert_mmr",
+      "candidate_hash": "ce87c2c1c874ee91387540bc12835a86a19fb16dc21bb37cf1e47228383ecd49",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.3/resolved_config.yaml",
+      "config_sha256": "81efda3efcac9a072f11815bae25f522bf06058bffcf4c2966138187a8bd340f",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.4923838512868519,
+          "rouge2": 0.13957310394712572,
+          "rougeLsum": 0.4635838172159468
+        },
+        "macro_rouge": 0.3651802574833081,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.4361233480176,
+          "min": 638,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "sbert_mmr_lambda_0.5": {
+      "status": "completed",
+      "candidate": "sbert_mmr_lambda_0.5",
+      "method": "sbert_mmr",
+      "candidate_hash": "6d5c8f9303f6f72284e3f7d02e18d49bc29b79e69fa19be4d6ad831fd3b281c4",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.5/resolved_config.yaml",
+      "config_sha256": "9b4552ced8ecb25defd7aa938b65a5686c9da8dc13b73d22875a37feac946d20",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5541735866757759,
+          "rouge2": 0.1966092512925773,
+          "rougeLsum": 0.520626197199497
+        },
+        "macro_rouge": 0.42380301172261675,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5712187958884,
+          "min": 641,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "sbert_mmr_lambda_0.7": {
+      "status": "completed",
+      "candidate": "sbert_mmr_lambda_0.7",
+      "method": "sbert_mmr",
+      "candidate_hash": "09c71ce005cfff2043eefa3d0859d14d46583e05cf5dc10208d5678f80d38c0d",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.7/resolved_config.yaml",
+      "config_sha256": "b3bc428cae8cccdc473c6026e36b0630a3895030be5fd8b08c0c076932b1317d",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5768539495053653,
+          "rouge2": 0.2346123443848607,
+          "rougeLsum": 0.5423196017788243
+        },
+        "macro_rouge": 0.45126196522301676,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6960352422908,
+          "min": 641,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "sbert_mmr_lambda_0.9": {
+      "status": "completed",
+      "candidate": "sbert_mmr_lambda_0.9",
+      "method": "sbert_mmr",
+      "candidate_hash": "e72aeb8668a80b4f9552b8bd5f8a3cb4979c2bf5a758acee06c759e5192ad433",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/resolved_config.yaml",
+      "config_sha256": "67fbc0dfb80ecdbe01d7b619dab400f27938d7f4459b15206ba6d9371bb86562",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5750095558521071,
+          "rouge2": 0.24157636022637521,
+          "rougeLsum": 0.5417184342480911
+        },
+        "macro_rouge": 0.4527681167755245,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6505139500734,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B00_default": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B00_default",
+      "method": "pacsum_sbert",
+      "candidate_hash": "3e837b9b817a8d7e6702c7a74702231f3af3fb6204266baaeb972ea8211294d7",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B00_default/resolved_config.yaml",
+      "config_sha256": "c83e724d9866ee4634db3ed0ec1be526466781340f629da5d9e96e3d457dc14d",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5560288209613569,
+          "rouge2": 0.22764345199388467,
+          "rougeLsum": 0.5273491598439118
+        },
+        "macro_rouge": 0.4370071442663845,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6196769456682,
+          "min": 641,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B01_beta_0.1": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B01_beta_0.1",
+      "method": "pacsum_sbert",
+      "candidate_hash": "891aa3a6546dee3ee64c3b26b8c1363dc13613ad8a6373e70693901d7d7838d6",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B01_beta_0.1/resolved_config.yaml",
+      "config_sha256": "69ea795808008f28c658de41594be23276704e72416378293be043adefbc2fde",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5596463986755945,
+          "rouge2": 0.23091270480597448,
+          "rougeLsum": 0.5307207939970422
+        },
+        "macro_rouge": 0.44042663249287034,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5697503671072,
+          "min": 638,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B02_beta_0.2": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B02_beta_0.2",
+      "method": "pacsum_sbert",
+      "candidate_hash": "b05c2e2551f15dec5901de0cbf8af9dd5682358330816fc2e3b81c0354781d3c",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B02_beta_0.2/resolved_config.yaml",
+      "config_sha256": "d549e0803957067cc1b5c384b9a54b710d91e4fd19f9e9e82650a7c45cf04fd4",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5639320870812636,
+          "rouge2": 0.2343086359287342,
+          "rougeLsum": 0.5343275130311552
+        },
+        "macro_rouge": 0.4441894120137177,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6226138032306,
+          "min": 638,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B03_beta_0.3": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B03_beta_0.3",
+      "method": "pacsum_sbert",
+      "candidate_hash": "7ab89f4f5ee271865b581699957a65235f9cd2a5c1edfebfd989ae18f3cebeb6",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B03_beta_0.3/resolved_config.yaml",
+      "config_sha256": "7dc04cddffae37ecf9c052dd952d1127664f41636a9e9251a2b642763df5c938",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5666565873657521,
+          "rouge2": 0.2364972131797885,
+          "rougeLsum": 0.5361845586778938
+        },
+        "macro_rouge": 0.44644611974114473,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.647577092511,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B04_beta_0.4": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B04_beta_0.4",
+      "method": "pacsum_sbert",
+      "candidate_hash": "b8f014a85bf6738f0a21525020a058c07078a83ad180bf36778a2135e90074e0",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B04_beta_0.4/resolved_config.yaml",
+      "config_sha256": "1db8bde0e4162cd6f96d7faa5fe61f6a04d20cd80a7169de5dd06e2d27b3b418",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.569290762294845,
+          "rouge2": 0.23958938847803118,
+          "rougeLsum": 0.5385973496007789
+        },
+        "macro_rouge": 0.4491591667912183,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6446402349486,
+          "min": 641,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B05_beta_0.5": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B05_beta_0.5",
+      "method": "pacsum_sbert",
+      "candidate_hash": "1532d1a2e1692ea8b57b82797ad3fb9a510d6c78798e884f40caf642ea9db088",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B05_beta_0.5/resolved_config.yaml",
+      "config_sha256": "2012dedc994211c47742be6b51b53322d705b70484a75ed1d2a38a3037e39ffe",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.570588623142746,
+          "rouge2": 0.2426131861404014,
+          "rougeLsum": 0.5400950679549524
+        },
+        "macro_rouge": 0.4510989590793666,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.640234948605,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B06_beta_0.6": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B06_beta_0.6",
+      "method": "pacsum_sbert",
+      "candidate_hash": "cc344ae9088e486f3f08049df9087d3fae9f0d1997fc9854c854f8dfd03e517b",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B06_beta_0.6/resolved_config.yaml",
+      "config_sha256": "2de81a4526600c4853b6899f78dd7e8d684501ffd8b30a804b0e33957f8d4383",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5679271810003393,
+          "rouge2": 0.24386762361128822,
+          "rougeLsum": 0.5376508108638257
+        },
+        "macro_rouge": 0.44981520515848444,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5697503671072,
+          "min": 639,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B07_beta_0.7": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B07_beta_0.7",
+      "method": "pacsum_sbert",
+      "candidate_hash": "c8158b28765b21601425e630668d5d5f0e5cbe22e608063a3f6c0c3ff7f97ac9",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B07_beta_0.7/resolved_config.yaml",
+      "config_sha256": "461cb480454169b1313f70b77b47ab1f27a6e50a5cb0157e919926674325147c",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.563698710858534,
+          "rouge2": 0.24276055775738048,
+          "rougeLsum": 0.5340788800715296
+        },
+        "macro_rouge": 0.44684604956248136,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6505139500734,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B08_beta_0.8": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B08_beta_0.8",
+      "method": "pacsum_sbert",
+      "candidate_hash": "82a1b04374abd9ea1aca72e03a198c66a049347b1d869423121de5281aa39c00",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B08_beta_0.8/resolved_config.yaml",
+      "config_sha256": "1ade902bbe789c0ae5264084b2eb4f164396da6124f0dd3999c20fa918a40ceb",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5552127814394445,
+          "rouge2": 0.2337652891859683,
+          "rougeLsum": 0.5260384935405681
+        },
+        "macro_rouge": 0.4383388547219937,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.4992657856094,
+          "min": 639,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B09_beta_0.9": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B09_beta_0.9",
+      "method": "pacsum_sbert",
+      "candidate_hash": "09f462e9221f6047a7020d0afe916d80f43869f2ffba6c73d6e8b3bff9744059",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B09_beta_0.9/resolved_config.yaml",
+      "config_sha256": "4f6279c3efa07e64f7b18d2efa0e82cc78d2520a3db29fceb258e4a6c4430daf",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5294389806030385,
+          "rouge2": 0.20815925338386795,
+          "rougeLsum": 0.5027188602663337
+        },
+        "macro_rouge": 0.41343903141774674,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.4581497797357,
+          "min": 641,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_B10_beta_1.0": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_B10_beta_1.0",
+      "method": "pacsum_sbert",
+      "candidate_hash": "fe902e864ffba2dd9b5b477ea87c308e88c40f1f0e6630e5e009c96f8f07f808",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B10_beta_1.0/resolved_config.yaml",
+      "config_sha256": "9f08cc439020e68a5b14f1094310c7f8bb86436940f36140933adabc3e4f3280",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5159922803450571,
+          "rouge2": 0.19487626303133804,
+          "rougeLsum": 0.49099371452216234
+        },
+        "macro_rouge": 0.40062075263285246,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5535976505139,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P01_previous_-0.1": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P01_previous_-0.1",
+      "method": "pacsum_sbert",
+      "candidate_hash": "c00a20ea1aee99deaacf0c692f76fd76675e7e49d6febc5cab30a6b27195d805",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P01_previous_-0.1/resolved_config.yaml",
+      "config_sha256": "d5b88f33b76e96beadba3d74534030be9a2f5e451a93c1f5422be0226b2746ff",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5543161617715834,
+          "rouge2": 0.22633680465865452,
+          "rougeLsum": 0.525807122771538
+        },
+        "macro_rouge": 0.43548669640059195,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5888399412629,
+          "min": 639,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P02_previous_-0.2": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P02_previous_-0.2",
+      "method": "pacsum_sbert",
+      "candidate_hash": "e288f60c9b192135fd4e81c00c09ecf75e27c1c10d382b6862a325c8e6397847",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P02_previous_-0.2/resolved_config.yaml",
+      "config_sha256": "65cecbf1d41effc6c332383e8fae6bc19efdb36eb78a9983dd7893677d1410aa",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5525785768933013,
+          "rouge2": 0.2247821267835981,
+          "rougeLsum": 0.5240892623854122
+        },
+        "macro_rouge": 0.43381665535410385,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.6093979441997,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P03_previous_-0.3": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P03_previous_-0.3",
+      "method": "pacsum_sbert",
+      "candidate_hash": "099e9cedbb59f369cdc8e442d8cc64755d3a659682ba1798ef606a06ed4a3d50",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P03_previous_-0.3/resolved_config.yaml",
+      "config_sha256": "23f5a645988de0ff7aeee0502c03fe258147b528c96d199dc7470e334a35ff4d",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5507048214441165,
+          "rouge2": 0.22324277017429833,
+          "rougeLsum": 0.5225402983800551
+        },
+        "macro_rouge": 0.43216262999949,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5770925110132,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P04_previous_-0.4": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P04_previous_-0.4",
+      "method": "pacsum_sbert",
+      "candidate_hash": "20669cf9d4e867a7ae1251eeedc7f16db25508597e6dac5f7175a056b23f8121",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P04_previous_-0.4/resolved_config.yaml",
+      "config_sha256": "038955915e6add07a71fae78658f6e7285c2aa5e37ec9ae74886baf3358a59cc",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5474182798897955,
+          "rouge2": 0.21976411369373136,
+          "rougeLsum": 0.5196025897463853
+        },
+        "macro_rouge": 0.42892832777663736,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5873715124817,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P05_previous_-0.5": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P05_previous_-0.5",
+      "method": "pacsum_sbert",
+      "candidate_hash": "e919d6af557863038843738eda05bdd3394dc8a6e25b7ba5bc00730c963eb5c9",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P05_previous_-0.5/resolved_config.yaml",
+      "config_sha256": "c98f5c2153212dcdab44615f51b1ae9223afd2cb47010285254b63dc43fd4bf1",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5442840451609402,
+          "rouge2": 0.21708687672091923,
+          "rougeLsum": 0.5166948292342636
+        },
+        "macro_rouge": 0.4260219170387076,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5844346549193,
+          "min": 642,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P06_previous_-0.6": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P06_previous_-0.6",
+      "method": "pacsum_sbert",
+      "candidate_hash": "4825a68efacb9ccb21407183d30a6c3ef831ab11bbed38fb2eae3454cc0c6dfb",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P06_previous_-0.6/resolved_config.yaml",
+      "config_sha256": "d4755b1bd873b644247b862cc05d19d8c6d63f0457622fcb47038c6c7796e623",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5405519042998254,
+          "rouge2": 0.21387033001467468,
+          "rougeLsum": 0.5133376309228526
+        },
+        "macro_rouge": 0.42258662174578426,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.503671071953,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P07_previous_-0.7": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P07_previous_-0.7",
+      "method": "pacsum_sbert",
+      "candidate_hash": "25a0575cf31a0eea518f57d899ca92bfcda8c1e953bd58c71cfb8ac437d74e4d",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P07_previous_-0.7/resolved_config.yaml",
+      "config_sha256": "9a71de9cae75290121a5e6757e3a6d0687d3227545f115f7794a8937a7384d7a",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5354629688683649,
+          "rouge2": 0.20889808890308767,
+          "rougeLsum": 0.5086502151589739
+        },
+        "macro_rouge": 0.4176704243101422,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.5051395007342,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P08_previous_-0.8": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P08_previous_-0.8",
+      "method": "pacsum_sbert",
+      "candidate_hash": "3ed8ea25a0313154f875a6dbf61c5ddeac3efb37477773c8101d9d4ccb6c2c0a",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P08_previous_-0.8/resolved_config.yaml",
+      "config_sha256": "9b622e1f4f7685f55ccdebdc0dbedb5bb43e2081d11d99044d1a9bb2bb65b80a",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.529402901668104,
+          "rouge2": 0.2044150379937261,
+          "rougeLsum": 0.5034682408476536
+        },
+        "macro_rouge": 0.41242872683649456,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.4845814977973,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P09_previous_-0.9": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P09_previous_-0.9",
+      "method": "pacsum_sbert",
+      "candidate_hash": "3094d3a18a6c693f35cee8a87bf2ab42f14a89081664dfcbeb6f208266337c8f",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P09_previous_-0.9/resolved_config.yaml",
+      "config_sha256": "82bdc3d468477d993e763dcb013eb47bb3c75d72b21eb08f953fff4d4a022ed1",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.52210845762216,
+          "rouge2": 0.19812932944110304,
+          "rougeLsum": 0.49681905256373166
+        },
+        "macro_rouge": 0.40568561320899826,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.4508076358296,
+          "min": 639,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "pacsum_sbert_P10_previous_-1.0": {
+      "status": "completed",
+      "candidate": "pacsum_sbert_P10_previous_-1.0",
+      "method": "pacsum_sbert",
+      "candidate_hash": "10c28f69bdfe0ff6af64f78f4a62e474fdc9d0c3a7c6a74eccaf2a471358e54a",
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_P10_previous_-1.0/resolved_config.yaml",
+      "config_sha256": "e41322b11dd457c223a771e30178682070b93baa3893a5d7ca18456e386766d9",
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 681,
+        "rouge": {
+          "rouge1": 0.5161191325974424,
+          "rouge2": 0.19241887259067864,
+          "rougeLsum": 0.4914842257781217
+        },
+        "macro_rouge": 0.4000074103220809,
+        "feasible_rows": 681,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 649.3582966226138,
+          "min": 640,
+          "max": 650
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

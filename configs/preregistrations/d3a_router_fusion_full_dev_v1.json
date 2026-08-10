@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d3a-router-fusion-full-dev-v1",
+  "registered_at_utc": "2026-08-09T14:11:53.2826937Z",
+  "implementation_parent_commit": "8f97759f43b6b5ef02ea1e7883ddda5a4baef27c",
+  "registration_timing": "after frozen D3a pilot finalist analysis and before any D3a finalist full-dev score",
+  "source_pilot_analysis": "runs_v2/d3a_router_fusion_screen_v1/analysis/pilot_analysis.json",
+  "source_pilot_analysis_sha256": "10c6e68c7fadc60c9a5ee7ddeb72fd636abcf5ff647afabfe19c1d3abb7fa1ec",
+  "test_split_prohibited": true,
+  "dev_test_access": "none",
+  "partition": "dev",
+  "question": "Do the mechanically selected D3a pilot finalists generalize to full frozen dev and close the task-profile adversarial-baseline gap?",
+  "datasets": {
+    "Multi-News": {
+      "task_profile": "multi_document + multi_sentence",
+      "rows": 3935,
+      "base_config": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "base_config_sha256": "b1a0de3218c19c0aeed751299d57ad9345556eeaf0dc3a489d6381e276055186",
+      "anchor_run": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run",
+      "adversarial_baseline": "PacSum TF-IDF P08",
+      "adversarial_per_example": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+      "adversarial_per_example_sha256": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e",
+      "finalists": ["R00_anchor", "R01_total120", "R07_bigrams_position02", "R10_graph_x2"]
+    },
+    "GovReport": {
+      "task_profile": "single_document + multi_sentence",
+      "rows": 681,
+      "base_config": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/resolved_config.yaml",
+      "base_config_sha256": "9d2918bfd936b8db8b75ee13b853ef2ed58214ecc8a6f470ada8c6b5bb48d910",
+      "anchor_run": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/mmr/run",
+      "adversarial_baseline": "full-source SBERT+MMR lambda 0.9",
+      "adversarial_per_example": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+      "adversarial_per_example_sha256": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43",
+      "finalists": ["R00_anchor", "R01_total120", "R07_bigrams_position02", "R11_lexical_x05", "R09_semantic_x2"]
+    }
+  },
+  "candidates": {
+    "R00_anchor": {"family": "anchor", "reuse_anchor": true, "delta": {}},
+    "R01_total120": {"family": "capacity", "delta": {"candidate_budget.total": 120}},
+    "R07_bigrams_position02": {"family": "lexical_salience", "delta": {"features.tf_isf.use_bigrams": true, "features.weights.position": 0.2}},
+    "R09_semantic_x2": {"family": "route_weight", "delta": {"candidates.route_weights": {"semantic": 2.0}}},
+    "R10_graph_x2": {"family": "route_weight", "delta": {"candidates.route_weights": {"graph": 2.0}}},
+    "R11_lexical_x05": {"family": "route_weight", "delta": {"candidates.route_weights": {"lexical": 0.5}}}
+  },
+  "fixed_contract": {
+    "routes": ["lexical", "semantic", "graph"],
+    "selector": "D2 task-profile selector policy",
+    "length_policy": "dataset-specific A1 frozen policy",
+    "semantic_model_and_revision": "all-MiniLM-L6-v2@c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+    "evaluator": "multisentence_lsum",
+    "output_order": "canonical source order"
+  },
+  "execution": {
+    "workers_requested": 16,
+    "worker_policy": "up to 16 bounded row workers, one BLAS/OMP thread each; candidates run sequentially",
+    "embedding_cache": "F-51-audited Gate 2 cache",
+    "streaming": "full predictions stream atomically; only summaries, scores and selected-index digests remain in memory",
+    "resume": "completed finalists immutable; failures preserved before retry"
+  },
+  "measurement": {
+    "primary": "all-row macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "paired": "10,000 paired bootstrap resamples, seed 20260809",
+    "holm_family": "7 non-anchor finalist comparisons x 4 endpoints = 28",
+    "selection_opportunities": "83 proposed configurations x 4 endpoints = 332",
+    "adversarial_comparison": "each dataset's best full-dev finalist versus its frozen strongest Gate 2 baseline"
+  },
+  "decision_rule": {
+    "winner": "highest full-dev macro within task profile; exact tie chooses lower selector pool cost, then lower candidate ID",
+    "promotion": "winner macro must exceed adversarial baseline, macro paired CI lower must be positive, Holm-28 p<=0.05, and 332-opportunity Bonferroni p<=0.05; all three component metrics are reported and no component may have a CI upper below zero",
+    "failure": "if either task profile fails, do not access dev-test; continue only with a separately preregistered D3b combination justified by cross-profile evidence, otherwise write repositioning advice",
+    "protected_splits": "even if promotion passes, stop before dev-test/test and write the required freeze recommendation"
+  },
+  "scores_observed_after_registration": false
+}

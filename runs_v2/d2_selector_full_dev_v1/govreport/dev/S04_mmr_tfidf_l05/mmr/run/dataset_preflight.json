@@ -1,0 +1,17 @@
+{
+  "valid": true,
+  "policy_id": "govreport-validation-v1",
+  "policy_path": "configs/data_policies/govreport_validation_v1.json",
+  "policy_file_sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e",
+  "analysis": "main",
+  "analysis_role": "primary_validation",
+  "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+  "input_file_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_fingerprint": "4f2506cb94ce65882b6e5f176c27cb471a08c60a75f21b5383dc9cfc90cfad7d",
+  "rows": 973,
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "replacement_character_rows": 0,
+  "replacement_characters": 0,
+  "replacement_manifest_file_sha256": "92fda0df5f4d9d8e632766a930e91a3137a1d9c22e6e5b6bbb2fbe85fbcd18a6",
+  "canonical_exclusion_manifest_file_sha256": "59e6107a2f3ac93fc9bd8e8b3c20e6e6d225250ad9cf9c11e8a47cb72a9dc041"
+}

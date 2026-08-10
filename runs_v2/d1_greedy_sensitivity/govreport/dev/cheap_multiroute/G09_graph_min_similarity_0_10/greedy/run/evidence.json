@@ -1,0 +1,94 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T10:33:20.922866+00:00",
+  "started_at_utc": "2026-08-08T10:31:14.285253+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "method": "greedy",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.pipeline.select_sentences",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\greedy",
+    "--stamp",
+    "run"
+  ],
+  "implementation_commit": "f922c94654601454d45e8d245601373a9826fba6",
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G09_graph_min_similarity_0_10/resolved_config.yaml",
+  "config_sha256": "4a2fd68915504a8601f2ba4202247003c20db825c3284d75a9aaca744a50ccff",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dataset_preflight_sha256": "78850e7197229f03dc06528cd9719659b79cf4640003a8b888eb5c765bee5e70",
+  "partition_preflight_sha256": "719b521d4c7567b238e95e79ac9de6bf5219dad00c720d9975dd1fbcd3e915d3",
+  "predictions_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G09_graph_min_similarity_0_10/greedy/run/predictions.jsonl",
+  "predictions_sha256": "49ee1733787954d3236aed518cc6291cf4f71ed465f77a01195604ef8d701a99",
+  "selected_indices_sha256": "aa343ef5585ce26d4651d85b0e80fa3e7525d9354760da39d06999fe9aa2ee06",
+  "selected_indices_digest_semantics": "SHA-256 over canonical LF-separated {id, selected_indices}; use this, not predictions artifact SHA, for cross-machine selection reproducibility",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5296230433482849,
+      "rouge2": 0.1850532644549383,
+      "rougeLsum": 0.49577306031804674
+    },
+    "macro_rouge": 0.40348312270709,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 642.4522760646108,
+      "min": 551,
+      "max": 650
+    }
+  },
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G09_graph_min_similarity_0_10",
+  "candidate_hash": "5016bdc9971f39aea3fc785329bca8fc9c4365d5d678529911886a0cd36f4917",
+  "declared_delta": {
+    "routes.graph.min_similarity": 0.1
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 59.81204111600587,
+    "selector_candidate_size_mean": 59.81204111600587,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 59.81204111600587,
+    "route_agreement_mean": 1.1157084718208232,
+    "unique_candidate_mean_by_route": {
+      "graph": 26.52863436123348,
+      "lexical": 26.45374449339207
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 9.208516886930983,
+      "lexical": 9.386196769456681
+    }
+  }
+}

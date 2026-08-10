@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "sbert_centroid",
+  "method": "sbert_centroid",
+  "candidate_hash": "e6bd58e815aa83d028a0141bd22fff25511e181c87c57a2994041eec834721d2",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/resolved_config.yaml",
+  "config_sha256": "3f9229033ccdbbcbcc05ce4d14cc86b1884596cbab332f972b15f3ced00e3f6e",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42761333878811236,
+      "rouge2": 0.13612077089989616,
+      "rougeLsum": 0.38433733192488984
+    },
+    "macro_rouge": 0.3160238138709661,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.41550190597204,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

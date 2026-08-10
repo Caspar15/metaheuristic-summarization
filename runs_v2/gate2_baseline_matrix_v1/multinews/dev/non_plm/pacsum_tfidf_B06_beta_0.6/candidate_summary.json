@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "pacsum_tfidf_B06_beta_0.6",
+  "method": "pacsum_tfidf",
+  "candidate_hash": "89ca46997fde75c856cc5cc03ada5db2769ec776f339a6a85c072246a3b2e527",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_B06_beta_0.6/resolved_config.yaml",
+  "config_sha256": "40f00d75d6f193fb523bc35ffe7f46db8a7e79e2611e7059207147ac9892cbea",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.42592667042061727,
+      "rouge2": 0.14150888171260845,
+      "rougeLsum": 0.38407292596714293
+    },
+    "macro_rouge": 0.3171694927001229,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.2355781448539,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -1,0 +1,62 @@
+{
+  "policy_schema_version": "1.0",
+  "policy_id": "govreport-validation-v1",
+  "status": "frozen_before_validation_results",
+  "frozen_at_utc": "2026-08-08T04:41:35.0958775Z",
+  "test_split_accessed": false,
+  "dataset": {
+    "name": "GovReport",
+    "dataset_id": "official-govreport-author-archive",
+    "dataset_revision": "official-author-archive-2021-04-01",
+    "preprocessor_version": "govreport-canonical-v1",
+    "split": "validation",
+    "license": "CC-BY-4.0",
+    "official_dataset_page": "https://gov-report-data.github.io/"
+  },
+  "source_archive": {
+    "path": "data/raw/gov-report.tar.gz",
+    "file_sha256": "bedf7a780910afbaa8bb64e794742722f3faea06d3c156fd1cedc1a7b5c4cd3c",
+    "official_validation_membership_rows": 974,
+    "crs_validation_ids": {
+      "rows": 362,
+      "file_sha256": "6df97176a9f774aa01959d3b9f357e10e13f67b57a7686b0884bf381edc01232"
+    },
+    "gao_validation_ids": {
+      "rows": 612,
+      "file_sha256": "4f3141769de2995d6ff05f85a9df05b2bab060a2a9803e2a0e89580c940b6642"
+    }
+  },
+  "canonical_exclusions": {
+    "expected_rows": 1,
+    "reason": "one official CRS validation report has an empty reference summary",
+    "manifest_path": "configs/data_policies/govreport_validation_exclusions_v1.json",
+    "manifest_file_sha256": "59e6107a2f3ac93fc9bd8e8b3c20e6e6d225250ad9cf9c11e8a47cb72a9dc041"
+  },
+  "replacement_character_manifest": {
+    "path": "configs/data_policies/govreport_validation_replacement_characters_v1.json",
+    "rows": 0,
+    "characters": 0,
+    "file_sha256": "92fda0df5f4d9d8e632766a930e91a3137a1d9c22e6e5b6bbb2fbe85fbcd18a6"
+  },
+  "analyses": {
+    "main": {
+      "role": "primary_validation",
+      "artifact_path": "data/processed/govreport_validation_canonical.jsonl",
+      "row_policy": "exclude_only_pinned_empty_reference_row",
+      "text_repair": "forbidden",
+      "expected_rows": 973,
+      "expected_dataset_fingerprint": "4f2506cb94ce65882b6e5f176c27cb471a08c60a75f21b5383dc9cfc90cfad7d",
+      "expected_file_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+      "expected_replacement_rows": 0,
+      "expected_replacement_characters": 0,
+      "allow_replacement_character": false
+    }
+  },
+  "section_policy": {
+    "preserve_nested_section_order": true,
+    "preserve_paragraph_position": true,
+    "gao_letter_rule": "exclude top-level Letter paragraphs but retain Letter subsections, matching the official preprocessing README",
+    "empty_section_nodes": "record and omit nodes that contribute no source sentences"
+  },
+  "interpretation_rule": "Evaluate all 973 structurally valid rows. The single pinned empty-reference row is excluded before scores and may not be restored with a fabricated target."
+}

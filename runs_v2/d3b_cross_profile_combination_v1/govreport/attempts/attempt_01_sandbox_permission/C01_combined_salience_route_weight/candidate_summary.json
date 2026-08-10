@@ -1,0 +1,14 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:45:23.002031+00:00",
+  "started_at_utc": "2026-08-09T14:45:23.001527+00:00",
+  "status": "failed",
+  "study_id": "d3b-cross-profile-combination-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "candidate": "C01_combined_salience_route_weight",
+  "candidate_hash": "35a9a22431e36c196e6166b324496a7ce0cc6532974c23ae15e692f31443e637",
+  "failure": "PermissionError: [WinError 5] 存取被拒。",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

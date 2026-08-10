@@ -1,0 +1,13 @@
+{
+  "valid": true,
+  "manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "manifest_file_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "manifest_status": "frozen_before_optimization_scores",
+  "dataset": "GovReport",
+  "base_split": "validation",
+  "partition": "dev",
+  "rows": 681,
+  "selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "selection_algorithm": "lowest_sha256(seed\\0row_id) to nearest-integer dev_fraction; IDs stored in canonical input order",
+  "seed": 3407
+}

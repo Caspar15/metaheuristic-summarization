@@ -1,0 +1,110 @@
+{
+  "preregistration_schema_version": "1.0",
+  "status": "frozen_before_d1_scores",
+  "frozen_at_utc": "2026-08-08T06:17:02.0757877Z",
+  "implementation_parent_commit": "ee8beb829ea36f727ce859d1176e3b66e9eae372",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "test_split_prohibited": true,
+  "dev_test_access": "none_in_screening",
+  "question": "Under each dataset's frozen length contract, which effective knobs merit later dev search, and which route or candidate mechanisms are inactive or harmful?",
+  "datasets": {
+    "Multi-News": {
+      "partition": "dev",
+      "rows": 3935,
+      "length_policy": "configs/length_policies/multinews_v1.json",
+      "min_words": 200,
+      "max_words": 250
+    },
+    "GovReport": {
+      "partition": "dev",
+      "rows": 681,
+      "length_policy": "configs/length_policies/govreport_v1.json",
+      "min_words": 500,
+      "max_words": 650
+    }
+  },
+  "selector": "greedy_only",
+  "base": {
+    "features": "TF-ISF v2, stopwords on, sublinear TF on, unigrams, importance weight 1.0 and all other base-feature weights 0",
+    "representation": "per-document TF-IDF similarity",
+    "routes": ["lexical"],
+    "candidate_budget": {"route_top_k": 40, "min_per_route": 20, "total": 60},
+    "candidate_mode": "hard",
+    "selector_salience": "rrf_fusion",
+    "objectives": {"importance_aggregation": "length_normalized", "coverage_method": "max", "lambda_importance": 1.0, "lambda_coverage": 0.8, "lambda_redundancy": 0.7},
+    "coverage_guard": {"enabled": true, "document": true, "section": false, "position": false},
+    "seed": 3407
+  },
+  "correctness_precondition": {
+    "change": "Add features.position.scope=document and compute the position prior from canonical document_position, resetting at each document boundary.",
+    "reason": "The current feature receives only the flattened sentence list; enabling it on Multi-News would encode cross-document concatenation order rather than within-document position.",
+    "success": "Golden multi-document test proves both document starts receive 1.0; missing sentence records fail loudly when document scope is requested.",
+    "score_access_before_fix": false
+  },
+  "families": {
+    "lexical_objective": [
+      {"id": "L00_base", "delta": {}},
+      {"id": "L01_importance_mean", "delta": {"objectives.importance_aggregation": "mean"}},
+      {"id": "L02_lambda_importance_half", "delta": {"objectives.lambda_importance": 0.5}},
+      {"id": "L03_lambda_coverage_double", "delta": {"objectives.lambda_coverage": 1.6}},
+      {"id": "L04_lambda_redundancy_double", "delta": {"objectives.lambda_redundancy": 1.4}},
+      {"id": "L05_keep_stopwords", "delta": {"features.tf_isf.use_stopwords": false}},
+      {"id": "L06_linear_tf", "delta": {"features.tf_isf.use_sublinear_tf": false}},
+      {"id": "L07_bigrams", "delta": {"features.tf_isf.use_bigrams": true}},
+      {"id": "L08_fusion_v2", "delta": {"features.fusion.version": "v2"}},
+      {"id": "L09_document_position", "delta": {"features.position.scope": "document", "features.position.version": "v2", "features.position.method": "inverse", "features.weights.position": 0.2}},
+      {"id": "L10_no_candidate_prefilter", "delta": {"candidates.use": false}},
+      {"id": "L11_position_guard", "delta": {"coverage_guard.position": true}}
+    ],
+    "cheap_multiroute": [
+      {"id": "G00_lexical_graph", "delta": {"compute_budget.enabled_routes": ["lexical", "graph"]}},
+      {"id": "G01_tfidf_centroid_route", "delta": {"compute_budget.enabled_routes": ["lexical", "tfidf_centroid"]}},
+      {"id": "G02_route_top_k_80", "parent": "G00_lexical_graph", "delta": {"candidate_budget.route_top_k": 80}},
+      {"id": "G03_min_per_route_10", "parent": "G00_lexical_graph", "delta": {"candidate_budget.min_per_route": 10}},
+      {"id": "G04_total_80", "parent": "G00_lexical_graph", "delta": {"candidate_budget.total": 80}},
+      {"id": "G05_rrf_constant_30", "parent": "G00_lexical_graph", "delta": {"candidates.rrf_constant": 30}},
+      {"id": "G06_membership_only", "parent": "G00_lexical_graph", "delta": {"selector.salience_source": "membership_only"}},
+      {"id": "G07_soft_pool", "parent": "G00_lexical_graph", "delta": {"candidates.mode": "soft", "selector.salience_source": "membership_only"}},
+      {"id": "G08_graph_neighbors_16", "parent": "G00_lexical_graph", "delta": {"routes.graph.n_neighbors": 16}},
+      {"id": "G09_graph_min_similarity_0_10", "parent": "G00_lexical_graph", "delta": {"routes.graph.min_similarity": 0.1}},
+      {"id": "G10_graph_alpha_0_90", "parent": "G00_lexical_graph", "delta": {"routes.graph.alpha": 0.9}},
+      {"id": "G11_dataset_structure_guard", "parent": "G00_lexical_graph", "dataset_delta": {"Multi-News": {"coverage_guard.document": false}, "GovReport": {"coverage_guard.section": true}}}
+    ],
+    "semantic_route": [
+      {"id": "S00_lexical_semantic", "delta": {"compute_budget.enabled_routes": ["lexical", "semantic"]}},
+      {"id": "S01_semantic_selector", "parent": "S00_lexical_semantic", "delta": {"selector.salience_source": "semantic_raw", "selector.similarity_source": "sbert"}},
+      {"id": "S02_lexical_semantic_graph", "parent": "S00_lexical_semantic", "delta": {"compute_budget.enabled_routes": ["lexical", "semantic", "graph"]}}
+    ]
+  },
+  "fixed_not_searched": [
+    "data policy, partition manifest, evaluator and all-row denominator",
+    "dataset-specific frozen length policy",
+    "semantic model name and revision",
+    "semantic batch size, device and max_model_tokens after a truncation/cost preflight",
+    "sparse graph implementation, convergence tolerance and iteration ceiling",
+    "output ordering, require_nonempty and word-count unit",
+    "compute_budget.mode=fixed",
+    "optimizer method=greedy and seed=3407"
+  ],
+  "excluded_as_invalid_or_redundant": [
+    "TF-ISF v1 because it has a documented length/repetition defect",
+    "dense graph base feature because GovReport requires bounded sparse graph",
+    "length feature until its documented formula mismatch is resolved",
+    "centrality and novelty base weights because they are degenerate and duplicate route semantics",
+    "coverage_method=set because the canonical evaluator treats it as the same facility-location definition as max",
+    "coverage_method=diversity because it double-counts redundancy and is rejected by the objective factory",
+    "group_coverage because it is not implemented and fails loudly",
+    "adaptive compute mode because it is not implemented",
+    "legacy fast/bert/fusion branches and candidates.recall_target"
+  ],
+  "measurement": {
+    "primary_screen_score": "all-row mean of per-document macro mean(ROUGE-1, ROUGE-2, ROUGE-Lsum)",
+    "also_report": ["ROUGE-1", "ROUGE-2", "ROUGE-Lsum", "summary words", "feasibility rate", "candidate size", "route unique contribution", "runtime", "peak memory when available"],
+    "screening_is_not_significance": true,
+    "comparison_count": 27,
+    "failed_runs_are_logged": true
+  },
+  "promotion_rule": "Use dev deltas only to rank follow-up effort. Promote a knob when it improves the primary screen score without an upper-bound/schema/denominator failure and either has the same sign on both primary datasets or has a predeclared task-profile explanation for a dataset-specific effect. Do not observe dev-test during this screening.",
+  "route_deletion_rule": "A route is not deleted from a cheap ROUGE screen alone. After the screen, run candidate recall and unique-contribution diagnostics on dev. Apply ARCHITECTURE sections 5.3 and 5.4: delete semantic without unique validated candidate recall or quality gain; delete graph when it has no incremental effect beyond semantic or is highly redundant.",
+  "scores_observed_at_freeze": false
+}

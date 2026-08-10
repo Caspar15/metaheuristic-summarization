@@ -1,0 +1,327 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T05:26:49.137795+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "study_id": "a1-length-contract-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "rows": 3935,
+  "candidate_count": 4,
+  "method_count": 3,
+  "method_families": [
+    "lead",
+    "random",
+    "greedy"
+  ],
+  "multiple_comparison_candidate_count": 4,
+  "ranking": [
+    "legacy_floor_200_cap_250",
+    "p75_cap_260",
+    "max_only_250",
+    "median_cap_220"
+  ],
+  "candidates": {
+    "legacy_floor_200_cap_250": {
+      "status": "completed",
+      "study_id": "a1-length-contract-v1",
+      "dataset": "Multi-News",
+      "partition": "dev",
+      "partition_rows": 3935,
+      "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+      "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+      "candidate": "legacy_floor_200_cap_250",
+      "candidate_hash": "e6a9108129238a61e913915950837b33aacbde3a93d8496737a60684b31cd1f4",
+      "length_contract": {
+        "min_words": 200,
+        "max_words": 250
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/resolved_config.yaml",
+      "resolved_config_sha256": "cffe519d00da6bb05b7f33215161fcac0a97c437a9329d7906489eeb1ebe1c7f",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.43503283092084166,
+            "rouge2": 0.148138832947838,
+            "rougeLsum": 0.39570096591010867
+          },
+          "macro_rouge": 0.3262908765929295,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 233.70419313850064,
+            "min": 22,
+            "max": 250
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.4179007958181792,
+            "rouge2": 0.12328876864885509,
+            "rougeLsum": 0.3801038161786124
+          },
+          "macro_rouge": 0.3070977935485489,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 247.03557814485387,
+            "min": 36,
+            "max": 250
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.42294418595001687,
+            "rouge2": 0.1273627971951294,
+            "rougeLsum": 0.38075237440758963
+          },
+          "macro_rouge": 0.3103531191842453,
+          "feasible_rows": 3931,
+          "infeasible_rows": 4,
+          "summary_words": {
+            "mean": 242.602541296061,
+            "min": 36,
+            "max": 250
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.31458059644190767,
+      "per_example_sha256": "a3b186c121289fdc8907245d147035c6f0b9f21fbdd2322c8ad77f93e4a535be"
+    },
+    "median_cap_220": {
+      "status": "completed",
+      "study_id": "a1-length-contract-v1",
+      "dataset": "Multi-News",
+      "partition": "dev",
+      "partition_rows": 3935,
+      "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+      "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+      "candidate": "median_cap_220",
+      "candidate_hash": "89a7341da5ac51e7710391d83ad18cfc771c2ec4a726867edb396918c9c19336",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 220
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/multinews/dev/median_cap_220/resolved_config.yaml",
+      "resolved_config_sha256": "eb196789a4cffa69d6aefeef24e5a6b8fcb7031035776a77014e5f1ba7558fb9",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.4277263746159901,
+            "rouge2": 0.14256246762464198,
+            "rougeLsum": 0.38758412510392154
+          },
+          "macro_rouge": 0.3192909891148512,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 204.44421855146123,
+            "min": 31,
+            "max": 220
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.4111117537051901,
+            "rouge2": 0.1179494254191686,
+            "rougeLsum": 0.37310916855050563
+          },
+          "macro_rouge": 0.3007234492249548,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 217.61473951715374,
+            "min": 36,
+            "max": 220
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.37530896811472825,
+            "rouge2": 0.11373775678481822,
+            "rougeLsum": 0.33463159499592626
+          },
+          "macro_rouge": 0.2745594399651576,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 178.16467598475222,
+            "min": 1,
+            "max": 220
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.29819129276832107,
+      "per_example_sha256": "e7a27b86f21f56bc63e93083ae21d12b7e2c3473515139c4da92575a02e2a177"
+    },
+    "max_only_250": {
+      "status": "completed",
+      "study_id": "a1-length-contract-v1",
+      "dataset": "Multi-News",
+      "partition": "dev",
+      "partition_rows": 3935,
+      "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+      "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+      "candidate": "max_only_250",
+      "candidate_hash": "6d1f41f2b8484dbb18312455113ed768e5d9a6454217e2358a5bfee6d52a1629",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 250
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/multinews/dev/max_only_250/resolved_config.yaml",
+      "resolved_config_sha256": "162bf665d77ca260a0bee24b87ab8c9372da3a225a18158fe9cdbac2ce46386e",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.43503283092084166,
+            "rouge2": 0.148138832947838,
+            "rougeLsum": 0.39570096591010867
+          },
+          "macro_rouge": 0.3262908765929295,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 233.70419313850064,
+            "min": 22,
+            "max": 250
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.4179007958181792,
+            "rouge2": 0.12328876864885509,
+            "rougeLsum": 0.3801038161786124
+          },
+          "macro_rouge": 0.3070977935485489,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 247.03557814485387,
+            "min": 36,
+            "max": 250
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.38093875397343596,
+            "rouge2": 0.11770289240438378,
+            "rougeLsum": 0.34085140596092584
+          },
+          "macro_rouge": 0.27983101744624855,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 200.451334180432,
+            "min": 1,
+            "max": 250
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.3044065625292419,
+      "per_example_sha256": "2c43c6a5cb39f13b7c7b33a105b3ffb4ce8a37e9508f4384329a4162d6604f17"
+    },
+    "p75_cap_260": {
+      "status": "completed",
+      "study_id": "a1-length-contract-v1",
+      "dataset": "Multi-News",
+      "partition": "dev",
+      "partition_rows": 3935,
+      "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+      "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_v1.json",
+      "preregistration_sha256": "95631534cb7e721a5efe522dbe12dcbd5b8a5220114e057cf51302c6d8b4e792",
+      "candidate": "p75_cap_260",
+      "candidate_hash": "4932438e4bf719d65ff5cb24272821be3b9a4821662f60cee45ce09005359065",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 260
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/multinews/dev/p75_cap_260/resolved_config.yaml",
+      "resolved_config_sha256": "479422c203da1987891d62fe8c922b424100b23c1904b71b5a25817ba4f8bac0",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.43631581842334,
+            "rouge2": 0.14967314551937697,
+            "rougeLsum": 0.39731196567948474
+          },
+          "macro_rouge": 0.3277669765407339,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 243.44701397712834,
+            "min": 22,
+            "max": 260
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.4188739341490008,
+            "rouge2": 0.1243899807104836,
+            "rougeLsum": 0.38129899326060385
+          },
+          "macro_rouge": 0.30818763604002947,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 256.7817026683609,
+            "min": 36,
+            "max": 260
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 3935,
+          "rouge": {
+            "rouge1": 0.38176167602933314,
+            "rouge2": 0.11859831515421657,
+            "rougeLsum": 0.34197796175770423
+          },
+          "macro_rouge": 0.28077931764708464,
+          "feasible_rows": 3935,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 207.86048284625159,
+            "min": 1,
+            "max": 260
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.30557797674261605,
+      "per_example_sha256": "d922705900854da30a8e436e48a784f9e64c77037bfb182caeaccf257bca78b0"
+    }
+  },
+  "selection": null
+}

@@ -1,0 +1,48 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T10:35:38.915678+00:00",
+  "started_at_utc": "2026-08-08T10:35:30.009173+00:00",
+  "status": "failed",
+  "test_split_accessed": false,
+  "method": "greedy",
+  "command": [
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.venv\\Scripts\\python.exe",
+    "-m",
+    "src.pipeline.select_sentences",
+    "--config",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\resolved_config.yaml",
+    "--split",
+    "validation",
+    "--input",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl",
+    "--run_dir",
+    "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\greedy",
+    "--stamp",
+    "run"
+  ],
+  "return_code": 1,
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G11_dataset_structure_guard/resolved_config.yaml",
+  "config_sha256": "16101ab9c2c2e7f1e3fb423908ace84a854890be3a909cde803e9ba3e38fb1f3",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G11_dataset_structure_guard",
+  "candidate_hash": "988e50a1fe5d90b0f0f2a62b2625decc9db148733ec0f15b0c31ac926e2bcbc0",
+  "declared_delta": {
+    "Multi-News": {
+      "coverage_guard.document": false
+    },
+    "GovReport": {
+      "coverage_guard.section": true
+    }
+  }
+}

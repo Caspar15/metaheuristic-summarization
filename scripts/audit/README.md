@@ -6,11 +6,40 @@
 > ⚠️ **這些是 diagnostic，不是論文結果。**
 > 全部使用 `src.eval.rouge` 的**內部多句 Lsum 協定**，與 published Perl ROUGE 數字
 > 不保證可比。greedy reference **不是** exact upper bound，也不是任何資料集的官方 oracle 協定。
+
+`run_gate2_baseline_matrix.py` 執行預註冊的兩-primary Gate 2 baseline 搜尋。它沒有 split
+參數，只能讀 frozen dev manifest；`non_plm` 展開 23 個 candidates，`plm` 展開 27 個。
+每次成功或失敗都寫 evidence 與 `runs_v2/search_log.jsonl`，不得用它讀 dev-test/test。
+
+`summarize_gate2_baseline_family.py` 只讀上述 frozen-dev family，驗證 candidate/evidence
+完整性、partition guards、排名與 PacSum 退化端點，輸出 `analysis_summary.json`；它同樣沒有
+partition CLI，不得用來讀 dev-test/test。
+
 > 正式結果必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程。
 
 > 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；
 > 本目錄的 `lead_vs_system.py` 仍只用來重現 test-tuned legacy F-0，不是 Phase 2
 > baseline runner，也不會因 Lead 程式已合併而自動變成投稿級結果。
+
+## Governed development runners（不是 legacy test diagnostics）
+
+- `run_length_contract_study.py` 已完成 A1；兩 primary 各自唯一一次 dev-test 已凍結
+  length policy，不得重跑。
+- `effective_tunable_inventory.py` 驗證 D1 的 19 組／90 paths 手工 runtime audit。
+- `run_greedy_sensitivity.py` 只跑 frozen validation 的 `dev` membership；CLI 刻意沒有
+  split 參數。用法：
+
+```bash
+.venv/Scripts/python.exe -m scripts.audit.run_greedy_sensitivity \
+  --dataset multinews --family lexical_objective
+```
+
+family 可為 `lexical_objective`、`cheap_multiroute`、`semantic_route`。每個 family
+預設只能建立一次既定 output root；外部 job timeout 後可加 `--resume`，它會驗證並
+重用完整 candidate、封存不完整 atomic artifact 與 interruption evidence，再只重跑
+缺少者。所有成功、方法失敗與外部中斷 attempt 都進 method evidence 與
+`runs_v2/search_log.jsonl`。這些是正式 governance 下的 development evidence，但仍不是
+test 結果或可直接投稿的最終主表。
 
 執行位置：`metaheuristic-summarization/`（模組路徑需要 repo root 在 `sys.path`）
 
@@ -161,6 +190,25 @@ Pool 與選中句子的字數分布（同一次全量重跑）：
 
 ---
 
+## `run_length_contract_study.py` — A1 長度協定選擇
+
+依兩份 frozen A1 preregistration，在 dev 或 dev-test 對四個 length protocols 執行
+Lead document-order、Random seed 3407、lexical-only length-normalized Greedy。每個
+protocol 會 materialize exact resolved config，三個 method 各產生 `evidence.json`、
+prediction SHA、selected-indices digest、dependency versions 與逐篇 ROUGE；候選層以
+每篇 3 methods × 3 metrics 的 macro mean 排名。所有成功與失敗都 append 至
+`runs_v2/search_log.jsonl`。
+
+```bash
+python -m scripts.audit.run_length_contract_study --dataset multinews --partition dev
+python -m scripts.audit.run_length_contract_study --dataset govreport --partition dev
+```
+
+只有 dev 全部完成後才允許 `--partition dev-test`。同一 logical candidate 已有完成的
+dev-test log 時，script 會拒絕第二次觀察。dev-test raw winner 必須對三個 alternatives
+的 paired bootstrap 95% CI 都為正且 Holm-adjusted p < .05；否則採預註冊 tie rule。
+script 沒有 test 選項。
+
 ## `length_matched_lead.py` — 長度括弧（F-18b）
 
 比系統多用字數就可能贏 R-1／R-Lsum，這正是稽核批評舊稿的那一點。句子粒度使精確等長不可能，所以**兩側都要報**：
@@ -234,3 +282,130 @@ python -m scripts.audit.paired_run_intersection \
 | `dataset_headroom.py` | 主場資料集選擇 | `STRATEGY_ASSESSMENT.md` §1.1 / §2 |
 | `plm_timing.py` | F-4 計時是載入 overhead | `CODE_AUDIT_IEEE_Access.md` F-4 |
 | `random_baseline_min_words.py` | Random baseline `apply_min_words=False` 決策 | `src/baselines/random_baseline.py` 模組 docstring |
+| `greedy_scaling_projection.py` | F-30/F-31 archived partial 的 prefix-calibrated 舊 Greedy 成本 proxy | `CODE_AUDIT_IEEE_Access.md` F-30/F-31 |
+| `verify_greedy_incremental_equivalence.py` | post-F-30 真實 GovReport L00 逐篇 selected-indices 等價 | `CODE_AUDIT_IEEE_Access.md` F-30 |
+| `run_d1_section_guard_followup.py` | G11 section reservations overflow 後、事前清單已授權的 cap-aware GovReport dev follow-up；固定 `max_items=20`，無 split CLI | `CODE_AUDIT_IEEE_Access.md` F-34 |
+| `run_d1_three_route_followup.py` | S02 三路 reservations overflow 後的兩-primary capacity follow-up；固定 total 80、guard max 20，只有 dataset CLI | `CODE_AUDIT_IEEE_Access.md` F-36 |
+
+---
+
+## 凍結 validation 內的 dev／dev-test（2026-08-08）
+
+在任何新 optimization score 前，只依 canonical validation row ID 建立 reference-blind
+70/30 partition。此腳本會拒絕任何非 `validation` row；它不會產生或讀取 test split。
+
+```bash
+python -m scripts.audit.freeze_validation_partitions \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --output configs/validation_partitions/multinews_validation_dev_v1.json \
+  --dataset Multi-News \
+  --seed 3407 \
+  --dev_fraction 0.70
+```
+
+正式 runner 仍先對完整 canonical file 做 frozen data-policy preflight，才依 manifest 過濾；
+每個 run 會保存 `partition_preflight.json`。dev 可重複搜尋，dev-test 對每個 config hash
+只能看一次。
+
+## Matched selector pilot（2026-08-06）
+
+先凍結 reference-blind manifest；凍結後才可跑品質比較：
+
+```bash
+python -m scripts.audit.freeze_selector_pilot \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --output configs/pilot_manifests/multinews_selector_pilot_v1.json \
+  --sample_size 200 \
+  --salt multinews-selector-pilot-v1
+
+python -m scripts.audit.run_selector_comparison \
+  --input data/processed/multi_news_validation_canonical.jsonl \
+  --config configs/selector_comparison_multinews.yaml \
+  --manifest configs/pilot_manifests/multinews_selector_pilot_v1.json \
+  --output_dir runs/selector_pilot_v1 \
+  --methods greedy mmr nsga2 \
+  --nsga_seeds 2024 \
+  --bootstrap_resamples 10000
+```
+
+Runner 先驗 full 5,621-row frozen policy，再只取 manifest IDs；逐方法輸出完整
+predictions、per-example ROUGE、平均字／句數，並強制檢查 candidate、salience、
+similarity、coverage fingerprints 完全一致。pilot 的單一 NSGA-II seed 只供方向
+判斷；正式結論仍須至少五個預先固定 seeds 與 full validation。
+
+NSGA-II 多 seed 完成後，以 `aggregate_nsga_seed_stability.py` 對同一 Greedy
+reference 做 10,000 次 paired bootstrap、15-test Holm correction，並計算每篇
+選句集合的 seed-pair Jaccard。它會再次驗證每個 seed 的 selector-input hashes；
+不可只把五個 corpus means 手動貼在一起後挑最高值。
+## F-51 embedding-cache equivalence
+
+`verify_embedding_cache_equivalence.py` 固定只讀 Multi-News frozen dev，沒有 dataset/split
+CLI。它以既有 uncached SBERT-centroid artifact 為基準，先做 cold-populate，再做
+3,935/3,935 warm-hit；兩次都必須逐篇 selected indices、summary、feasibility、
+representation hashes 與 ROUGE 完全一致。預註冊：
+`configs/preregistrations/f51_embedding_cache_equivalence_v1.json`。
+
+## Gate 2 metric-specific greedy reference
+
+`run_gate2_greedy_reference.py` 沒有 split CLI，只能從兩 primary 的 frozen-dev manifest
+取列。R1／R2／Lsum 必須分開執行；逐文件可平行，但結果依 manifest 順序寫入
+`rows.jsonl`，每列 flush，外層中斷後以 `--resume` 驗 exact prefix 並保存 interruption
+evidence。它是 headroom／candidate-recall diagnostic，不是 baseline、oracle 或 upper bound。
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_gate2_greedy_reference `
+  --dataset multinews --target rouge1 --workers 2
+```
+
+Runner 預設 2 workers，且最多只保留同 worker 數量的 pending documents；已完成的輕量
+row results 可等待 canonical 前方長尾而不阻塞 workers。這是 execution-only
+資源保護，避免 Python 3.12 `ProcessPoolExecutor.map` 預先序列化整個 GovReport 剩餘
+corpus。互動使用電腦時保留預設；明確提高 `--workers` 會成比例增加 CPU 與 process
+memory。ROUGE greedy search 是 CPU string/count/LCS 工作，這個 runner 沒有 GPU route。
+
+預註冊：`configs/preregistrations/gate2_greedy_reference_v1.json`。不得用舊
+`src.eval.oracle --limit` CLI 產生正式 Gate 2 數字。
+
+runner 以 OS-level lock 保證同一 dataset/target 只有一個 writer。若外部程序管理器曾
+留下重複 writer 而破壞 checkpoint，使用下列治理工具；它會完整封存污染檔、只保留
+可驗證的 frozen-ID prefix，並把失敗寫入 evidence 與 search log：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.recover_greedy_reference_checkpoint `
+  --dataset multinews --target rouge1
+```
+
+三個 target 完成後，用已凍結的 v2 協定計算 metric-specific headroom 與 S02b 的
+union-cap-80／完整 route-top-40／final-selection recall。CLI 只有 dataset，沒有 split：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.analyze_gate2_greedy_reference `
+  --dataset multinews
+```
+
+v1 曾把 total-cap 後 `candidate_records.selected_by_routes` 誤標成完整 route top-40；
+在任何 overlap score 前由 v2（SHA-256 `ef45c056...a3e39`）保留並 supersede。
+
+## Gate 2 paired finalists
+
+`analyze_gate2_paired_finalists.py` 讀取 S02b 與每個 primary 八個 baseline-family
+finalists 已存在的 frozen-dev per-example artifacts。比較集合與 multiplicity 已在任何
+paired resampling outcome 前凍結於 `gate2_paired_finalists_v1.json`。runner 沒有 split
+CLI，報 64-test Holm 與 12,896-opportunity selection-aware diagnostic，不能授權
+dev-test 或 test。
+
+## D2 full-dev selector screen
+
+`run_d2_selector_full_dev.py` 固定 S02b 的三 routes、candidate cap、RRF salience、A1 長度與
+輸出規則，只替換 Greedy／MMR／NSGA-II，以及 selector similarity 的 TF-IDF／pinned
+SBERT。預註冊共 14 candidates／dataset；CLI 只有 dataset、resume 與已凍結 candidate ID，
+沒有 split。F-51 已驗等價的 Gate 2 embedding cache 只作 execution optimization。
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_d2_selector_full_dev `
+  --dataset multinews --resume
+```
+
+MMR λ 網格為 0.1/0.3/0.5/0.7/0.9；NSGA-II 固定 64×80、seed 3407。只有 NSGA-II
+距最佳 deterministic selector 不超過 0.002 macro 或贏任一 metric，才執行五個 full-dev
+seeds。不得用 200-row pilot 直接宣稱 MMR 已在完整 dev 勝出。

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "study_id": "d1-three-route-capacity-followup-v1",
+  "registered_at_utc": "2026-08-08T11:38:16.1036785Z",
+  "trigger": {
+    "dataset": "Multi-News",
+    "candidate": "S02_lexical_semantic_graph",
+    "evidence": "runs_v2/d1_greedy_sensitivity/multinews/dev/semantic_route/S02_lexical_semantic_graph/greedy/run/evidence.json",
+    "failure": "candidate total cap 60 cannot fit 61 mandatory route/guard reservations"
+  },
+  "datasets": ["Multi-News", "GovReport"],
+  "base_split": "validation",
+  "partition": "dev",
+  "parent_variant": "S02_lexical_semantic_graph",
+  "candidate": {
+    "id": "S02b_three_route_capacity_80",
+    "delta": {
+      "candidate_budget.total": 80,
+      "coverage_guard.max_items": 20
+    },
+    "derivation": "three active routes times min_per_route 20 plus at most 20 deterministic coverage guards equals total 80",
+    "score_used_to_choose_delta": false
+  },
+  "success_contract": {
+    "max_candidate_pool": 80,
+    "expected_rows": {
+      "Multi-News": 3935,
+      "GovReport": 681
+    },
+    "dev_test_accessed": false,
+    "test_split_accessed": false,
+    "interpretation": "Capacity-correct three-route follow-up; original S02 failure remains and this run alone cannot promote the architecture."
+  },
+  "multiple_comparison_count_after_followups": 29
+}

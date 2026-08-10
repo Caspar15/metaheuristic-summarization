@@ -1,0 +1,65 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T13:59:37.793692+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "dev_test_accessed": false,
+  "study_id": "d1-capacity-matched-route-ablation-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_capacity_matched_route_ablation_v1.json",
+  "preregistration_sha256": "b614dfe7f2eb66ca6496adf427ffc6f3f56dce7db06cb874ce20cfd3353a642f",
+  "family": "capacity_matched_route_ablation",
+  "candidate": "A01_without_semantic",
+  "candidate_hash": "a9c8e4949a63c3b3b490d5973e5ec53c2dc8081ae2510c24a27101360e78088c",
+  "declared_delta": {
+    "compute_budget.enabled_routes": [
+      "lexical",
+      "graph"
+    ]
+  },
+  "base_candidate": "S02b_three_route_capacity_80",
+  "config_path": "runs_v2/d1_capacity_matched_route_ablation/govreport/dev/A01_without_semantic/resolved_config.yaml",
+  "config_sha256": "febc512ced2f1504cdb4f06d6d273ae4702d356db26a7d3a8c715ffe57aa5bfa",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5295224269130595,
+      "rouge2": 0.18426641819529135,
+      "rougeLsum": 0.4969928524105012
+    },
+    "macro_rouge": 0.40359389917295063,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 643.3641703377386,
+      "min": 619,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 73.17033773861968,
+    "selector_candidate_size_mean": 73.17033773861968,
+    "selector_candidate_size_p95": 79.0,
+    "selector_candidate_size_max": 80,
+    "provenance_candidate_size_mean": 73.17033773861968,
+    "route_agreement_mean": 1.1012294051086031,
+    "unique_candidate_mean_by_route": {
+      "graph": 33.17033773861968,
+      "lexical": 33.17033773861968
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 10.869309838472834,
+      "lexical": 10.051395007342144
+    }
+  }
+}

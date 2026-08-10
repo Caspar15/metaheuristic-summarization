@@ -1,0 +1,799 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:33:28.104140+00:00",
+  "status": "completed_no_protected_split_promotion",
+  "study_id": "d3a-router-fusion-full-dev-v1",
+  "preregistration_path": "configs/preregistrations/d3a_router_fusion_full_dev_v1.json",
+  "preregistration_sha256": "083b3a615dc10169bf14557878853abf0c8ebc82ca345308df9e57d58f7fc5c5",
+  "paired_contract": {
+    "resamples": 10000,
+    "base_seed_formal": 20260809,
+    "holm_endpoints": 28,
+    "selection_opportunities": 83,
+    "selection_endpoints": 332,
+    "finite_bootstrap_minimum_two_sided_p": 0.00019998000199980003,
+    "minimum_possible_bonferroni_332": 0.06639336066393361
+  },
+  "datasets": {
+    "Multi-News": {
+      "rows": 3935,
+      "anchor": {
+        "macro": 0.32807720596074463,
+        "per_example": {
+          "path": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run/per_example.jsonl",
+          "sha256": "1e52be52eab75ef2d7520a1a40f2e5bc346ecfd9dc7ef4e4293881c89b2bd831",
+          "rows": 3935
+        }
+      },
+      "adversarial_baseline": {
+        "label": "PacSum TF-IDF P08",
+        "per_example": {
+          "path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+          "sha256": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e",
+          "rows": 3935
+        },
+        "macro": 0.33173990364087286
+      },
+      "candidates": {
+        "R01_total120": {
+          "macro": 0.3282555053109351,
+          "macro_delta_vs_anchor": 0.0001782993501904806,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R01_total120/per_example.jsonl",
+            "sha256": "497188f33a9b5e8d8dc3ca8c813f3d4d88cf5f3d3ff01d8ccceb7addac56e7c5",
+            "rows": 3935
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270809,
+              "confidence": 0.95,
+              "mean_difference": 0.0001498194162916779,
+              "ci_lower": -6.761135078712614e-05,
+              "ci_upper": 0.0003717894725335685,
+              "p_value_two_sided": 0.1787821217878212
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270810,
+              "confidence": 0.95,
+              "mean_difference": 0.00020879288308064652,
+              "ci_lower": -5.823120991962993e-06,
+              "ci_upper": 0.00044552244726651626,
+              "p_value_two_sided": 0.055194480551944806
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270811,
+              "confidence": 0.95,
+              "mean_difference": 0.00017628575119948476,
+              "ci_lower": -3.854261793081059e-05,
+              "ci_upper": 0.00039470542183000053,
+              "p_value_two_sided": 0.10578942105789421
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270812,
+              "confidence": 0.95,
+              "mean_difference": 0.00017829935019060292,
+              "ci_lower": -2.693746148534645e-05,
+              "ci_upper": 0.0003800194081863578,
+              "p_value_two_sided": 0.08999100089991001
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260809,
+              "confidence": 0.95,
+              "mean_difference": -0.001953468839081263,
+              "ci_lower": -0.0040331570335257385,
+              "ci_upper": 9.221415040941383e-05,
+              "p_value_two_sided": 0.060193980601939805,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.6115388461153884
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260810,
+              "confidence": 0.95,
+              "mean_difference": -0.010052480882345506,
+              "ci_lower": -0.012424778113647617,
+              "ci_upper": -0.00763802934558767,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260811,
+              "confidence": 0.95,
+              "mean_difference": 0.0015527547316140022,
+              "ci_lower": -0.00046501461102039046,
+              "ci_upper": 0.003592937734105346,
+              "p_value_two_sided": 0.13438656134386562,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.8783121687831217
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260812,
+              "confidence": 0.95,
+              "mean_difference": -0.0034843983299375904,
+              "ci_lower": -0.005528136244118403,
+              "ci_upper": -0.0015011702227874406,
+              "p_value_two_sided": 0.0007999200079992001,
+              "p_value_selection_bonferroni_332": 0.26557344265573446,
+              "p_value_holm_28": 0.015998400159984
+            }
+          }
+        },
+        "R07_bigrams_position02": {
+          "macro": 0.32970379678805983,
+          "macro_delta_vs_anchor": 0.0016265908273151997,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R07_bigrams_position02/per_example.jsonl",
+            "sha256": "64409ff5197c5aad01c8359b89aa9c07750951e2f5d63c68672ecaf1e543e3d0",
+            "rows": 3935
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270813,
+              "confidence": 0.95,
+              "mean_difference": 0.0019053116828185905,
+              "ci_lower": 0.0013123190340592421,
+              "ci_upper": 0.0024998431257469357,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270814,
+              "confidence": 0.95,
+              "mean_difference": 0.0012901412440383005,
+              "ci_lower": 0.0005938724688054486,
+              "ci_upper": 0.0019887541124626726,
+              "p_value_two_sided": 0.0007999200079992001
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270815,
+              "confidence": 0.95,
+              "mean_difference": 0.0016843195550877853,
+              "ci_lower": 0.0010811509151864838,
+              "ci_upper": 0.0022867774848765055,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270816,
+              "confidence": 0.95,
+              "mean_difference": 0.0016265908273148928,
+              "ci_lower": 0.0010373627129093659,
+              "ci_upper": 0.002231416178156049,
+              "p_value_two_sided": 0.00019998000199980003
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260813,
+              "confidence": 0.95,
+              "mean_difference": -0.00019797657255435046,
+              "ci_lower": -0.0022311702226589705,
+              "ci_upper": 0.001810826402992419,
+              "p_value_two_sided": 0.8427157284271573,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 1.0
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260814,
+              "confidence": 0.95,
+              "mean_difference": -0.008971132521387851,
+              "ci_lower": -0.011305950995838109,
+              "ci_upper": -0.006592460020580844,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260815,
+              "confidence": 0.95,
+              "mean_difference": 0.003060788535502303,
+              "ci_lower": 0.0009973813780293677,
+              "ci_upper": 0.005101459416381579,
+              "p_value_two_sided": 0.0037996200379962005,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.06079392060793921
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260816,
+              "confidence": 0.95,
+              "mean_difference": -0.0020361068528133,
+              "ci_lower": -0.004137117746620168,
+              "ci_upper": 4.243638585810187e-05,
+              "p_value_two_sided": 0.055594440555944404,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.6115388461153884
+            }
+          }
+        },
+        "R10_graph_x2": {
+          "macro": 0.32910440433151505,
+          "macro_delta_vs_anchor": 0.0010271983707704213,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/multinews/dev/R10_graph_x2/per_example.jsonl",
+            "sha256": "1bdfffbd18a488182dc45432f4bb0b6d556c3c8fe51c635801eeb350c506e654",
+            "rows": 3935
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270817,
+              "confidence": 0.95,
+              "mean_difference": 0.001071067769066261,
+              "ci_lower": 0.00045431808023786783,
+              "ci_upper": 0.0016832047475401515,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270818,
+              "confidence": 0.95,
+              "mean_difference": 0.0005672658276156822,
+              "ci_lower": -0.00017505592243912153,
+              "ci_upper": 0.0013131793726050313,
+              "p_value_two_sided": 0.13878612138786123
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270819,
+              "confidence": 0.95,
+              "mean_difference": 0.0014432615156298935,
+              "ci_lower": 0.0008268117544602975,
+              "ci_upper": 0.0020474257089417875,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20270820,
+              "confidence": 0.95,
+              "mean_difference": 0.0010271983707706123,
+              "ci_lower": 0.0004210206587659386,
+              "ci_upper": 0.0016243091917108818,
+              "p_value_two_sided": 0.000999900009999
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260817,
+              "confidence": 0.95,
+              "mean_difference": -0.00103222048630668,
+              "ci_lower": -0.003007002038525163,
+              "ci_upper": 0.0009575649943397047,
+              "p_value_two_sided": 0.31756824317568244,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 1.0
+            },
+            "rouge2": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260818,
+              "confidence": 0.95,
+              "mean_difference": -0.00969400793781047,
+              "ci_lower": -0.01212350709906308,
+              "ci_upper": -0.007339183564165881,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "rougeLsum": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260819,
+              "confidence": 0.95,
+              "mean_difference": 0.002819730496044411,
+              "ci_lower": 0.0008189167891269933,
+              "ci_upper": 0.004857435282811658,
+              "p_value_two_sided": 0.0065993400659934,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.098990100989901
+            },
+            "macro_rouge": {
+              "n_pairs": 3935,
+              "n_resamples": 10000,
+              "seed": 20260820,
+              "confidence": 0.95,
+              "mean_difference": -0.002635499309357581,
+              "ci_lower": -0.004728219621610413,
+              "ci_upper": -0.0005529715954417792,
+              "p_value_two_sided": 0.010998900109989001,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.142985701429857
+            }
+          }
+        }
+      },
+      "winner": "R07_bigrams_position02",
+      "winner_macro": 0.32970379678805983,
+      "winner_macro_delta_vs_adversarial": -0.0020361068528130244,
+      "promotion": {
+        "eligible": false,
+        "checks": {
+          "macro_point_positive": false,
+          "macro_ci_lower_positive": false,
+          "macro_holm_28_le_005": false,
+          "macro_selection_bonferroni_332_le_005": false,
+          "no_component_ci_entirely_negative": false
+        }
+      }
+    },
+    "GovReport": {
+      "rows": 681,
+      "anchor": {
+        "macro": 0.44615445182695007,
+        "per_example": {
+          "path": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S05_mmr_tfidf_l07/mmr/run/per_example.jsonl",
+          "sha256": "836c682979b075d76aa07b9ef6be8929b0f2ad1f2a3be6e89a89b3c302322ce9",
+          "rows": 681
+        }
+      },
+      "adversarial_baseline": {
+        "label": "full-source SBERT+MMR lambda 0.9",
+        "per_example": {
+          "path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+          "sha256": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43",
+          "rows": 681
+        },
+        "macro": 0.4527681167755245
+      },
+      "candidates": {
+        "R01_total120": {
+          "macro": 0.44612807001572047,
+          "macro_delta_vs_anchor": -2.6381811229603258e-05,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R01_total120/per_example.jsonl",
+            "sha256": "47a4258e6075b83be3704ea2ed5a479c1cbbedcbe0ca3f38c4722449882f77a7",
+            "rows": 681
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270821,
+              "confidence": 0.95,
+              "mean_difference": -2.1608802933617388e-05,
+              "ci_lower": -0.00010004483841160482,
+              "ci_upper": 4.38727250195162e-05,
+              "p_value_two_sided": 0.5877412258774123
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270822,
+              "confidence": 0.95,
+              "mean_difference": -5.60628292135697e-05,
+              "ci_lower": -0.00011930272501837565,
+              "ci_upper": 8.384496894566472e-07,
+              "p_value_two_sided": 0.052594740525947405
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270823,
+              "confidence": 0.95,
+              "mean_difference": -1.473801541568719e-06,
+              "ci_lower": -7.74006854798321e-05,
+              "ci_upper": 6.011824467962163e-05,
+              "p_value_two_sided": 0.9783021697830216
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270824,
+              "confidence": 0.95,
+              "mean_difference": -2.6381811229584837e-05,
+              "ci_lower": -9.773703853517795e-05,
+              "ci_upper": 2.9337881810104517e-05,
+              "p_value_two_sided": 0.40715928407159285
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260821,
+              "confidence": 0.95,
+              "mean_difference": -0.004746655188046969,
+              "ci_lower": -0.007257042657792276,
+              "ci_upper": -0.002174973568323425,
+              "p_value_two_sided": 0.0007999200079992001,
+              "p_value_selection_bonferroni_332": 0.26557344265573446,
+              "p_value_holm_28": 0.015998400159984
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260822,
+              "confidence": 0.95,
+              "mean_difference": -0.006260438501186687,
+              "ci_lower": -0.00943115989781906,
+              "ci_upper": -0.0030530401960905695,
+              "p_value_two_sided": 0.00039996000399960006,
+              "p_value_selection_bonferroni_332": 0.13278672132786723,
+              "p_value_holm_28": 0.008399160083991601
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260823,
+              "confidence": 0.95,
+              "mean_difference": -0.008913046590178351,
+              "ci_lower": -0.011559590419500809,
+              "ci_upper": -0.006243606693008361,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260824,
+              "confidence": 0.95,
+              "mean_difference": -0.006640046759804004,
+              "ci_lower": -0.009334530088473823,
+              "ci_upper": -0.003960415027985134,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            }
+          }
+        },
+        "R07_bigrams_position02": {
+          "macro": 0.44935637104067166,
+          "macro_delta_vs_anchor": 0.0032019192137215935,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R07_bigrams_position02/per_example.jsonl",
+            "sha256": "aa25a961529bc379cd2a8c3dfb50bc285565b2ab7efe3fa4c6af11bfb37d4b15",
+            "rows": 681
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270825,
+              "confidence": 0.95,
+              "mean_difference": 0.002784338824285812,
+              "ci_lower": 0.001763004388261612,
+              "ci_upper": 0.0037929854629842425,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270826,
+              "confidence": 0.95,
+              "mean_difference": 0.0037067359520280597,
+              "ci_lower": 0.0023627977163635633,
+              "ci_upper": 0.005069785281858063,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270827,
+              "confidence": 0.95,
+              "mean_difference": 0.0031146828648503616,
+              "ci_lower": 0.002058626210976153,
+              "ci_upper": 0.004170290387321177,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270828,
+              "confidence": 0.95,
+              "mean_difference": 0.0032019192137214126,
+              "ci_lower": 0.0021306873648049168,
+              "ci_upper": 0.004290783862584499,
+              "p_value_two_sided": 0.00019998000199980003
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260825,
+              "confidence": 0.95,
+              "mean_difference": -0.001940707560827541,
+              "ci_lower": -0.004271926627740888,
+              "ci_upper": 0.0004597907562099761,
+              "p_value_two_sided": 0.10978902109789021,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.8783121687831217
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260826,
+              "confidence": 0.95,
+              "mean_difference": -0.0024976397199450574,
+              "ci_lower": -0.005521576793470467,
+              "ci_upper": 0.0006166160142739997,
+              "p_value_two_sided": 0.11538846115388461,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.8783121687831217
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260827,
+              "confidence": 0.95,
+              "mean_difference": -0.005796889923786422,
+              "ci_lower": -0.008307065943696542,
+              "ci_upper": -0.00328437499413599,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260828,
+              "confidence": 0.95,
+              "mean_difference": -0.0034117457348530065,
+              "ci_lower": -0.005981206707375692,
+              "ci_upper": -0.0008753725364503954,
+              "p_value_two_sided": 0.008399160083991601,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.11758824117588242
+            }
+          }
+        },
+        "R11_lexical_x05": {
+          "macro": 0.4564230519761085,
+          "macro_delta_vs_anchor": 0.010268600149158424,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R11_lexical_x05/per_example.jsonl",
+            "sha256": "51bc7878e6e3417a3c957502e55d266a3c2e58f0e6ea82d3a595e13675f6ff29",
+            "rows": 681
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270829,
+              "confidence": 0.95,
+              "mean_difference": 0.008071946011316906,
+              "ci_lower": 0.006405398728396452,
+              "ci_upper": 0.0096916356348856,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270830,
+              "confidence": 0.95,
+              "mean_difference": 0.012864093760317998,
+              "ci_lower": 0.010791386907094925,
+              "ci_upper": 0.014856236974745434,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270831,
+              "confidence": 0.95,
+              "mean_difference": 0.009869760675840696,
+              "ci_lower": 0.008112525248671265,
+              "ci_upper": 0.011540877247172104,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270832,
+              "confidence": 0.95,
+              "mean_difference": 0.010268600149158534,
+              "ci_lower": 0.00855231710256677,
+              "ci_upper": 0.01196276744329991,
+              "p_value_two_sided": 0.00019998000199980003
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260829,
+              "confidence": 0.95,
+              "mean_difference": 0.0033468996262035534,
+              "ci_lower": 0.0013181835149200535,
+              "ci_upper": 0.005406115924780607,
+              "p_value_two_sided": 0.0011998800119988001,
+              "p_value_selection_bonferroni_332": 0.39836016398360163,
+              "p_value_holm_28": 0.021597840215978402
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260830,
+              "confidence": 0.95,
+              "mean_difference": 0.00665971808834488,
+              "ci_lower": 0.003958386636167271,
+              "ci_upper": 0.009401495594481777,
+              "p_value_two_sided": 0.00019998000199980003,
+              "p_value_selection_bonferroni_332": 0.06639336066393361,
+              "p_value_holm_28": 0.005599440055994401
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260831,
+              "confidence": 0.95,
+              "mean_difference": 0.0009581878872039136,
+              "ci_lower": -0.0012059424223597958,
+              "ci_upper": 0.0031659635054207035,
+              "p_value_two_sided": 0.39716028397160286,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 1.0
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260832,
+              "confidence": 0.95,
+              "mean_difference": 0.003654935200584115,
+              "ci_lower": 0.0014463062504373116,
+              "ci_upper": 0.005875941736440091,
+              "p_value_two_sided": 0.0013998600139986002,
+              "p_value_selection_bonferroni_332": 0.4647535246475353,
+              "p_value_holm_28": 0.023797620237976203
+            }
+          }
+        },
+        "R09_semantic_x2": {
+          "macro": 0.4541292988016983,
+          "macro_delta_vs_anchor": 0.007974846974748206,
+          "per_example": {
+            "path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R09_semantic_x2/per_example.jsonl",
+            "sha256": "70d4d5fcb1ae5a5689b657300ca2bd357d2535e8e1bd5f34e1040ae61b838430",
+            "rows": 681
+          },
+          "versus_anchor_descriptive": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270833,
+              "confidence": 0.95,
+              "mean_difference": 0.006938412974765107,
+              "ci_lower": 0.005280762763036889,
+              "ci_upper": 0.008680178637710716,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270834,
+              "confidence": 0.95,
+              "mean_difference": 0.008432999532538569,
+              "ci_lower": 0.00648620778218466,
+              "ci_upper": 0.010404401824084303,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270835,
+              "confidence": 0.95,
+              "mean_difference": 0.008553128416940612,
+              "ci_lower": 0.006826414900205887,
+              "ci_upper": 0.010320631669997941,
+              "p_value_two_sided": 0.00019998000199980003
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20270836,
+              "confidence": 0.95,
+              "mean_difference": 0.007974846974748095,
+              "ci_lower": 0.006301016822636997,
+              "ci_upper": 0.009704148010129999,
+              "p_value_two_sided": 0.00019998000199980003
+            }
+          },
+          "versus_adversarial_formal": {
+            "rouge1": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260833,
+              "confidence": 0.95,
+              "mean_difference": 0.0022133665896517545,
+              "ci_lower": 0.00044714269370039913,
+              "ci_upper": 0.004018945239176847,
+              "p_value_two_sided": 0.0143985601439856,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.17278272172782722
+            },
+            "rouge2": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260834,
+              "confidence": 0.95,
+              "mean_difference": 0.0022286238605654513,
+              "ci_lower": -0.00010014477870284096,
+              "ci_upper": 0.004629679599697738,
+              "p_value_two_sided": 0.062193780621937804,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.6115388461153884
+            },
+            "rougeLsum": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260835,
+              "confidence": 0.95,
+              "mean_difference": -0.000358444371696171,
+              "ci_lower": -0.002294062171789826,
+              "ci_upper": 0.0015943525377441828,
+              "p_value_two_sided": 0.7123287671232876,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 1.0
+            },
+            "macro_rouge": {
+              "n_pairs": 681,
+              "n_resamples": 10000,
+              "seed": 20260836,
+              "confidence": 0.95,
+              "mean_difference": 0.0013611820261736772,
+              "ci_lower": -0.0005335971217488016,
+              "ci_upper": 0.0033083896059253586,
+              "p_value_two_sided": 0.1601839816018398,
+              "p_value_selection_bonferroni_332": 1.0,
+              "p_value_holm_28": 0.8783121687831217
+            }
+          }
+        }
+      },
+      "winner": "R11_lexical_x05",
+      "winner_macro": 0.4564230519761085,
+      "winner_macro_delta_vs_adversarial": 0.0036549352005840197,
+      "promotion": {
+        "eligible": false,
+        "checks": {
+          "macro_point_positive": true,
+          "macro_ci_lower_positive": true,
+          "macro_holm_28_le_005": true,
+          "macro_selection_bonferroni_332_le_005": false,
+          "no_component_ci_entirely_negative": true
+        }
+      }
+    }
+  },
+  "all_profiles_eligible": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

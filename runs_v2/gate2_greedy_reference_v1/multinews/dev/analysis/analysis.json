@@ -1,0 +1,248 @@
+{
+  "analysis_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T23:10:42.540685+00:00",
+  "study_id": "gate2-greedy-reference-analysis-v2",
+  "status": "completed",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "rows": 3935,
+  "headroom": {
+    "systems": {
+      "S02b_three_route_capacity_80": {
+        "per_metric": {
+          "rouge1": {
+            "lead": 0.43503283092084166,
+            "system": 0.4407588844212616,
+            "greedy_reference": 0.5952875996523809,
+            "available_headroom": 0.1602547687315392,
+            "captured_fraction": 0.03573093983875321,
+            "remaining_gap_to_greedy_reference": 0.15452871523111927
+          },
+          "rouge2": {
+            "lead": 0.148138832947838,
+            "system": 0.13980293788831186,
+            "greedy_reference": 0.34522912215156,
+            "available_headroom": 0.19709028920372199,
+            "captured_fraction": -0.04229480352991802,
+            "remaining_gap_to_greedy_reference": 0.20542618426324813
+          },
+          "rougeLsum": {
+            "lead": 0.39570096591010867,
+            "system": 0.4036697955726605,
+            "greedy_reference": 0.5585961795137699,
+            "available_headroom": 0.16289521360366127,
+            "captured_fraction": 0.048919974296732144,
+            "remaining_gap_to_greedy_reference": 0.15492638394110947
+          }
+        },
+        "mean_captured_fraction": 0.014118703535189112
+      },
+      "pacsum_tfidf_P08_previous_-0.8": {
+        "per_metric": {
+          "rouge1": {
+            "lead": 0.43503283092084166,
+            "system": 0.4428621726766346,
+            "greedy_reference": 0.5952875996523809,
+            "available_headroom": 0.1602547687315392,
+            "captured_fraction": 0.048855592989614734,
+            "remaining_gap_to_greedy_reference": 0.1524254269757463
+          },
+          "rouge2": {
+            "lead": 0.148138832947838,
+            "system": 0.150064211653738,
+            "greedy_reference": 0.34522912215156,
+            "available_headroom": 0.19709028920372199,
+            "captured_fraction": 0.009769018624300898,
+            "remaining_gap_to_greedy_reference": 0.19516491049782198
+          },
+          "rougeLsum": {
+            "lead": 0.39570096591010867,
+            "system": 0.4022933265922459,
+            "greedy_reference": 0.5585961795137699,
+            "available_headroom": 0.16289521360366127,
+            "captured_fraction": 0.040469947129183684,
+            "remaining_gap_to_greedy_reference": 0.15630285292152402
+          }
+        },
+        "mean_captured_fraction": 0.033031519581033106
+      }
+    }
+  },
+  "candidate_recall": {
+    "rouge1": {
+      "rows": 3935,
+      "nonempty_greedy_rows": 3935,
+      "empty_greedy_rows": 0,
+      "greedy_selected_denominator": 31999,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.8588705897059283,
+          "macro_recall": 0.8723106516705775,
+          "complete_row_rate": 0.5354510800508259,
+          "hit_count": 27483
+        },
+        "lexical": {
+          "micro_recall": 0.6925216413012907,
+          "macro_recall": 0.7195365347827966,
+          "complete_row_rate": 0.36264294790343077,
+          "hit_count": 22160
+        },
+        "semantic": {
+          "micro_recall": 0.7193974811712867,
+          "macro_recall": 0.7405460666826771,
+          "complete_row_rate": 0.3878017789072427,
+          "hit_count": 23020
+        },
+        "graph": {
+          "micro_recall": 0.736991780993156,
+          "macro_recall": 0.7593955625720449,
+          "complete_row_rate": 0.397712833545108,
+          "hit_count": 23583
+        },
+        "selected_set": {
+          "micro_recall": 0.3006656458014313,
+          "macro_recall": 0.3067743474594746,
+          "complete_row_rate": 0.036848792884371026,
+          "hit_count": 9621
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 1472,
+        "semantic": 1276,
+        "graph": 1729
+      }
+    },
+    "rouge2": {
+      "rows": 3935,
+      "nonempty_greedy_rows": 3929,
+      "empty_greedy_rows": 6,
+      "greedy_selected_denominator": 30631,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.8190721817766315,
+          "macro_recall": 0.8539706248303786,
+          "complete_row_rate": 0.5495036905064902,
+          "hit_count": 25089
+        },
+        "lexical": {
+          "micro_recall": 0.5927654990042767,
+          "macro_recall": 0.6550064234574883,
+          "complete_row_rate": 0.36497836599643674,
+          "hit_count": 18157
+        },
+        "semantic": {
+          "micro_recall": 0.661845842447194,
+          "macro_recall": 0.7139361356581172,
+          "complete_row_rate": 0.39984728938661235,
+          "hit_count": 20273
+        },
+        "graph": {
+          "micro_recall": 0.6782344683490581,
+          "macro_recall": 0.729074007992625,
+          "complete_row_rate": 0.40799185543395267,
+          "hit_count": 20775
+        },
+        "selected_set": {
+          "micro_recall": 0.29630113283928045,
+          "macro_recall": 0.32588049908703587,
+          "complete_row_rate": 0.04581318401628913,
+          "hit_count": 9076
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 1576,
+        "semantic": 1651,
+        "graph": 2297
+      }
+    },
+    "rougeLsum": {
+      "rows": 3935,
+      "nonempty_greedy_rows": 3935,
+      "empty_greedy_rows": 0,
+      "greedy_selected_denominator": 34047,
+      "sets": {
+        "union_pool": {
+          "micro_recall": 0.8438628954092872,
+          "macro_recall": 0.8591400534112511,
+          "complete_row_rate": 0.5074968233799237,
+          "hit_count": 28731
+        },
+        "lexical": {
+          "micro_recall": 0.6614092284195376,
+          "macro_recall": 0.6918717586146604,
+          "complete_row_rate": 0.3458703939008895,
+          "hit_count": 22519
+        },
+        "semantic": {
+          "micro_recall": 0.701236525978794,
+          "macro_recall": 0.7245535723571561,
+          "complete_row_rate": 0.3712833545108005,
+          "hit_count": 23875
+        },
+        "graph": {
+          "micro_recall": 0.7217669691896496,
+          "macro_recall": 0.746001949189727,
+          "complete_row_rate": 0.3804320203303685,
+          "hit_count": 24574
+        },
+        "selected_set": {
+          "micro_recall": 0.308455957940494,
+          "macro_recall": 0.3166477320790909,
+          "complete_row_rate": 0.03710292249047014,
+          "hit_count": 10502
+        }
+      },
+      "exclusive_route_hits": {
+        "lexical": 1538,
+        "semantic": 1420,
+        "graph": 2048
+      }
+    }
+  },
+  "score_sources": {
+    "lead": {
+      "rouge1": 0.43503283092084166,
+      "rouge2": 0.148138832947838,
+      "rougeLsum": 0.39570096591010867
+    },
+    "greedy_reference_metric_specific": {
+      "rouge1": 0.5952875996523809,
+      "rouge2": 0.34522912215156,
+      "rougeLsum": 0.5585961795137699
+    },
+    "proposed": {
+      "rouge1": 0.4407588844212616,
+      "rouge2": 0.13980293788831186,
+      "rougeLsum": 0.4036697955726605
+    },
+    "strongest_completed_baseline": {
+      "rouge1": 0.4428621726766346,
+      "rouge2": 0.150064211653738,
+      "rougeLsum": 0.4022933265922459
+    }
+  },
+  "greedy_reference_evidence": {
+    "rouge1": {
+      "path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rouge1/evidence.json",
+      "sha256": "30a993c774f3b2096de5a60a708d770cb2cede1ef2b5ecaddc96af8b60400c00",
+      "rows_sha256": "a8077aa7acb0d1a831d130228ebd413149699024da709c1487b12297950b04e9",
+      "selected_indices_sha256": "374a993c8a5a514a7b6422fefb484d4ea8260c47f798922f630cd0c848340f3e"
+    },
+    "rouge2": {
+      "path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rouge2/evidence.json",
+      "sha256": "48adfff105c3c3dcd47f7ae713d40b4246efeedfedafd39468e856d9056ff383",
+      "rows_sha256": "832d671c7578166ce9b698a1495fdf6e5ed0d155d7d257066e0a323e8eb7424b",
+      "selected_indices_sha256": "3d07e0a465f86d2f41a517f7d8c21b32fa59ff804c5ce51cb1a9c8f218c97c5b"
+    },
+    "rougeLsum": {
+      "path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rougeLsum/evidence.json",
+      "sha256": "24a7e020f9e188e039a9255444e50d3a65f53c3e67907ce8de550855eecccb8b",
+      "rows_sha256": "a07f87b4175d89c42000fb247fa74ab859794ffc541c1a024b4b21d1856bdf33",
+      "selected_indices_sha256": "4202094a96b87b78ef880b4a1f99c5ff0839e22b20455267747e59a709dff43d"
+    }
+  },
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_analysis_v2.json",
+  "preregistration_sha256": "ef45c0562a29569709d2e7700da0f5570fe8c39b06ddb9b87166ca7fc66a3e39",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

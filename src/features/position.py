@@ -1,4 +1,5 @@
-from typing import List
+from collections import defaultdict
+from typing import List, Mapping, Sequence
 import math
 
 
@@ -54,3 +55,60 @@ def position_scores_v2(
     # normalize to [0, 1]
     mx = max(raw)
     return [s / mx for s in raw] if mx > 0 else raw
+
+
+def document_position_scores(
+    sentence_records: Sequence[Mapping],
+    *,
+    version: str = "v1",
+    method: str = "inverse",
+    decay: float = 0.1,
+) -> List[float]:
+    """Score within-document positions without flattening document boundaries.
+
+    Canonical records must supply a non-empty ``document_id`` and consecutive
+    zero-based ``document_position`` values for every document. Refusing
+    legacy/unavailable provenance is intentional: silently treating a flat
+    row as one document would recreate F-25 under a more reassuring label.
+    """
+
+    if not sentence_records:
+        return []
+    groups: dict[str, list[tuple[int, int]]] = defaultdict(list)
+    for flat_index, record in enumerate(sentence_records):
+        document_id = record.get("document_id")
+        if not isinstance(document_id, str) or not document_id.strip():
+            raise ValueError(
+                "document-scoped position requires canonical document_id provenance"
+            )
+        position = record.get("document_position")
+        if not isinstance(position, int) or isinstance(position, bool) or position < 0:
+            raise ValueError(
+                "document-scoped position requires non-negative integer "
+                "document_position values"
+            )
+        groups[document_id].append((flat_index, position))
+
+    scores = [0.0] * len(sentence_records)
+    normalized_version = (version or "v1").strip().lower()
+    for document_id, members in groups.items():
+        observed = sorted(position for _, position in members)
+        expected = list(range(len(members)))
+        if observed != expected:
+            raise ValueError(
+                f"document {document_id!r} positions must be consecutive "
+                f"zero-based values; observed {observed[:10]!r}"
+            )
+        ordered = sorted(members, key=lambda item: item[1])
+        placeholders = [""] * len(ordered)
+        if normalized_version == "v2":
+            document_scores = position_scores_v2(
+                placeholders, method=method, decay=decay
+            )
+        elif normalized_version == "v1":
+            document_scores = position_scores(placeholders)
+        else:
+            raise ValueError(f"unknown position feature version: {version!r}")
+        for (flat_index, _), score in zip(ordered, document_scores):
+            scores[flat_index] = score
+    return scores

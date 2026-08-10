@@ -1,0 +1,49 @@
+{
+  "path": "data/processed/govreport_validation_canonical.jsonl",
+  "rows": 973,
+  "documents": 973,
+  "sentences": 308154,
+  "references": 973,
+  "errors": [],
+  "valid": true,
+  "dataset_fingerprint": "4f2506cb94ce65882b6e5f176c27cb471a08c60a75f21b5383dc9cfc90cfad7d",
+  "health": {
+    "split_counts": {
+      "validation": 973
+    },
+    "dataset_names": {
+      "GovReport": 973
+    },
+    "dataset_revisions": {
+      "official-author-archive-2021-04-01": 973
+    },
+    "structurally_valid_rows": 973,
+    "documents_per_example": {
+      "1": 973
+    },
+    "references_per_example": {
+      "1": 973
+    },
+    "sentences_per_example": {
+      "mean": 316.705035971223,
+      "min": 7,
+      "p50": 268,
+      "p95": 698,
+      "p99": 1354,
+      "max": 2889,
+      "under_20": 1,
+      "under_40": 3
+    },
+    "sentence_words": {
+      "mean": 25.48863230722301,
+      "p50": 24,
+      "p95": 50,
+      "p99": 68,
+      "max": 629,
+      "over_80": 1445
+    },
+    "unicode_replacement_characters": 0,
+    "unicode_replacement_rows": 0,
+    "debug_subset_rows": 0
+  }
+}

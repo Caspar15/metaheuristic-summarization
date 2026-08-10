@@ -26,8 +26,28 @@ PR #14 原本宣稱此 adapter 與正常 sumy English `to_words()` 全量 0 mism
 `punkt_tab`。修成 `preserve_line=True` 後，5,621 篇、456,942 個 canonical
 sentences 中有 **1,550 句（0.339%）** 與舊 sumy/Punkt token stream 不同，主要
 來自句內縮寫。這是移除二次分句後的預期 scoring 語義變更，不得再稱 token
-parity；舊 TextRank／LexRank ROUGE 維持 historical，正式引用前必須重跑。
-完整 hash 與首個差異見 `docs/research/evidence/f19_word_tokenizer_parity.json`。
+parity；舊 TextRank／LexRank ROUGE 維持 historical。PR #15 合併後已用最終實作完成
+Multi-News validation full-split rerun；新結果與 artifact hashes 見
+`docs/research/evidence/f19_centrality_final_pipeline.json`，完整 token hash 與首個差異見
+`docs/research/evidence/f19_word_tokenizer_parity.json`。
+
+## PR #15 後的 full-split timing 與結果
+
+兩個 baseline 都在同一台 Windows 11 主機、Python 3.12.7、`sumy==0.12.0`、
+`nltk==3.10.0` 上**分開、單程序**執行。選句計時停止後才跑 evaluator，因此不受
+ROUGE 工作競爭 CPU 影響。這些 wall-clock 只能描述本機，不能作跨硬體速度宣稱。
+
+| baseline | rows | selection | evaluation | R-1 | R-2 | R-Lsum |
+|---|---:|---:|---:|---:|---:|---:|
+| TextRank | 5,621 | 523.539 s | 122.895 s | 0.413845 | 0.128837 | 0.368487 |
+| LexRank | 5,621 | 766.732 s | 124.673 s | 0.430671 | 0.135995 | 0.389532 |
+
+兩份 predictions 都有 5,621 個唯一 ID、5,621 feasible rows、0 個 selected-index 或
+summary reconstruction mismatch。LexRank 仍正確標記 `validation_1082` 與
+`validation_2303` 兩個 scorer-degenerate rows；TextRank 為 0。相較 pre-hotfix
+historical metrics，TextRank 最大絕對差為 0.000010，LexRank 為 0.000095，研究排序
+沒有翻轉。bulk predictions 仍在本機 `runs_v2/`，未進 Git；投稿／外部 artifact review
+前必須上傳 immutable artifact store 並依 evidence manifest 的 SHA-256 驗證。
 
 `nltk==3.10.0` 仍精確 pin，原因是 reproducibility 與 sumy runtime code
 dependency，不代表 repo 會散布任何 NLTK data package。若未來升版：
@@ -107,9 +127,9 @@ TextRank 與第一次 LexRank 同時執行時，TextRank 的
 ## CI coverage
 
 PR #14 合併 head 的 GitHub Linux run 實際為 `15 failed, 270 passed, 4 skipped`；
-15 個 failure 都源自乾淨 runner 找不到 `punkt_tab`，不能視為綠燈。hotfix 改成
-`preserve_line=True` 後，Windows 本機完整結果為 `289 passed`；Linux CI 結果
-須以 hotfix PR 的新 run 為準。CI 的四個既存 skips 來自
+15 個 failure 都源自乾淨 runner 找不到 `punkt_tab`，不能視為綠燈。PR #15 hotfix
+改成 `preserve_line=True` 後，Windows 本機完整結果為 `289 passed`，GitHub Linux CI
+亦已綠燈。CI 的四個既存 skips 來自
 `pytest.importorskip("pymoo")`，因此仍未覆蓋 NSGA-II；在下一次正式 NSGA-II
 run 前應將 `pymoo` 納入 CI dependency。
 

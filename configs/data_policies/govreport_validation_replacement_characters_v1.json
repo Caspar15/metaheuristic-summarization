@@ -1,0 +1,10 @@
+{
+  "manifest_schema_version": "1.0",
+  "dataset": "GovReport",
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "split": "validation",
+  "rule": "record every canonical row containing U+FFFD without text repair",
+  "rows": [],
+  "row_count": 0,
+  "character_count": 0
+}

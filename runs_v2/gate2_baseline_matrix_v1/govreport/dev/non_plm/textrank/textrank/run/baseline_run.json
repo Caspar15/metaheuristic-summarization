@@ -1,0 +1,5 @@
+{
+  "baseline": "textrank",
+  "split": "validation",
+  "input": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_validation_canonical.jsonl"
+}

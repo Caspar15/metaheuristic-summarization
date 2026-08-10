@@ -1,0 +1,1106 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T13:53:13.285838+00:00",
+  "status": "completed",
+  "study_id": "d3a-router-fusion-screen-v1",
+  "dataset": "Multi-News",
+  "partition": "dev_pilot",
+  "pilot_rows": 200,
+  "preregistration_path": "configs/preregistrations/d3a_router_fusion_screen_v1.json",
+  "preregistration_sha256": "07de205a39b781389573b0c44fa526474f2226ca329b52a027e0288c770de58a",
+  "candidates": {
+    "R00_anchor": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:49:05.110371+00:00",
+      "started_at_utc": "2026-08-09T13:48:30.460419+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R00_anchor",
+      "candidate_hash": "804d69f6fddc4ed33b6e7a56d2958699a9cea90021cb4ad2ff935baa4befbed0",
+      "declared_delta": {},
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R00_anchor/resolved_config.yaml",
+      "config_sha256": "722aa5ddd007728a92f03b5669a5aacc955a0e8ff74bc8c9b636e12e795b58a6",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R00_anchor/predictions.jsonl",
+      "predictions_sha256": "7406c4cef0582516b8d4d14c584536fac530ca9135504052b1e71fddc99de7e3",
+      "selected_indices_sha256": "f9b562d739fc833bb29d215f84cc1653c94de3e92084bc3d643e39e40629a4fa",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 29.522452599951066
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43242224899884774,
+          "rouge2": 0.12930304628688624,
+          "rougeLsum": 0.3933653335290601
+        },
+        "macro_rouge": 0.3183635429382647,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.825,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R01_total120": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:49:24.051122+00:00",
+      "started_at_utc": "2026-08-09T13:49:05.269905+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R01_total120",
+      "candidate_hash": "b18c513424a15396beab2f8c965852eb06a488c2dcfdf80a2bf6997e54a167c7",
+      "declared_delta": {
+        "candidate_budget.total": 120
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R01_total120/resolved_config.yaml",
+      "config_sha256": "a895af9480ec9e155bf11ab0c52f36cb854356c2d1b4d42205096acf7987fd35",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R01_total120/predictions.jsonl",
+      "predictions_sha256": "39552395d4c058ea42a82b26106f13cfb203d57b0e6a90a8c5eb33b747d02386",
+      "selected_indices_sha256": "ca15ff6339f8a555b031b538d8bcd3c91e0892f147e251d54c761ac2cf8a7620",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 14.053029799950309
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43287014411707064,
+          "rouge2": 0.1294864570333036,
+          "rougeLsum": 0.3938882841343412
+        },
+        "macro_rouge": 0.31874829509490515,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.885,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R02_k80_total80": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:49:43.613033+00:00",
+      "started_at_utc": "2026-08-09T13:49:24.148455+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R02_k80_total80",
+      "candidate_hash": "71a777b4a6a0b54dca11a280744f691f68ba35b508d8f78c25aa7f5366d078e6",
+      "declared_delta": {
+        "candidate_budget.route_top_k": 80
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R02_k80_total80/resolved_config.yaml",
+      "config_sha256": "51c276995580504250a6c2bb8299943d488f73218e6ea0a6c6096cbb00588dd4",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R02_k80_total80/predictions.jsonl",
+      "predictions_sha256": "31d09bdf86ca0fc87f2b3f5dd0083013c6ed88bf51c86e2e1bafccf68c99b8f5",
+      "selected_indices_sha256": "ff9f9df3b88b1f9cf0783ea4605f5a5b357240e3cf7f9f735c497c77fb36ecf8",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 14.09271599992644
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43118745769565636,
+          "rouge2": 0.1277515126634068,
+          "rougeLsum": 0.39284757043119883
+        },
+        "macro_rouge": 0.3172621802634206,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.435,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R03_k80_total120": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:50:03.015915+00:00",
+      "started_at_utc": "2026-08-09T13:49:43.721970+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R03_k80_total120",
+      "candidate_hash": "9a5b1716041ebdebf309e1a62d9be410cedc53db71015638920db19767439f46",
+      "declared_delta": {
+        "candidate_budget.route_top_k": 80,
+        "candidate_budget.total": 120
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R03_k80_total120/resolved_config.yaml",
+      "config_sha256": "b185e2662162145591b0d53a11d44506faeecbb88fad0875ed92fb6145627888",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R03_k80_total120/predictions.jsonl",
+      "predictions_sha256": "8f41373902be24123449a274a7d719aca2182151da214bdc4166dd42db5d844f",
+      "selected_indices_sha256": "0becb0cac9090c1a3b811c3cb44c1a6bfb831c96ebb8991e4e46c4303ab7fcba",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 14.384906399995089
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.4312896191073793,
+          "rouge2": 0.12882805468158393,
+          "rougeLsum": 0.39373413411027364
+        },
+        "macro_rouge": 0.31795060263307895,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.48,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R04_k120_total160": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:50:23.599460+00:00",
+      "started_at_utc": "2026-08-09T13:50:03.114143+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R04_k120_total160",
+      "candidate_hash": "e9d345aa86b5e97d361b61cce1936be71a92929756238e96e2cbcab7320945d4",
+      "declared_delta": {
+        "candidate_budget.route_top_k": 120,
+        "candidate_budget.total": 160
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R04_k120_total160/resolved_config.yaml",
+      "config_sha256": "99d24dcfb2a16e610689658464906b4e655b3284115aa03915b65881dfe733e9",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R04_k120_total160/predictions.jsonl",
+      "predictions_sha256": "5fd3b22aeab1efdbf66ae710c7cd6b5c5a15236360472445adad551380b67c9f",
+      "selected_indices_sha256": "cbaaeee477bbcfe7b97c7ed4041802a66a73ace70b8735681afd9b55fe437e3b",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 14.796134800068103
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43109340620878667,
+          "rouge2": 0.1291830584213638,
+          "rougeLsum": 0.3936143139188805
+        },
+        "macro_rouge": 0.31796359284967696,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.595,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R05_bigrams": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:50:42.550238+00:00",
+      "started_at_utc": "2026-08-09T13:50:23.717824+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R05_bigrams",
+      "candidate_hash": "90b7b2b963164a90077e0a8d3bca84e48e663479e07441136f852f4db03870bb",
+      "declared_delta": {
+        "features.tf_isf.use_bigrams": true
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R05_bigrams/resolved_config.yaml",
+      "config_sha256": "757b35ab7dfa77e80d6476e7e5f78d682be5148a6df1d5260b145022dc4c91b5",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R05_bigrams/predictions.jsonl",
+      "predictions_sha256": "fcff646332dc99a469b79ba4503480bdf544a516118f93d4d6b2ce2692dd8f59",
+      "selected_indices_sha256": "7641b925388bf2b9d7707ca51c6556a76052e17145537297f950bfe4414641c3",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.791431399993598
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43348487694598803,
+          "rouge2": 0.13083410884972324,
+          "rougeLsum": 0.3944724125706738
+        },
+        "macro_rouge": 0.31959713278879504,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.985,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R06_position02": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:51:00.912019+00:00",
+      "started_at_utc": "2026-08-09T13:50:42.653326+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R06_position02",
+      "candidate_hash": "b90084ceec4e5f779a4b5a229a992c978a67104b6a9c602459b32b1395e88ef9",
+      "declared_delta": {
+        "features.weights.position": 0.2
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R06_position02/resolved_config.yaml",
+      "config_sha256": "f6556ba334b53423ecc50775f7d59e68039858188bbf2b0304ce50604595513d",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R06_position02/predictions.jsonl",
+      "predictions_sha256": "7b800e5884ca716f65826234f1534b6494aec858bd978a9e3fd04b4823f2f53f",
+      "selected_indices_sha256": "777b0ce0645b2e5221e2a7b230e242df8f4908336d90fdef5fc235e3d233bbbf",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.5544535999652
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43443769348865785,
+          "rouge2": 0.13111164030501993,
+          "rougeLsum": 0.3953647523714622
+        },
+        "macro_rouge": 0.32030469538837997,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.87,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R07_bigrams_position02": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:51:19.389009+00:00",
+      "started_at_utc": "2026-08-09T13:51:01.010428+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R07_bigrams_position02",
+      "candidate_hash": "a0f75836d4e23688ec311d2a3cd0ac19ee816d62156a91982ddfa5a0ab3276b6",
+      "declared_delta": {
+        "features.tf_isf.use_bigrams": true,
+        "features.weights.position": 0.2
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R07_bigrams_position02/resolved_config.yaml",
+      "config_sha256": "61c28097f845a2c157af85c436fcf74d3ffafb42fb78f156cbca9b0247384ebc",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R07_bigrams_position02/predictions.jsonl",
+      "predictions_sha256": "55bb6436506ad7c4942cbcd42f266cdb6d858392bbeb2f97d4199cf73222b55a",
+      "selected_indices_sha256": "d377399e45ad80898abc26c63c0ce45dee32484e58682568a3ab47488384ef1c",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.738826500019059
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43514498839689636,
+          "rouge2": 0.13119124295738743,
+          "rougeLsum": 0.3964308180555875
+        },
+        "macro_rouge": 0.32092234980329043,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.74,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R08_lexical_x2": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:51:38.758437+00:00",
+      "started_at_utc": "2026-08-09T13:51:19.485921+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R08_lexical_x2",
+      "candidate_hash": "7ae3e2026c774ee5b96ded55c569fbbb2cfb0f6a65310a87f7dfcff0f88b8993",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "lexical": 2.0
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R08_lexical_x2/resolved_config.yaml",
+      "config_sha256": "e9f4b54c9d6c138a509bd3e6adfbf3c37da3c41fb5234540f89d38f38eb61dd2",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R08_lexical_x2/predictions.jsonl",
+      "predictions_sha256": "cbdaf5202a6550202dcb7389f3ac2d5204534af4dbe4d5295457fe6acf776c5b",
+      "selected_indices_sha256": "755733ffe58f09dca78870f72995f19eadc703485f696fead8ed18f78de0eaca",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.949194099986926
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.4277433562884323,
+          "rouge2": 0.12689971942874115,
+          "rougeLsum": 0.3874552261273273
+        },
+        "macro_rouge": 0.31403276728150026,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.54,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R09_semantic_x2": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:51:57.755914+00:00",
+      "started_at_utc": "2026-08-09T13:51:38.877391+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R09_semantic_x2",
+      "candidate_hash": "a112c13752785237b7df17d59528f2853a8b0c6b8b6aee6333f758292bfe54f8",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "semantic": 2.0
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R09_semantic_x2/resolved_config.yaml",
+      "config_sha256": "f14656ff46bd5be481a982f5307f2825245bd40cf99f29ee0c84548e5653e132",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R09_semantic_x2/predictions.jsonl",
+      "predictions_sha256": "fe463158a2d19a31acddf81d0c8a909109bd1cfd5fe58fe3f08d513960f8c33c",
+      "selected_indices_sha256": "451df72e18f7a07c1ff323ee4cfe92199c3cb79b066d2e6f07709d7e6a24402c",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 14.14219459996093
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43151556902956634,
+          "rouge2": 0.12858243530856653,
+          "rougeLsum": 0.392993373680104
+        },
+        "macro_rouge": 0.31769712600607897,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 245.075,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R10_graph_x2": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:52:16.586058+00:00",
+      "started_at_utc": "2026-08-09T13:51:57.857759+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R10_graph_x2",
+      "candidate_hash": "b0d6738ba711c478b8c36e759c6212e5919cbad1e58789e28222b76773e62668",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "graph": 2.0
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R10_graph_x2/resolved_config.yaml",
+      "config_sha256": "bf722efa03994fdf6cd4310a4f36bf9f19693e4227a934269dd47113b37b5dc5",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R10_graph_x2/predictions.jsonl",
+      "predictions_sha256": "751180424c7dc810d3d9c1312f19a46004c82cd7d2d72a4f0a67407f1b4b1b84",
+      "selected_indices_sha256": "6f48496e7284ab1751fa8a846441b02538b5745fcaae1dcccb1981bd9fd12af0",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.767176300054416
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.43291925264384046,
+          "rouge2": 0.12977348938965208,
+          "rougeLsum": 0.393959772273511
+        },
+        "macro_rouge": 0.31888417143566783,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.595,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R11_lexical_x05": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:52:35.275186+00:00",
+      "started_at_utc": "2026-08-09T13:52:16.683191+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R11_lexical_x05",
+      "candidate_hash": "325ed82b4ea2d4be8acfc25abbd003ec603d5245dc6f8453b186845bcef91176",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "lexical": 0.5
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R11_lexical_x05/resolved_config.yaml",
+      "config_sha256": "2604fe63a017a445958a95896bdaf171f2d15f7e74357d639117c0afc1683a6c",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R11_lexical_x05/predictions.jsonl",
+      "predictions_sha256": "022a3c44d41883587db7aab7ad3aac2cb9f6350f8151ba91b1237b310b32ce8c",
+      "selected_indices_sha256": "2257893c6e6e56ec0500e12679f6e2797d8d015166ffa66d087486a3b7f858c9",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.780191899975762
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.4321237425772921,
+          "rouge2": 0.1291119467965842,
+          "rougeLsum": 0.39365368055846534
+        },
+        "macro_rouge": 0.3182964566441138,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.71,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R12_semantic_x05": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:52:54.510920+00:00",
+      "started_at_utc": "2026-08-09T13:52:35.377863+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R12_semantic_x05",
+      "candidate_hash": "7e53e900fd8989111b8914584f1368c038bcb04c6c0e39e3f9332f941394adcf",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "semantic": 0.5
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R12_semantic_x05/resolved_config.yaml",
+      "config_sha256": "6f062e42793b22958467e2bf59d2c747da66d0ca11e2ca85c6410163f3b053ba",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R12_semantic_x05/predictions.jsonl",
+      "predictions_sha256": "db3374ea2d4348fbbac59243ed82bfa4e6abfb1cb30c332152fe9b4cf514a246",
+      "selected_indices_sha256": "468006feeb45fa7999f64bd0105270a14930319cc902c3bb6d97b68b85ffd575",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.772281700046733
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.42908553118964216,
+          "rouge2": 0.1269959628898896,
+          "rougeLsum": 0.38999059252212087
+        },
+        "macro_rouge": 0.3153573622005509,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.755,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "R13_graph_x05": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-09T13:53:13.183550+00:00",
+      "started_at_utc": "2026-08-09T13:52:54.614324+00:00",
+      "status": "completed",
+      "study_id": "d3a-router-fusion-screen-v1",
+      "dataset": "Multi-News",
+      "partition": "dev_pilot",
+      "pilot_rows": 200,
+      "candidate": "R13_graph_x05",
+      "candidate_hash": "f5a39bbd9262544aa1ad6df139a43dcbbe2c7c56c814bab85ce5724cb17c7fbf",
+      "declared_delta": {
+        "candidates.route_weights": {
+          "graph": 0.5
+        }
+      },
+      "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R13_graph_x05/resolved_config.yaml",
+      "config_sha256": "09fc703d7b79ac0ea0be6c15ce508edd25f432e62c7686bb542cfdab9ca3cc88",
+      "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R13_graph_x05/predictions.jsonl",
+      "predictions_sha256": "a1fe162064df035599052062d77d9f4af03f919c99ef71a5a29291575dc8a5a1",
+      "selected_indices_sha256": "e2a7fac84acfe076c33b8ef7b012d53f6b4e0011617dab2d8516a403a197db83",
+      "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "platform": "Windows-11-10.0.26200-SP0",
+      "execution": {
+        "workers": 16,
+        "worker_kind": "bounded_row_processes",
+        "omp_threads_per_worker": 1,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+        "elapsed_seconds": 13.945172000094317
+      },
+      "dataset_preflight": {
+        "valid": true,
+        "policy_id": "multinews-validation-v1",
+        "policy_path": "configs/data_policies/multinews_validation_v1.json",
+        "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+        "analysis": "main",
+        "analysis_role": "primary_validation",
+        "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+        "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+        "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+        "rows": 5621,
+        "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+        "replacement_character_rows": 72,
+        "replacement_characters": 1042,
+        "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+        "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 200,
+        "rouge": {
+          "rouge1": 0.4306776080191277,
+          "rouge2": 0.12797222229714472,
+          "rougeLsum": 0.39137376878026986
+        },
+        "macro_rouge": 0.31667453303218074,
+        "feasible_rows": 200,
+        "infeasible_rows": 0,
+        "summary_words": {
+          "mean": 244.7,
+          "min": 77,
+          "max": 250
+        }
+      },
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

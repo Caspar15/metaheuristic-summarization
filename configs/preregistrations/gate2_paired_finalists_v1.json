@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "study_id": "gate2-paired-finalists-v1",
+  "status": "frozen_before_any_gate2_paired_resampling_outcome",
+  "registered_at_utc": "2026-08-09T04:24:53.527349+00:00",
+  "implementation_parent_commit": "b5b281661a00500ba54d03481a3224bdb331371f",
+  "registration_timing": {
+    "aggregate_and_per_example_scores_preexisted": true,
+    "paired_resampling_outcomes_accessed_before_registration": false,
+    "interpretation": "post-score diagnostic preregistration; not a blind confirmatory experiment"
+  },
+  "partition": "dev",
+  "dev_test_accessed": false,
+  "test_split_prohibited": true,
+  "metrics": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20260809,
+    "confidence": 0.95,
+    "method": "paired percentile bootstrap of per-row differences"
+  },
+  "datasets": {
+    "multinews": {
+      "label": "Multi-News",
+      "rows": 3935,
+      "manifest": "configs/validation_partitions/multinews_validation_dev_v1.json",
+      "proposed": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run/per_example.jsonl",
+      "baselines": {
+        "lead": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/lead/run/per_example.jsonl",
+        "random": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/random/run/per_example.jsonl",
+        "textrank": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/textrank/textrank/run/per_example.jsonl",
+        "lexrank": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/lexrank/run/per_example.jsonl",
+        "pacsum_tfidf_selected": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+        "sbert_centroid": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/sbert_centroid/run/per_example.jsonl",
+        "sbert_mmr_selected": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.7/sbert_mmr/run/per_example.jsonl",
+        "pacsum_sbert_selected": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/pacsum_sbert_P03_previous_-0.3/pacsum_sbert/run/per_example.jsonl"
+      }
+    },
+    "govreport": {
+      "label": "GovReport",
+      "rows": 681,
+      "manifest": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "proposed": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/greedy/run/per_example.jsonl",
+      "baselines": {
+        "lead": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run/per_example.jsonl",
+        "random": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/random/run/per_example.jsonl",
+        "textrank": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/textrank/textrank/run/per_example.jsonl",
+        "lexrank": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/lexrank/lexrank/run/per_example.jsonl",
+        "pacsum_tfidf_selected": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/pacsum_tfidf/run/per_example.jsonl",
+        "sbert_centroid": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_centroid/sbert_centroid/run/per_example.jsonl",
+        "sbert_mmr_selected": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+        "pacsum_sbert_selected": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B05_beta_0.5/pacsum_sbert/run/per_example.jsonl"
+      }
+    }
+  },
+  "multiplicity": {
+    "observed_comparisons": "2 datasets x 8 baseline finalists x 4 endpoints = 64",
+    "holm_family_size": 64,
+    "proposed_search_opportunities": 31,
+    "baseline_candidates_per_dataset": 52,
+    "selection_aware_bonferroni_opportunities": 12896,
+    "selection_aware_derivation": "31 proposed configurations x 52 baseline configurations x 2 datasets x 4 endpoints",
+    "resolution_warning": "with 10,000 resamples the minimum two-sided p-value cannot pass the 12,896-opportunity Bonferroni threshold; report this explicitly rather than claiming a selection-aware dev win"
+  },
+  "decision_rule": {
+    "direction": "proposed S02b minus baseline finalist",
+    "descriptive_endpoint_win": "mean difference > 0 and 95% CI lower > 0 and 64-test Holm p < 0.05",
+    "selection_aware_win": "descriptive win plus Bonferroni p < 0.05; expected to be unresolved at 10,000 resamples",
+    "adversarial_gate": "S02b must beat the highest-dev-macro baseline finalist on all reporting requirements before it can be called a Gate 2 win",
+    "promotion": "none; current dev analysis cannot authorize dev-test or test"
+  },
+  "denominator": "all frozen dev IDs in exact manifest order; missing, duplicate, extra, non-finite, or metric-incomplete rows fail loud",
+  "protected_splits": {
+    "dev_test": "not read",
+    "test": "prohibited until signed freeze"
+  }
+}

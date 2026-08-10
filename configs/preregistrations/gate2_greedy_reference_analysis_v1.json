@@ -1,0 +1,91 @@
+{
+  "study_id": "gate2-greedy-reference-analysis-v1",
+  "registered_at_local": "2026-08-09T07:03:09.8934321+08:00",
+  "status": "frozen_before_candidate_overlap_scores",
+  "scope": "post-hoc analysis of preregistered frozen-dev greedy-reference artifacts",
+  "partition": "dev",
+  "dev_test_accessed": false,
+  "test_split_prohibited": true,
+  "datasets": {
+    "multinews": {
+      "label": "Multi-News",
+      "rows": 3935,
+      "greedy_reference_root": "runs_v2/gate2_greedy_reference_v1/multinews/dev",
+      "lead_metrics": {
+        "path": "runs_v2/a1_length_contract/multinews/dev/max_only_250/lead/run/metrics.json",
+        "sha256": "48a8377eb6e35b142694aafb6956c73d5f774b15ba881d92c00740ff7e208829"
+      },
+      "proposed": {
+        "label": "S02b_three_route_capacity_80",
+        "predictions_path": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run/predictions.jsonl",
+        "predictions_sha256": "a39b5dbcfdde0553889efefe9de1069f30f836cb754ba5166d16087d5308e38e",
+        "per_example_path": "runs_v2/d1_three_route_followup/multinews/dev/S02b_three_route_capacity_80/greedy/run/per_example.jsonl",
+        "per_example_sha256": "1e52be52eab75ef2d7520a1a40f2e5bc346ecfd9dc7ef4e4293881c89b2bd831",
+        "route_top_k": 40,
+        "total_cap": 80
+      },
+      "strongest_completed_baseline": {
+        "label": "pacsum_tfidf_P08_previous_-0.8",
+        "per_example_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/per_example.jsonl",
+        "per_example_sha256": "ae8a19efbf4a41e98bcdc058b30ea4562946159d7066ac3c5cf1191c4801a97e"
+      }
+    },
+    "govreport": {
+      "label": "GovReport",
+      "rows": 681,
+      "greedy_reference_root": "runs_v2/gate2_greedy_reference_v1/govreport/dev",
+      "lead_metrics": {
+        "path": "runs_v2/a1_length_contract/govreport/dev/p75_cap_650/lead/run/metrics.json",
+        "sha256": "f981e81624ce6e812baaca92c3e41ab3b4dcf6bbb365100007c7e24e2901ab4a"
+      },
+      "proposed": {
+        "label": "S02b_three_route_capacity_80",
+        "predictions_path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/greedy/run/predictions.jsonl",
+        "predictions_sha256": "93c2ce4fd01658751a60fe9dce5ad8f5ac13fbf736f70f6e32e7e5192a785db2",
+        "per_example_path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/greedy/run/per_example.jsonl",
+        "per_example_sha256": "b4aced12f386b3ba28f1c58e103cf223750f1004c68479ebc01567536390e257",
+        "route_top_k": 40,
+        "total_cap": 80
+      },
+      "strongest_completed_baseline": {
+        "label": "sbert_mmr_lambda_0.9",
+        "per_example_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/per_example.jsonl",
+        "per_example_sha256": "ac23e09ee6ba2142309667553a32042b8ce11c95bc3ce13026f2906b24cefb43"
+      }
+    }
+  },
+  "greedy_reference_contract": {
+    "targets": ["rouge1", "rouge2", "rougeLsum"],
+    "require_completed_evidence": true,
+    "require_exact_row_id_alignment": true,
+    "exact_upper_bound": false
+  },
+  "headroom": {
+    "formula": "(system_metric - lead_metric) / (metric_specific_greedy_reference_metric - lead_metric)",
+    "systems": ["proposed", "strongest_completed_baseline"],
+    "report": ["per_metric_fraction", "mean_of_three_metric_fractions", "remaining_gap_to_greedy_reference"],
+    "fail_if_greedy_not_above_lead": true,
+    "interpretation": "descriptive frozen-dev diagnostic; not theoretical headroom or significance"
+  },
+  "candidate_recall": {
+    "greedy_set": "selected_indices from the matching metric-specific greedy-reference row",
+    "union_pool": "original_index values in proposed candidate_records",
+    "route_pool": "candidate_records whose selected_by_routes contains the route",
+    "selected_set": "proposed selected_indices",
+    "routes": ["lexical", "semantic", "graph"],
+    "metrics": {
+      "micro_recall": "sum_i |G_i intersect C_i| / sum_i |G_i|",
+      "macro_recall": "mean_i |G_i intersect C_i| / |G_i| over nonempty G_i",
+      "complete_row_rate": "fraction of nonempty G_i with G_i subset C_i",
+      "exclusive_route_hits": "greedy indices present in exactly one route pool, counted by route"
+    },
+    "empty_greedy_rows": "exclude from macro and complete-row denominators; report count; micro denominator is unchanged",
+    "labels": {
+      "union_pool": "recall@configured-union-cap-80",
+      "route_pool": "recall@route-top-40",
+      "selected_set": "recall@final-selection"
+    }
+  },
+  "success_rule": "analysis is complete only when all three targets for both primary datasets pass provenance, row alignment, and denominator checks",
+  "promotion_rule": "none; analysis cannot promote a method and dev-test remains unread"
+}

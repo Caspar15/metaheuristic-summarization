@@ -1,0 +1,12 @@
+{
+  "rows": 3935,
+  "rouge": {
+    "rouge1": 0.5739467402865575,
+    "rouge2": 0.34522912215156,
+    "rougeLsum": 0.5369768146176952
+  },
+  "mean_selected_words": 170.50597204574333,
+  "mean_selected_sentences": 7.784243964421855,
+  "min_selected_words": 0,
+  "max_selected_words": 250
+}

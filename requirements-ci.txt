@@ -1,5 +1,7 @@
-# Lightweight dependency set for the unit-test workflow.
-# Full research runs still require requirements.txt (including torch/transformers/pymoo).
+# Dependency set for the unit-test workflow.  The workflow installs the pinned
+# CPU-only torch wheel first; listing it here keeps this file the complete CI
+# contract.  Full research runs still require requirements.txt (including
+# pymoo and the remaining runtime dependencies).
 numpy>=1.23
 scipy>=1.11,<1.13
 scikit-learn>=1.3.0
@@ -14,3 +16,8 @@ pytest>=7.4
 # LexRank/TextRank baseline tests need this importable in CI (lightweight,
 # no torch-scale cost).
 sumy==0.12.0
+# Encoder representation, cache, PacSum-SBERT, and integration contract tests
+# use small in-memory tensors and mocked checkpoints; they never download a
+# model, but torch and transformers must be importable during test collection.
+torch==2.8.0
+transformers==4.56.0

@@ -1,0 +1,60 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T23:01:45.930077+00:00",
+  "invocation_started_at_utc": "2026-08-08T22:19:34.434008+00:00",
+  "status": "completed",
+  "study_id": "gate2-greedy-reference-v1",
+  "implementation_commit": "00c2e98686659fe9e54ae39211fd9aa7fd5894e3",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "optimization_target": "rougeLsum",
+  "method": "metric_specific_greedy_reference",
+  "exact_upper_bound": false,
+  "max_words": 250,
+  "requested_min_forced": false,
+  "config_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rougeLsum/resolved_config.json",
+  "scientific_config_sha256": "293a6624888843f86afba08e770cbc8020eeaeba19def71dc2fd0183d6d597c4",
+  "config_artifact_sha256": "5974dd0aeed988c485b87def73aeadfc47b5545f5bdc134721299900e64c9ed0",
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_v1.json",
+  "preregistration_sha256": "04235301d400a1a7bd502879cd8d59b5a5c27cafc902b23ee16bde3435c9f735",
+  "input_path": "data/processed/multi_news_validation_canonical.jsonl",
+  "input_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "rows_path": "runs_v2/gate2_greedy_reference_v1/multinews/dev/rougeLsum/rows.jsonl",
+  "rows_sha256": "a07f87b4175d89c42000fb247fa74ab859794ffc541c1a024b4b21d1856bdf33",
+  "selected_indices_sha256": "4202094a96b87b78ef880b4a1f99c5ff0839e22b20455267747e59a709dff43d",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "ordered_result_assembly": true,
+    "invocation_wall_seconds": 2531.5499656000175
+  },
+  "metrics": {
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.5916620086765026,
+      "rouge2": 0.29219772676565653,
+      "rougeLsum": 0.5585961795137699
+    },
+    "mean_selected_words": 212.6559085133418,
+    "mean_selected_sentences": 8.652350698856416,
+    "min_selected_words": 36,
+    "max_selected_words": 250
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

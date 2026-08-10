@@ -1,0 +1,60 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "cheap_multiroute",
+  "candidate": "G00_lexical_graph",
+  "candidate_hash": "211aa8021fc204d0b4368e8c2c8f23cdecb626580b8c480a06e295acdebb8806",
+  "declared_delta": {
+    "compute_budget.enabled_routes": [
+      "lexical",
+      "graph"
+    ]
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/cheap_multiroute/G00_lexical_graph/resolved_config.yaml",
+  "config_sha256": "898f543ec2b84f151890ae04a85a1b4dee44a2d058b0d5a884d3ece5df7a1a9e",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5295421979886559,
+      "rouge2": 0.18519050181374094,
+      "rougeLsum": 0.4957556618226385
+    },
+    "macro_rouge": 0.4034961205416785,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 642.3157121879589,
+      "min": 551,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 59.819383259911895,
+    "selector_candidate_size_mean": 59.819383259911895,
+    "selector_candidate_size_p95": 60.0,
+    "selector_candidate_size_max": 60,
+    "provenance_candidate_size_mean": 59.819383259911895,
+    "route_agreement_mean": 1.1156321267138196,
+    "unique_candidate_mean_by_route": {
+      "graph": 26.534508076358296,
+      "lexical": 26.455212922173274
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 9.154185022026432,
+      "lexical": 9.405286343612335
+    }
+  }
+}

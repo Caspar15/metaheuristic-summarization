@@ -34,6 +34,7 @@ import json
 import sys
 
 import pytest
+import torch
 
 from src.baselines import cli as baseline_cli
 from src.data.schemas import build_document_example
@@ -359,14 +360,41 @@ def test_every_baseline_is_dispatchable(tmp_path, monkeypatch, baseline):
     input_path = tmp_path / "toy.jsonl"
     write_jsonl_atomic(str(input_path), [doc])
     config_path = tmp_path / "cfg.yaml"
-    config_path.write_text(
+    config_text = (
         "length_control:\n"
         "  unit: words\n"
         "  max_words: 50\n"
         "  min_words: 0\n"
-        "  require_nonempty: true\n",
-        encoding="utf-8",
+        "  require_nonempty: true\n"
     )
+    if "sbert" in baseline:
+        config_text += (
+            "routes:\n"
+            "  semantic:\n"
+            "    model_name: sentence-transformers/fake\n"
+            "    revision: c9745ed1d9f207416be6d2e6f8de32d1f16199bf\n"
+        )
+
+        def fake_embeddings(sentences, **kwargs):
+            values = torch.eye(len(sentences), dtype=torch.float32)
+            return values, {
+                "model_name": kwargs["model_name"],
+                "model_revision": kwargs["revision"],
+                "pooling": "attention_mask_mean",
+                "normalize_embeddings": True,
+                "similarity": "normalized_dot_product_cosine",
+                "estimated_cost": {"encoded_sentences": len(sentences)},
+            }
+
+        monkeypatch.setattr(
+            "src.baselines.semantic.encoder_document_embeddings",
+            fake_embeddings,
+        )
+        monkeypatch.setattr(
+            "src.baselines.pacsum.encoder_document_embeddings",
+            fake_embeddings,
+        )
+    config_path.write_text(config_text, encoding="utf-8")
     run_dir = tmp_path / "runs"
 
     argv = [

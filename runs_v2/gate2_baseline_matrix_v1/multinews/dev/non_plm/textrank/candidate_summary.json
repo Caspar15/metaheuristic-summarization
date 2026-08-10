@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "textrank",
+  "method": "textrank",
+  "candidate_hash": "4d4145968ab835990380d350bf4914acac66b8236846a1cedee3cbd91022ca9b",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/textrank/resolved_config.yaml",
+  "config_sha256": "2424c62a9a5bd5bd56429d5245f530c5cf45d381bab3b88383d8515b71573fca",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4151922764991816,
+      "rouge2": 0.13021830031720527,
+      "rougeLsum": 0.3698764871453121
+    },
+    "macro_rouge": 0.305095687987233,
+    "feasible_rows": 3935,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 247.53163913595935,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

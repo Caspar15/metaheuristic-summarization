@@ -1,0 +1,379 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T06:10:46.348282+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "study_id": "a1-length-contract-govreport-v1",
+  "dataset": "GovReport",
+  "partition": "dev-test",
+  "rows": 292,
+  "candidate_count": 4,
+  "method_count": 3,
+  "method_families": [
+    "lead",
+    "random",
+    "greedy"
+  ],
+  "multiple_comparison_candidate_count": 4,
+  "ranking": [
+    "dev_iqr_band_500_650",
+    "p75_cap_650",
+    "median_cap_570",
+    "paper_mean_cap_550"
+  ],
+  "candidates": {
+    "dev_iqr_band_500_650": {
+      "status": "completed",
+      "study_id": "a1-length-contract-govreport-v1",
+      "dataset": "GovReport",
+      "partition": "dev-test",
+      "partition_rows": 292,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "4d7d3cc7d90ad9e4e65fd08e942d5f1c4eb710eb2d9b3e4319f6adc73d0e234c",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+      "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+      "candidate": "dev_iqr_band_500_650",
+      "candidate_hash": "3c8cbed09a41b64a8294ed658080cc796ca066481fbe4dbb362bc93f03e71006",
+      "length_contract": {
+        "min_words": 500,
+        "max_words": 650
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/govreport/dev-test/dev_iqr_band_500_650/resolved_config.yaml",
+      "resolved_config_sha256": "82ad907c42e1eb36736cccb1ea5f954759d1b30a6848b72d9bfbbaa8ba22e914",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5114793783548157,
+            "rouge2": 0.18668265399674436,
+            "rougeLsum": 0.48628251164017255
+          },
+          "macro_rouge": 0.3948148479972442,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 631.8253424657535,
+            "min": 173,
+            "max": 650
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5396398637968487,
+            "rouge2": 0.1826230736029383,
+            "rougeLsum": 0.5088829688605693
+          },
+          "macro_rouge": 0.41038196875345206,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 647.8458904109589,
+            "min": 173,
+            "max": 650
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5032559940886989,
+            "rouge2": 0.15492320008573698,
+            "rougeLsum": 0.46696624793504354
+          },
+          "macro_rouge": 0.3750484807031598,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 637.1027397260274,
+            "min": 173,
+            "max": 650
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.3934150991512854,
+      "per_example_sha256": "33e0b44f77fe8f8d0cc636dddb6b4dc80557402da276fc6f8ea4f7329fdf5527"
+    },
+    "median_cap_570": {
+      "status": "completed",
+      "study_id": "a1-length-contract-govreport-v1",
+      "dataset": "GovReport",
+      "partition": "dev-test",
+      "partition_rows": 292,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "4d7d3cc7d90ad9e4e65fd08e942d5f1c4eb710eb2d9b3e4319f6adc73d0e234c",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+      "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+      "candidate": "median_cap_570",
+      "candidate_hash": "a3e6c78c7344f079f8f6e5f510eb8238ce9d6496e632df7a05ee4b6d90ad2b52",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 570
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/govreport/dev-test/median_cap_570/resolved_config.yaml",
+      "resolved_config_sha256": "8d0821a601d36d0e4f3aac4e34d5a8a82f3ae8e5d006a99bd8381733d7a71668",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5065016619447109,
+            "rouge2": 0.1828135370840037,
+            "rougeLsum": 0.48094247741288826
+          },
+          "macro_rouge": 0.39008589214720096,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 553.2842465753424,
+            "min": 173,
+            "max": 570
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5325050816669233,
+            "rouge2": 0.1769702258378348,
+            "rougeLsum": 0.5010132826392931
+          },
+          "macro_rouge": 0.40349619671468373,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 568.2534246575342,
+            "min": 173,
+            "max": 570
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.2503019255210707,
+            "rouge2": 0.09300634735066081,
+            "rougeLsum": 0.22914882316723217
+          },
+          "macro_rouge": 0.1908190320129879,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 185.236301369863,
+            "min": 6,
+            "max": 570
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.32813370695829086,
+      "per_example_sha256": "ad2341ee949fc0f987fbc3d355154c863952634d1b5bff00c6b63b3f6d83112f"
+    },
+    "paper_mean_cap_550": {
+      "status": "completed",
+      "study_id": "a1-length-contract-govreport-v1",
+      "dataset": "GovReport",
+      "partition": "dev-test",
+      "partition_rows": 292,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "4d7d3cc7d90ad9e4e65fd08e942d5f1c4eb710eb2d9b3e4319f6adc73d0e234c",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+      "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+      "candidate": "paper_mean_cap_550",
+      "candidate_hash": "8a54d9d4eedd6419a65795008ec0280cc4fdd4b7b77e3fd296c92bbca715f50c",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 550
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/govreport/dev-test/paper_mean_cap_550/resolved_config.yaml",
+      "resolved_config_sha256": "bb7d8bbd82883f376f42a0bb92fc11c786754c4dc3abf65dc23c3aa41b955e40",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5037323936135798,
+            "rouge2": 0.18101705163750673,
+            "rougeLsum": 0.47817912539057245
+          },
+          "macro_rouge": 0.387642856880553,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 532.9931506849315,
+            "min": 173,
+            "max": 550
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5293269946440403,
+            "rouge2": 0.1753201967206551,
+            "rougeLsum": 0.49759003282937314
+          },
+          "macro_rouge": 0.4007457413980229,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 548.1130136986301,
+            "min": 173,
+            "max": 550
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.2494948517720396,
+            "rouge2": 0.09277825896012053,
+            "rougeLsum": 0.22833272840122887
+          },
+          "macro_rouge": 0.19020194637779633,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 181.09246575342465,
+            "min": 6,
+            "max": 550
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.3261968482187907,
+      "per_example_sha256": "1717a0fc03cc8d9fe83196cb15abea8ca35f063263fc4c6ad6761fe1b56c9a0c"
+    },
+    "p75_cap_650": {
+      "status": "completed",
+      "study_id": "a1-length-contract-govreport-v1",
+      "dataset": "GovReport",
+      "partition": "dev-test",
+      "partition_rows": 292,
+      "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "partition_selected_ids_sha256": "4d7d3cc7d90ad9e4e65fd08e942d5f1c4eb710eb2d9b3e4319f6adc73d0e234c",
+      "preregistration_path": "configs/preregistrations/a1_length_contract_govreport_v1.json",
+      "preregistration_sha256": "faa0a8b0c95cda90de96685e3c0660c8b043d20b048ea259152831910d449d49",
+      "candidate": "p75_cap_650",
+      "candidate_hash": "da7ed2339f08564b21ab37a9f659da69fd7f6fc1fe643407407aa6b66c1e29ba",
+      "length_contract": {
+        "min_words": 0,
+        "max_words": 650
+      },
+      "resolved_config_path": "runs_v2/a1_length_contract/govreport/dev-test/p75_cap_650/resolved_config.yaml",
+      "resolved_config_sha256": "57e567039c8f0a5808b773299e15d8af501ed03c67d1ee0e7be4e8660f82cdeb",
+      "methods": {
+        "lead": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5114793783548157,
+            "rouge2": 0.18668265399674436,
+            "rougeLsum": 0.48628251164017255
+          },
+          "macro_rouge": 0.3948148479972442,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 631.8253424657535,
+            "min": 173,
+            "max": 650
+          }
+        },
+        "random": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.5396398637968487,
+            "rouge2": 0.1826230736029383,
+            "rougeLsum": 0.5088829688605693
+          },
+          "macro_rouge": 0.41038196875345206,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 647.8458904109589,
+            "min": 173,
+            "max": 650
+          }
+        },
+        "greedy": {
+          "evaluation_protocol": "multisentence_lsum",
+          "rows": 292,
+          "rouge": {
+            "rouge1": 0.2530014209408428,
+            "rouge2": 0.0943373029493514,
+            "rougeLsum": 0.2320276369979021
+          },
+          "macro_rouge": 0.19312212029603212,
+          "feasible_rows": 292,
+          "infeasible_rows": 0,
+          "summary_words": {
+            "mean": 202.3972602739726,
+            "min": 6,
+            "max": 650
+          }
+        }
+      },
+      "cross_method_macro_rouge": 0.33277297901557623,
+      "per_example_sha256": "f578c9fbf71c1e0cb39b1e5a6adf20b7f6f34032d4f1644b0ecddedc5db060c9"
+    }
+  },
+  "selection": {
+    "candidate_means": {
+      "dev_iqr_band_500_650": 0.3934150991512854,
+      "median_cap_570": 0.32813370695829086,
+      "paper_mean_cap_550": 0.3261968482187907,
+      "p75_cap_650": 0.33277297901557623
+    },
+    "raw_winner": "dev_iqr_band_500_650",
+    "comparisons_to_raw_winner": {
+      "median_cap_570": {
+        "n_pairs": 292,
+        "n_resamples": 10000,
+        "seed": 20260809,
+        "confidence": 0.95,
+        "mean_difference": 0.06528139219299453,
+        "ci_lower": 0.060342891556255794,
+        "ci_upper": 0.06996209316187628,
+        "p_value_two_sided": 0.00019998000199980003,
+        "p_value_holm": 0.0005999400059994001,
+        "significant_positive_after_holm": true
+      },
+      "p75_cap_650": {
+        "n_pairs": 292,
+        "n_resamples": 10000,
+        "seed": 20260810,
+        "confidence": 0.95,
+        "mean_difference": 0.060642120135709215,
+        "ci_lower": 0.05605825177214614,
+        "ci_upper": 0.0651470366602554,
+        "p_value_two_sided": 0.00019998000199980003,
+        "p_value_holm": 0.0005999400059994001,
+        "significant_positive_after_holm": true
+      },
+      "paper_mean_cap_550": {
+        "n_pairs": 292,
+        "n_resamples": 10000,
+        "seed": 20260811,
+        "confidence": 0.95,
+        "mean_difference": 0.06721825093249469,
+        "ci_lower": 0.062244673038569134,
+        "ci_upper": 0.0720104875076437,
+        "p_value_two_sided": 0.00019998000199980003,
+        "p_value_holm": 0.0005999400059994001,
+        "significant_positive_after_holm": true
+      }
+    },
+    "holm_family_size": 3,
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20260808,
+    "raw_winner_significant_against_all": true,
+    "selected_protocol": "dev_iqr_band_500_650",
+    "selection_reason": "raw winner passed every positive paired-bootstrap and Holm test"
+  }
+}

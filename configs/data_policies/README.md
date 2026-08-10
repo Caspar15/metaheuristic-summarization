@@ -32,3 +32,16 @@ Status checked on 2026-08-02: this same policy is enforced by both the proposed
 pipeline and the PR #10 Lead baseline CLI. Adding a baseline does not authorize
 a new subset or a rewritten policy; formal baseline outputs must carry the same
 preflight identity as the system run they are compared with.
+
+`govreport_validation_v1.json` is the corresponding pre-result contract for
+the official author archive, not a flattened third-party mirror. The official
+validation membership has 974 reports (362 CRS + 612 GAO). One pinned CRS row,
+`98-228`, has an empty official reference and is excluded without fabricating a
+target, leaving 973 canonical evaluation rows. The policy binds the official
+archive SHA-256, validation-ID checksums, canonical artifact identity, empty
+U+FFFD manifest, section/paragraph preservation rule, and CC-BY-4.0 license.
+
+GovReport preprocessing reads validation membership only. Its streaming tar
+pass can encounter other archive member names, but does not read test
+membership or test payload bytes. Do not change the policy or inspect the test
+split before the human freeze decision.

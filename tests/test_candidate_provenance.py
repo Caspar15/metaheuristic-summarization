@@ -114,6 +114,44 @@ def test_total_budget_uses_fused_rank_not_original_order():
     assert all(candidate["inclusion_reasons"] for candidate in candidates)
 
 
+def test_weighted_rrf_changes_fused_order_and_records_contract():
+    records = two_document_records()
+    pool = build_candidate_pool(
+        records,
+        base_scores=[0.1, 0.9, 0.8, 0.2],
+        k=2,
+        sources=["lexical", "position"],
+        min_per_route=0,
+        total_budget=1,
+        route_weights={"lexical": 4.0, "position_guard": 1.0},
+    )
+    assert [row["original_index"] for row in pool["records"]] == [1]
+    assert pool["allocation"]["fusion_method"] == "weighted_rrf"
+    assert pool["allocation"]["route_weights"] == {
+        "lexical": 4.0,
+        "position_guard": 1.0,
+    }
+
+
+@pytest.mark.parametrize(
+    "weights,match",
+    [
+        ({"lexical": 0.0}, "finite and positive"),
+        ({"semantic": 1.0}, "disabled route"),
+    ],
+)
+def test_invalid_weighted_rrf_contract_fails_loudly(weights, match):
+    records = two_document_records()
+    with pytest.raises(ValueError, match=match):
+        build_candidate_pool(
+            records,
+            base_scores=[0.1, 0.9, 0.8, 0.2],
+            k=2,
+            sources=["lexical", "position"],
+            route_weights=weights,
+        )
+
+
 def test_total_cap_never_admits_sentences_outside_route_union():
     records = two_document_records()
     pool = build_candidate_pool(
@@ -263,6 +301,76 @@ def test_semantic_route_requires_explicit_checkpoint():
             base_scores=[0.0] * 4,
             k=1,
             sources=["semantic"],
+        )
+
+
+def test_semantic_route_accepts_verified_precomputed_scores(monkeypatch):
+    records = two_document_records()
+
+    def must_not_encode(*args, **kwargs):
+        raise AssertionError("semantic route encoded a second time")
+
+    monkeypatch.setattr(
+        "src.pipeline.candidate_builder.encoder_route_scores", must_not_encode
+    )
+    revision = "a" * 40
+    candidates = build_candidate_records(
+        records,
+        base_scores=[0.0] * 4,
+        k=2,
+        sources=["semantic"],
+        route_config={
+            "semantic": {
+                "model_name": "sentence-transformers/fake",
+                "revision": revision,
+            }
+        },
+        precomputed_route_data={
+            "semantic": {
+                "values": [0.1, 0.9, 0.8, 0.2],
+                "metadata": {
+                    "model_name": "sentence-transformers/fake",
+                    "model_revision": revision,
+                    "pooling": "attention_mask_mean",
+                    "normalize_embeddings": True,
+                    "estimated_cost": {"encoded_sentences": 4},
+                },
+            }
+        },
+    )
+    assert [candidate["original_index"] for candidate in candidates] == [1, 2]
+    assert all(
+        candidate["route_scores"]["semantic"]["metadata"][
+            "normalize_embeddings"
+        ]
+        is True
+        for candidate in candidates
+    )
+
+
+def test_precomputed_semantic_revision_mismatch_fails_loudly():
+    records = two_document_records()
+    with pytest.raises(RuntimeError, match="revision does not match"):
+        build_candidate_records(
+            records,
+            base_scores=[0.0] * 4,
+            k=1,
+            sources=["semantic"],
+            route_config={
+                "semantic": {
+                    "model_name": "sentence-transformers/fake",
+                    "revision": "a" * 40,
+                }
+            },
+            precomputed_route_data={
+                "semantic": {
+                    "values": [0.1, 0.9, 0.8, 0.2],
+                    "metadata": {
+                        "model_name": "sentence-transformers/fake",
+                        "model_revision": "b" * 40,
+                    },
+                }
+            },
         )
 
 

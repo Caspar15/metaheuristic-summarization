@@ -1,0 +1,13 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T04:17:53.208468+00:00",
+  "status": "failed",
+  "failure": "BrokenProcessPool: A process in the process pool was terminated abruptly while the future was running or pending.",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "optimization_target": "rougeLsum",
+  "completed_prefix_rows": 257,
+  "scientific_config_sha256": "98e290f48f906048905cd9cb3dce64c93c5db1e7e99c212d08fc10e6368c4a84",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

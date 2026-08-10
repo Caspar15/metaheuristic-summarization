@@ -1,5 +1,6 @@
 """Regression tests for frozen dataset policy generation and enforcement."""
 
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -11,7 +12,7 @@ from src.data.freeze_multinews_policy import (
     freeze_policy,
     materialize_clean_sensitivity,
 )
-from src.data.policy import sha256_file, validate_dataset_policy_request
+from src.data.policy import sha256_file, validate_dataset_policy_request, verify_pin
 from src.data.preprocess_multinews import DATASET_REVISION
 from src.data.schemas import build_document_example
 from src.utils.io import write_jsonl
@@ -205,3 +206,219 @@ def test_freeze_fails_when_observed_damage_does_not_match_declared_policy(
             expected_replacement_rows=1,
             expected_replacement_characters=1,
         )
+
+
+def _write_errata(
+    path,
+    *,
+    legacy_sha256: str,
+    canonical_sha256: str,
+    content_id: str = "toy fixture",
+    representative_path: str = "some/toy/manifest.json",
+    reference_count: int = 1,
+):
+    path.write_text(
+        json.dumps(
+            {
+                "errata_version": "1.0",
+                "equivalences": [
+                    {
+                        "content_id": content_id,
+                        "representative_path": representative_path,
+                        "legacy_crlf_sha256": legacy_sha256,
+                        "lf_canonical_sha256": canonical_sha256,
+                        "reference_count": reference_count,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_verify_pin_returns_pass_when_the_hash_already_matches(tmp_path):
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+    expected = sha256_file(str(target))
+
+    assert verify_pin(str(target), expected) == "pass"
+
+
+def test_verify_pin_returns_legacy_for_a_known_crlf_era_pin(tmp_path):
+    target = tmp_path / "sub" / "manifest.json"
+    target.parent.mkdir()
+    lf_content = '{"a": 1}\n'
+    target.write_text(lf_content, encoding="utf-8")
+    canonical = sha256_file(str(target))
+    legacy = hashlib.sha256(lf_content.replace("\n", "\r\n").encode("utf-8")).hexdigest()
+    assert legacy != canonical
+
+    errata_path = tmp_path / "errata.json"
+    _write_errata(errata_path, legacy_sha256=legacy, canonical_sha256=canonical)
+
+    result = verify_pin(str(target), legacy, errata_path=str(errata_path))
+
+    assert result == "legacy"
+
+
+def test_verify_pin_returns_legacy_regardless_of_where_the_file_actually_lives(tmp_path):
+    """Matching is by hash pair alone: a legacy-era content blob copied to a
+    path that has nothing to do with the errata's documentation-only
+    ``representative_path`` must still be recognized, because this is
+    exactly the shape of the dataset_preflight.json/partition_preflight.json
+    family -- one identical blob copied into 100+ run directories."""
+
+    target = tmp_path / "some" / "totally" / "different" / "directory" / "copy.json"
+    target.parent.mkdir(parents=True)
+    lf_content = '{"rows": 3935}\n'
+    target.write_text(lf_content, encoding="utf-8")
+    canonical = sha256_file(str(target))
+    legacy = hashlib.sha256(lf_content.replace("\n", "\r\n").encode("utf-8")).hexdigest()
+
+    errata_path = tmp_path / "errata.json"
+    _write_errata(
+        errata_path,
+        legacy_sha256=legacy,
+        canonical_sha256=canonical,
+        representative_path="configs/validation_partitions/multinews_validation_dev_v1.json",
+        reference_count=118,
+    )
+
+    assert verify_pin(str(target), legacy, errata_path=str(errata_path)) == "legacy"
+
+
+def test_verify_pin_raises_when_not_covered_by_errata(tmp_path):
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+    wrong_expected = "f" * 64
+    errata_path = tmp_path / "errata.json"
+    _write_errata(errata_path, legacy_sha256="a" * 64, canonical_sha256="b" * 64)
+
+    with pytest.raises(ValueError, match="not covered by errata"):
+        verify_pin(str(target), wrong_expected, errata_path=str(errata_path))
+
+
+def test_verify_pin_raises_when_only_legacy_matches_but_not_canonical(tmp_path):
+    """``expected`` matches a recorded legacy hash, but the file's actual
+    content matches neither ``expected`` nor that entry's canonical hash.
+    Satisfying only the legacy side of the pair must still fail loud."""
+
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+    legacy = "a" * 64
+    errata_path = tmp_path / "errata.json"
+    _write_errata(
+        errata_path,
+        legacy_sha256=legacy,
+        canonical_sha256="c" * 64,  # does not match sha256_file(target)
+    )
+
+    with pytest.raises(ValueError, match="not covered by errata"):
+        verify_pin(str(target), legacy, errata_path=str(errata_path))
+
+
+def test_verify_pin_raises_when_only_canonical_matches_but_not_legacy(tmp_path):
+    """The file's actual content happens to equal some errata entry's
+    canonical hash, but the caller's ``expected`` is not that entry's
+    legacy hash (it is not covered by the errata at all). A coincidental
+    match on only the canonical side must not grant "legacy" status."""
+
+    target = tmp_path / "manifest.json"
+    lf_content = '{"a": 1}\n'
+    target.write_text(lf_content, encoding="utf-8")
+    canonical = sha256_file(str(target))
+    legacy = hashlib.sha256(lf_content.replace("\n", "\r\n").encode("utf-8")).hexdigest()
+
+    errata_path = tmp_path / "errata.json"
+    _write_errata(errata_path, legacy_sha256=legacy, canonical_sha256=canonical)
+
+    unrelated_expected = "f" * 64
+    assert unrelated_expected != legacy
+
+    with pytest.raises(ValueError, match="not covered by errata"):
+        verify_pin(str(target), unrelated_expected, errata_path=str(errata_path))
+
+
+def test_verify_pin_missing_errata_file_treats_everything_as_uncovered(tmp_path):
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="not covered by errata"):
+        verify_pin(str(target), "d" * 64, errata_path=str(tmp_path / "does-not-exist.json"))
+
+
+def test_verify_pin_raises_on_duplicate_legacy_hash_across_two_entries(tmp_path):
+    """A hand-maintained errata file that grows over time must fail loud on
+    a duplicate legacy_crlf_sha256 rather than silently keeping only the
+    last entry -- a silent overwrite would make one equivalence vanish
+    without any signal."""
+
+    shared_legacy = "a" * 64
+    errata_path = tmp_path / "errata.json"
+    errata_path.write_text(
+        json.dumps(
+            {
+                "errata_version": "1.0",
+                "equivalences": [
+                    {
+                        "content_id": "first content",
+                        "representative_path": "some/first/path.json",
+                        "legacy_crlf_sha256": shared_legacy,
+                        "lf_canonical_sha256": "b" * 64,
+                        "reference_count": 1,
+                    },
+                    {
+                        "content_id": "second content",
+                        "representative_path": "some/second/path.json",
+                        "legacy_crlf_sha256": shared_legacy,
+                        "lf_canonical_sha256": "c" * 64,
+                        "reference_count": 1,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="duplicate legacy_crlf_sha256"):
+        verify_pin(str(target), shared_legacy, errata_path=str(errata_path))
+
+
+def test_verify_pin_allows_the_same_canonical_hash_under_two_legacy_entries(tmp_path):
+    """The inverse of the duplicate-legacy guard: the same current content
+    having had more than one historical CRLF-era identity is expected, not
+    an error -- there is no uniqueness requirement on lf_canonical_sha256."""
+
+    target = tmp_path / "manifest.json"
+    target.write_text('{"a": 1}\n', encoding="utf-8")
+    canonical = sha256_file(str(target))
+    errata_path = tmp_path / "errata.json"
+    errata_path.write_text(
+        json.dumps(
+            {
+                "errata_version": "1.0",
+                "equivalences": [
+                    {
+                        "content_id": "first historical identity",
+                        "representative_path": "some/first/path.json",
+                        "legacy_crlf_sha256": "a" * 64,
+                        "lf_canonical_sha256": canonical,
+                        "reference_count": 1,
+                    },
+                    {
+                        "content_id": "second historical identity",
+                        "representative_path": "some/second/path.json",
+                        "legacy_crlf_sha256": "b" * 64,
+                        "lf_canonical_sha256": canonical,
+                        "reference_count": 1,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert verify_pin(str(target), "a" * 64, errata_path=str(errata_path)) == "legacy"
+    assert verify_pin(str(target), "b" * 64, errata_path=str(errata_path)) == "legacy"

@@ -1,0 +1,55 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "Multi-News",
+  "partition": "dev",
+  "partition_rows": 3935,
+  "partition_manifest_path": "configs/validation_partitions/multinews_validation_dev_v1.json",
+  "partition_manifest_sha256": "e61405482cda203c0bd50dda3e958986b11a51b48124129e68617f97ce9e42ee",
+  "partition_selected_ids_sha256": "872f863cf87bcf8f0b269004a07fd7834a8df75c2fc84f5d18b6a355c2e8a52f",
+  "length_policy_path": "configs/length_policies/multinews_v1.json",
+  "length_policy_sha256": "995ef68530343b7777b225dae1cf3739afa73e2f8cbae4d4dc2197d5bb7a3145",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L05_keep_stopwords",
+  "candidate_hash": "39da7582d52809b9324ed4c8a771fa1360425262ab9fa2ce0106e8d4111c8ec2",
+  "declared_delta": {
+    "features.tf_isf.use_stopwords": false
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/multinews/dev/lexical_objective/L05_keep_stopwords/resolved_config.yaml",
+  "config_sha256": "9e0e31e9cdf0ad369dfef17b59bd28e7abd5937fe271732e3e06a88acb8972e0",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4239092853459622,
+      "rouge2": 0.1281070438849713,
+      "rougeLsum": 0.3814650472507457
+    },
+    "macro_rouge": 0.31116045882722637,
+    "feasible_rows": 3931,
+    "infeasible_rows": 4,
+    "summary_words": {
+      "mean": 242.4874205844981,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 3935,
+    "candidate_size_mean": 35.95146124523507,
+    "selector_candidate_size_mean": 35.95146124523507,
+    "selector_candidate_size_p95": 40.0,
+    "selector_candidate_size_max": 44,
+    "provenance_candidate_size_mean": 35.95146124523507,
+    "route_agreement_mean": 0.9990372518216863,
+    "unique_candidate_mean_by_route": {
+      "lexical": 35.91156289707751
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 10.54587039390089
+    }
+  }
+}

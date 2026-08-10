@@ -1,0 +1,60 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T00:04:34.798900+00:00",
+  "invocation_started_at_utc": "2026-08-08T23:14:05.068988+00:00",
+  "status": "completed",
+  "study_id": "gate2-greedy-reference-v1",
+  "implementation_commit": "64357c777dd81f612c010e36db3c818a42e5e16d",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "optimization_target": "rouge1",
+  "method": "metric_specific_greedy_reference",
+  "exact_upper_bound": false,
+  "max_words": 650,
+  "requested_min_forced": false,
+  "config_path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rouge1/resolved_config.json",
+  "scientific_config_sha256": "c9bb4c9351958cd6408103951d3866aa846b89f190e348b9f530e89d5f3a7192",
+  "config_artifact_sha256": "ba01a35f6a33e9e63f3881d1b698ef3404f546045a3485ca15dbe20a727a48a1",
+  "preregistration_path": "configs/preregistrations/gate2_greedy_reference_v1.json",
+  "preregistration_sha256": "04235301d400a1a7bd502879cd8d59b5a5c27cafc902b23ee16bde3435c9f735",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "rows_path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rouge1/rows.jsonl",
+  "rows_sha256": "6d17c2fdff593c78ab9ad9758d40a926649e0c7d278e4689e9d46f5572395802",
+  "selected_indices_sha256": "44d45f2f966f7413010c6855e240a7a618066b1ed8674a8211771253b81d3638",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "ordered_result_assembly": true,
+    "invocation_wall_seconds": 3029.789345700061
+  },
+  "metrics": {
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.7260304736325203,
+      "rouge2": 0.3873442465073588,
+      "rougeLsum": 0.6854520271928766
+    },
+    "mean_selected_words": 588.7430249632893,
+    "mean_selected_sentences": 17.201174743024964,
+    "min_selected_words": 58,
+    "max_selected_words": 650
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

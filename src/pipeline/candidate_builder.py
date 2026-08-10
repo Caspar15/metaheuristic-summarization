@@ -5,6 +5,8 @@ route failure is a failed run: this module never replaces missing scores with
 zeros and never silently switches to another route.
 """
 
+import math
+
 from typing import Any, Dict, List, Mapping, Optional, Set, Tuple
 
 from src.data.schemas import validate_candidate_record
@@ -12,6 +14,7 @@ from src.features.graph import (
     compute_textrank_scores,
     sparse_tfidf_knn_textrank_scores,
 )
+from src.features.position import document_position_scores
 from src.models.extractive.encoder_rank import encoder_route_scores
 from src.representations.tfidf_helper import tfidf_scores_and_sim
 from src.utils.tokenizer import count_tokens
@@ -21,18 +24,7 @@ RouteMetadata = Dict[str, Any]
 
 
 def _document_aware_position_scores(sentence_records: List[Dict]) -> List[float]:
-    group_sizes: Dict[object, int] = {}
-    for record in sentence_records:
-        group = record.get("document_id") or "__legacy_flat__"
-        group_sizes[group] = group_sizes.get(group, 0) + 1
-
-    scores = []
-    for record in sentence_records:
-        group = record.get("document_id") or "__legacy_flat__"
-        position = int(record.get("document_position", record["original_index"]))
-        size = group_sizes[group]
-        scores.append(1.0 if size <= 1 else 1.0 - position / (size - 1))
-    return scores
+    return document_position_scores(sentence_records, version="v1")
 
 
 def _canonical_route_name(raw_source: str) -> str:
@@ -76,6 +68,7 @@ def _score_route(
     sim_matrix,
     threshold: float,
     config: Mapping[str, Any],
+    precomputed: Optional[Mapping[str, Any]] = None,
 ) -> Tuple[List[float], RouteMetadata]:
     n = len(sentences)
     if route == "lexical":
@@ -156,14 +149,31 @@ def _score_route(
                 "semantic candidate route requires routes.semantic.model_name; "
                 "use an explicit sentence-similarity checkpoint"
             )
-        values, semantic_metadata = encoder_route_scores(
-            sentences,
-            model_name=model_name,
-            device=config.get("device"),
-            batch_size=int(config.get("batch_size", 16)),
-            max_model_tokens=int(config.get("max_model_tokens", 256)),
-            revision=config.get("revision"),
-        )
+        if precomputed is None:
+            values, semantic_metadata = encoder_route_scores(
+                sentences,
+                model_name=model_name,
+                device=config.get("device"),
+                batch_size=int(config.get("batch_size", 16)),
+                max_model_tokens=int(config.get("max_model_tokens", 256)),
+                revision=config.get("revision"),
+            )
+        else:
+            values = list(precomputed.get("values", []))
+            semantic_metadata = dict(precomputed.get("metadata", {}))
+            if semantic_metadata.get("model_name") != model_name:
+                raise ValueError(
+                    "precomputed semantic route model does not match "
+                    "routes.semantic.model_name"
+                )
+            configured_revision = config.get("revision")
+            if configured_revision is not None and str(
+                semantic_metadata.get("model_revision")
+            ) != str(configured_revision):
+                raise ValueError(
+                    "precomputed semantic route revision does not match "
+                    "routes.semantic.revision"
+                )
         metadata = {
             "route_type": "semantic_sentence_encoder",
             **semantic_metadata,
@@ -259,6 +269,29 @@ def _resolve_min_per_route(
     return resolved
 
 
+def _resolve_route_weights(
+    value: Optional[Mapping[str, float]], routes: List[str]
+) -> Dict[str, float]:
+    """Resolve positive RRF weights without accepting hidden/disabled routes."""
+
+    resolved = {route: 1.0 for route in routes}
+    if value is None:
+        return resolved
+    if not isinstance(value, Mapping):
+        raise ValueError("candidates.route_weights must be an object")
+    for raw_route, raw_weight in value.items():
+        route = _canonical_route_name(str(raw_route))
+        if route not in resolved:
+            raise ValueError(
+                f"fusion weight configured for disabled route {raw_route!r}"
+            )
+        weight = float(raw_weight)
+        if not math.isfinite(weight) or weight <= 0.0:
+            raise ValueError("candidate route fusion weights must be finite and positive")
+        resolved[route] = weight
+    return resolved
+
+
 def build_candidate_pool(
     sentence_records: List[Dict],
     base_scores: List[float],
@@ -272,6 +305,8 @@ def build_candidate_pool(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    route_weights: Optional[Mapping[str, float]] = None,
+    precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Build route proposals, reservations, guards, and one capped final pool.
 
@@ -319,6 +354,7 @@ def build_candidate_pool(
         total_budget = min(total_budget, n)
     sentences = [record["text"] for record in sentence_records]
     configs = route_config or {}
+    precomputed_routes = precomputed_route_data or {}
 
     route_values: Dict[str, List[float]] = {}
     route_metadata: Dict[str, RouteMetadata] = {}
@@ -336,6 +372,7 @@ def build_candidate_pool(
                 sim_matrix,
                 threshold,
                 config,
+                precomputed_routes.get(route),
             )
         except Exception as exc:
             raise RuntimeError(f"candidate route {route!r} failed: {exc}") from exc
@@ -357,6 +394,9 @@ def build_candidate_pool(
     requested_route_minimums = _resolve_min_per_route(
         min_per_route, list(route_values), configured_quota
     )
+    resolved_route_weights = _resolve_route_weights(
+        route_weights, list(route_values)
+    )
     # A reservation is a guarantee over evidence that actually exists, not a
     # requirement that every document contain at least the configured number
     # of sentences. Keep configuration validation tied to the configured
@@ -372,7 +412,8 @@ def build_candidate_pool(
 
     fusion_scores = {
         index: sum(
-            1.0 / (rrf_constant + route_ranks[route][index])
+            resolved_route_weights[route]
+            / (rrf_constant + route_ranks[route][index])
             for route in route_values
         )
         for index in range(n)
@@ -534,6 +575,9 @@ def build_candidate_pool(
             "underfilled_by": underfilled_by,
             "selected_proposals_by_route": reservation_counts,
             "dropped_proposals_by_route": dropped_by_route,
+            "fusion_method": "weighted_rrf",
+            "rrf_constant": int(rrf_constant),
+            "route_weights": resolved_route_weights,
         },
     }
 
@@ -551,6 +595,8 @@ def build_candidate_records(
     route_config: Optional[Mapping[str, Mapping[str, Any]]] = None,
     coverage_guard: Optional[Mapping[str, Any]] = None,
     rrf_constant: int = 60,
+    route_weights: Optional[Mapping[str, float]] = None,
+    precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> List[Dict]:
     """Backward-compatible record-only view of :func:`build_candidate_pool`."""
 
@@ -566,6 +612,8 @@ def build_candidate_records(
         route_config=route_config,
         coverage_guard=coverage_guard,
         rrf_constant=rrf_constant,
+        route_weights=route_weights,
+        precomputed_route_data=precomputed_route_data,
     )["records"]
 
 

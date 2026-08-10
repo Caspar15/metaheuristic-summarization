@@ -1,0 +1,55 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L11_position_guard",
+  "candidate_hash": "7c29b52e720e309d1578aace20179a81d5ccbcfee656d1831971e6e16bab0e61",
+  "declared_delta": {
+    "coverage_guard.position": true
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L11_position_guard/resolved_config.yaml",
+  "config_sha256": "7c287c01f5f54e65ad2246900ef2576fd70022f11c916c3e1a35717a8dae9869",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5000353986631757,
+      "rouge2": 0.15531301193288607,
+      "rougeLsum": 0.46365714932309554
+    },
+    "macro_rouge": 0.37300185330638574,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 638.3509544787078,
+      "min": 508,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 40.734214390602055,
+    "selector_candidate_size_mean": 40.734214390602055,
+    "selector_candidate_size_p95": 41.0,
+    "selector_candidate_size_max": 41,
+    "provenance_candidate_size_mean": 40.734214390602055,
+    "route_agreement_mean": 0.9820923319365353,
+    "unique_candidate_mean_by_route": {
+      "lexical": 40.0
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 16.164464023494862
+    }
+  }
+}

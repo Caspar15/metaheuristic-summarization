@@ -1,0 +1,14 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T03:34:02.741138+00:00",
+  "status": "interrupted",
+  "reason": "user stopped resource-saturating process tree; exact-prefix checkpoint retained",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "optimization_target": "rougeLsum",
+  "completed_prefix_rows": 257,
+  "checkpoint_path": "runs_v2/gate2_greedy_reference_v1/govreport/dev/rougeLsum/rows.jsonl",
+  "checkpoint_sha256": "5f680c82e267417a50f17cccf071d3ed2441f8c53ff9e05a528dc07106656a3e",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

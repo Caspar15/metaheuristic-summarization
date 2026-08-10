@@ -1,0 +1,79 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T13:52:35.275186+00:00",
+  "started_at_utc": "2026-08-09T13:52:16.683191+00:00",
+  "status": "completed",
+  "study_id": "d3a-router-fusion-screen-v1",
+  "dataset": "Multi-News",
+  "partition": "dev_pilot",
+  "pilot_rows": 200,
+  "candidate": "R11_lexical_x05",
+  "candidate_hash": "325ed82b4ea2d4be8acfc25abbd003ec603d5245dc6f8453b186845bcef91176",
+  "declared_delta": {
+    "candidates.route_weights": {
+      "lexical": 0.5
+    }
+  },
+  "config_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R11_lexical_x05/resolved_config.yaml",
+  "config_sha256": "2604fe63a017a445958a95896bdaf171f2d15f7e74357d639117c0afc1683a6c",
+  "predictions_path": "runs_v2/d3a_router_fusion_screen_v1/multinews/pilot/R11_lexical_x05/predictions.jsonl",
+  "predictions_sha256": "022a3c44d41883587db7aab7ad3aac2cb9f6350f8151ba91b1237b310b32ce8c",
+  "selected_indices_sha256": "2257893c6e6e56ec0500e12679f6e2797d8d015166ffa66d087486a3b7f858c9",
+  "implementation_commit": "267c144c2d1ad538a2ac6af639c6444d32baeecb",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "execution": {
+    "workers": 16,
+    "worker_kind": "bounded_row_processes",
+    "omp_threads_per_worker": 1,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+    "elapsed_seconds": 13.780191899975762
+  },
+  "dataset_preflight": {
+    "valid": true,
+    "policy_id": "multinews-validation-v1",
+    "policy_path": "configs/data_policies/multinews_validation_v1.json",
+    "policy_file_sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+    "analysis": "main",
+    "analysis_role": "primary_validation",
+    "input_path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\multi_news_validation_canonical.jsonl",
+    "input_file_sha256": "24c23be3e61a9d76fe396ff4620474ff45cbd4c2dd46ee7efa610c7c70b6eef1",
+    "dataset_fingerprint": "765438735a96070b5b36c1576721bd7b63125c0ae5aaf917818052ea0a621b14",
+    "rows": 5621,
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "replacement_character_rows": 72,
+    "replacement_characters": 1042,
+    "replacement_manifest_file_sha256": "963b37425daf326206675617b26959161dc79bf9dfbf2ad72ffd706949cbdeee",
+    "canonical_exclusion_manifest_file_sha256": "d030bdff82d7071a0b20e4104325e7bd0d57574dab88d19304a5d4fc47adaa30"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 200,
+    "rouge": {
+      "rouge1": 0.4321237425772921,
+      "rouge2": 0.1291119467965842,
+      "rougeLsum": 0.39365368055846534
+    },
+    "macro_rouge": 0.3182964566441138,
+    "feasible_rows": 200,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 244.71,
+      "min": 77,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

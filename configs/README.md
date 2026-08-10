@@ -1,6 +1,30 @@
 # configs — 實驗設定
 
-> ⚠️ 除 `phase1_mvp_multinews.yaml` 外，**其餘都是 legacy 設定。** 它們產生的結果全部是在 test set 上調參得到的（見
+## Selector comparison
+
+`selector_comparison_multinews.yaml` 是 validation-only matched-selector config。
+用同一檔案分別覆寫 `--optimizer greedy`、`--optimizer mmr`、
+`--optimizer nsga2`；不要複製三份後各自修改其他欄位。它固定 semantic-raw
+SBERT salience、SBERT similarity/coverage、候選池與 output budget。正式 full
+validation 前仍須依成本 preflight 凍結 NSGA-II population/generations。
+
+`pilot_manifests/multinews_selector_pilot_v1.json` 是在看 selector ROUGE 前
+凍結的 200-row reference-blind hash sample。它只供 pilot；正式 primary 仍是
+policy 所定義的全部 5,621 rows。不要重新抽樣或依 pilot 分數換 manifest。
+
+## Governed A1/D1 studies
+
+- `length_policies/{multinews,govreport}_v1.json` 是 A1 唯一一次 dev-test 後凍結的
+  word contracts；正式 development config 不得自行覆寫。
+- `studies/d1/{multinews,govreport}_base.yaml` 是 D1 dev-only Greedy sensitivity 的
+  dataset base。27 個 resolved variants 只能由
+  `preregistrations/d1_greedy_sensitivity_v1.json` 與 governed runner 產生。
+- D1 分成 lexical/objective、cheap multiroute、semantic 三個可獨立提交的 family；
+  runner 沒有 split 參數且只讀 frozen validation manifest 的 `dev` membership。
+
+> ⚠️ 根目錄的舊 numbered/fusion configs 是 **legacy 設定**；`studies/`、
+> `preregistrations/`、`length_policies/`、`validation_partitions/` 與現行 Phase 1 configs
+> 不在此列。legacy configs 產生的結果是在 test set 上調參得到的（見
 > `docs/research/CODE_AUDIT_IEEE_Access.md` 的 P0-01），**不可用於新論文**。
 > 保留它們只為了重現 `runs/` 底下的既有 artifact。
 > 新架構以 `phase1_mvp_*.yaml` 命名，且只允許 validation pilot；schema 以 `docs/research/ARCHITECTURE.md` 為準。
@@ -27,8 +51,10 @@ PR #10 的 `src.baselines.cli` 會讀同一份 `phase1_mvp_multinews.yaml`，因
 source capacity、selected words 與 reason。正式 run 請明確指定 `--run_dir runs_v2`；
 CLI 目前的 `runs` 預設值不可當作新舊結果分界。
 
-截至 2026-08-02，master 只包含 Lead。Random 的 PR #11 尚未合併；其他 baseline
-仍是 Phase 2 待辦。
+截至 2026-08-08，Lead、Random、TextRank、LexRank、SBERT centroid/MMR，以及明確標示
+clean-room adaptation 的 `pacsum_tfidf`／`pacsum_sbert` 已接線；舊 full-validation artifacts
+只算 historical diagnostics。PacSum 與 SBERT 的兩-primary正式
+partitioned matrix 與 paired significance 仍是 Phase 2 待辦。
 
 ---
 
@@ -109,6 +135,7 @@ python -m src.pipeline.select_sentences \
 | `candidate_budget.min_per_route` | total cap 前優先保留的 route evidence；全域值不得大於 configured `route_top_k`，短文件逐列 clamp 並在 artifact 保存 requested/effective/shortfall |
 | `candidate_budget.total` | selector pool 的上限，不從 proposal union／coverage guard 外補句；union 小於上限時允許誠實 underfill |
 | `selector.salience_source` | `rrf_fusion` 會把 normalized provenance fusion 實際送入 selector；`membership_only` 僅供消融 |
+| `candidates.route_weights` | weighted RRF 的顯式 route 權重；未設定時每路皆為 `1.0`，只接受已啟用 route 的有限正值，實際解析值寫入 candidate allocation |
 | `compute_budget.mode / enabled_routes` | 目前只實作 validation-frozen `fixed`；宣告 `adaptive` 會直接失敗 |
 | `length_control.min_words` | requested lower bound；逐文件依完整來源在 `max_words/max_sentences` 下的精確可達上限產生 `effective_min_words`。只有 source-intrinsic shortfall 可調降；candidate pool 若達不到 effective bound 必須報錯。兩者與 relaxation reason 均寫入 artifact |
 | `routes.semantic.*` | sentence encoder 名稱、固定 revision、batch size、`max_model_tokens`；輸出記錄實際 revision 與截斷率 |
@@ -125,3 +152,10 @@ python -m src.pipeline.select_sentences \
 > ℹ️ `pop_size` / `n_gen` / `seed` 過去**未被程式讀取**（實際一律跑 100/100），
 > 已在 `optimizer_dispatch.py` 修好。因此 legacy run 的 config_used.json
 > 不代表當時真正生效的參數。
+
+## Gate 2 baseline 搜尋
+
+`preregistrations/gate2_baseline_matrix_v1.json` 在正式 baseline 分數前凍結每個 primary
+的 non-PLM 23／PLM 27 candidates、dev-only selection score 與禁止 dev-test/test 的規則。
+截至 2026-08-09 只有 Multi-News non-PLM family 完成；不得因單一 family winner 改寫
+候選空間或提前讀 dev-test。

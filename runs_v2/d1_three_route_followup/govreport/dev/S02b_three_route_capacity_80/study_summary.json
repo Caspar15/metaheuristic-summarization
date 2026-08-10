@@ -1,0 +1,67 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-08T13:08:35.888602+00:00",
+  "status": "completed",
+  "test_split_accessed": false,
+  "dev_test_accessed": false,
+  "study_id": "d1-three-route-capacity-followup-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_three_route_capacity_followup_v1.json",
+  "preregistration_sha256": "2cac40b58c2d669ab0a2e5088f25afafbaaaa5c332460dad62e7bb9564e92743",
+  "family": "semantic_route_followup",
+  "candidate": "S02b_three_route_capacity_80",
+  "candidate_hash": "22ef42b0a80260b94c5b4a5cefacac724e199b05cd18389ff318ed587446b5d6",
+  "declared_delta": {
+    "candidate_budget.total": 80,
+    "coverage_guard.max_items": 20
+  },
+  "supersedes_original_failure": false,
+  "trigger_candidate": "S02_lexical_semantic_graph",
+  "config_path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+  "config_sha256": "f3cf22b9fdd2ea7b2457cfd34f66ba0c71b4faaac6fd1aa6479099c82a7c42d2",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.545090914619881,
+      "rouge2": 0.19622746490109597,
+      "rougeLsum": 0.5122671252147345
+    },
+    "macro_rouge": 0.4178618349119039,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 644.503671071953,
+      "min": 524,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 78.73861967694567,
+    "selector_candidate_size_mean": 78.73861967694567,
+    "selector_candidate_size_p95": 80.0,
+    "selector_candidate_size_max": 80,
+    "provenance_candidate_size_mean": 78.73861967694567,
+    "route_agreement_mean": 1.329200812515543,
+    "unique_candidate_mean_by_route": {
+      "graph": 18.41850220264317,
+      "lexical": 20.65051395007342,
+      "semantic": 18.19970631424376
+    },
+    "unique_selected_mean_by_route": {
+      "graph": 6.610866372980911,
+      "lexical": 7.02496328928047,
+      "semantic": 5.057268722466961
+    }
+  },
+  "interpretation": "capacity follow-up only; original S02 remains failed"
+}

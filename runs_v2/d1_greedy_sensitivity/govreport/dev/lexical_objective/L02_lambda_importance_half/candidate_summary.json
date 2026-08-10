@@ -1,0 +1,55 @@
+{
+  "status": "completed",
+  "study_id": "d1-greedy-sensitivity-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_selected_ids_sha256": "029fcecb2368c1b63c57f174aadfe89818e6c1a2f1d0726696f0116319805b25",
+  "length_policy_path": "configs/length_policies/govreport_v1.json",
+  "length_policy_sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+  "preregistration_path": "configs/preregistrations/d1_greedy_sensitivity_v1.json",
+  "preregistration_sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+  "family": "lexical_objective",
+  "candidate": "L02_lambda_importance_half",
+  "candidate_hash": "c7d380ad49574bb50faf068c10df87479e4ae340c3dbecc22cea76448c59667e",
+  "declared_delta": {
+    "objectives.lambda_importance": 0.5
+  },
+  "config_path": "runs_v2/d1_greedy_sensitivity/govreport/dev/lexical_objective/L02_lambda_importance_half/resolved_config.yaml",
+  "config_sha256": "47723dcc7427fdaddc10df4ca32e3954be41a159b9a568bd4110b7577c52731a",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.4990959665586692,
+      "rouge2": 0.15294688412153593,
+      "rougeLsum": 0.46207725138794625
+    },
+    "macro_rouge": 0.3713733673560505,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 638.618208516887,
+      "min": 520,
+      "max": 650
+    }
+  },
+  "candidate_diagnostics": {
+    "diagnostics_schema_version": "2.0",
+    "rows": 681,
+    "candidate_size_mean": 40.0,
+    "selector_candidate_size_mean": 40.0,
+    "selector_candidate_size_p95": 40.0,
+    "selector_candidate_size_max": 40,
+    "provenance_candidate_size_mean": 40.0,
+    "route_agreement_mean": 1.0,
+    "unique_candidate_mean_by_route": {
+      "lexical": 40.0
+    },
+    "unique_selected_mean_by_route": {
+      "lexical": 16.2863436123348
+    }
+  }
+}

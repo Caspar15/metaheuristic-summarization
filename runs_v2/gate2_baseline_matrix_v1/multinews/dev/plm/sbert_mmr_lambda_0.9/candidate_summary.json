@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "candidate": "sbert_mmr_lambda_0.9",
+  "method": "sbert_mmr",
+  "candidate_hash": "3f1ff119ff7a22cf8807713d37151acea6681d3bd425d6a2e544c73e2e19b960",
+  "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.9/resolved_config.yaml",
+  "config_sha256": "898ea936e1c6ad9237e4911445783777998dd16939698605ae51718a105fc768",
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.43039057070641734,
+      "rouge2": 0.13702408465735674,
+      "rougeLsum": 0.38693593204932825
+    },
+    "macro_rouge": 0.31811686247103416,
+    "feasible_rows": 3932,
+    "infeasible_rows": 3,
+    "summary_words": {
+      "mean": 247.38653113087673,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

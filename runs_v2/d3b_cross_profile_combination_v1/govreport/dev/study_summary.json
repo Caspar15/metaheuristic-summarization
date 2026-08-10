@@ -1,0 +1,83 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-09T14:48:09.153545+00:00",
+  "status": "completed",
+  "study_id": "d3b-cross-profile-combination-v1",
+  "dataset": "GovReport",
+  "partition": "dev",
+  "partition_rows": 681,
+  "anchor": {
+    "candidate": "R11_lexical_x05",
+    "macro": 0.4564230519761085,
+    "summary_path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R11_lexical_x05/candidate_summary.json"
+  },
+  "combination": {
+    "evidence_schema_version": "1.0",
+    "measured_at_utc": "2026-08-09T14:48:09.086765+00:00",
+    "started_at_utc": "2026-08-09T14:46:28.435777+00:00",
+    "status": "completed",
+    "study_id": "d3b-cross-profile-combination-v1",
+    "dataset": "GovReport",
+    "partition": "dev",
+    "candidate": "C01_combined_salience_route_weight",
+    "candidate_hash": "35a9a22431e36c196e6166b324496a7ce0cc6532974c23ae15e692f31443e637",
+    "declared_delta": {
+      "features.tf_isf.use_bigrams": true,
+      "features.weights.position": 0.2,
+      "candidates.route_weights": {
+        "lexical": 0.5
+      }
+    },
+    "config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481",
+    "implementation_commit": "b0e0d28551d788ff78dd3c2a2c00727975554f5e",
+    "dependency_versions": {
+      "python": "3.12.7",
+      "numpy": "1.26.4",
+      "scikit-learn": "1.7.1",
+      "nltk": "3.10.0",
+      "rouge-score": "0.1.2",
+      "PyYAML": "6.0.2",
+      "torch": "2.8.0+cpu",
+      "transformers": "4.56.0",
+      "tokenizers": "0.22.0",
+      "sentence-transformers": "5.1.0"
+    },
+    "execution": {
+      "workers": 16,
+      "threads_per_worker": 1,
+      "streamed_predictions": true,
+      "elapsed_seconds": 100.70421039999928,
+      "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+    },
+    "anchor_candidate": "R11_lexical_x05",
+    "anchor_summary_path": "runs_v2/d3a_router_fusion_full_dev_v1/govreport/dev/R11_lexical_x05/candidate_summary.json",
+    "anchor_summary_sha256": "183e237f72ead0f02e05b59575a25ddae9da445320c54ff90c1bc2d7deef2ed4",
+    "metrics": {
+      "evaluation_protocol": "multisentence_lsum",
+      "rows": 681,
+      "rouge": {
+        "rouge1": 0.5791063169607387,
+        "rouge2": 0.24938000973565697,
+        "rougeLsum": 0.5437248565512196
+      },
+      "macro_rouge": 0.45740372774920507,
+      "feasible_rows": 681,
+      "infeasible_rows": 0,
+      "summary_words": {
+        "mean": 647.1732745961821,
+        "min": 630,
+        "max": 650
+      }
+    },
+    "predictions_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+    "predictions_sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2",
+    "selected_indices_sha256": "96d588a9798e0a14ae0843257ecf87adb7044d5f49a51416b47471fd2a9b7517",
+    "per_example_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/per_example.jsonl",
+    "per_example_sha256": "9538f20d53b5374c0e0006b6f38ac1a3a0e882067d77210ad468e1b8530e486d",
+    "dev_test_accessed": false,
+    "test_split_accessed": false
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -5,6 +5,19 @@
 > 本文件是策略 memo，不是數字權威來源。Legacy Multi-News 的 ROUGE/Lead 已重現。
 > headroom、位置與 oracle overlap 的腳本**已版本化**至 `scripts/audit/`
 > 並由該處重跑確認一致，但仍使用小樣本與非官方 oracle，維持 diagnostic 標籤。
+> 2026-08-06 更新：frozen 200-row matched-selector pilot 顯示 MMR 在 R-1／R-2
+> 顯著優於 Greedy；NSGA-II 五 seed mean 均低於 Greedy且選句 Jaccard 0.639。
+> selector 路線當時因此暫定為 MMR main／Greedy reference／NSGA-II comparator。這只是
+> selector gate；兩 primary 的 strongest non-PLM baseline 都已勝 proposed S02b。Multi-News
+> PLM 27/27 之後最強仍是 non-PLM PacSum P08；GovReport PLM winner MMR λ=0.9 只高
+> LexRank `0.001148`、卻高 S02b `0.034906`。是否值得投稿仍取決於 dev 優化與完整 paired gate。
+> 2026-08-09 full-dev D2 更正：Multi-News 3,935-row selector isolation 中，Greedy-TFIDF
+> macro `0.328077` 勝所有 MMR／NSGA-II；最佳新候選 NSGA-II+TF-IDF 為 `0.322615`，
+> 最佳 MMR+TF-IDF 為 `0.321744`。200-row pilot 的 MMR 優勢未外推，NSGA-II 的
+> 高成本也未換得品質。GovReport D2 最佳 TF-IDF-MMR λ=0.7 macro `0.446154`，
+> 對 Greedy `+0.028293` 且 multiplicity-corrected paired gate 通過，但仍低 full-source
+> SBERT+MMR `0.006614`。沒有共同近最優 selector；下一輪採 task-profile policy，
+> 但兩 primary 都不具 dev-test promotion 資格。
 
 ---
 
@@ -213,6 +226,16 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 **第 3 點和第 4 點最有機會形成 IEEE Access 的方法敘事**，但目前只是待驗證的架構假設；仍需消融、matched baseline 與使用情境證明。
 
+### 3.4 D3b 後的實證修正（2026-08-09）
+
+現在不能再概括說「品質最好」，但第 3.3 節的定位在 GovReport 得到第一個正式支持。
+D3b 在 GovReport 對 full-source SBERT+MMR macro `+0.004636`，100k paired CI
+`[+0.002507,+0.006745]`，Holm-8 與 Bonferroni-340 均通過；這支持長篇單文件、
+training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低 PacSum
+`0.001323`，且 R-2 `−0.008565` 的 CI 全負；因此它同時否定跨 multi-document profile
+的普遍 superiority claim。策略不再是繼續調參，而是由作者決定是否批准
+`REPOSITIONING_RECOMMENDATION.md` 的 GovReport-centered claim matrix。
+
 ---
 
 ## 4. 文件整合與證據分工
@@ -242,7 +265,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 217 tests、10-document snapshot、shared objective/constraint、candidate provenance/RRF handoff 與 Multi-News validation policy preflight 已通過；PR #10 又加入 shared baseline contract 與 Lead。這仍只證明 correctness／baseline plumbing。published-protocol parity、GovReport、正式成本 pilot、其餘 baseline 與品質 validation 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 453 local tests、PR #16 Linux CI（含 pinned CPU encoder dependencies、pytest invocation/tmp portability 與 CRLF-era pin errata）、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -286,9 +309,9 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 217 tests、snapshot、shared objectives 與 Multi-News frozen-policy preflight 已完成；published-protocol parity、GovReport、正式成本 pilot 與 validation-frozen output policy 仍是未完成範圍；CNN/DM 是 Gate 3 後 optional |
-| Phase 2（baseline validation） | PR #10 已完成 Lead 程式與共用 contract；下一步仍是**先在兩個 primary 正式跑 Lead**，且長度上限、資料 policy 與 evaluator 嚴格對齊。程式存在不等於 reality check 已完成 |
-| Phase 3（方法實驗） | **新增核心指標：候選池對 validated oracle／greedy reference 的 recall@K，以及選句位置分布**。先在 validation 建立可重現版本 |
+| Phase 1（correctness refactor） | canonical 主路徑的 453 local tests、PR #16 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-71/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
+| Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
 | Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
 | Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
 
@@ -302,12 +325,17 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 
 ## 6. 最後的總體判斷
 
-**還有沒有機會投 IEEE Access？有，但不是現在，而且不能只補實驗。**
+**還有沒有機會投 IEEE Access？有條件，而且不是以原本的跨資料集 superiority 主張。**
 
 - **現在直接投** → 我判斷**幾乎確定被拒**。test-set 調參（P0-01）+ 輸給 Lead（F-0）任一被抓到就結束
 - **只修 evaluator、補 baseline、改寫文字後投** → 仍然 No-Go。因為修正後會**更清楚地顯示輸給 Lead**
-- **照合併計畫執行（含打破 lead bias 的核心改動）** → **有實質機會**。前提是中途檢查點通過
+- **改採 GovReport-centered 的長篇單文件／可審計 training-free 定位** → 有條件的機會；
+  必須先由老師與作者批准新的 claim matrix，再補 evaluator parity、成本/scaling 與寫作證據
+- **保留兩 primary 都須勝 strongest baseline 的原 gate** → D3b 已判定 No-Go，不應再跑同一搜尋空間
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
-**最後一句實話**：這個專案的核心概念（zero-training、可解釋 provenance、多目標成本控制）是有價值的，ICACT 的獎不是白拿的。legacy 系統實際上接近一個包裝得很複雜的 Lead baseline；新 canonical pipeline 已修掉多個造成此現象的工程缺陷，但尚無 validation 品質結果，不能先假定已經擺脫 lead bias。下一步仍是用同 split、同 budget 的 Lead 與強 baseline 直接驗證。
+**最後一句實話**：核心概念在 GovReport 已有 multiplicity-corrected 正證據，但
+Multi-News 的 R-2 缺陷仍明確，跨資料集主張已失敗。現在不能再優化同一 dev 搜尋空間，
+也不能直接投稿；應先由老師與作者審核 `REPOSITIONING_RECOMMENDATION.md`，決定縮窄為
+GovReport-centered 修訂稿，或接受 IEEE Access 方法稿 No-Go。

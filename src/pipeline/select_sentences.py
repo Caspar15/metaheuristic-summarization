@@ -5,6 +5,7 @@ optimizer dispatch — each delegated to its own module.
 """
 
 import argparse
+import hashlib
 import os
 import re
 import time
@@ -25,11 +26,21 @@ from src.representations.sent_vectors import SentenceVectors
 from src.representations.similarity import cosine_similarity_matrix
 from src.data.schemas import flatten_sentence_records, validate_candidate_record
 from src.data.policy import validate_dataset_policy_request
+from src.data.partitions import (
+    iter_partition_rows,
+    partition_report_for_artifact,
+    resolve_experiment_partition,
+)
 from src.eval.feasibility import classify_feasibility_row
 
 from src.pipeline.feature_builder import build_base_scores
 from src.pipeline.candidate_builder import build_candidate_pool
 from src.pipeline.optimizer_dispatch import dispatch_optimizer
+from src.models.extractive.encoder_rank import (
+    centroid_scores_from_embeddings,
+    cosine_matrix_from_embeddings,
+    encoder_document_embeddings,
+)
 from src.objectives.factory import build_objective_spec, validate_selector_for_task
 from src.objectives.evaluator import (
     InfeasibleSelectionError,
@@ -137,6 +148,13 @@ def attach_selector_salience(
                     f"selector salience source {source!r} requires route {route!r}"
                 )
             value = float(candidate["route_scores"][route]["percentile"])
+        elif normalized_source.endswith("_raw"):
+            route = normalized_source[: -len("_raw")]
+            if route not in candidate["route_scores"]:
+                raise ValueError(
+                    f"selector salience source {source!r} requires route {route!r}"
+                )
+            value = float(candidate["route_scores"][route]["raw"])
         else:
             raise ValueError(f"unknown selector.salience_source: {source!r}")
         candidate["selector_salience"] = value
@@ -144,6 +162,15 @@ def attach_selector_salience(
         validate_candidate_record(candidate)
         selector_scores.append(value)
     return selector_scores
+
+
+def _numeric_sha256(values, dtype: str) -> str | None:
+    """Hash a numeric selector input with explicit little-endian encoding."""
+
+    if values is None:
+        return None
+    array = np.ascontiguousarray(np.asarray(values, dtype=dtype))
+    return hashlib.sha256(array.tobytes(order="C")).hexdigest()
 
 
 def summarize_one(doc: Dict, cfg: Dict) -> Dict:
@@ -172,7 +199,12 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         sim = cosine_similarity_matrix(X)
 
     # 2. Feature scores
-    base_scores = build_base_scores(sentences, cfg, similarity_matrix=sim)
+    base_scores = build_base_scores(
+        sentences,
+        cfg,
+        similarity_matrix=sim,
+        sentence_records=sentence_records,
+    )
 
     # 3. Length / redundancy parameters
     lc = cfg.get("length_control", {})
@@ -227,6 +259,66 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     )
     selection_eligible_indices = eligibility.eligible_indices
     ineligible_sentences = eligibility.ineligible_sentences
+
+    # A selector representation is independent of the lexical representation
+    # used by handcrafted features and optional graph routing.  In the matched
+    # selector study all selectors receive this exact matrix.  When SBERT is
+    # requested, encode the full source once, reuse the eligible slice for the
+    # semantic candidate route, and retain the full-source rows for facility
+    # coverage.
+    selector_cfg = cfg.get("selector", {}) or {}
+    selector_similarity_source = str(
+        selector_cfg.get("similarity_source", "pipeline_similarity")
+    ).lower()
+    selector_full_sim = sim
+    selector_representation_metadata: Dict = {
+        "source": "pipeline_similarity",
+        "method": rep_cfg.get("method", "tfidf"),
+    }
+    precomputed_route_data: Dict = {}
+    if selector_similarity_source == "sbert":
+        semantic_cfg = (cfg.get("routes", {}) or {}).get("semantic", {})
+        model_name = semantic_cfg.get("model_name")
+        revision = semantic_cfg.get("revision")
+        if not isinstance(model_name, str) or not model_name.strip():
+            raise ValueError(
+                "selector.similarity_source='sbert' requires "
+                "routes.semantic.model_name"
+            )
+        if not isinstance(revision, str) or not revision.strip():
+            raise ValueError(
+                "selector.similarity_source='sbert' requires a pinned "
+                "routes.semantic.revision"
+            )
+        full_embeddings, semantic_metadata = encoder_document_embeddings(
+            sentences,
+            model_name=model_name,
+            device=semantic_cfg.get("device"),
+            batch_size=int(semantic_cfg.get("batch_size", 16)),
+            max_model_tokens=int(semantic_cfg.get("max_model_tokens", 256)),
+            revision=revision,
+        )
+        selector_full_sim = cosine_matrix_from_embeddings(full_embeddings)
+        eligible_embeddings = full_embeddings[selection_eligible_indices]
+        eligible_semantic_scores = centroid_scores_from_embeddings(
+            eligible_embeddings
+        )
+        precomputed_route_data["semantic"] = {
+            "values": eligible_semantic_scores,
+            "metadata": semantic_metadata,
+        }
+        selector_representation_metadata = {
+            "source": "sbert",
+            **semantic_metadata,
+        }
+    elif selector_similarity_source not in {
+        "pipeline_similarity",
+        "tfidf",
+    }:
+        raise ValueError(
+            "selector.similarity_source must be 'pipeline_similarity', "
+            "'tfidf', or 'sbert'"
+        )
 
     # 4. Candidate pool. Per-route quota and final selector budget are
     # deliberately separate from the output-length budget above.
@@ -292,6 +384,8 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             route_config=cfg.get("routes", {}) or {},
             coverage_guard=cfg.get("coverage_guard", {}) or {},
             rrf_constant=int(cand_cfg.get("rrf_constant", 60)),
+            route_weights=cand_cfg.get("route_weights"),
+            precomputed_route_data=precomputed_route_data,
         )
         if use_cand
         else {
@@ -302,7 +396,6 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
     )
     candidate_records = candidate_pool_result["records"]
     cand_idx = [record["original_index"] for record in candidate_records]
-    selector_cfg = cfg.get("selector", {}) or {}
     salience_source = str(selector_cfg.get("salience_source", "base_score"))
 
     # 5. Apply candidate mode
@@ -312,8 +405,16 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         sub_scores = attach_selector_salience(
             candidate_records, base_scores, salience_source
         )
-        sub_sim = sim[np.ix_(cand_idx, cand_idx)] if sim is not None else None
-        sub_coverage = sim[:, cand_idx] if sim is not None else None
+        sub_sim = (
+            selector_full_sim[np.ix_(cand_idx, cand_idx)]
+            if selector_full_sim is not None
+            else None
+        )
+        sub_coverage = (
+            selector_full_sim[:, cand_idx]
+            if selector_full_sim is not None
+            else None
+        )
     elif use_cand and cand_idx:
         if mode != "hard":
             if salience_source.lower() not in {"base_score", "membership_only"}:
@@ -331,12 +432,16 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 relative = eligible_position[original]
                 sub_scores[relative] = float(sub_scores[relative]) * soft_boost
             sub_sim = (
-                sim[np.ix_(sub_original_indices, sub_original_indices)]
-                if sim is not None
+                selector_full_sim[
+                    np.ix_(sub_original_indices, sub_original_indices)
+                ]
+                if selector_full_sim is not None
                 else None
             )
             sub_coverage = (
-                sim[:, sub_original_indices] if sim is not None else None
+                selector_full_sim[:, sub_original_indices]
+                if selector_full_sim is not None
+                else None
             )
     else:
         # Eligibility is independent of whether candidate routing is enabled.
@@ -346,11 +451,15 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         sub_sentences = [sentences[i] for i in sub_original_indices]
         sub_scores = [float(base_scores[i]) for i in sub_original_indices]
         sub_sim = (
-            sim[np.ix_(sub_original_indices, sub_original_indices)]
-            if sim is not None
+            selector_full_sim[np.ix_(sub_original_indices, sub_original_indices)]
+            if selector_full_sim is not None
             else None
         )
-        sub_coverage = sim[:, sub_original_indices] if sim is not None else None
+        sub_coverage = (
+            selector_full_sim[:, sub_original_indices]
+            if selector_full_sim is not None
+            else None
+        )
 
     candidate_capacity_words = maximum_feasible_words(
         sub_sentences,
@@ -394,6 +503,14 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         require_nonempty=require_nonempty,
         coverage_matrix=evaluator_coverage,
     )
+    selector_input_fingerprints = {
+        "candidate_original_indices_sha256": _numeric_sha256(
+            sub_original_indices, "<i8"
+        ),
+        "salience_sha256": _numeric_sha256(sub_scores, "<f8"),
+        "similarity_sha256": _numeric_sha256(sub_sim, "<f8"),
+        "coverage_sha256": _numeric_sha256(sub_coverage, "<f8"),
+    }
     caught_infeasible_error = None
     infeasible_code = None
     infeasible_reason = None
@@ -495,6 +612,14 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
                 "selection kept as-is"
             )
 
+    optimizer_diagnostics.setdefault("method", method_opt)
+    optimizer_diagnostics["selector_input_fingerprints"] = dict(
+        selector_input_fingerprints
+    )
+    optimizer_diagnostics["selector_representation"] = dict(
+        selector_representation_metadata
+    )
+
     selection_evaluation = evaluation.to_dict()
 
     # 7. Map back to original indices
@@ -572,6 +697,14 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         "infeasible_reason": infeasible_reason,
         "violations": selection_evaluation["violations"],
         "optimizer_diagnostics": optimizer_diagnostics or None,
+        "selector_inputs": {
+            "candidate_count": len(sub_original_indices),
+            "coverage_universe_size": (
+                0 if sub_coverage is None else int(sub_coverage.shape[0])
+            ),
+            "representation": dict(selector_representation_metadata),
+            **selector_input_fingerprints,
+        },
         "output_budget": {
             "unit": unit,
             "max_words": max_words if unit == "words" else None,
@@ -639,6 +772,7 @@ def summarize_jsonl(
     cfg: Dict,
     requested_split: str,
     dataset_preflight: Dict | None = None,
+    partition_preflight: Dict | None = None,
 ) -> int:
     """Stream one dataset into an atomic prediction artifact."""
 
@@ -646,12 +780,15 @@ def summarize_jsonl(
         dataset_preflight = validate_dataset_policy_request(
             cfg, input_path, requested_split
         )
+    if partition_preflight is None:
+        partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     processed = 0
 
     def prediction_rows():
         nonlocal processed
-        for doc in tqdm(read_jsonl(input_path), desc="Summarizing"):
+        rows = iter_partition_rows(read_jsonl(input_path), partition_preflight)
+        for doc in tqdm(rows, desc="Summarizing"):
             validate_requested_split(doc, requested_split)
             result = summarize_one(doc, cfg)
             processed += 1
@@ -688,6 +825,7 @@ def main():
 
     validate_experiment_request(cfg, args.split)
     dataset_preflight = validate_dataset_policy_request(cfg, args.input, args.split)
+    partition_preflight = resolve_experiment_partition(cfg, dataset_preflight)
 
     # Guard: Stage2 union input should use fast (non-BERT) optimizers only
     method_opt = (cfg.get("optimizer", {}).get("method") or "").lower()
@@ -712,6 +850,7 @@ def main():
         cfg,
         args.split,
         dataset_preflight=dataset_preflight,
+        partition_preflight=partition_preflight,
     )
     t1 = time.perf_counter()
 
@@ -726,6 +865,14 @@ def main():
             encoding="utf-8",
         ) as f:
             json.dump(dataset_preflight, f, ensure_ascii=False, indent=2)
+    partition_report = partition_report_for_artifact(partition_preflight)
+    if partition_report is not None:
+        with open(
+            os.path.join(out_dir, "partition_preflight.json"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(partition_report, f, ensure_ascii=False, indent=2)
 
     feasibility_report = build_feasibility_report(preds_path)
     with open(
