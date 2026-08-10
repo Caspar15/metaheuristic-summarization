@@ -81,6 +81,133 @@ def sha256_binary_file(path: str) -> str:
     return digest.hexdigest()
 
 
+DEFAULT_PIN_ERRATA_PATH = "configs/pin_errata_lf_normalization.json"
+
+
+def _load_pin_errata(errata_path: str) -> Dict[str, str]:
+    """Load the LF-normalization errata, keyed by its legacy CRLF-era pin.
+
+    Returns a mapping of ``legacy_crlf_sha256 -> lf_canonical_sha256``. Those
+    two hashes are the entire matching contract (see :func:`verify_pin`);
+    ``content_id``, ``representative_path``, and ``reference_count`` are
+    validated for shape here (a malformed entry is still a hard error) but
+    are documentation only and never participate in matching. A single
+    legacy-era content blob is legitimately copied to well over a hundred
+    different paths in this project (e.g. ``dataset_preflight.json`` is
+    identical across every method's run directory under one partition), so
+    the file's real path cannot be part of the safety condition without
+    making the errata unable to describe that class of pin at all.
+
+    A duplicate ``legacy_crlf_sha256`` across two entries fails loud instead
+    of silently keeping only the last one: this file is hand-maintained and
+    grows over time, and a silent overwrite would make one of the two
+    equivalences vanish without any signal. There is no equivalent guard on
+    ``lf_canonical_sha256`` -- the same current content can legitimately
+    have had more than one legacy CRLF-era identity (e.g. if it was
+    regenerated more than once before the write_text() fix), so repeated
+    canonical values are expected, not a defect.
+
+    Missing errata file is not an error: most callers never hit a legacy
+    pin, and the errata file is deliberately excluded from the pin system
+    it documents (see its own ``note`` field), so a repo checkout without
+    it must still work for every pin that already matches directly.
+    """
+
+    try:
+        with open(errata_path, "r", encoding="utf-8") as stream:
+            errata = json.load(stream)
+    except FileNotFoundError:
+        return {}
+    equivalences = errata.get("equivalences")
+    if not isinstance(equivalences, list):
+        raise ValueError(f"{errata_path}: missing or malformed 'equivalences' list")
+
+    by_legacy_hash: Dict[str, str] = {}
+    content_id_by_legacy_hash: Dict[str, str] = {}
+    for entry in equivalences:
+        if not isinstance(entry, Mapping):
+            raise ValueError(f"{errata_path}: equivalences entry is not an object: {entry!r}")
+        legacy = entry.get("legacy_crlf_sha256")
+        canonical = entry.get("lf_canonical_sha256")
+        content_id = entry.get("content_id")
+        representative_path = entry.get("representative_path")
+        reference_count = entry.get("reference_count")
+        if not (isinstance(legacy, str) and len(legacy) == 64):
+            raise ValueError(
+                f"{errata_path}: entry has an invalid 'legacy_crlf_sha256': {entry!r}"
+            )
+        if not (isinstance(canonical, str) and len(canonical) == 64):
+            raise ValueError(
+                f"{errata_path}: entry has an invalid 'lf_canonical_sha256': {entry!r}"
+            )
+        if not (isinstance(content_id, str) and content_id.strip()):
+            raise ValueError(f"{errata_path}: entry has an invalid 'content_id': {entry!r}")
+        if not (isinstance(representative_path, str) and representative_path.strip()):
+            raise ValueError(
+                f"{errata_path}: entry has an invalid 'representative_path': {entry!r}"
+            )
+        if not (isinstance(reference_count, int) and reference_count > 0):
+            raise ValueError(
+                f"{errata_path}: entry has an invalid 'reference_count': {entry!r}"
+            )
+        if legacy in by_legacy_hash:
+            raise ValueError(
+                f"{errata_path}: duplicate legacy_crlf_sha256 {legacy!r} -- "
+                f"declared by both {content_id_by_legacy_hash[legacy]!r} and "
+                f"{content_id!r}. Silently overwriting the first entry would "
+                "make its equivalence disappear without warning; give each "
+                "legacy pin its own entry or merge the two content_id "
+                "descriptions by hand."
+            )
+        by_legacy_hash[legacy] = canonical
+        content_id_by_legacy_hash[legacy] = content_id
+    return by_legacy_hash
+
+
+def verify_pin(
+    path: str, expected: str, *, errata_path: str = DEFAULT_PIN_ERRATA_PATH
+) -> str:
+    """Verify ``path``'s SHA-256 against ``expected``, honoring the LF errata.
+
+    Returns ``"pass"`` when :func:`sha256_file` already equals ``expected``
+    directly -- the ordinary, current case.
+
+    Returns ``"legacy"`` only when *both* hold: ``expected`` equals a
+    recorded ``legacy_crlf_sha256`` in the errata, AND the file's actual
+    (LF-normalized) hash equals that same entry's ``lf_canonical_sha256``.
+    Matching is by hash pair alone, not by path -- a single legacy-era
+    content blob can legitimately live at well over a hundred different
+    paths (copies of the same run-input identity across method
+    subdirectories), so requiring a specific path would make the errata
+    unable to describe that case. The two-hash condition is still the full
+    safety net: satisfying only one side is not enough to grant "legacy" --
+    ``expected`` matching a legacy hash while the file's actual content
+    matches neither that hash nor its recorded canonical value must fail
+    loud, and a file whose content coincidentally equals some entry's
+    canonical hash grants nothing unless the caller's ``expected`` is that
+    same entry's legacy hash. Callers must record a ``"legacy"`` result
+    distinctly from ``"pass"`` -- it means the pin predates the PR #16 CRLF
+    fix, not that the file is currently pinned correctly.
+
+    Anything else fails loud with both hashes in the message. This function
+    never silently falls back to treating a mismatch as acceptable.
+    """
+
+    actual = sha256_file(path)
+    if actual == expected:
+        return "pass"
+
+    errata = _load_pin_errata(errata_path)
+    canonical = errata.get(expected)
+    if canonical is not None and canonical == actual:
+        return "legacy"
+
+    raise ValueError(
+        f"{path}: SHA-256 is {actual}, expected {expected} "
+        "(not covered by errata)"
+    )
+
+
 def load_frozen_policy(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as stream:
         policy = json.load(stream)

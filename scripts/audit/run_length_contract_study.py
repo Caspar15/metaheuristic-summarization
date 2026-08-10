@@ -26,7 +26,7 @@ import numpy as np
 import yaml
 
 from src.data.partitions import selected_ids_sha256
-from src.data.policy import sha256_file
+from src.data.policy import sha256_file, verify_pin
 from src.data.schemas import extract_references
 from src.eval.paired import holm_adjust, paired_bootstrap_difference
 from src.eval.rouge import DEFAULT_METRICS, rouge_scores
@@ -166,8 +166,9 @@ def _load_study(dataset: str) -> dict[str, Any]:
             "max_words": max_words,
         }
     manifest_path = REPO_ROOT / spec["manifest"]
-    if sha256_file(str(manifest_path)) != spec["manifest_sha256"]:
-        raise ValueError("frozen validation partition manifest SHA-256 drifted")
+    pin_status = verify_pin(str(manifest_path), spec["manifest_sha256"])
+    if pin_status == "legacy":
+        print(f"[legacy pin] {manifest_path} (CRLF-era pin, see errata)")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     spec.update(
         {

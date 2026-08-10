@@ -35,7 +35,7 @@ from scripts.audit.run_length_contract_study import (
     _write_jsonl,
 )
 from scripts.audit.run_selector_comparison import load_frozen_rows
-from src.data.policy import sha256_file, validate_dataset_policy_request
+from src.data.policy import sha256_file, validate_dataset_policy_request, verify_pin
 from src.data.schemas import extract_references
 from src.eval.rouge import DEFAULT_METRICS, rouge_scores
 from src.pipeline.select_sentences import summarize_one, validate_requested_split
@@ -192,8 +192,9 @@ def run(dataset: str, *, workers: int, resume: bool = False) -> dict[str, Any]:
     manifest_path = REPO_ROOT / registration["pilot_manifest"]
     if sha256_file(str(base_path)) != registration["base_config_sha256"]:
         raise ValueError("D3a base config SHA-256 drifted")
-    if sha256_file(str(manifest_path)) != registration["pilot_manifest_sha256"]:
-        raise ValueError("D3a pilot manifest SHA-256 drifted")
+    pin_status = verify_pin(str(manifest_path), registration["pilot_manifest_sha256"])
+    if pin_status == "legacy":
+        print(f"[legacy pin] {manifest_path} (CRLF-era pin, see errata)")
     base = load_yaml(str(base_path))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     dataset_preflight = validate_dataset_policy_request(

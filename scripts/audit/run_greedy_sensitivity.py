@@ -31,7 +31,7 @@ from scripts.audit.run_length_contract_study import (
     _write_json,
 )
 from src.data.partitions import selected_ids_sha256
-from src.data.policy import sha256_file
+from src.data.policy import sha256_file, verify_pin
 from src.utils.io import load_yaml, read_jsonl
 
 
@@ -137,9 +137,10 @@ def _load_study(dataset: str) -> dict[str, Any]:
     spec = copy.deepcopy(STUDIES[dataset])
     for key in ("manifest", "length_policy"):
         expected = spec[f"{key}_sha256"]
-        actual = sha256_file(str(REPO_ROOT / spec[key]))
-        if actual != expected:
-            raise ValueError(f"frozen D1 {key} SHA-256 drifted")
+        target_path = REPO_ROOT / spec[key]
+        pin_status = verify_pin(str(target_path), expected)
+        if pin_status == "legacy":
+            print(f"[legacy pin] {target_path} (CRLF-era pin, see errata)")
     manifest = json.loads((REPO_ROOT / spec["manifest"]).read_text(encoding="utf-8"))
     length_policy = json.loads(
         (REPO_ROOT / spec["length_policy"]).read_text(encoding="utf-8")

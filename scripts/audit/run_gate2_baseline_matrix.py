@@ -30,7 +30,7 @@ from scripts.audit.run_length_contract_study import (
     _write_json,
 )
 from src.data.partitions import selected_ids_sha256
-from src.data.policy import sha256_file
+from src.data.policy import sha256_file, verify_pin
 from src.models.extractive.encoder_rank import (
     EMBEDDING_CACHE_CONTRACT_VERSION,
     EMBEDDING_CACHE_ENV,
@@ -303,8 +303,9 @@ def run_family(dataset: str, family: str, *, resume: bool = False) -> dict[str, 
     variants = expand_variants(prereg, family)
     spec = copy.deepcopy(STUDIES[dataset])
     manifest_path = REPO_ROOT / spec["manifest"]
-    if sha256_file(str(manifest_path)) != spec["manifest_sha256"]:
-        raise ValueError("frozen Gate 2 manifest SHA-256 drifted")
+    pin_status = verify_pin(str(manifest_path), spec["manifest_sha256"])
+    if pin_status == "legacy":
+        print(f"[legacy pin] {manifest_path} (CRLF-era pin, see errata)")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     partition = manifest["partitions"]["dev"]
     ordered_ids = partition["selected_ids"]

@@ -16,7 +16,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, Mapping
 
-from src.data.policy import sha256_file
+from src.data.policy import sha256_file, verify_pin
 
 
 PARTITION_SCHEMA_VERSION = "1.0"
@@ -89,12 +89,10 @@ def resolve_experiment_partition(
         )
     if not os.path.isfile(manifest_path):
         raise ValueError(f"validation partition manifest is missing: {manifest_path}")
+    pin_status = verify_pin(manifest_path, expected_manifest_sha256)
+    if pin_status == "legacy":
+        print(f"[legacy pin] {manifest_path} (CRLF-era pin, see errata)")
     actual_manifest_sha256 = sha256_file(manifest_path)
-    if actual_manifest_sha256 != expected_manifest_sha256:
-        raise ValueError(
-            "validation partition manifest SHA-256 is "
-            f"{actual_manifest_sha256}, expected {expected_manifest_sha256}"
-        )
 
     manifest = _load_manifest(manifest_path)
     experiment = cfg.get("experiment")
