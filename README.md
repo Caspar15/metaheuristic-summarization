@@ -201,6 +201,12 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+腳本從 repo root 執行，並設定 `PYTHONPATH`：
+
+```bash
+PYTHONPATH=. python scripts/audit/verify_provenance.py
+```
+
 只想跑展示用的 web app 才需要：
 
 ```bash
