@@ -210,6 +210,7 @@ def run_comparison(
         (label_dir / "metrics.json").write_text(
             json.dumps(label_summary, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
         per_example_by_label[label] = per_example_rows
         result_summaries[label] = label_summary
@@ -288,7 +289,9 @@ def run_comparison(
     }
     summary_path = output_dir / "summary.json"
     summary_path.write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     return summary
 

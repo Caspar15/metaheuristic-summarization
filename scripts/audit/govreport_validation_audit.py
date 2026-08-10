@@ -12,7 +12,7 @@ from typing import Any, Iterable
 
 import numpy as np
 
-from src.data.policy import sha256_file
+from src.data.policy import sha256_binary_file, sha256_file
 from src.data.schemas import (
     extract_references,
     flatten_sentence_records,
@@ -161,7 +161,7 @@ def build_report(
         },
         "official_archive": {
             "path": archive_path.as_posix(),
-            "file_sha256": sha256_file(str(archive_path)),
+            "file_sha256": sha256_binary_file(str(archive_path)),
             "expected_file_sha256": "bedf7a780910afbaa8bb64e794742722f3faea06d3c156fd1cedc1a7b5c4cd3c",
         },
         "license": {
@@ -213,7 +213,9 @@ def _write_json(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     temporary.replace(path)
 

@@ -16,7 +16,7 @@ from pathlib import Path
 import tarfile
 from typing import Any, Iterable, Mapping, Sequence
 
-from src.data.policy import sha256_file
+from src.data.policy import sha256_binary_file
 from src.data.preprocess_multinews import segment_document
 from src.data.schemas import (
     SCHEMA_VERSION,
@@ -326,7 +326,7 @@ def iter_validation_examples(
     rather than fabricated, silently dropped, or allowed to fail evaluation.
     """
 
-    actual_sha256 = sha256_file(str(archive_path))
+    actual_sha256 = sha256_binary_file(str(archive_path))
     if actual_sha256 != OFFICIAL_ARCHIVE_SHA256:
         raise GovReportPreprocessingError(
             f"official archive SHA-256 is {actual_sha256}, "
@@ -460,6 +460,7 @@ def main() -> None:
     temporary_manifest.write_text(
         json.dumps(exclusion_manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     temporary_manifest.replace(manifest_path)
     print(f"Wrote canonical GovReport validation to {args.output}")

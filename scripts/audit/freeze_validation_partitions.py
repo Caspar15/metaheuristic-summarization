@@ -30,6 +30,7 @@ def main() -> None:
     temporary.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     temporary.replace(output)
     print(

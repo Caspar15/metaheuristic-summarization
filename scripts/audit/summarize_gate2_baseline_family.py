@@ -276,7 +276,9 @@ def summarize(dataset: str, family: str) -> dict[str, Any]:
     }
     output_path = root / OUTPUT_NAME
     output_path.write_text(
-        json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(output, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     return output
 

@@ -11,10 +11,72 @@ from typing import Any, Dict, Mapping
 from src.data.validate_dataset import validate_jsonl
 
 
+_CHUNK_SIZE = 1024 * 1024
+
+
 def sha256_file(path: str) -> str:
+    """Hash a text provenance artifact after normalizing CRLF to LF.
+
+    Every artifact this project points at ``sha256_file`` is JSON, JSONL,
+    or YAML written by this project's own tooling. In any such file, a
+    literal CR byte (0x0D) can only ever be a line terminator: a CR that is
+    genuine string *content* must be JSON/YAML-escaped as the two-byte
+    sequence ``\\r`` (0x5C 0x72), never emitted as a raw control byte.
+    ``pathlib.Path.write_text()`` performs universal-newline translation by
+    default, so the same call writes ``\n`` on Linux/macOS but ``\r\n`` on
+    Windows (PR #16's CRLF pin audit: the value frozen into every
+    downstream ``manifest_sha256``/``PREREGISTRATION_SHA256`` was computed
+    from a Windows-written CRLF file, while a checkout of the same content
+    on any other platform is LF-only). Normalizing here makes the digest
+    depend only on content, not on which OS happened to write the file,
+    without altering what the JSON/YAML actually says.
+
+    A binary artifact (an archive, checkpoint, or embedding cache) may
+    contain a genuine ``\r\n`` byte pair that is not a line ending, so it
+    must go through :func:`sha256_binary_file` instead. A NUL byte cannot
+    occur in a legitimate UTF-8 text artifact this project produces, so its
+    presence means the caller pointed this function at something binary;
+    that fails loud here rather than silently returning a normalized (and
+    wrong) digest for it.
+    """
+
     digest = hashlib.sha256()
     with open(path, "rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+        carry = b""
+        while True:
+            chunk = stream.read(_CHUNK_SIZE)
+            if not chunk:
+                break
+            chunk = carry + chunk
+            if b"\x00" in chunk:
+                raise ValueError(
+                    f"{path}: contains a NUL byte, so it cannot be a "
+                    "legitimate UTF-8 text artifact; use sha256_binary_file() "
+                    "instead of sha256_file() for binary artifacts"
+                )
+            if chunk.endswith(b"\r"):
+                carry = b"\r"
+                chunk = chunk[:-1]
+            else:
+                carry = b""
+            digest.update(chunk.replace(b"\r\n", b"\n"))
+        if carry:
+            digest.update(carry)
+    return digest.hexdigest()
+
+
+def sha256_binary_file(path: str) -> str:
+    """Hash a binary artifact's raw bytes with no normalization.
+
+    Use this for archives, model checkpoints, embedding caches, or any
+    artifact where a ``\r\n`` byte pair might be genuine binary content
+    rather than a text line ending. Unlike :func:`sha256_file`, this never
+    rejects NUL bytes and never rewrites the digested bytes.
+    """
+
+    digest = hashlib.sha256()
+    with open(path, "rb") as stream:
+        for chunk in iter(lambda: stream.read(_CHUNK_SIZE), b""):
             digest.update(chunk)
     return digest.hexdigest()
 
