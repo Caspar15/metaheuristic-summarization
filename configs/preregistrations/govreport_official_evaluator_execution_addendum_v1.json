@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "govreport-official-evaluator-execution-addendum-v1",
+  "status": "frozen_before_any_official_evaluator_score",
+  "registered_at_utc": "2026-08-15T06:41:31.8434851Z",
+  "parent_preregistration": {
+    "path": "configs/preregistrations/govreport_centered_evidence_completion_v1.json",
+    "sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2"
+  },
+  "authoritative_code": {
+    "repository": "https://github.com/luyang-huang96/LongDocSum",
+    "commit": "ee0dd33f2fde9d19b9a15d81884418d68320e5ca",
+    "files": ["Model/eval_model.py", "Model/evaluate.py"]
+  },
+  "execution_dependencies": {
+    "stanza": "1.10.1",
+    "stanza_english_tokenize_combined_sha256": "6280da0f82125c267e22f5fb912c4e090cb02804232d17a2df9a174df7c8fef1",
+    "stanza_english_mwt_combined_sha256": "5f7579111def1f6212c98fa8154ff964bf0eafb9218845ecfa3a1d5a931be237",
+    "stanza_resources_json_sha256": "3efb2833a67c0184fac2ea9986c04f9585bfb89fb943a4ab1a6bcbed641d6be0",
+    "pyrouge": "0.1.3",
+    "rouge_toolkit_mirror": "https://github.com/andersjo/pyrouge",
+    "rouge_toolkit_mirror_commit": "3b6c415204dbc2c8360a01d92533441f4aae95eb",
+    "rouge_1_5_5_pl_sha256": "158c72cf445719d76195b802854101c3373209aa6cb1e91f80d1ce165beaa0d2",
+    "perl": "Strawberry Perl 5.42.2"
+  },
+  "protocol": {
+    "stanza_pipeline": "Pipeline(lang='en', processors='tokenize,mwt', use_gpu=False, download_method=None)",
+    "sentence_serialization": "tokens joined by one ASCII space; sentences joined by LF",
+    "rouge_arguments": "-c 95 -r 1000 -n 2 -m",
+    "per_evaluation_output_flag": "-d; output-only flag, with a smoke check requiring identical corpus Average_F with and without -d",
+    "systems": "the nine immutable prediction artifacts in the parent E1 registration",
+    "rows": 681,
+    "all_rows_denominator": true
+  },
+  "paired_inference": {
+    "primary_comparator": "sbert_mmr_lambda_0.9",
+    "primary_macro": "100000 paired bootstrap resamples, seed 20260815, 95% percentile CI, finite-corrected two-sided p",
+    "component_family": "R1/R2/RL, 100000 resamples with seeds 20260816..20260818, Holm-adjusted over 3",
+    "secondary_family": "eight proposed-versus-other-baseline comparisons x R1/R2/RL/macro = 32 Holm endpoints; descriptive only",
+    "secondary_seed_base": 20261815,
+    "decision": "No official score may trigger tuning. A reversed macro comparison or clearly negative component downgrades/revokes the corresponding claim."
+  },
+  "scores_observed_before_registration": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

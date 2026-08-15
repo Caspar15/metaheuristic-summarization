@@ -1,0 +1,12 @@
+{
+  "evidence_schema_version": "1.0",
+  "recorded_at_utc": "2026-08-15T07:06:37.6301009Z",
+  "status": "failed_before_perl_or_any_score",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "lead",
+  "failure": "NameError in the newly added ASCII-alias identity guard: ADDENDUM should have been EXECUTION_ADDENDUM.",
+  "resolution": "Correct the constant name; scientific inputs, evaluator, and cached tokenization remain unchanged.",
+  "official_scores_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

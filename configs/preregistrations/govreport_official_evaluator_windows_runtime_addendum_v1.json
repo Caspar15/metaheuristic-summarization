@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "govreport-official-evaluator-windows-runtime-addendum-v1",
+  "status": "frozen_before_any_official_evaluator_score",
+  "registered_at_utc": "2026-08-15T07:08:40.2968300Z",
+  "parent_execution_addendum": {
+    "path": "configs/preregistrations/govreport_official_evaluator_execution_addendum_v1.json",
+    "sha256": "2486dbfb29560fe599256995356e291d28c7ebf9d21b478e22166151d013ab8c"
+  },
+  "reason": "Strawberry Perl DB_File cannot read the toolkit mirror's prebuilt Unix Berkeley DB. The score-free smoke reached the database open and failed before evaluating any pair.",
+  "unchanged_components": {
+    "rouge_1_5_5_pl_sha256": "158c72cf445719d76195b802854101c3373209aa6cb1e91f80d1ce165beaa0d2",
+    "rouge_arguments": "-c 95 -r 1000 -n 2 -m",
+    "stanza_models": "unchanged from parent execution addendum",
+    "prediction_and_reference_bytes": "unchanged",
+    "ascii_repo_alias": "temporary R: subst alias to the exact repository; alias identity is SHA-verified by the runner"
+  },
+  "wordnet_runtime_db": {
+    "mirror_prebuilt_db_sha256_unreadable_on_this_platform": "de39665d1d0a0e5d24895b25dfee7015cd84632e13f0dd02340bd9b6010d5a78",
+    "released_builder": "data/WordNet-2.0-Exceptions/buildExeptionDB.pl",
+    "released_builder_sha256": "a920ccce2d3116b2bb1721d820940e4ad73a8334df5c8cce9c986efd80c379ab",
+    "source_exception_files": {
+      "adj.exc": "42c47c5a15b93852b3c7071e059e300bb2fc83c238bf84af020ed1ccc1cae61a",
+      "adv.exc": "f276606e7ef4b5a8feeb19522ff40072bf1ac5869cddabdcbbed4d45b2d54ec1",
+      "noun.exc": "368b48a257dc5bfd7bc12380151c6561a6222a76e4438b9907f02c9da0fee087",
+      "verb.exc": "570bcbd093c046eb51e0489204b4bf18bb424ce952c4a14c82ef9e95dd858c53"
+    },
+    "platform_native_db_sha256": "7824d3fb1db9220dda7f15b60b3b9e441c633d01439261715b449e08bdf5a3db",
+    "unique_plaintext_keys": 5930,
+    "db_file_keys": 5930,
+    "semantic_change": false
+  },
+  "official_scores_observed_before_registration": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
