@@ -34,6 +34,7 @@ ADDENDUM = REPO_ROOT / "configs/preregistrations/govreport_centered_cost_addendu
 SAMPLE = REPO_ROOT / "configs/pilot_manifests/govreport_cost_scaling_sample_v1.json"
 CANONICAL = REPO_ROOT / "data/processed/govreport_validation_canonical.jsonl"
 OUTPUT_ROOT = REPO_ROOT / "runs_v2/govreport_cost_scaling_v1"
+SEARCH_LOG = REPO_ROOT / "runs_v2/search_log.jsonl"
 PLM_SYSTEMS = {
     "frozen_C01_proposed",
     "full_source_sbert_mmr_lambda_0.9",
@@ -95,6 +96,32 @@ def _write_json(path: Path, value: Mapping[str, Any]) -> None:
         newline="\n",
     )
     temporary.replace(path)
+
+
+def _append_search_log(evidence: Mapping[str, Any]) -> None:
+    """Record every newly executed E2 attempt without treating timing as quality search."""
+    entry = {
+        "logged_at_utc": _utc_now(),
+        "study_id": "govreport-cost-scaling-v1",
+        "dataset": "GovReport",
+        "partition": "dev_reference_blind_30_document_cost_sample",
+        "family": "cost_scaling_evidence_only",
+        "candidate": (
+            f"{evidence['system']}:{evidence['state']}:"
+            f"{evidence['role']}:{evidence['repetition']}"
+        ),
+        "config_path": evidence["config_path"],
+        "config_hash": evidence["config_sha256"],
+        "dev_score": None,
+        "dev_test_score": None,
+        "status": evidence["status"],
+        "promoted": False,
+        "reason": "E2 cost evidence only; timing cannot tune or promote a method",
+        "test_split_accessed": False,
+    }
+    SEARCH_LOG.parent.mkdir(parents=True, exist_ok=True)
+    with SEARCH_LOG.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def _ids_digest(rows: Sequence[Mapping[str, Any]]) -> str:
@@ -380,6 +407,7 @@ def _run_once(
         "test_split_accessed": False,
     }
     _write_json(evidence_path, evidence)
+    _append_search_log(evidence)
     if evidence["status"] != "completed":
         raise RuntimeError(f"E2 attempt failed; preserved at {evidence_path}")
     return evidence
