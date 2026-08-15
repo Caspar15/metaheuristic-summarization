@@ -11,9 +11,12 @@
 - freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗，現在**尚未到可以跑 test**
   的狀態。作者端已於 2026-08-10 批准 GovReport-centered 重新定位：GovReport 是唯一
   primary quality domain，Multi-News 只保留為 boundary-condition evidence。
-- 配置搜尋與 baseline matrix 已結束。接下來的「最終實驗」專指 frozen GovReport dev
-  上已預註冊的 E1 官方 evaluator 對齊、E2 cold/warm runtime-memory-scaling、E3
-  route/provenance ablation；這三項都不是新調參，也不是 final test。
+- 配置搜尋與 baseline matrix 已結束。E1 官方 evaluator 已完成：Proposed 官方
+  macro `0.458257`，相對 full-source SBERT+MMR `+0.004569`，95% CI
+  `[+0.002467,+0.006680]`、`p=0.000020`；R-L 單項未顯著。接下來只執行 E2
+  cold/warm runtime-memory-scaling 與 E3 route/provenance ablation；它們不是新調參，
+  也不是 final test。完整表見
+  [`E1_OFFICIAL_EVALUATOR_STATUS.md`](docs/research/E1_OFFICIAL_EVALUATOR_STATUS.md)。
 - E1～E3 完成後要先寫 freeze audit、建立尚未 materialize 的 GovReport test policy，
   並取得老師與完整作者群簽字；只有全部通過才可能 one-shot 跑 official test。
 
@@ -146,7 +149,7 @@
 | Baseline／最終方法 gate | 🟡 **v1 雙-primary gate 失敗；v2 方向已核准、證據尚未補完** —— GovReport 對 SBERT+MMR macro `+0.004636` 且多重校正通過；Multi-News 低 PacSum `0.001323` 且 R-2 顯著較差。v2 將 GovReport 定為唯一 primary、Multi-News 定為 boundary；protected splits 仍鎖定。見 `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **459 local tests passed**（2026-08-11）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-72） |
+| 測試 | ✅ **464 local tests passed**（2026-08-15）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-73） |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

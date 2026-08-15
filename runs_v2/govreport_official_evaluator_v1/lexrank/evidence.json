@@ -1,0 +1,41 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T08:12:24.397707+00:00",
+  "status": "completed",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "lexrank",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "prediction_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/lexrank/lexrank/run/predictions.jsonl",
+  "prediction_sha256": "c2e17bcf31f90f2d8ece3edcfede77620886b57a1566f0e1df7cd66f3c69da47",
+  "metrics": {
+    "rouge1": 0.57375,
+    "rouge2": 0.24099,
+    "rougeL": 0.54243,
+    "macro_rouge": 0.45239
+  },
+  "per_example_path": "runs_v2/govreport_official_evaluator_v1/lexrank/per_example.jsonl",
+  "per_example_sha256": "83add4e53c451317f1a586036146da6358b49e17990e6f619b749e000d4e288e",
+  "raw_output_path": "runs_v2/govreport_official_evaluator_v1/lexrank/rouge_raw.txt",
+  "raw_output_sha256": "218f8e63aad9f3b9fe1b21c6821e410931b2877ae1e052473c29b9dc2c0295e3",
+  "execution_seconds": 161.3723883999628,
+  "command": [
+    "C:\\Strawberry\\perl\\bin\\perl.exe",
+    "R:\\.tmp\\rouge-windows-runtime\\ROUGE-1.5.5.pl",
+    "-e",
+    "R:\\.tmp\\rouge-windows-runtime\\data",
+    "-c",
+    "95",
+    "-r",
+    "1000",
+    "-n",
+    "2",
+    "-m",
+    "-d",
+    "-a",
+    "R:\\runs_v2\\govreport_official_evaluator_v1\\lexrank\\rouge_workspace\\settings.xml"
+  ],
+  "d_flag_corpus_parity_smoke": null,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

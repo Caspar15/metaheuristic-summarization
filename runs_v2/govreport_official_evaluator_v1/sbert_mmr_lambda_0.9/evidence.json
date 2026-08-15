@@ -1,0 +1,41 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T08:46:09.505674+00:00",
+  "status": "completed",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "sbert_mmr_lambda_0.9",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "prediction_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/predictions.jsonl",
+  "prediction_sha256": "7a39388eba1b75753ae3fe59da39a9ce290fd77d07d78590dfb44bcd3e85611e",
+  "metrics": {
+    "rouge1": 0.57653,
+    "rouge2": 0.24169,
+    "rougeL": 0.54285,
+    "macro_rouge": 0.45369
+  },
+  "per_example_path": "runs_v2/govreport_official_evaluator_v1/sbert_mmr_lambda_0.9/per_example.jsonl",
+  "per_example_sha256": "adf30ab1bcb042b5a4d7c16d9afdbfdb0df4bd23de7270e8227c503020a481f8",
+  "raw_output_path": "runs_v2/govreport_official_evaluator_v1/sbert_mmr_lambda_0.9/rouge_raw.txt",
+  "raw_output_sha256": "015a138da41d3e89b6d6ff9140a34b3d93b273ba4d60efcf1c3ca72c5683f18f",
+  "execution_seconds": 162.55887410003925,
+  "command": [
+    "C:\\Strawberry\\perl\\bin\\perl.exe",
+    "R:\\.tmp\\rouge-windows-runtime\\ROUGE-1.5.5.pl",
+    "-e",
+    "R:\\.tmp\\rouge-windows-runtime\\data",
+    "-c",
+    "95",
+    "-r",
+    "1000",
+    "-n",
+    "2",
+    "-m",
+    "-d",
+    "-a",
+    "R:\\runs_v2\\govreport_official_evaluator_v1\\sbert_mmr_lambda_0.9\\rouge_workspace\\settings.xml"
+  ],
+  "d_flag_corpus_parity_smoke": null,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -7,10 +7,13 @@ Multi-News 的既有 D3b 負結果保留為 boundary-condition evidence，不再
 promotion 的共同 primary。機器可讀 addendum、claim matrix、非搜尋 evidence preregistration
 與仍鎖定的 final protocol 已版本化；protected dev-test/test 仍未解鎖。
 
-**現在要執行的是 test 前最後三組 evidence-completion 實驗，不是 test：** E1 以官方
-Stanza + Perl ROUGE-1.5.5 重評已凍結 outputs，E2 量 cold/warm runtime、peak memory
-與 scaling，E3 跑五個已預註冊 route/provenance ablations。配置搜尋、baseline matrix
-與 D3b 已結束；E1～E3 之後先產出 freeze audit 並等待完整簽字。
+E1 官方 evaluator 已完成：Proposed 在 681-row frozen dev 的官方尺度 macro
+`0.458257`，相對 full-source SBERT+MMR `+0.004569`，95% CI
+`[+0.002467,+0.006680]`、`p=0.000020`；R-L 單項未顯著。現在要執行的是 test 前
+剩餘兩組 evidence-completion 實驗，不是 test：E2 量 cold/warm runtime、peak memory
+與 scaling，E3 跑五個已預註冊 route/provenance ablations。完整 E1 表見
+[`E1_OFFICIAL_EVALUATOR_STATUS.md`](E1_OFFICIAL_EVALUATOR_STATUS.md)；E2～E3 後先產出
+freeze audit 並等待完整簽字。
 
 Multi-News full-dev D2 已依事前凍結規格完成 14/14 selector candidates，只讀 dev
 3,935 rows。固定 S02b 候選時 Greedy-TFIDF macro `0.328077` 勝 NSGA-II+TF-IDF
@@ -73,7 +76,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route/provenance/shared objectives、兩套歷史資料 policy 與 partition 已完成；v2 已固定 GovReport primary／Multi-News boundary。published GovReport evaluator parity、正式成本 pilot、route/provenance final ablation 與 final-output policy 仍未完成；見 `ACTION_PLAN.md` Phase 3d |
-| 測試 | ✅ **459 local tests 全過**（2026-08-11）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**。新增 6 個 v2 freeze guards，F-70～F-72 均納入回歸 |
+| 測試 | ✅ **464 local tests 全過**（2026-08-15）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**。E1 runner/parser 與 fixed-pool guards 已納入回歸 |
 | **baseline** | ✅ **矩陣與 diagnosis 完成；quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；其後已完成 D2/D3a/D3b，不再重開 baseline grid。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |

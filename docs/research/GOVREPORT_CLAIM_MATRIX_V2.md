@@ -1,7 +1,8 @@
 # GovReport-centered Claim Matrix v2
 
 > **執行狀態覆核：2026-08-15。** Candidate、主張範圍與 E1～E3 protocol 已凍結；
-> E1、E2、E3、camera-ready extension audit、test data policy 與 final signatures 仍未完成。
+> E1 已完成且官方尺度 primary comparison 通過。E2、E3、camera-ready extension audit、
+> test data policy 與 final signatures 仍未完成。
 > 因此現在是 pre-test evidence completion，不是可執行 final test 的狀態。
 
 ## 決策狀態
@@ -22,7 +23,7 @@ A1 長度協定、預註冊或歷史 evidence。原本「兩 primary 都必須�
 
 | 角色 | 資料集 | 新稿用途 | 明確限制 |
 |---|---|---|---|
-| 唯一主要品質資料集 | **GovReport** | 驗證 long single-document、multi-sentence、training-free extractive summarization | 現有優勢只在 frozen dev 與內部 evaluator 成立；official evaluator 與 test 尚未通過 |
+| 唯一主要品質資料集 | **GovReport** | 驗證 long single-document、multi-sentence、training-free extractive summarization | frozen dev 的 official evaluator 已通過；test 尚未執行 |
 | Boundary condition | **Multi-News** | 報告 multi-document profile 的失敗邊界 | 不再作共同 promotion gate，不新增 protected-split 搜尋，也不能隱藏 R-2 顯著失敗 |
 | 未納入 | CNN/DailyMail、SciTLDR、PubMed | 本次定案不新增 | 不能為了增加資料集數量而在 freeze 後臨時加入 |
 
@@ -30,7 +31,7 @@ A1 長度協定、預註冊或歷史 evidence。原本「兩 primary 都必須�
 
 | ID | 主張 | 目前可寫到哪裡 | 投稿前還缺什麼 | 失敗時怎麼辦 |
 |---|---|---|---|---|
-| C-GOV-QUALITY | Frozen proposed 在 GovReport 優於 full-source SBERT+MMR λ=0.9 | 只能寫「frozen dev、內部 evaluator、multiplicity-corrected」 | 官方 ROUGE parity 與簽字後 one-shot final evaluation | 撤回 superiority；不得調參救分 |
+| C-GOV-QUALITY | Frozen proposed 在 GovReport 優於 full-source SBERT+MMR λ=0.9 | 可寫「frozen dev、官方 evaluator、預註冊 macro 顯著」；R-L 單項未顯著 | E2/E3、freeze 簽字與 one-shot final evaluation | test 若失敗即撤回 superiority；不得調參救分 |
 | C-PROVENANCE | 每句保留 lexical／semantic／graph route、rank、fusion 與 selector provenance | 可寫 implemented、schema-tested | full vs rank-only vs index-only matched ablation | 降為 engineering/reproducibility feature |
 | C-ROUTES | semantic／graph 對長篇單文件提供增量 | 只能寫 preliminary dev evidence | capacity-aware route ablation、unique contribution、cost、memory | 沒增量的 route 從主要貢獻降級 |
 | C-NSGA | NSGA-II 是 matched comparator，不是最佳 selector | pilot 與 full-dev 均支持負結果 | 如實報告，不需要再跑 test 搜尋 | 保留負結果／附錄，不能放回標題 |
@@ -66,7 +67,7 @@ global optimum、已在 test 勝出，或把不同 split／evaluator 的文獻�
 
 ## 解鎖 final evaluation 前的 DoD
 
-- [ ] GovReport 作者官方 Stanza + Perl ROUGE-1.5.5 protocol 已版本化並完成 parity/ranking check。
+- [x] GovReport 作者官方 Stanza + Perl ROUGE-1.5.5 protocol 已版本化並完成 parity/ranking check。
 - [ ] Frozen candidate、SBERT+MMR 與必要 baselines 的 cold/warm runtime、peak RAM/VRAM、scaling 完成。
 - [ ] Route-removal 與 provenance-removal ablation 依預註冊完成；沒有新增搜尋。
 - [ ] ICACT → IEEE Access extension table 已由 camera-ready 逐頁核對。

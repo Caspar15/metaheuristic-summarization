@@ -2,9 +2,9 @@
 
 ## 2026-08-15 freeze 前自治執行狀態
 
-> **目前執行點**：A1～D3b、baseline matrix 與 GovReport-centered 定位已完成；
-> 配置搜尋已停止。下一個工作包依序是 E1 官方 evaluator、E2 cold/warm
-> runtime-memory-scaling、E3 route/provenance ablation。三者只讀 frozen GovReport dev，
+> **目前執行點**：A1～D3b、baseline matrix、GovReport-centered 定位與 E1 官方
+> evaluator 已完成；配置搜尋已停止。下一個工作包依序是 E2 cold/warm
+> runtime-memory-scaling、E3 route/provenance ablation。兩者只讀 frozen GovReport dev，
 > 都不是 test。完成後寫 freeze audit 並等待老師／完整作者群簽字；目前禁止 dev-test/test。
 
 - [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
@@ -579,8 +579,10 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
       E1 official evaluator、E2 cold/warm runtime-memory-scaling、E3 route/provenance ablation
 - [x] `govreport_centered_final_evaluation_v1.json` 已固定 final candidate、baseline matrix、
       authoritative evaluator 與 paired test；`execution_status=locked`，尚未建立 test data policy
-- [ ] E1：對已凍結 GovReport dev outputs 跑官方 Stanza + Perl ROUGE-1.5.5 protocol，
-      檢查 proposed 與八個 baseline 的 ranking 是否維持；若反轉，撤回品質優勢且不得重調
+- [x] E1：九個 frozen GovReport dev systems 已以官方 Stanza + Perl ROUGE-1.5.5
+      protocol 重評（681/681）。Proposed macro `0.458257`，相對 full-source
+      SBERT+MMR `+0.004569`，95% CI `[+0.002467,+0.006680]`、`p=0.000020`；
+      R-1/R-2 通過 Holm-3，R-L 未顯著。見 `E1_OFFICIAL_EVALUATOR_STATUS.md`
 - [ ] E2：依 reference-blind 30-document sample，量 cold/warm latency、peak RSS、文件長度 scaling；CPU 是主報告
 - [ ] E3：在 frozen GovReport dev 681 rows 跑五個事前指定 ablations，20-endpoint Holm、100k paired bootstrap
 - [~] ICACT→IEEE Access extension matrix 草案已建立；repo 缺 ICACT camera-ready，頁碼／原表格仍待人工核對

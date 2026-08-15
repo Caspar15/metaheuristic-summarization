@@ -2404,3 +2404,27 @@ strict local-evidence mode 驗 10 個 artifacts／0 deferred；
 `compileall -f src tests scripts` 通過，provenance audit 為
 `468 checked / 468 legacy / 0 fail`；freeze verifier 回報 protected splits locked、
 `test_split_accessed=false`。
+
+## F-73 — Official GovReport evaluator 已對齊；Windows runtime 需要原生 WordNet DB
+
+**嚴重度：P0 已關閉（evaluator parity）／P2 portability limitation**
+
+2026-08-15 在任何 test 存取前完成 E1。九個 immutable prediction artifacts 均在
+GovReport frozen dev 681 rows，以官方 Stanza `tokenize,mwt` 與 Perl ROUGE-1.5.5
+`-c 95 -r 1000 -n 2 -m` 重評。Proposed 官方 macro `0.458257`，相對預註冊
+full-source SBERT+MMR comparator 為 `+0.004569`，100,000 次 paired bootstrap
+95% CI `[+0.002467,+0.006680]`、`p=0.000020`。R-1/R-2 通過 Holm-3；R-L
+CI 跨 0、Holm-3 `p=0.063219`，不得宣稱三分項全顯著。完整表與證據索引見
+`E1_OFFICIAL_EVALUATOR_STATUS.md`。
+
+score-blind 啟動期間發現三個 Windows portability 問題並完整保留失敗 evidence：含中文的
+repository path 無法由 Perl/DB_File 正確開啟、第一次 ASCII alias guard 有拼字錯誤、
+上游預建 Unix Berkeley DB 無法由 Windows Strawberry Perl 讀取。最終以 ASCII `R:`
+alias 與相同 WordNet plaintext 重建平台原生 DB 解決；ROUGE script、plaintext、native DB
+與 builder hashes 均在 execution/runtime addenda 凍結。Lead corpus smoke 證明 `-d`
+前後總分完全相同。
+
+本階段完整 pytest **464 passed**、`compileall -f src tests scripts` 通過；freeze verifier
+仍回報 `protected_splits_unlocked=false`、`dev_test_accessed=false`、
+`test_split_accessed=false`。F-72 的官方 parity blocker 因此關閉，但 E2、E3、test policy
+與完整簽字仍是 final test 前硬條件。
