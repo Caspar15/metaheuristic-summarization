@@ -1,6 +1,6 @@
 # Metaheuristic Extractive Summarization
 
-## 2026-08-08 development freeze checkpoint
+## 2026-08-15 pre-test evidence checkpoint
 
 - Multi-News canonical validation 已在任何新 optimization score 前，以固定 seed 3407
   reference-blind 凍結為 dev 3,935／dev-test 1,686。proposed-method 與 baseline runner
@@ -10,8 +10,12 @@
   dev 681／dev-test 292；唯一排除的是官方 reference 為空的 CRS `98-228`。
 - freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗，現在**尚未到可以跑 test**
   的狀態。作者端已於 2026-08-10 批准 GovReport-centered 重新定位：GovReport 是唯一
-  primary quality domain，Multi-News 只保留為 boundary-condition evidence；須先完成
-  official evaluator、成本／scaling、route/provenance ablation 與完整作者群簽字。
+  primary quality domain，Multi-News 只保留為 boundary-condition evidence。
+- 配置搜尋與 baseline matrix 已結束。接下來的「最終實驗」專指 frozen GovReport dev
+  上已預註冊的 E1 官方 evaluator 對齊、E2 cold/warm runtime-memory-scaling、E3
+  route/provenance ablation；這三項都不是新調參，也不是 final test。
+- E1～E3 完成後要先寫 freeze audit、建立尚未 materialize 的 GovReport test policy，
+  並取得老師與完整作者群簽字；只有全部通過才可能 one-shot 跑 official test。
 
 ## 2026-08-09 full-dev selector checkpoint
 
@@ -90,7 +94,8 @@
   版本化，會為每個 run 寫 evidence／search log 並拒絕重看 dev-test。兩個 primary 的
   唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 與 Multi-News PLM
   已完成；GovReport PLM、兩 primary greedy reference 與正式 paired finalist diagnostic
-  隨後也完成。Gate 2 結論是 S02b 顯著輸強 baseline，下一步回 dev redesign；test split 仍鎖定。
+  隨後也完成。Gate 2 結論是 S02b 顯著輸強 baseline；其後 D2/D3a/D3b dev redesign
+  已完成並停止搜尋。現在轉入 GovReport E1～E3，test split 仍鎖定。
 - A1 Multi-News 已依預註冊規則選定 200–250 words：dev-test cross-method macro
   `0.310382`，相對 max-only250／median220／p75-cap260 的 paired-bootstrap 95% CI
   全為正，三個 Holm-adjusted `p=0.000600`。這個勝負主要來自 Greedy stopping，不能

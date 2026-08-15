@@ -1,5 +1,9 @@
 # ICACT → IEEE Access Extension Matrix
 
+> **2026-08-15 狀態**：技術差異草案已與 GovReport-centered v2 對齊，但所有
+> camera-ready 核對欄仍未完成；E1 official evaluator、E2 cost/scaling、E3 ablation
+> 也尚未產生可填入新稿的最終表格。此文件目前不能當成 extension 合規已完成的證明。
+
 ## 使用方式
 
 這是投稿前的差異證據表，不是宣傳稿。ICACT camera-ready 與 ICT Express 被拒稿全文

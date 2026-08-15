@@ -1,5 +1,9 @@
 # F-18 paired feasible intersection
 
+> **適用範圍覆核（2026-08-15）**：這是 pre-D1 的歷史 Multi-News diagnostic，已被
+> post-F-17 的 frozen partition、Gate 2 與 D3b all-row evidence 取代為現行決策依據。
+> 保留本目錄只為重現 F-18；不得用它更新 GovReport v2 主張或重開搜尋。
+
 這個目錄是 `scripts.audit.paired_run_intersection` 在 2026-08-05 產生的
 versioned diagnostic output。它比較目前的兩份完整 Multi-News validation
 predictions：

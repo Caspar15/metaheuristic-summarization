@@ -1,11 +1,16 @@
 # 專案總索引
 
-## 最新 checkpoint（2026-08-10）
+## 最新 checkpoint（2026-08-15）
 
 作者端已批准 GovReport-centered 選項 A。GovReport 現為唯一 primary quality domain；
 Multi-News 的既有 D3b 負結果保留為 boundary-condition evidence，不再是 final-test
 promotion 的共同 primary。機器可讀 addendum、claim matrix、非搜尋 evidence preregistration
 與仍鎖定的 final protocol 已版本化；protected dev-test/test 仍未解鎖。
+
+**現在要執行的是 test 前最後三組 evidence-completion 實驗，不是 test：** E1 以官方
+Stanza + Perl ROUGE-1.5.5 重評已凍結 outputs，E2 量 cold/warm runtime、peak memory
+與 scaling，E3 跑五個已預註冊 route/provenance ablations。配置搜尋、baseline matrix
+與 D3b 已結束；E1～E3 之後先產出 freeze audit 並等待完整簽字。
 
 Multi-News full-dev D2 已依事前凍結規格完成 14/14 selector candidates，只讀 dev
 3,935 rows。固定 S02b 候選時 Greedy-TFIDF macro `0.328077` 勝 NSGA-II+TF-IDF
@@ -42,8 +47,8 @@ NSGA-II 五 seed mean 三指標均低於 Greedy，且選句 Jaccard 僅 `0.639`�
 當時決策因此暫定為 MMR main／Greedy reference／NSGA-II comparator；上方 D2 已更正。這仍是 diagnostic，
 兩 primary frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與
 64-endpoint paired finalists 均已完成。S02b 對 Multi-News P08 macro `−0.003663`、對
-GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 quality gate 失敗，
-因此不得進 dev-test，回到 frozen-dev redesign。單一規格來源見
+GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 quality gate 失敗。
+其後 D2/D3a/D3b dev redesign 已完成，現在停止搜尋並進入 E1～E3。單一規格來源見
 [`SELECTOR_COMPARISON_PROTOCOL.md`](SELECTOR_COMPARISON_PROTOCOL.md)。
 
 抽取式摘要研究 —— ICT Express 拒稿後改投 **IEEE Access** 的修訂工作。
@@ -63,21 +68,21 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 
 → 詳見 `ACTION_PLAN.md` 的 Phase −1；這兩件事已被版本化為研究治理前提。**後續不得再以 legacy 結果直接改寫或支撐新論文。**
 
-### 目前進度速覽（2026-08-10）
+### 目前進度速覽（2026-08-15）
 
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route/provenance/shared objectives、兩套歷史資料 policy 與 partition 已完成；v2 已固定 GovReport primary／Multi-News boundary。published GovReport evaluator parity、正式成本 pilot、route/provenance final ablation 與 final-output policy 仍未完成；見 `ACTION_PLAN.md` Phase 3d |
 | 測試 | ✅ **459 local tests 全過**（2026-08-11）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**。新增 6 個 v2 freeze guards，F-70～F-72 均納入回歸 |
-| **baseline** | 🔴 **Gate 2 diagnosis 完成、quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；不得進 dev-test，回 dev redesign。見 `GATE2_BASELINE_STATUS.md` |
+| **baseline** | ✅ **矩陣與 diagnosis 完成；quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；其後已完成 D2/D3a/D3b，不再重開 baseline grid。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
 | D2 full-dev selector | 🔴 **兩 primary 各 14/14 + paired analysis 完成，promotion失敗** —— Multi-News Greedy `0.328077` 最佳且低 P08 `0.003663`；GovReport TF-IDF-MMR λ=0.7 `0.446154` 最佳、顯著高 Greedy，但低 full-source SBERT+MMR `0.006614`。採 task-profile policy；未讀 dev-test/test |
 | 舊新 pipeline 診斷 | 🟡 F-18/F-19 的 `length_normalized` 相對 Lead 為 R-1 +0.001465、R-Lsum +0.001906，但 R-2 −0.011423；它不是新 matched-selector pilot，不能混併數字 |
-| ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 與目前 289-test suite 全過；實測 5,620 feasible／1 recorded infeasible |
+| ✅ **主線 selector F-17** | 已採 option 1：所有 lower-bound document infeasibility 都寫成完整 prediction row；candidate capacity、Greedy、GRASP、NSGA-II 與無 eligible sentence 共用 contract，upper-bound／config bug 仍 fail loud。F-17 的 5,621-row governed regression 通過；現行全套為 459 local passed、PR #17 Linux 454 passed／5 skipped。實測 5,620 feasible／1 recorded infeasible |
 | 資料 | ✅ 兩 primary validation 已由 pinned source 建立並凍結 policy／fingerprint／dev-dev-test manifests；GovReport 973 rows（CRS 361／GAO 612）。test split 在 freeze 簽字前禁止讀取 |
 | A1 長度協定 | ✅ 兩 primary 的唯一一次 dev-test 已完成：Multi-News 凍結 200–250 words（macro `0.310382`），GovReport 凍結 500–650（`0.393415`）；兩者對三案的 Holm-adjusted `p=0.000600`。Multi-News Greedy 3/1,686 floor shortfalls 完整保留（F-23）；GovReport floor-bound lexical Greedy 仍輸 Lead/Random（F-24） |
-| D1 敏感度 | 🟡 原 screens／matched route ablations／paired analysis 完成。12/12 route endpoints 通過 Holm 與 186-opportunity correction，semantic/graph 暫留；但 Multi-News 對 Lead R-2 顯著 `−0.008336`，GovReport 對 Lead R-2 CI 跨 0，且強 baseline 未齊。10k resamples 對 372 correction 解析度不足，不事後改協定；本階段不看 dev-test |
+| D1 敏感度 | ✅ 原 screens／matched route ablations／paired analysis 完成。12/12 route endpoints 通過 Holm 與 186-opportunity correction，semantic/graph 暫留；Multi-News 對 Lead R-2 顯著 `−0.008336`。其後強 baseline、D2/D3a/D3b 均完成；D1 不重開、不看 dev-test |
 
 > ⚠️ **「契約完成」不等於「方法有效」。** F-18 已有第一次 diagnostic
 > validation pilot；D3b 已在 GovReport 取得 multiplicity-corrected 正證據，但

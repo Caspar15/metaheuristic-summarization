@@ -1,6 +1,6 @@
 # 總體可行性評估 —— 設計是否有救、主場在哪、文件如何分工
 
-> 初稿日期：2026-07-26 ｜ 程式／資料狀態覆核：2026-08-02
+> 初稿日期：2026-07-26 ｜ 最新策略狀態覆核：2026-08-15
 > 對象問題：「是不是設計本身就有問題？分數這麼低還投得出去嗎？我們的優勢在哪？架構還有救嗎？」
 > 本文件是策略 memo，不是數字權威來源。Legacy Multi-News 的 ROUGE/Lead 已重現。
 > headroom、位置與 oracle overlap 的腳本**已版本化**至 `scripts/audit/`
@@ -10,7 +10,8 @@
 > selector 路線當時因此暫定為 MMR main／Greedy reference／NSGA-II comparator。這只是
 > selector gate；兩 primary 的 strongest non-PLM baseline 都已勝 proposed S02b。Multi-News
 > PLM 27/27 之後最強仍是 non-PLM PacSum P08；GovReport PLM winner MMR λ=0.9 只高
-> LexRank `0.001148`、卻高 S02b `0.034906`。是否值得投稿仍取決於 dev 優化與完整 paired gate。
+> LexRank `0.001148`、卻高 S02b `0.034906`。這是 D3b 前的歷史狀態；後續 dev 優化與
+> paired gate 已完成，現行判斷見 §3.4。
 > 2026-08-09 full-dev D2 更正：Multi-News 3,935-row selector isolation 中，Greedy-TFIDF
 > macro `0.328077` 勝所有 MMR／NSGA-II；最佳新候選 NSGA-II+TF-IDF 為 `0.322615`，
 > 最佳 MMR+TF-IDF 為 `0.321744`。200-row pilot 的 MMR 優勢未外推，NSGA-II 的
@@ -18,6 +19,11 @@
 > 對 Greedy `+0.028293` 且 multiplicity-corrected paired gate 通過，但仍低 full-source
 > SBERT+MMR `0.006614`。沒有共同近最優 selector；下一輪採 task-profile policy，
 > 但兩 primary 都不具 dev-test promotion 資格。
+
+> **現行決策（取代本文早期的雙-primary 推薦）**：D3b 後已停止搜尋，作者端已核准
+> GovReport-centered 選項 A。GovReport 是唯一 primary；Multi-News 只保留既有負面
+> boundary evidence。下一步是 E1～E3 evidence completion 與 final freeze 簽字，不是
+> 重新選資料集、重新調參或跑 test。本文較早的三資料集／雙-primary討論保留作決策沿革。
 
 ---
 
@@ -168,7 +174,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 > **但「實作完成」不等於「有效」** —— 三項的效益都還沒量測，仍須通過 validation pilot。
 > 以下保留原始診斷與驗收條件，狀態另以標籤標示。
 
-**① 打破候選池的 lead bias —— 這是最關鍵的一刀**　【✅ 契約已實作／⏳ 效益未驗證】
+**① 打破候選池的 lead bias —— 這是最關鍵的一刀**　【✅ 契約與 recall 驗收已完成】
 
 原診斷：候選池由 lead-biased 分數單獨決定 → 後續 route 無法找回已被排除的句子。
 
@@ -178,8 +184,10 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 - ✅ position / document / section strata coverage guard 可獨立設定，並標為 `guard:*` 而非第四個語意 route
 - ✅ 不可行的保留額組合會 fail loud，不會默默犧牲某個 route
 
-⏳ **仍未完成的驗收**：候選池對 validated oracle／greedy-reference 的 **recall@K**。
-22.8% 是 legacy exploratory 值；新 pipeline 的數字**還沒量過**，提升門檻也還沒訂。
+✅ **後續驗收已完成**：兩個 frozen-dev profile 的 metric-specific greedy references、
+candidate-union recall 與 final-selection recall 已量測。Multi-News S02b union recall 約
+82–86%、final recall 約 30%；GovReport union recall 約 47–56%、final recall 約 12–13%。
+它們證明候選與 selector/salience 都仍是瓶頸；greedy reference 不是 exact oracle。
 
 > 這仍是最關鍵的一刀 —— 但現在的問題已從「有沒有做」變成「做了有沒有用」。
 
@@ -266,7 +274,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 459 local tests（2026-08-11）、PR #16 Linux CI、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 6 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
+| **Phase 1 canonical 主路徑已重構** | 459 local tests（2026-08-11）、PR #17 clean-clone Linux CI 454 passed／5 skipped、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 6 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -298,9 +306,9 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 在投入任何重構之前，先接受兩個事實：
 
-- [ ] 承認 **F-0 的正確範圍**：legacy Multi-News 沒有贏過同協定 Lead；CNN/DM 尚無公平勝負，研究主計畫 §6.1 的 redesign gate 已觸發
-- [ ] 承認 **P0-01**：11 個 tuning/ablation runs 在 Multi-News test 上選設定，受此流程影響的 legacy 主結果**不能用於新稿**
-- [ ] 決定路線：建議研究主計畫的「路線 A（方法型）」，並把「打破候選池 lead bias」列為優先驗證的假設
+- [x] 已承認 **F-0 的正確範圍**：legacy Multi-News 沒有贏過同協定 Lead；CNN/DM 無公平勝負，舊主張不再使用
+- [x] 已承認 **P0-01**：11 個 test-tuned runs 只保留為 legacy diagnostic，不能用於新稿
+- [x] 已完成路線決策：作者端於 2026-08-10 核准 GovReport-centered 選項 A；後續定位與證據 gate 見 §3.4
 
 ### Phase 0–6：依研究主計畫與 `ACTION_PLAN.md` 執行
 

@@ -1,5 +1,9 @@
 # IEEE Access 重新定位建議書
 
+> **2026-08-15 執行狀態**：選項 A 已定案，無須再選 A/B/C。配置搜尋已停止；
+> 現在只執行 E1～E3，完成後把本建議書升級成 freeze audit 交老師與完整作者群簽字。
+> GovReport test policy 尚未建立，dev-test/test 仍鎖定。
+
 ## 決策摘要（2026-08-09）
 
 **目前不得進 dev-test 或 test，也不建議以「跨資料集品質優於強 baseline」投稿 IEEE

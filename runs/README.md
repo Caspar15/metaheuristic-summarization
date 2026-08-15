@@ -1,10 +1,11 @@
 # ⚠️ 這個目錄裡沒有任何可用於論文的結果
 
-截至 2026-08-02，`runs/` 現存的 `metrics.csv` 與 `predictions.jsonl` **都不能作為新論文的證據**。
+截至 2026-08-15 覆核，`runs/` 現存的 `metrics.csv` 與 `predictions.jsonl` **都不能作為新論文的證據**。
 理由分三類，每一類的失效原因不同。
 
 > 這個目錄本身已被 `.gitignore` 排除（只有這份 README 進版本庫）。
 > 保留本機檔案是為了重現舊 artifact 與寫 response letter，不是為了引用數字。
+> 新的 governed evidence 只登錄於 `runs_v2/`；目前該主線停在 E1～E3，沒有 test run。
 
 ---
 

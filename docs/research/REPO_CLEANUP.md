@@ -1,7 +1,8 @@
 # 專案整理計畫
 
 > 對應 `ACTION_PLAN.md` 的 Phase 0。以下是提案，不是已授權的刪除清單；任何 move/delete/tag 前都要先核對 dirty worktree、legacy 重現需求與精確目標。
-> 初始盤點數字保留為 2026-07-26 snapshot；目前任務狀態已覆核至 2026-08-02，應以 §7 為準。
+> 初始盤點數字保留為 2026-07-26 snapshot；整理狀態覆核至 2026-08-15，應以 §7 為準。
+> 本文件不是研究實驗排程；目前 E1～E3 比剩餘低優先度 cleanup 更重要。
 
 ---
 
@@ -138,7 +139,7 @@ scikit-learn>=1.3.0     # 第 27 行  ← 重複；實際有效下限為 1.3.0
 ```
 
 - [x] 合併重複項，鎖定單一版本（2026-07-26：`pymoo` / `scikit-learn` 各只剩一條）
-- [x] 補上 `pytest`（已在依賴與 CI；2026-08-02 master 之 217 tests 全過）
+- [x] 補上 `pytest`（已在依賴與 CI；2026-08-11 本機 459 passed，PR #17 Linux CI 454 passed／5 skipped）
 - [x] 拆出 `requirements-demo.txt`（fastapi / flask / uvicorn）與 `requirements-ci.txt`（輕量 CI）
 - [x] 補上 `nltk`（canonical Multi-News 分句已使用 Punkt）
 - [ ] 補上 `bert-score`（Phase 5 語意指標才需要）
@@ -197,8 +198,8 @@ metaheuristic-summarization/
 `frontend` / `backend` / `experimental` 已在 README 標明可略過。兩者都不影響研究正確性，
 可等 Phase 1 收尾再處理。
 
-⚠️ **`runs/README.md` 需要隨新結果更新**：它目前列的是 legacy artifact 與兩個 3 筆 smoke run。
-`runs_v2/` 建立後，這份 README 要同步說明新舊分界。
-7. 建立 `runs_v2/` 與新的 `src/` 子模組骨架
+✅ `runs/README.md` 與 `runs_v2/README.md` 已明確區分 legacy invalid artifacts 與
+governed evidence registry；新舊分界已完成。研究現行狀態以 `runs_v2/README.md`、
+`ACTION_PLAN.md` 與 claim matrix 為準。
 
 > 全部做完約 1 天。**第 1 步不要跳過** —— 那 11 個污染的 run 是目前最危險的東西。

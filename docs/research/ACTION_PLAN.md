@@ -1,6 +1,11 @@
 # ACTION PLAN —— 到底要做什麼
 
-## 2026-08-08 freeze 前自治執行狀態
+## 2026-08-15 freeze 前自治執行狀態
+
+> **目前執行點**：A1～D3b、baseline matrix 與 GovReport-centered 定位已完成；
+> 配置搜尋已停止。下一個工作包依序是 E1 官方 evaluator、E2 cold/warm
+> runtime-memory-scaling、E3 route/provenance ablation。三者只讀 frozen GovReport dev，
+> 都不是 test。完成後寫 freeze audit 並等待老師／完整作者群簽字；目前禁止 dev-test/test。
 
 - [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
       SHA-256 排序、固定 seed `3407` 凍結為 dev `3,935`（70.005%）與
@@ -22,8 +27,9 @@
 - [x] A1 已完成兩 primary 的 reference-only 統計、預註冊、dev 與唯一一次 dev-test；
       Multi-News 依預註冊規則選定 200–250 words，GovReport 選定 500–650 words；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
-      partition freeze、Gate 2 baseline／greedy／paired diagnosis 已完成；quality gate 失敗，
-      dev redesign/search 尚未完成。
+      partition freeze、Gate 2 baseline／greedy／paired diagnosis與 D2/D3a/D3b dev redesign
+      已完成；v1 雙-primary quality gate 失敗後已停止搜尋，v2 GovReport-centered evidence
+      completion 尚未完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
 - [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
       median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
@@ -513,12 +519,16 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 
 - [x] Provenance-preserving RRF fusion 已把 route rank/score 傳入 selector；Gate 2 顯示它仍
       不足，後續可比較 unique-preserving fusion，但不得退回 index-only membership
-- [ ] Budget-aware adaptive routing（依文件特性決定要不要啟用 PLM）
-- [ ] 重新設計 `position` 特徵（legacy greedy-reference 位置中位數探索值為 **0.46**；須在 validation 重做）
+- [x] Budget-aware adaptive routing 已決定**不納入 frozen v2**：現行只允許 fixed routes，
+      `adaptive` 設定會 fail loud；E2/E3 只量成本與 route contribution，不新增 router 搜尋
+- [x] `position` 已改為 document-aware scope，且 D3a/D3b 在 frozen dev 完成驗證；
+      Multi-News C01 使用 position 0.2，GovReport C01 的位置設定由 resolved config 固定
 - [x] profiled multi-sentence objective 已禁止 raw sum，D1 採 length-normalized；後續只在
       預註冊搜尋中比較，不再沿用 legacy raw-sum
-- [ ] 依 `ARCHITECTURE.md` 跑 task-profile/objective 啟用矩陣，不按 dataset 名稱偷換公式
-- [ ] 明確的 Pareto 選解規則（knee point / reference point，權重只能在 validation 定）
+- [x] task-profile selector policy 已由 D2 完成：multi-document 用 Greedy-TFIDF、
+      single-document multi-sentence 用 TF-IDF-MMR λ=0.7；v2 只凍結 GovReport profile
+- [x] Pareto policy 不再阻塞主線：NSGA-II 已降為 comparator，D2 comparator 的
+      weighted policy 已預先固定；frozen C01 使用 MMR，不從 Pareto front 選 final output
 
 ### 3c. Validation 實驗
 
@@ -665,7 +675,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag 與 invalid-run 標記均已版本化；final execution freeze 仍屬 Phase 3d |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
 | 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 459 local tests 與 PR #17 clean-clone Linux CI 454 passed／5 skipped（2026-08-11）、snapshot、shared objectives、兩套歷史 policies/partitions、A1～D3b 與 F-51～F-72 guards 已完成。official evaluator、正式成本 pilot 與 final-output policy 仍待補 |
-| 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
+| 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
 | 3 方法開發 | `[~]` | ❌ v1 雙-primary gate；🟡 v2 evidence gate 尚未完成 | D3b 後停止配置搜尋；作者端已核准 GovReport-centered 選項 A。E1 official evaluator、E2 cost/scaling、E3 ablation 與完整作者群簽字尚未完成；不進 dev-test/test |
 | 4 正式 test | `[ ]` | | |
 | 5 分析寫作 | `[ ]` | | |
@@ -691,4 +701,5 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
       resume 成功。winner MMR λ=0.9 macro `0.452768`，只高 LexRank `0.001148`；
       27×681 cache row accesses 全數通過 F-53。
 - [x] 兩 primary greedy reference 6/6 與 paired matrix 已完成；Gate 2 quality gate 未過，
-      dev-test/test 未讀，下一步回 frozen-dev redesign。
+      dev-test/test 未讀；其後 D2/D3a/D3b redesign 已完成並依停止條件關閉搜尋。
+      下一步固定為 GovReport E1～E3。

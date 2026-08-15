@@ -1,5 +1,10 @@
 # Experiment preregistrations
 
+**2026-08-15 execution status:** all method-search registrations through D3b are closed.
+The next executable registration is `govreport_centered_evidence_completion_v1.json`
+(E1-E3, frozen GovReport dev only). `govreport_centered_final_evaluation_v1.json` is a
+locked protocol, not permission to access test.
+
 每個 freeze 前實驗都必須先在這裡寫明：改什麼、預期什麼、成功／刪除條件、會看幾次
 dev-test，以及多重比較 family。`status=frozen_before_candidate_system_scores` 只代表該份
 protocol 在候選 system score 前凍結；若已看過歷史 diagnostic，必須在內容中誠實列出，

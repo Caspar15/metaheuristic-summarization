@@ -1,5 +1,9 @@
 # Gate 2 baseline 狀態報告
 
+> **2026-08-15 狀態覆核**：Gate 2 的工程矩陣與 paired diagnosis 已全部完成；
+> quality gate 失敗是結果，不是待補 baseline。其後 D2/D3a/D3b 已完成並停止搜尋。
+> GovReport v2 主線下一步是 E1～E3；本文件不授權任何新 baseline grid 或 test。
+
 ## 2026-08-09 final checkpoint：Gate 2 dev diagnosis 完成、品質 gate 未通過
 
 - 兩 primary 的 non-PLM 各 23/23、PLM 各 27/27、metric-specific greedy reference
@@ -171,8 +175,9 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - P08 仍有 1/3,935 row score-degenerate。它與 frozen Lead 只有 166/3,935 rows 的
   `selected_indices` 完全相同，平均 selection Jaccard `0.617715`，並非單純複製 Lead。
 - baseline family 表中的單列數字是 point estimates；greedy reference 與正式 paired
-  finalists 已完成，但 S02b 對兩個 adversarial winners 均顯著落後。Multi-News clean
-  sensitivity 與 redesign 尚未完成；**Gate 2 quality gate 未通過，也不讀 dev-test**。
+  finalists 已完成，但 S02b 對兩個 adversarial winners 均顯著落後。其後 D2/D3a/D3b
+  redesign 已完成；Multi-News 在 v2 只保留 boundary evidence，不再追加 clean sensitivity。
+  **Gate 2 quality gate 未通過，也不讀 dev-test**。
 
 ### 證據
 

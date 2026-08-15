@@ -1,5 +1,11 @@
 # Frozen data policies
 
+Current role decision (checked 2026-08-15): GovReport is the sole primary
+quality domain, Multi-News is frozen boundary evidence, and no new dataset is
+authorized. The validation policies below remain immutable historical data
+contracts. A GovReport official-test policy intentionally does not yet exist;
+it may be materialized only after E1-E3 and before the signed one-shot test.
+
 `multinews_validation_v1.json` is the pre-result data contract for the Phase 1
 Multi-News validation pilot. It binds each allowed analysis to an exact row
 count, canonical content fingerprint, file SHA-256, source revision, U+FFFD

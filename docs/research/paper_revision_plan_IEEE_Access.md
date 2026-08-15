@@ -1,6 +1,6 @@
 # IEEE Access 全面修訂計畫
 
-## 2026-08-10 GovReport-centered v2 定案（取代後文的現行雙-primary 排程）
+## 2026-08-15 GovReport-centered v2 執行狀態（取代後文的現行雙-primary 排程）
 
 作者端已核准 `REPOSITIONING_RECOMMENDATION.md` 的選項 A：**GovReport 是唯一 primary
 quality domain，Multi-News 只保留既有 D3b 負結果作 boundary-condition evidence**。
@@ -19,6 +19,11 @@ quality domain，Multi-News 只保留既有 D3b 負結果作 boundary-condition 
 A1～D3b 決策，不再授權新的 Multi-News dev-test/test。下一步固定為 GovReport official
 evaluator parity、cold/warm runtime-memory-scaling、route/provenance ablation；完成後才交老師與
 完整作者群簽署 final freeze。**在此之前不准讀 test。**
+
+截至本次覆核，A1～D3b、完整 baseline matrix、greedy reference 與 paired inference
+都已完成；尚未完成的是 E1 official evaluator、E2 controlled cost/scaling、E3
+route/provenance ablation、ICACT camera-ready 逐頁核對、GovReport test data policy 與
+final signatures。因此「準備跑最終實驗」只能指 E1～E3，不能指 final test。
 
 ## 2026-08-06 selector-comparison update
 
@@ -63,7 +68,7 @@ evaluator parity、cold/warm runtime-memory-scaling、route/provenance ablation�
 收到相同候選與數值輸入。真實 Multi-News 3-row smoke 的 shared-objective 平均
 utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROUGE，
 只能證明 NSGA-II 不會因較昂貴就自然優於 Greedy，不能作品質結論。正式去留須
-依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation
+依 `SELECTOR_COMPARISON_PROTOCOL.md` 在 Multi-News 與 GovReport validation。
 2026-08-06 frozen 200-row matched pilot 已提供第一個方向：candidate-matched MMR
 在 R-1／R-2 顯著優於 Greedy，而 NSGA-II seed 2024 無顯著改善且總時間約 4.6×；
 五 seed stability extension 後，NSGA-II 三個 ROUGE 的 seed mean 均低於 Greedy，
@@ -71,14 +76,14 @@ utility 為 Greedy `0.3131`、NSGA-II `0.2990`、MMR `0.1111`；此處未計 ROU
 Greedy 為 reference、NSGA-II 為 comparator；上方 D2 update 已更正此 pilot 外推。這不等於整個方法已成立：Multi-News
 frozen-dev non-PLM 23/23 與 PLM 27/27 已完成；PacSum TF-IDF P08 macro 仍比
 PLM winner 高 `0.000282`、比 proposed S02b 高 `0.003663`，而最佳 full-source
-SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍須完成
-  GovReport PLM 亦已完成：MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。
-  64-endpoint paired finalists 隨後確認 S02b 對 Multi-News P08 macro `−0.003663`
-  （Holm `p=0.021598`）、對 GovReport MMR λ=0.9 `−0.034906`
-  （Holm `p=0.012799`），selection-aware wins 0。candidate router 目前不足以形成可投稿
-  貢獻，必須回 frozen dev redesign。
+SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。GovReport
+PLM 亦已完成：MMR λ=0.9 高 LexRank `0.001148`、高 S02b `0.034906`。64-endpoint
+paired finalists 隨後確認 S02b 對 Multi-News P08 macro `−0.003663`（Holm
+`p=0.021598`）、對 GovReport MMR λ=0.9 `−0.034906`（Holm `p=0.012799`），
+selection-aware wins 0。candidate router 當時不足以形成可投稿貢獻；其後 D2/D3a/D3b
+dev redesign 已完成，現已停止搜尋並進入 GovReport-centered evidence completion。
 
-版本：2026-07-26 技術稽核版 ｜ 程式／資料狀態覆核：2026-08-02
+版本：2026-07-26 技術稽核版 ｜ 現行執行狀態覆核：2026-08-15
 適用範圍：ICACT 得獎論文的期刊擴充、ICT Express 拒稿稿件、metaheuristic-summarization 研究程式與既有實驗結果
 
 文件治理：本文件是研究標準與投稿 gate 的唯一規範來源；`ACTION_PLAN.md` 是日常執行清單；`CODE_AUDIT_IEEE_Access.md` 與 `STRATEGY_ASSESSMENT.md` 只能作證據快照與衍生判斷。若數字衝突，以可重現 artifact、版本化程式、資料 fingerprint 與明確 evaluator protocol 為準，而不是以任何一份敘述文件為準。
@@ -149,17 +154,16 @@ SBERT-MMR 低 S02b `0.005496`。GovReport LexRank 亦高 S02b `0.033758`。仍�
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **Baseline matrix 已完成，但 Gate 2 quality gate 明確失敗** —— 兩 primary
-   frozen-dev non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists
-   均完成。S02b 對 Multi-News P08 macro `−0.003663`、對 GovReport MMR λ=0.9
-   `−0.034906`，兩個 paired CI 均全負且 Holm-significant；不得進 dev-test。
-2. 🔴 **方法 redesign 尚未完成** —— Multi-News 主要是 selector/salience bottleneck；
-   GovReport 同時有 candidate coverage 與 selector/salience bottleneck。必須只用 frozen dev
-   預註冊搜尋，若耗盡仍無顯著優勢則依停止條件重新定位。
-3. 🔴 **P0-08 的殘留** —— `length_scores` 與 `centrality`/`novelty` 兩項
-4. 🟡 **P0-02 是條件式工作** —— 保留 CNN/DM sanity 才需重建 official test；不保留就必須刪除舊結果與主張
-5. 🟡 P0-01 的 legacy artifact 永久作廢（不是待修，是既成事實）
-6. 🟡 P0-06 的 published-protocol parity、P0-09 的正式計時，以及 validation-frozen Pareto/output policy
+1. 🔴 **E1 official evaluator**：現有 D3b 是內部 `multisentence_lsum`；須用 GovReport
+   作者的 Stanza + Perl ROUGE-1.5.5 重評已凍結 outputs，若 ranking 反轉就撤回 superiority。
+2. 🔴 **E2 cost/scaling**：30-document reference-blind sample、cold/warm 各三次、peak
+   process-tree RSS 與 scaling 尚未完成；既有零散 timing 不能代替。
+3. 🔴 **E3 route/provenance ablation**：五個預註冊 variants、20-endpoint Holm 與
+   100,000 paired bootstrap 尚未完成；不支持的 route／provenance claim 必須降級。
+4. 🟡 **投稿與 freeze package**：ICACT camera-ready 逐頁 extension 核對、GovReport
+   test data policy、exact commit/environment 與老師／完整作者群簽字尚未完成。
+5. 🟡 **永久限制**：P0-01 legacy artifacts 作廢；CNN/DM／SciTLDR 不在 v2 矩陣；
+   P0-08 未使用或未修的公式不得寫成現行方法貢獻。
 
 > ⚠️ **「P0 修好」不等於「可以投稿」。** §9 的 Go 條件要求相對強 baseline 有一致正向效果，
 > D1 的兩個 lexical/objective cells 顯示明確 domain difference：Multi-News 全文候選
@@ -542,6 +546,10 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
 ### 3.2 推薦的真正方法擴充
 
+> **v2 更正（2026-08-15）**：本節是 D3b 前的候選設計清單。最終 frozen C01 採
+> provenance-preserving fusion、固定三路與 TF-IDF MMR；adaptive router 沒有實作，
+> 不在現行方法名稱、主張或 E1～E3。不得把下面第 2 項的提案文字寫成已完成貢獻。
+
 優先研究下列設計，通過 validation 後再決定是否成為主方法：
 
 1. Provenance-preserving fusion  
@@ -561,10 +569,11 @@ Reviewer #4 的判斷基本正確：NSGA-II、centroid PLM ranking、thresholded
 
 ### 3.3 三個可接受的研究路線
 
-路線 A：方法型，推薦
+路線 A：方法型（v1 歷史推薦；v2 已縮窄）
 
-- 加入 provenance-aware fusion 與 budget-aware routing。
-- 主貢獻是 adaptive quality-cost optimization。
+- provenance-aware fusion 已保留；budget-aware routing 未實作且不在 frozen v2。
+- v2 主貢獻改為 fixed multi-route provenance、matched selector evidence 與 GovReport
+  domain-bounded quality evidence，不宣稱 adaptive quality-cost optimization。
 - 需要完整重構與新實驗，但最有 IEEE Access 說服力。
 
 路線 B：嚴謹實證型，風險較高
@@ -639,7 +648,7 @@ route/provenance 是否能寫成貢獻，仍須通過 v2 E3 ablation，不得因
 3. Calibrated provenance fusion  
    每句保留 route rank、raw score、校準後 score、route agreement 與成本。融合器使用這些證據，而非只知道某句是否出現在 union。
 
-4. Budget-aware adaptive router  
+4. Budget-aware adaptive router（v1 歷史候選，frozen v2 未採用）
    依句數、文件數、section 數、廉價 lexical redundancy／topic dispersion、cheap lexical graph density 與預估 route cost 決定各 route 的 K，並允許在容易文件跳過 PLM。不可用必須先執行昂貴 route 才能得到的 route agreement 作事前決策；routing policy 只能在 validation 設計與凍結。
 
 5. Selector competition  
@@ -674,7 +683,8 @@ Pilot 通過條件：
 
 - full method 在至少一個主要資料集明顯優於強 no-task-training baseline，另一個至少不劣或形成清楚的 cost Pareto 優勢。
 - graph 與 semantic route 至少有一個產生非零且可重現的 unique oracle-candidate recall；否則刪除無效 route。
-- adaptive router 相對 always-on full method 降低至少一項完整成本，且 quality loss 在預先定義的 non-inferiority margin 內。
+- adaptive-router 條件在 v2 已撤出：沒有 implementation，也沒有預先凍結的
+  non-inferiority margin。E2 只報固定系統成本，不能據此補寫 adaptive claim。
 - [已觸發] NSGA-II 相對 deterministic selector 沒有穩定增益，已從標題與主貢獻
   移除 meta-heuristic；後續只作 comparator。
 

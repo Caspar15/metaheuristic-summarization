@@ -3,7 +3,7 @@
 
 > 稽核日期：2026-07-26
 > 稽核對象：repo 根目錄（commit `1b9fe6f`）
-> 新 pipeline 狀態覆核：2026-08-02（master 已含 PR #10）
+> 新 pipeline 狀態覆核：2026-08-15（A1～D3b 與 PR #17 CI evidence 已納入）
 > 與 `paper_revision_plan_IEEE_Access.md` 的關係：**本文件是 evidence ledger，不取代研究主計畫**。
 > 研究主計畫定義「論文該怎麼改」；本文件記錄「legacy 程式碼與 artifact 實際上做了什麼」。
 > 本文件是 legacy snapshot 的 evidence ledger，不是目前 working tree 的驗收證書。
@@ -18,11 +18,12 @@
 > **2026-08-11 v2 freeze-package 覆核**：作者端已核准 GovReport-centered 定位；
 > GovReport 是唯一 primary，Multi-News 是 boundary evidence。F-72 登錄官方 evaluator
 > mismatch risk；459 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
-> **2026-08-06 selector evidence**：200-row reference-blind matched pilot 與五 seed
+> **2026-08-06 selector evidence（歷史 pilot，已由 D2 更正）**：200-row reference-blind matched pilot 與五 seed
 > NSGA-II stability extension 已完成。MMR 對 Greedy 的 R-1/R-2 paired gain 為
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
-> Greedy、selection Jaccard 僅 `0.639`。selector 因此採 MMR，NSGA-II 降為
-> comparator；這仍未回答 full-source MMR／PacSum／兩 primary 的 system gate。
+> Greedy、selection Jaccard 僅 `0.639`。當時暫採 MMR、NSGA-II 降為 comparator；
+> 2026-08-09 full-dev D2 後改採 task-profile policy，GovReport 才使用 TF-IDF MMR λ=0.7，
+> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；現在只待 E1～E3 與 final freeze。
 > **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
 > Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime

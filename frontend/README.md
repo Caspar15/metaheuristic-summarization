@@ -5,7 +5,8 @@ React + Vite dashboard for orchestrating Stage1/Stage2 summarization runs.
 > ⚠️ 這是 legacy demo，不是 IEEE Access 研究主線。介面中的 Stage1/Stage2、
 > LLM、400-token 等選項反映展示流程，不代表目前 canonical architecture、
 > frozen data policy 或 Phase 2 baseline protocol。研究狀態以 repo 根目錄
-> `README.md` 與 `docs/research/ACTION_PLAN.md` 為準（2026-08-02 覆核）。
+> `README.md` 與 `docs/research/ACTION_PLAN.md` 為準（2026-08-15 覆核）。目前主線是
+> frozen GovReport E1～E3 evidence completion；此 dashboard 不可啟動 final test。
 
 ## 開發環境
 

@@ -6,7 +6,28 @@ All notable changes to the `metaheuristic-summarization` project will be documen
 > invalidated.** They are kept for history, with corrections noted inline.
 > See `docs/research/CODE_AUDIT_IEEE_Access.md`.
 
-## [Unreleased] - Phase 1e correctness + Phase 2 baseline foundation
+## [Unreleased] - GovReport-centered pre-test evidence freeze
+
+- **Documentation and execution status aligned (2026-08-15).** A1 through D3b,
+  the two historical task profiles' Gate 2 matrices, six greedy-reference runs,
+  and paired analyses are complete. Configuration search is closed.
+- Frozen GovReport C01 scores `0.579106 / 0.249380 / 0.543725` (macro
+  `0.457404`) under the internal evaluator, `+0.004636` over full-source
+  SBERT+MMR; Multi-News remains a negative boundary (`−0.001323` macro and
+  significantly worse ROUGE-2 versus PacSum).
+- The next executable work is E1 official Stanza/Perl evaluator parity, E2
+  controlled cold/warm runtime-memory-scaling, and E3 five preregistered
+  route/provenance ablations on frozen GovReport dev. This is evidence
+  completion, not test execution.
+- GovReport official test remains locked pending E1-E3, a versioned test data
+  policy, exact environment/commit freeze, and teacher/full-author signatures.
+- Current regression evidence: 459 local tests passed; PR #17 clean-clone Linux
+  CI reported 454 passed and 5 skipped.
+
+### Historical Phase 1e / Phase 2 entries
+
+The entries below preserve the chronological engineering record. Their
+then-current pending statements are superseded by the checkpoint above.
 
 - **First validation pilot measured (2026-08-03, diagnostic).** See
   `docs/research/CODE_AUDIT_IEEE_Access.md` F-17 and F-18. Headlines:

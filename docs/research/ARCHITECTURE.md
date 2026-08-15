@@ -1,4 +1,11 @@
-# 最終候選架構規格 —— Provenance-Aware Adaptive Extractive Summarization
+# 最終候選架構規格 —— Provenance-Aware Multi-Route Extractive Summarization
+
+> **2026-08-15 文件同步**：架構與品質導向配置已凍結在 GovReport D3b candidate
+> `C01_combined_salience_route_weight`。接下來只允許預註冊的 E1 official-evaluator
+> re-scoring、E2 cost/scaling instrumentation 與 E3 五個 route/provenance ablations；
+> 不再改 route、weight、candidate budget、selector 或 length contract，也不讀 dev-test/test。
+> 現行 `compute_budget.mode` 是固定三路；adaptive allocator 從未實作，也不在 frozen v2
+> claim 或 E1～E3 中。下方 adaptive-routing 段落保留為 v1 歷史候選方向，不是現行方法。
 
 > 2026-08-06 implementation note：selector boundary 現已能固定同一 candidate
 > indices、SBERT semantic-raw salience、candidate×candidate similarity、
@@ -52,7 +59,7 @@
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
 4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
-   NSGA-II 退出核心與標題；GovReport D3b 已通過 adversarial-baseline gate，但
+   NSGA-II 退出核心與標題；GovReport D3b 已通過 internal-evaluator adversarial-baseline gate，但
    Multi-News 未通過，故 v1 雙-primary system 沒有取得 freeze 資格；v2 已縮窄為
    GovReport-centered，但仍須 E1～E3 evidence 與 final signature。
 
@@ -295,10 +302,14 @@ CandidateRecord
 > **D1 route gate（2026-08-08）**：在 S02b total 80／guard cap 20 下，兩-primary
 > capacity-matched ablation 與預註冊 paired analysis 已完成。semantic 與 graph 的 12 個
 > route endpoints 均有正 95% CI，12-test Holm p=`0.002400`，31-config selection-aware
-> correction p=`0.037196`；因此 §5.3／§5.4 的直接刪除條件目前未觸發。這不凍結
-> always-on policy：semantic 的高成本仍須 §5.5 adaptive allocator／strong-baseline gate。
+> correction p=`0.037196`；因此 §5.3／§5.4 的直接刪除條件當時未觸發。現行 C01 已
+> 固定三路；semantic 的高成本改由 E2 成本量測與 E3 removal ablation 決定主張強度，
+> 不再新增 adaptive-routing 搜尋。
 
-### 5.5 Adaptive route budget allocator
+### 5.5 Adaptive route budget allocator（v1 歷史候選；v2 未採用）
+
+> 本節沒有 production implementation。`compute_budget.mode=adaptive` 目前會 fail loud；
+> frozen GovReport C01 使用 fixed routes。以下內容只保留研究沿革，不得寫入現行方法或貢獻。
 
 > **F-59 route/candidate gate（Multi-News frozen dev）**：S02b union-cap-80 對
 > metric-specific greedy selections 的 micro recall 為 R1/R2/Lsum
@@ -407,7 +418,9 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 - 在相同品質下提供可量化的 coverage/redundancy Pareto 優勢。
 - 在不同輸出 budget 上提供穩定、可解釋且 deterministic 方法無法達到的 operating points。
 
-若全部不成立：改投「provenance-aware adaptive extractive selection」架構，NSGA-II 降為負結果／附錄，論文標題移除 meta-heuristic。
+若全部不成立：NSGA-II 降為負結果／附錄，論文標題移除 meta-heuristic。v1 曾考慮
+改投 adaptive selection，但 v2 最終採固定的 provenance-aware multi-route 架構；
+不得因這段歷史條件句重新宣稱 adaptive routing。
 
 ## 8. Output policy 與可重現性
 
@@ -428,7 +441,7 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 | provenance 是否有用？ | index-only union vs rank-only vs full provenance |
 | semantic 是否有增量？ | lexical only vs +semantic |
 | graph 是否有增量？ | lexical+semantic vs +graph |
-| adaptive routing 是否值得？ | all-routes-always vs deterministic router |
+| adaptive routing 是否值得？ | **v1 歷史候選，v2 未實作／未納入 E3，不作現行 claim** |
 | NSGA-II 是否必要？ | greedy/MMR/facility-location vs NSGA-II，同候選同 objective |
 | objective 是否有基數偏誤？ | sum vs mean/length-normalized + length distribution |
 | U+FFFD rows 是否改變結論？ | frozen 5,621-row Multi-News main vs 共同 5,549 rows 的 clean sensitivity paired analysis；external retrieval-cleaned variants 不屬 v1 |

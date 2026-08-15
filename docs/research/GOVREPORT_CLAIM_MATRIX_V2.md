@@ -1,5 +1,9 @@
 # GovReport-centered Claim Matrix v2
 
+> **執行狀態覆核：2026-08-15。** Candidate、主張範圍與 E1～E3 protocol 已凍結；
+> E1、E2、E3、camera-ready extension audit、test data policy 與 final signatures 仍未完成。
+> 因此現在是 pre-test evidence completion，不是可執行 final test 的狀態。
+
 ## 決策狀態
 
 - 決策時間：2026-08-10（系統 UTC 時間記錄於 machine-readable addendum）。

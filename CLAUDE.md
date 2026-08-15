@@ -13,7 +13,7 @@
 - **ICACT**：已投稿，獲 outstanding paper award
 - **ICT Express**：已被拒（ICTE-D-26-00238），四位審稿人
 - **現在目標**：修正後改投 **IEEE Access**
-- **目前定案（2026-08-10）**：GovReport 是唯一 primary quality domain；Multi-News
+- **目前定案（2026-08-15 文件覆核）**：GovReport 是唯一 primary quality domain；Multi-News
   只保留既有負結果作 boundary evidence。作者端已核准方向，但 official evaluator、
   cost/scaling、route/provenance ablation 與老師／完整作者群 final freeze 尚未完成。
   dev-test/test 仍禁止存取。
@@ -39,13 +39,16 @@
 
 以下是目前證據快照。若 evaluator、資料、artifact 或程式版本改變，必須重新驗證；不得用「不要重新推導」阻止更正。證據與方法見 `docs/research/CODE_AUDIT_IEEE_Access.md`。
 
-### ⛔ 全域警告：所有既有的 ROUGE-Lsum 數字都已過期（2026-07-30，PR #9）
+### ⛔ 歷史協定警告：PR #9 前的 ROUGE-Lsum 數字已過期（2026-07-30）
 
 `src/eval/rouge.py` 的分句器已從手寫 regex `(?<=[.!?。！？])\s+` 換成
 `src/data/sentence_split.py` 的共用 Punkt tokenizer。舊 regex 在每個縮寫句點後都切一刀
 （`"Mr. Smith met U.S. officials on Tuesday."` 會被切成三句），是真的 bug。
 
-**這份文件裡出現的每一個 ROUGE-Lsum 數字，都是在舊分句器下量到的，重算前不得再引用。**
+**這項警告只涵蓋 PR #9 前、以舊 regex 分句器產生的 legacy 數字。** A1～D3b 與
+`runs_v2/` governed evidence 是在 PR #9 後的共用 Punkt／內部 `multisentence_lsum`
+協定下量測，數字仍可作內部 dev 證據；但在 E1 完成前，仍不能把它們當成 GovReport
+作者官方 Stanza + Perl ROUGE-1.5.5 結果。
 
 | | 舊 regex | 新 Punkt | 差 |
 |---|---|---|---|
@@ -149,7 +152,8 @@ greedy reference 不是 official oracle、未做 paired test。新 validation pi
 ### 已套用並通過 regression tests
 
 以下 patch 已接線。GovReport-centered 分支目前 **459 tests 全過**（2026-08-11）；
-PR #16 Linux CI 綠燈，另增的 6 個 freeze-package guards 也已納入全量回歸。這是 correctness
+PR #17 clean-clone Linux CI 為 **454 passed／5 skipped**，另增的 6 個 freeze-package
+guards 也已納入全量回歸。這是 correctness
 checkpoint，不是方法效果證據；
 SciTLDR 官方 conformance 尚未通過；它只在決定保留 optional stress test 時才是必要驗收，不阻塞 GovReport + Multi-News 主線：
 
@@ -211,11 +215,15 @@ python -m src.pipeline.evaluate --pred runs/<run>/predictions.jsonl --gold data/
 python -m src.eval.oracle --input data/processed/multi_news_test.jsonl --max_words 245 --limit 300
 ```
 
-跑選句：
+跑 validation/dev 選句（範例；正式研究優先使用沒有 split 入口的 governed runner）：
 
 ```bash
-python -m src.pipeline.select_sentences --config configs/<cfg>.yaml --split test --input data/processed/<data>.jsonl --run_dir runs
+python -m src.pipeline.select_sentences --config configs/<cfg>.yaml --split validation --input data/processed/<validation-data>.jsonl --run_dir runs_v2
 ```
+
+**不要把範例改成 `--split test`。** GovReport official test 目前仍由
+`govreport_centered_final_evaluation_v1.json` 鎖定；E1～E3、test data policy、exact
+commit/environment 與老師／完整作者群簽字全部完成前，不得建立 test run。
 
 跑測試：
 

@@ -1,7 +1,12 @@
-# Selector comparison protocol（validation freeze draft）
+# Selector comparison protocol（completed development evidence）
 
-更新日期：2026-08-06  
-狀態：**實作與 validation pilot 用；正式 test 尚未解鎖**
+初始凍結：2026-08-06 ｜ 狀態覆核：2026-08-15
+狀態：**pilot、full-dev D2 與 paired analysis 已完成；正式 test 尚未解鎖**
+
+> 本文件前半保留 200-row pilot 的原始設計與當時判斷；§9 的 full-dev 結果已取代
+> 「MMR 普遍成為 main selector」的外推。現行 frozen GovReport candidate 使用
+> TF-IDF MMR λ=0.7；NSGA-II 是成本高且沒有品質優勢的 comparator。selector search
+> 已結束，接下來只有 E3 中事前指定的 matched ablation，不能新增 selector grid。
 
 ## 1. 要回答的問題
 
