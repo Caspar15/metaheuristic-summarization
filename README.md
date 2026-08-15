@@ -21,14 +21,14 @@
   五個 frozen-dev route/provenance removals 的 macro CI 全正、Holm-20 均通過；
   681/681 rows 可行。完整消融表見
   [`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`](docs/research/E3_ROUTE_PROVENANCE_ABLATION_STATUS.md)。
-- E1～E3 現已全部完成；freeze audit 也已完成。下一步需先解決 test-policy materialization
-  與簽字的 frozen-ordering conflict；只有 policy、exact execution package 與兩階段簽核
-  全部通過，才可能 one-shot 跑 official test。
-  Freeze audit 已發現既有政策對「policy 與簽字誰先」形成循環，建議改採兩階段簽核；
-  詳見 [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md)。
+- E1～E3 現已全部完成；freeze audit 也已完成。Freeze audit 發現的
+  「policy 與簽字誰先」循環已以兩階段授權解決；詳見
+  [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md)。
 - 2026-08-16：老師／作者端的兩階段核准已由提出請求的作者轉述；Stage A test policy
-  已在零 prediction、零 score 狀態完成，973/973 rows 保留。下一步是凍結 one-shot runner，
-  仍不能手動繞過 runner 直接計分。見 [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md)。
+  已在零 prediction、零 score 狀態完成，973/973 rows 保留。One-shot runner、
+  scientific commit、環境、指令、輸出路徑、九個系統與 official evaluator 資源也已
+  在零分數狀態凍結。下一步是 score-free dry run 與 Stage B activation，仍不能
+  手動繞過 runner 直接計分。見 [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md)。
 
 ## 2026-08-09 full-dev selector checkpoint
 

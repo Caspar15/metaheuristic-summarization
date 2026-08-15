@@ -24,11 +24,16 @@ Frozen identity：
 - Health evidence：`docs/research/evidence/govreport_test_canonical_health_v1.json`
 - Authorization：`configs/data_policies/govreport_test_authorization_v1.json`
 
-## 尚未完成
+## Stage B 準備進度
 
-- 九系統 one-shot runner 與 official evaluator 的 test-only fail-closed 接線。
-- Score-free dry run。
-- Exact scientific commit、environment、commands、output paths freeze。
-- Stage B activation 與一次性正式執行。
+- 已完成九系統 one-shot runner 與 official evaluator 的 test-only fail-closed 接線。
+- 已凍結 exact scientific commit `36919f222a697fd84d25600b23ba1633ff908ae9`、
+  environment、commands 與 output paths。
+- 執行凍結檔：`configs/preregistrations/govreport_final_execution_freeze_v1.json`。
+- 尚未執行：score-free dry run、Stage B activation 與唯一一次正式計分。
+
+此凍結當下 `test_predictions_generated_at_freeze=false` 且
+`test_scores_observed_at_freeze=false`；最終分數不得回頭影響方法、baseline、
+長度、排除規則或 evaluator。
 
 Stage A 完成只代表資料 policy 可以使用，不代表可以在 runner 未凍結時臨時執行方法。

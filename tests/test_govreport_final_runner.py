@@ -6,7 +6,9 @@ from scripts.audit.run_govreport_final_test import (
     RANDOM_SEEDS,
     _baseline_config,
     _baseline_method,
+    _load_freeze,
 )
+from src.data.policy import sha256_file
 from src.pipeline.select_sentences import validate_experiment_request
 from src.utils.io import load_yaml
 
@@ -75,3 +77,17 @@ def test_final_baseline_labels_resolve_without_changing_proposed_selector():
     assert pacsum_sbert["baselines"]["pacsum"]["beta"] == 0.5
     assert pacsum_sbert["baselines"]["pacsum"]["lambda_previous"] == 0.0
     assert config["optimizer"] == original
+
+
+def test_committed_execution_freeze_is_score_blind_and_fully_pinned():
+    relative = Path(
+        "configs/preregistrations/govreport_final_execution_freeze_v1.json"
+    )
+    digest = sha256_file(str(ROOT / relative))
+    freeze = _load_freeze(relative, digest)
+    assert freeze["scientific_code_commit"] == (
+        "36919f222a697fd84d25600b23ba1633ff908ae9"
+    )
+    assert freeze["test_predictions_generated_at_freeze"] is False
+    assert freeze["test_scores_observed_at_freeze"] is False
+    assert freeze["execution"]["workers"] == 16

@@ -5,8 +5,11 @@ and the frozen-dev E1-E3 evidence-completion study is complete. Its post-evidenc
 is `govreport_pretest_evidence_index_v1.json`. `govreport_centered_final_evaluation_v1.json`
 remains a locked protocol, not permission to access test; policy ordering and human sign-off
 were resolved through `../data_policies/govreport_test_authorization_v1.json`. Stage A
-policy materialization is complete; test scoring stays locked until the exact runner,
-environment, commands, and output paths pass the score-free execution freeze.
+policy materialization is complete. The exact runner, scientific commit, environment,
+commands, output paths, nine system families, and evaluator resources are pinned by
+`govreport_final_execution_freeze_v1.json` before any test prediction or score. Test
+scoring remains locked until the score-free dry run is committed and an activation file
+pins that evidence.
 
 每個 freeze 前實驗都必須先在這裡寫明：改什麼、預期什麼、成功／刪除條件、會看幾次
 dev-test，以及多重比較 family。`status=frozen_before_candidate_system_scores` 只代表該份
@@ -28,3 +31,9 @@ selection-aware Bonferroni；結果不得授權 dev-test/test。
 `govreport_centered_final_evaluation_v1.json` 預先凍結 one-shot GovReport final protocol，
 但狀態明確為 execution locked。在 E1–E3、GovReport test policy、exact commit/environment
 與老師／完整作者群簽字全部完成前，不得建立 test run。
+
+`govreport_final_execution_freeze_v1.json` 是 Stage B 的機器可驗證凍結：它釘住
+973-row canonical test、最終 proposed config、九個 system families、10 個 random seeds、
+official evaluator 資源、套件版本、16 workers 與輸出路徑。建立當下為零
+prediction、零 score；它本身不是執行許可，還需 score-free dry run 與另一份
+activation 檔。
