@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "erratum_id": "govreport-e2-cache-classification-erratum-v1",
+  "status": "frozen_before_any_completed_timing_for_affected_systems",
+  "registered_at_utc": "2026-08-15T09:40:06.7721080Z",
+  "parent_cost_addendum": {
+    "path": "configs/preregistrations/govreport_centered_cost_addendum_v1.json",
+    "sha256": "01cc834045658d41a6ebceaf99fe33ee1b1f8d2ad5501e00f0abe438912ed777"
+  },
+  "static_config_finding": {
+    "affected_systems": [
+      "D2_matched_greedy_tfidf_anchor",
+      "D2_matched_nsga2_tfidf"
+    ],
+    "selector_labels": "TF-IDF",
+    "candidate_generator": "frozen S02b lexical + semantic + graph routes",
+    "semantic_route_enabled_by": "compute_budget.enabled_routes contains semantic and routes.semantic is configured",
+    "correction": "Treat both systems as embedding-cache users for cold/warm measurement. Prime and byte-verify a shared warm cache; use an empty isolated cache for every cold attempt."
+  },
+  "scope": {
+    "system_set_changed": false,
+    "sample_changed": false,
+    "repetitions_changed": false,
+    "metrics_changed": false,
+    "quality_selection_changed": false,
+    "completed_existing_system_timings_changed": false
+  },
+  "interrupted_attempt": {
+    "path": "runs_v2/govreport_cost_scaling_v1/D2_matched_greedy_tfidf_anchor/attempts/attempt_01_interrupted_wrong_cache_classification/evidence.json",
+    "sha256": "56cc58c2e11878c88c4792f68c2fb3fbef8d003c55e24c8fe409d62dc3f12db0",
+    "timing_used_in_analysis": false,
+    "completed_worker_output_observed": false
+  },
+  "disclosure": {
+    "some_unaffected_system_timings_observed_before_erratum": true,
+    "partial_elapsed_time_for_affected_system_observed": true,
+    "reason_correction_is_non_discretionary": "Both frozen YAML files explicitly contain compute_budget.enabled_routes including semantic and a configured routes.semantic block. A warm label without a primed semantic embedding cache would violate the already-frozen cold/warm contract.",
+    "quality_scores_observed": false
+  },
+  "corrected_runner_sha256": "9a9f9549db1e8f9ccbd90c656137f48b6034f4360c4ef4a478ba35ecd5596522",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

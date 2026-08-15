@@ -1,0 +1,22 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T09:38:18.2366218Z",
+  "status": "failed",
+  "study_id": "govreport-cost-scaling-v1",
+  "system": "D2_matched_greedy_tfidf_anchor",
+  "state": "cold",
+  "role": "smoke",
+  "repetition": 0,
+  "failure_class": "external_interrupt_after_cache_classification_audit",
+  "reason": "The frozen S02b candidate generator enables the semantic route, but the E2 runner classified this TF-IDF selector label as non-PLM. The run was interrupted before completion because its later warm state would have been mislabeled cold recomputation.",
+  "elapsed_seconds_at_interrupt": 170.407735100016,
+  "partial_peak_process_tree_rss_bytes": 751341568,
+  "partial_embedding_cache_bytes": 13521272,
+  "partial_embedding_cache_sha256": "9b9059e6efd232890d0d8a03ff0d5860d40134b4448502460f6880700cf9d945",
+  "config_path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+  "config_sha256": "f3cf22b9fdd2ea7b2457cfd34f66ba0c71b4faaac6fd1aa6479099c82a7c42d2",
+  "timing_used_in_analysis": false,
+  "quality_score_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

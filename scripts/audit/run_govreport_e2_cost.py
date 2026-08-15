@@ -31,6 +31,7 @@ from src.utils.io import read_jsonl, set_global_seed
 
 
 ADDENDUM = REPO_ROOT / "configs/preregistrations/govreport_centered_cost_addendum_v1.json"
+CACHE_ERRATUM = REPO_ROOT / "configs/preregistrations/govreport_e2_cache_classification_erratum_v1.json"
 SAMPLE = REPO_ROOT / "configs/pilot_manifests/govreport_cost_scaling_sample_v1.json"
 CANONICAL = REPO_ROOT / "data/processed/govreport_validation_canonical.jsonl"
 OUTPUT_ROOT = REPO_ROOT / "runs_v2/govreport_cost_scaling_v1"
@@ -38,6 +39,10 @@ SEARCH_LOG = REPO_ROOT / "runs_v2/search_log.jsonl"
 PLM_SYSTEMS = {
     "frozen_C01_proposed",
     "full_source_sbert_mmr_lambda_0.9",
+    # These selector labels are TF-IDF, but their frozen S02b candidate
+    # generators still execute the enabled semantic route and write embeddings.
+    "D2_matched_greedy_tfidf_anchor",
+    "D2_matched_nsga2_tfidf",
     "pacsum_sbert_beta_0.5",
     "sbert_centroid",
 }
@@ -153,6 +158,20 @@ def _specs() -> dict[str, dict[str, str]]:
     return specs
 
 
+def _validate_cache_classification(specs: Mapping[str, Mapping[str, str]]) -> None:
+    erratum = json.loads(CACHE_ERRATUM.read_text(encoding="utf-8"))
+    affected = erratum["static_config_finding"]["affected_systems"]
+    for system in affected:
+        if system not in PLM_SYSTEMS:
+            raise ValueError(f"semantic-route E2 system is not cache-aware: {system}")
+        config = _load_config(REPO_ROOT / specs[system]["config_path"])
+        if (
+            "semantic" not in config["compute_budget"]["enabled_routes"]
+            or not isinstance(config["routes"].get("semantic"), dict)
+        ):
+            raise ValueError(f"E2 cache erratum no longer matches frozen config: {system}")
+
+
 def _selected_rows() -> tuple[list[dict[str, Any]], dict[str, str]]:
     manifest = json.loads(SAMPLE.read_text(encoding="utf-8"))
     ordered_ids = list(manifest["selected_ids"])
@@ -207,6 +226,7 @@ def _embedding_cache_records(value: Any) -> list[dict[str, Any]]:
 
 def worker(system: str, output: Path, cache_dir: Path) -> None:
     specs = _specs()
+    _validate_cache_classification(specs)
     spec = specs[system]
     config_path = REPO_ROOT / spec["config_path"]
     if _sha256(config_path) != spec["config_sha256"]:
