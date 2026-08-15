@@ -23,7 +23,7 @@
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
 > Greedy、selection Jaccard 僅 `0.639`。當時暫採 MMR、NSGA-II 降為 comparator；
 > 2026-08-09 full-dev D2 後改採 task-profile policy，GovReport 才使用 TF-IDF MMR λ=0.7，
-> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；現在只待 E1～E3 與 final freeze。
+> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；E1～E3 已完成，現在只待 final freeze package。
 > **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
 > Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime
@@ -2426,8 +2426,8 @@ alias 與相同 WordNet plaintext 重建平台原生 DB 解決；ROUGE script、
 
 本階段完整 pytest **464 passed**、`compileall -f src tests scripts` 通過；freeze verifier
 仍回報 `protected_splits_unlocked=false`、`dev_test_accessed=false`、
-`test_split_accessed=false`。F-72 的官方 parity blocker 因此關閉，但 E2、E3、test policy
-與完整簽字仍是 final test 前硬條件。
+`test_split_accessed=false`。F-72 的官方 parity blocker 因此關閉；E2/E3 後續也已完成，
+目前 test policy、freeze audit 與完整簽字仍是 final test 前硬條件。
 
 ## F-74 — E2 以 selector 名稱判斷 cache applicability，錯列兩個 semantic-route systems
 
@@ -2451,3 +2451,31 @@ cold/warm selected-index digest 均一致。Proposed median cold/warm wall time 
 `176.03/10.52s`，full-source SBERT+MMR `177.81/12.45s`，matched NSGA-II
 `222.61/56.74s`。完整 memory/scaling 表見 `E2_COST_SCALING_STATUS.md`。
 dev-test/test 均未存取；timing outcome 不可用於調參或 promotion。
+
+## F-75 — E3 schema guard 啟動錯誤已留證；五個 route/provenance ablations 全部通過
+
+**嚴重度：P1 已關閉（runner correctness）／P0 claim evidence 已完成**
+
+2026-08-15 第一次 E3 invocation 在 worker 或分數產生前，以 `KeyError: 'partition'`
+中止。runner 把 `_load_study()` 回傳的 dataset spec 誤當成 partition object；正確凍結
+身分位於 `study['manifest_object']['partitions']['dev']`。修正只抽出 fail-loud manifest
+identity guard，驗證 rows、selected ID 型別與 SHA；三個 regression tests 覆蓋正常、
+membership drift 與 row-count drift。第二次 invocation 因 Windows sandbox 禁止建立
+worker pipe 而在任何 prediction／score 前失敗。兩次 attempt 都保留並進 search log，
+相同 frozen scientific configs 最後在 sandbox 外以 16 workers 完成。
+
+E3 五案均為 GovReport frozen dev 681/681 feasible、dev-test/test 未存取。完整 C01
+內部 macro `0.457404`；no-semantic `0.442022`、no-graph `0.448370`、capacity-80
+lexical-only `0.359463`、exact-pool equal-RRF `0.449608`、exact-pool lexical-salience
+`0.359569`。五個 C01−ablation macro 95% CI 全正，20-endpoint Holm-adjusted
+`p=0.000400`；所有 20 個 ROUGE endpoints 也都通過。A03 排除單純候選容量解釋；
+A04/A05 在固定 C01 membership 下分離 weighted fusion 與 selector salience，確認
+provenance 不能只停留在 candidate membership。
+
+完整 evidence 見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md` 與
+`runs_v2/govreport_e3_route_provenance_v1/`。本消融使用預註冊內部
+`rouge_score`/Lsum，不可與 E1 official Perl 尺度混表；結論限 GovReport frozen dev，
+不外推 Multi-News，也不解鎖 test。
+
+本階段完整 pytest **469 passed／5 subtests passed**，`compileall -f src tests scripts`
+通過；既有 provenance verifier 為 `468 checked / 468 legacy / 0 fail`。

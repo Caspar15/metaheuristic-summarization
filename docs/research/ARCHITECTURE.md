@@ -1,8 +1,8 @@
 # 最終候選架構規格 —— Provenance-Aware Multi-Route Extractive Summarization
 
 > **2026-08-15 文件同步**：架構與品質導向配置已凍結在 GovReport D3b candidate
-> `C01_combined_salience_route_weight`。接下來只允許預註冊的 E1 official-evaluator
-> re-scoring、E2 cost/scaling instrumentation 與 E3 五個 route/provenance ablations；
+> `C01_combined_salience_route_weight`。預註冊的 E1 official-evaluator re-scoring、
+> E2 cost/scaling instrumentation 與 E3 五個 route/provenance ablations 已全部完成；
 > 不再改 route、weight、candidate budget、selector 或 length contract，也不讀 dev-test/test。
 > 現行 `compute_budget.mode` 是固定三路；adaptive allocator 從未實作，也不在 frozen v2
 > claim 或 E1～E3 中。下方 adaptive-routing 段落保留為 v1 歷史候選方向，不是現行方法。
@@ -44,8 +44,8 @@
 > Multi-News 保留為 boundary condition。權威主張見 `GOVREPORT_CLAIM_MATRIX_V2.md`。
 
 > 狀態：**Target Architecture v2（GovReport-centered），方向已定案／final freeze 尚未簽字**
-> freeze 條件：完成 official evaluator parity、cost/scaling、final route/provenance ablation
-> 與 extension audit；沒有任何新的品質導向調參。
+> freeze 條件：official evaluator parity、cost/scaling、final route/provenance ablation
+> 已完成；尚待 extension audit、test policy 與完整作者簽字，且沒有新的品質導向調參。
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。
 
 ## 0. 結論
@@ -61,7 +61,7 @@
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
    NSGA-II 退出核心與標題；GovReport D3b 已通過 internal-evaluator adversarial-baseline gate，但
    Multi-News 未通過，故 v1 雙-primary system 沒有取得 freeze 資格；v2 已縮窄為
-   GovReport-centered，但仍須 E1～E3 evidence 與 final signature。
+   GovReport-centered；E1～E3 evidence 已完成，仍須 freeze audit 與 final signature。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 

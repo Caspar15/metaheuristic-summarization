@@ -1,0 +1,59 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T11:10:22.246990+00:00",
+  "started_at_utc": "2026-08-15T11:09:09.507912+00:00",
+  "status": "completed",
+  "study_id": "govreport-e3-route-provenance-v1",
+  "variant": "A03_lexical_only_capacity_80",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "config_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/resolved_config.yaml",
+  "config_sha256": "bbd5c3e18c116140a1242bc4bf433b85c3f95837ce8a0217bf7c18d589f64c1a",
+  "candidate_hash": "be32e1d7e66461196337f2eb46c50ec737eda6ec5a72279808c919c2c502bcca",
+  "implementation_commit": "36bcb8b6b3245c64e353d307f3ccdb86439f3ff3",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 72.79167090001283,
+    "cpu_process_tree_seconds": 163.75,
+    "peak_process_tree_rss_bytes": 3221577728,
+    "rss_sample_interval_ms": 50,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.48514172620736856,
+      "rouge2": 0.14648986716496007,
+      "rougeLsum": 0.4467586582937454
+    },
+    "macro_rouge": 0.35946341722202463,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 644.0528634361234,
+      "min": 614,
+      "max": 650
+    }
+  },
+  "predictions_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/predictions.jsonl",
+  "predictions_sha256": "ea98c8f2f07b7272acfd04c92319bae04a269f372ba5f14600b81ff54381af9c",
+  "selected_indices_sha256": "d7fc6b3772d932e6a8ec6fb506e1e3a263eee9d393b79c372039e6b8e275907f",
+  "per_example_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/per_example.jsonl",
+  "per_example_sha256": "e432d7d588f28445d884396598c0f85494de027b5ddb64d87c66d64d8b72fe14",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

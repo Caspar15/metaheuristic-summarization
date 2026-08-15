@@ -22,7 +22,8 @@
 
 > **現行決策（取代本文早期的雙-primary 推薦）**：D3b 後已停止搜尋，作者端已核准
 > GovReport-centered 選項 A。GovReport 是唯一 primary；Multi-News 只保留既有負面
-> boundary evidence。下一步是 E1～E3 evidence completion 與 final freeze 簽字，不是
+> boundary evidence。E1～E3 evidence completion 已完成；下一步是 freeze audit、test
+> policy 與 final freeze 簽字，不是
 > 重新選資料集、重新調參或跑 test。本文較早的三資料集／雙-primary討論保留作決策沿革。
 
 ---

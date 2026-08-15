@@ -16,14 +16,14 @@ quality domain，Multi-News 只保留既有 D3b 負結果作 boundary-condition 
 - ICACT 延伸：`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`
 
 後文「兩個 primary」與 Multi-News official test 的文字保留為 v1 歷史規格，用來解釋
-A1～D3b 決策，不再授權新的 Multi-News dev-test/test。下一步固定為 GovReport official
-evaluator parity、cold/warm runtime-memory-scaling、route/provenance ablation；完成後才交老師與
-完整作者群簽署 final freeze。**在此之前不准讀 test。**
+A1～D3b 決策，不再授權新的 Multi-News dev-test/test。GovReport official evaluator
+parity、cold/warm runtime-memory-scaling 與 route/provenance ablation 已完成；下一步只
+整理 freeze audit、test policy 與老師／完整作者群簽字。**簽字前不准讀 test。**
 
-截至本次覆核，A1～D3b、完整 baseline matrix、greedy reference 與 paired inference
-都已完成；尚未完成的是 E1 official evaluator、E2 controlled cost/scaling、E3
-route/provenance ablation、ICACT camera-ready 逐頁核對、GovReport test data policy 與
-final signatures。因此「準備跑最終實驗」只能指 E1～E3，不能指 final test。
+截至本次覆核，A1～D3b、完整 baseline matrix、greedy reference、paired inference，
+以及 E1 official evaluator、E2 controlled cost/scaling、E3 route/provenance ablation
+都已完成；尚未完成的是 ICACT camera-ready 逐頁核對、GovReport test data policy、
+freeze audit 與 final signatures。因此目前是「準備 final freeze」，不是已授權 final test。
 
 ## 2026-08-06 selector-comparison update
 
@@ -146,20 +146,20 @@ dev redesign 已完成，現已停止搜尋並進入 GovReport-centered evidence
 | P0-03 | Stage-1 top-K 與實作不符 | ✅ **已修** | 各 route 在完整輸入排名；`route_top_k` 只定義 proposal depth，`min_per_route` 才是保留額 |
 | P0-04 | Stage 2 沒有融合 BERT 分數 | ✅ **已修** | semantic route + `selector.salience_source: rrf_fusion`；實測改變 semantic 分數會改變選句 |
 | P0-05 | SciTLDR oracle 與 multi-reference | ✅ **v1 已排除；重新納入才重開** | `preprocess_scitldr` 已存 `references: list`；v1 不跑 SciTLDR，因此 official conformance 不阻塞目前主線 |
-| P0-06 | ROUGE-L 協定錯誤 | ✅ **已修**（parity 待驗） | `rougeLsum` + 手算 golden tests；與 published Perl ROUGE 的 parity 尚未驗證 |
+| P0-06 | ROUGE-L 協定錯誤 | ✅ **已修並完成 parity** | `rougeLsum` + 手算 golden tests；E1 已以 GovReport published Stanza/Perl protocol 重評 |
 | P0-07 | NSGA-II 參數與 config 不一致 | ✅ **已修** | `pop_size`/`n_gen`/`seed` 已接線、移除靜默 fallback、有 regression test |
 | P0-08 | 公式與實作多處不一致 | 🟡 **部分修** | 已修：TF-ISF v2 改用非負平滑、graph 不再就地竄改、τ 已接線。**仍未修：`length_scores` 除以「文件內觀察最大值」而非論文的 `min(len/40,1)`；`centrality` 與 `novelty` 完全反相關** |
-| P0-09 | Runtime protocol 不可重現 | 🟡 **程式已修，數字待重測** | `load_encoder()` 模型快取已修。**正式計時必須依鎖定 protocol 重測**（載入佔比在兩次量測間為 78% 與 93%，不穩定） |
+| P0-09 | Runtime protocol 不可重現 | ✅ **E2 controlled protocol 已完成** | `load_encoder()` 模型快取已修；E2 已分 cold/warm、fresh subprocess、peak process-tree RSS 與 cache lifecycle，各三次 measured repetition |
 | P0-10 | Data integrity 與 preprocessing | 🟡 **兩 primary validation 已修；freeze 後 splits 尚未讀取** | Multi-News 與 GovReport validation 的 canonical schema、pinned revision、health report、fingerprint、frozen policy、development partition 與防竄改守門已完成。test split 在人員簽署 freeze 前禁止；CNN/DM 是 Gate 3 後的條件式工作 |
 
 **目前真正還擋著投稿的**：
 
-1. 🔴 **E1 official evaluator**：現有 D3b 是內部 `multisentence_lsum`；須用 GovReport
-   作者的 Stanza + Perl ROUGE-1.5.5 重評已凍結 outputs，若 ranking 反轉就撤回 superiority。
-2. 🔴 **E2 cost/scaling**：30-document reference-blind sample、cold/warm 各三次、peak
-   process-tree RSS 與 scaling 尚未完成；既有零散 timing 不能代替。
-3. 🔴 **E3 route/provenance ablation**：五個預註冊 variants、20-endpoint Holm 與
-   100,000 paired bootstrap 尚未完成；不支持的 route／provenance claim 必須降級。
+1. ✅ **E1 official evaluator**：九系統已用 GovReport 作者的 Stanza + Perl
+   ROUGE-1.5.5 重評；Proposed 的預註冊 macro 優勢通過，R-L 單項未顯著。
+2. ✅ **E2 cost/scaling**：30-document reference-blind sample 的 cold/warm、peak
+   process-tree RSS 與 scaling 已完成，cache lifecycle 與失敗 attempt 均留證。
+3. ✅ **E3 route/provenance ablation**：五個預註冊 variants、20-endpoint Holm 與
+   100,000 paired bootstrap 已完成；五項主張均未觸發降級。
 4. 🟡 **投稿與 freeze package**：ICACT camera-ready 逐頁 extension 核對、GovReport
    test data policy、exact commit/environment 與老師／完整作者群簽字尚未完成。
 5. 🟡 **永久限制**：P0-01 legacy artifacts 作廢；CNN/DM／SciTLDR 不在 v2 矩陣；

@@ -60,7 +60,8 @@ cache，cold 使用獨立空 cache，warm 使用 byte-verified shared cache。�
 
 ## 尚未完成
 
-- E3 五個 route/provenance ablations 與 20-endpoint Holm inference。
 - ICACT camera-ready extension audit、test data policy、freeze audit 與完整簽字。
+
+E3 已於同日完成；見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`。
 
 E2 只補成本證據，不能依 timing 重新調參、promote 方法或解鎖 test。

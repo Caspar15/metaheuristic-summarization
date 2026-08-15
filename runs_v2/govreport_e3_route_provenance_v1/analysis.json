@@ -1,0 +1,290 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T11:13:13.074576+00:00",
+  "status": "completed",
+  "study_id": "govreport-e3-route-provenance-v1",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "holm_family_size": 20,
+  "bootstrap_resamples": 100000,
+  "base_seed": 20260820,
+  "anchor_metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5791063169607387,
+      "rouge2": 0.24938000973565697,
+      "rougeLsum": 0.5437248565512196
+    },
+    "macro_rouge": 0.45740372774920507,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 647.1732745961821,
+      "min": 630,
+      "max": 650
+    }
+  },
+  "comparisons_full_minus_ablation": {
+    "A01_no_semantic": {
+      "rouge1": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260820,
+        "confidence": 0.95,
+        "mean_difference": 0.014342086061490162,
+        "ci_lower": 0.012053043782950098,
+        "ci_upper": 0.016649497908391406,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rouge2": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260821,
+        "confidence": 0.95,
+        "mean_difference": 0.01685650588096435,
+        "ci_lower": 0.01417703253219023,
+        "ci_upper": 0.019570683574965553,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rougeLsum": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260822,
+        "confidence": 0.95,
+        "mean_difference": 0.014947318024417301,
+        "ci_lower": 0.012591612896598058,
+        "ci_upper": 0.017340930440930175,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "macro_rouge": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260823,
+        "confidence": 0.95,
+        "mean_difference": 0.015381969988957273,
+        "ci_lower": 0.01305665284953602,
+        "ci_upper": 0.017718989197127614,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      }
+    },
+    "A02_no_graph": {
+      "rouge1": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260824,
+        "confidence": 0.95,
+        "mean_difference": 0.005850453553778682,
+        "ci_lower": 0.003858293642759866,
+        "ci_upper": 0.007848366817193565,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rouge2": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260825,
+        "confidence": 0.95,
+        "mean_difference": 0.01472438105755715,
+        "ci_lower": 0.012203283710370232,
+        "ci_upper": 0.01726998519495274,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rougeLsum": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260826,
+        "confidence": 0.95,
+        "mean_difference": 0.006526607925826119,
+        "ci_lower": 0.004439287411150327,
+        "ci_upper": 0.008610443146071267,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "macro_rouge": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260827,
+        "confidence": 0.95,
+        "mean_difference": 0.009033814179053986,
+        "ci_lower": 0.006964094518518765,
+        "ci_upper": 0.011131150039345243,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      }
+    },
+    "A03_lexical_only_capacity_80": {
+      "rouge1": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260828,
+        "confidence": 0.95,
+        "mean_difference": 0.09396459075337059,
+        "ci_lower": 0.08943056234543763,
+        "ci_upper": 0.0984551029274005,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rouge2": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260829,
+        "confidence": 0.95,
+        "mean_difference": 0.10289014257069708,
+        "ci_lower": 0.09802346866665833,
+        "ci_upper": 0.10771033059945948,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rougeLsum": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260830,
+        "confidence": 0.95,
+        "mean_difference": 0.09696619825747409,
+        "ci_lower": 0.09241507386950705,
+        "ci_upper": 0.10151767563636326,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "macro_rouge": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260831,
+        "confidence": 0.95,
+        "mean_difference": 0.0979403105271806,
+        "ci_lower": 0.09347289403819839,
+        "ci_upper": 0.1024035806198882,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      }
+    },
+    "A04_equal_rank_rrf": {
+      "rouge1": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260832,
+        "confidence": 0.95,
+        "mean_difference": 0.005853313052163948,
+        "ci_lower": 0.004262897240859365,
+        "ci_upper": 0.007450724487002754,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rouge2": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260833,
+        "confidence": 0.95,
+        "mean_difference": 0.009981137767809508,
+        "ci_lower": 0.008101729240540709,
+        "ci_upper": 0.011840290093725808,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rougeLsum": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260834,
+        "confidence": 0.95,
+        "mean_difference": 0.007553339067974551,
+        "ci_lower": 0.005892482014922808,
+        "ci_upper": 0.009219597626506934,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "macro_rouge": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260835,
+        "confidence": 0.95,
+        "mean_difference": 0.007795929962649335,
+        "ci_lower": 0.0061537320162800705,
+        "ci_upper": 0.009419581400221038,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      }
+    },
+    "A05_index_only_lexical": {
+      "rouge1": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260836,
+        "confidence": 0.95,
+        "mean_difference": 0.0928204226238846,
+        "ci_lower": 0.08833178622531876,
+        "ci_upper": 0.09726389258415466,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rouge2": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260837,
+        "confidence": 0.95,
+        "mean_difference": 0.10529002665207046,
+        "ci_lower": 0.10027853309791808,
+        "ci_upper": 0.11020808187781476,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "rougeLsum": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260838,
+        "confidence": 0.95,
+        "mean_difference": 0.09539293760842997,
+        "ci_lower": 0.09085849055570884,
+        "ci_upper": 0.09992319937196759,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      },
+      "macro_rouge": {
+        "n_pairs": 681,
+        "n_resamples": 100000,
+        "seed": 20260839,
+        "confidence": 0.95,
+        "mean_difference": 0.097834462294795,
+        "ci_lower": 0.09330614304023488,
+        "ci_upper": 0.10232319390553926,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_20": 0.00039999600003999964,
+        "significant_positive_after_holm": true
+      }
+    }
+  },
+  "claim_decisions": {
+    "semantic_quality_contribution": true,
+    "graph_quality_contribution": true,
+    "combined_nonlexical_contribution": true,
+    "provenance_equal_rrf_contribution": true,
+    "provenance_vs_lexical_only_contribution": true
+  },
+  "required_claim_downgrades": [],
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -54,8 +54,7 @@ test 結果，也不解鎖 protected split。
 
 ## 尚未完成
 
-- E2：30-document reference-blind sample 的 cold/warm runtime、peak RSS 與 scaling。
-- E3：五個預註冊 route/provenance ablations 與 20-endpoint Holm inference。
 - ICACT camera-ready extension audit、test data policy 與老師／完整作者群簽字。
 
-上述項目完成並通過 freeze audit 前，仍不得跑 test。
+E2 與 E3 已於同日完成；見 `E2_COST_SCALING_STATUS.md` 與
+`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`。上述剩餘 freeze 項目完成前仍不得跑 test。
