@@ -76,15 +76,19 @@ def validate_experiment_request(cfg: Mapping, requested_split: str) -> None:
     if not isinstance(experiment, Mapping):
         raise ValueError("experiment configuration must be an object")
     status = experiment.get("status")
-    if status != "validation_pilot_only":
+    allowed_split = {
+        "validation_pilot_only": "validation",
+        "final_test_only": "test",
+    }.get(status)
+    if allowed_split is None:
         raise ValueError(
-            f"unknown experiment.status {status!r}; only "
-            "'validation_pilot_only' is currently implemented"
+            f"unknown experiment.status {status!r}; choose one of "
+            "'validation_pilot_only' or 'final_test_only'"
         )
-    if requested_split != "validation":
+    if requested_split != allowed_split:
         raise ValueError(
-            "experiment.status='validation_pilot_only' may only access the "
-            f"validation split, not {requested_split!r}"
+            f"experiment.status={status!r} may only access the "
+            f"{allowed_split} split, not {requested_split!r}"
         )
     data_policy = cfg.get("data_policy")
     if not isinstance(data_policy, Mapping):
@@ -95,6 +99,13 @@ def validate_experiment_request(cfg: Mapping, requested_split: str) -> None:
         raise ValueError("data_policy.policy_sha256 must be declared")
     if not isinstance(data_policy.get("analysis"), str):
         raise ValueError("data_policy.analysis must be declared")
+    if status == "final_test_only":
+        if _normalized_dataset_name(experiment.get("dataset")) != "govreport":
+            raise ValueError("final_test_only is frozen for GovReport only")
+        if data_policy.get("policy_path") != "configs/data_policies/govreport_test_v1.json":
+            raise ValueError("final_test_only requires the frozen GovReport test policy")
+        if cfg.get("experiment_partition") is not None:
+            raise ValueError("final_test_only must evaluate the complete official test policy")
 
 
 def _normalized_dataset_name(value: object) -> str:
