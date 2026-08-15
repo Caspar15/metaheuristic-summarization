@@ -105,6 +105,30 @@ class ProcessTreeSampler:
         self.cpu_end = max(self.cpu_end, self.peak_observed_cpu_total)
 
 
+def _validated_dev_partition(study: Mapping[str, Any]) -> tuple[dict[str, Any], list[str]]:
+    """Return the frozen dev partition after validating its recorded identity."""
+    manifest = study.get("manifest_object")
+    if not isinstance(manifest, Mapping):
+        raise ValueError("E3 study has no loaded partition manifest")
+    partitions = manifest.get("partitions")
+    if not isinstance(partitions, Mapping):
+        raise ValueError("E3 partition manifest has no partitions mapping")
+    partition = partitions.get("dev")
+    if not isinstance(partition, dict):
+        raise ValueError("E3 partition manifest has no dev object")
+    selected_ids = partition.get("selected_ids")
+    if not isinstance(selected_ids, list) or not all(
+        isinstance(value, str) for value in selected_ids
+    ):
+        raise ValueError("E3 dev partition has invalid selected_ids")
+    ordered_ids = list(selected_ids)
+    if len(ordered_ids) != partition.get("rows"):
+        raise ValueError("E3 dev partition row count drifted")
+    if selected_ids_sha256(ordered_ids) != partition.get("selected_ids_sha256"):
+        raise ValueError("E3 dev membership drifted")
+    return partition, ordered_ids
+
+
 def _selected_digest(rows: Iterable[Mapping[str, Any]]) -> str:
     digest = hashlib.sha256()
     for row in rows:
@@ -374,10 +398,7 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
 
     study = _load_study("govreport")
     input_path = REPO_ROOT / study["input"]
-    manifest = study["manifest_object"]
-    ordered_ids = list(manifest["partitions"]["dev"]["selected_ids"])
-    if selected_ids_sha256(ordered_ids) != study["partition"]["selected_ids_sha256"]:
-        raise ValueError("E3 dev membership drifted")
+    _partition, ordered_ids = _validated_dev_partition(study)
     gold = _load_gold(input_path, ordered_ids)
     base = load_yaml(str(ANCHOR_CONFIG))
     variants = _resolve_variants(base)
