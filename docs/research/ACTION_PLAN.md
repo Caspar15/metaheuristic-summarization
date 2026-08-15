@@ -4,7 +4,8 @@
 
 > **目前執行點**：A1～D3b、baseline matrix、GovReport-centered 定位與 E1 官方
 > evaluator、E2 cold/warm runtime-memory-scaling 與 E3 route/provenance ablation 已完成；
-> 配置搜尋已停止。下一個工作包是 pre-test freeze audit、test policy 草案與作者簽字。
+> 配置搜尋已停止，pre-test freeze audit 亦已完成。下一個工作包須先由老師／完整作者群
+> 決議 test-policy ordering，再建立 policy、exact execution package 並完成兩階段簽字。
 > E1～E3 都只讀 frozen GovReport dev，不是 test；目前仍禁止 dev-test/test。
 
 - [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
@@ -28,8 +29,8 @@
       Multi-News 依預註冊規則選定 200–250 words，GovReport 選定 500–650 words；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
       partition freeze、Gate 2 baseline／greedy／paired diagnosis與 D2/D3a/D3b dev redesign
-      已完成；v1 雙-primary quality gate 失敗後已停止搜尋，v2 GovReport-centered evidence
-      completion 尚未完成。
+      已完成；v1 雙-primary quality gate 失敗後已停止搜尋，v2 GovReport-centered E1～E3
+      evidence completion 亦已完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
 - [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
       median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
@@ -588,8 +589,8 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
       `176.03/10.52s`、SBERT+MMR `177.81/12.45s`、NSGA-II `222.61/56.74s`。
       78 success + 1 preserved failure；見 `E2_COST_SCALING_STATUS.md`
 - [x] E3：五個事前指定 ablations 已在 frozen GovReport dev 681 rows 完成；全數 681/681 feasible，20 個 endpoint 的 C01−ablation CI 全正且 Holm-20 均通過。見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`
-- [~] ICACT→IEEE Access extension matrix 草案已建立；repo 缺 ICACT camera-ready，頁碼／原表格仍待人工核對
-- [ ] 完成 E1～E3 後交老師與完整作者群簽署 final freeze；簽字前不得解鎖 protected split
+- [x] ICACT 六頁 PDF 已逐頁核對，舊 Eq. (1)–(13)、Tables 1–6、方法與 claims 已映射到 extension matrix；正式 DOI／獎項證明／similarity report 留至投稿稽核
+- [!] Pre-test freeze 建議書已建立，但 frozen policy 對「test policy 與簽字誰先」互相矛盾；需老師／完整作者群先批准兩階段順序。見 `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`
 
 **Gate 3 v1（歷史）** 🔴：
 - 在 validation 上，至少一個主 benchmark明顯勝過強 no-task-training baseline；另一個至少 non-inferior 或形成預先定義的 cost Pareto 優勢
@@ -622,7 +623,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 - [ ] （加分）Human evaluation 50–100 篇 × 3 人
 - [ ] 依研究主計畫 §11 的骨架重寫論文
 - [ ] Reviewer response matrix：四位審稿人每一條意見逐項對應
-- [~] Conference extension table 已建立誠實草案；待 ICACT camera-ready 頁碼／原表格逐項核對
+- [x] Conference extension 的六頁技術內容已逐項核對；正式引用、獎項證明與 similarity report 留在 Phase 6
 
 ---
 
@@ -679,7 +680,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag 與 invalid-run 標記均已版本化；final execution freeze 仍屬 Phase 3d |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | E3 後完整回歸 469 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、兩套歷史 policies/partitions、A1～E3 與 F-51～F-75 guards 已完成；final-output policy 仍待 freeze audit |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | Pre-test freeze audit 後完整回歸 470 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、兩套歷史 policies/partitions、A1～E3 與 F-51～F-76 guards 已完成；final-output policy 仍待兩階段簽核後 materialize |
 | 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
 | 3 方法開發 | `[~]` | ❌ v1 雙-primary gate；✅ v2 dev evidence／🟡 freeze 未簽 | D3b 後停止配置搜尋；E1 official evaluator、E2 cost/scaling、E3 ablation 均完成。尚待 freeze audit、test policy 與完整作者群簽字，不進 dev-test/test |
 | 4 正式 test | `[ ]` | | |

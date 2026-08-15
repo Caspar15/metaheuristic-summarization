@@ -1,39 +1,40 @@
 # ICACT → IEEE Access Extension Matrix
 
-> **2026-08-15 狀態**：技術差異草案已與 GovReport-centered v2 對齊，但所有
-> camera-ready 核對欄仍未完成；E1 official evaluator、E2 cost/scaling、E3 ablation
-> 已產生可填入新稿的凍結 dev 表格，但仍不是 final test。此文件目前不能當成
-> extension 合規已完成的證明。
+> **2026-08-15 狀態**：已逐頁核對作者提供的 6-page ICACT PDF（raw SHA-256
+> `fa4c0c18...a4577`），並與 GovReport-centered v2、E1 official evaluator、E2
+> cost/scaling、E3 ablation 對齊。技術內容 audit 已完成；正式 DOI／書目、Outstanding
+> Paper Award 證明、新稿頁碼與 similarity report 仍待補，因此目前仍不是投稿合規完成證明。
 
 ## 使用方式
 
-這是投稿前的差異證據表，不是宣傳稿。ICACT camera-ready 與 ICT Express 被拒稿全文
-不在 repo 內，因此「ICACT 已有內容」目前只填入 repo 文件可確認的高層範圍；頁碼、
-公式與表號必須由作者拿 camera-ready 逐項核對後才能勾選完成。不能把「程式已做」直接
-等同「期刊稿具有足夠新增比例」，正式 similarity 仍以投稿檢查為準。
+這是投稿前的差異證據表，不是宣傳稿。ICACT PDF 位於 repository 上層 `../ICACT/`，
+內容 audit 與逐頁 mapping 已記錄於 `evidence/icact_camera_ready_audit_v1.json`。ICT Express
+PDF 是被拒稿、不是 prior publication；它可供 reviewer-response 修訂，但 conference
+extension 的法規比較基準只應是 ICACT。不能把「程式已做」直接等同「期刊稿具有足夠
+新增比例」，正式 similarity 仍以投稿檢查為準。
 
 ## Extension matrix
 
-| 面向 | ICACT／ICT Express 既有範圍 | IEEE Access 實質新增 | 證據位置 | Camera-ready 核對 |
+| 面向 | ICACT 既有範圍 | IEEE Access 實質新增 | 證據位置 | ICACT 頁碼／項目 |
 |---|---|---|---|---|
-| 研究問題 | 結合 metaheuristic、graph centrality 與 PLM semantics 的抽取式摘要 | 改為 GovReport-centered、training-free、provenance-preserving long-document framework，並明列 Multi-News boundary | `GOVREPORT_CLAIM_MATRIX_V2.md` | [ ] 頁碼／原主張 |
-| 資料治理 | 舊稿存在 test-tuned Multi-News runs，不能再引用 | Canonical schema、pinned revisions、health manifests、GovReport official archive、reference-blind dev/dev-test partitions、test lock | `configs/data_policies/`、F-17/F-71 | [ ] 舊資料表 |
-| 候選架構 | 三路結果以 index union 組合，route evidence 會遺失 | Independent lexical／semantic／sparse-graph proposals、route reservation、weighted RRF、逐句 provenance | `ARCHITECTURE.md`、prediction schema | [ ] 舊流程圖 |
-| Selector | NSGA-II 是主要敘事，參數／fallback 曾與論文不一致 | Greedy／MMR／NSGA-II matched-input isolation；NSGA-II 因負證據降為 comparator | D2、selector pilot、F-63–F-65 | [ ] 舊 NSGA 公式／表格 |
-| Objective／constraint | 舊 importance、coverage、redundancy 語義與實作不完全一致 | Shared objective factory、length-normalized importance、source/candidate feasibility、fail-loud output contract | `src/objectives/`、F-14/F-17 | [ ] 舊目標函式 |
-| Baselines | baseline 不完整，部分數字來自不同 split／evaluator | 本地同 pipeline 的 Lead、Random、TextRank、LexRank、PacSum TF-IDF/SBERT、SBERT centroid/MMR | `GATE2_BASELINE_STATUS.md` | [ ] 舊 baseline 表 |
-| 統計 | 缺少完整 paired inference 與搜尋機會校正 | Per-example artifacts、paired bootstrap、Holm、selection-aware Bonferroni、失敗 profile 保留 | Gate 2、D1–D3 evidence | [ ] 舊統計段落 |
-| 評測協定 | 舊 ROUGE 定義與句界不足以支持 published comparison | Internal ROUGE golden + GovReport official Stanza/Perl ROUGE parity（E1 完成） | `E1_OFFICIAL_EVALUATOR_STATUS.md` | [ ] 舊 evaluator 描述 |
-| 效能與成本 | 元件計時曾被誤外推為完整 pipeline | Cold/warm end-to-end latency、peak RAM、cache state、document-length scaling（CPU E2 完成；GPU 不適用主報告） | `E2_COST_SCALING_STATUS.md` | [ ] 舊 timing 表 |
-| Ablation | 無法分離 route、candidate pool、selector 的效果 | Capacity-aware route removal + fixed-pool weighted/index-only provenance removal（E3 完成） | `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md` | [ ] 舊 ablation 表 |
-| 適用範圍 | 容易被解讀為一般性品質優勢 | GovReport 正證據與 Multi-News R-2 負結果並列，限制寫入摘要／結論 | D3b paired summary、claim matrix | [ ] 舊結論 |
-| 可重現性 | 缺乏完整 artifact chain | Config/data/manifest SHA、dependency pins、failed-attempt retention、CI、provenance verifier | `runs_v2/`、F-51/F-70/F-71 | [ ] 舊 availability statement |
+| 研究問題 | NSGA-II/metaheuristics 對 LM-only selector 的效率與品質優勢，並以 LM 輔助 ensemble | 改為 GovReport-centered、training-free、provenance-preserving long-document framework，並明列 Multi-News boundary | `GOVREPORT_CLAIM_MATRIX_V2.md` | [x] p.1 Abstract/Introduction；p.5 Conclusion |
+| 資料治理 | CNN/DailyMail 三句與 SciTLDR-AIC 單句；只述相同 preprocess，無 pinned split/artifact policy | Canonical schema、pinned revisions、health manifests、GovReport official archive、reference-blind partitions、test lock | `configs/data_policies/`、F-17/F-71 | [x] pp.2–4 dataset/evaluation descriptions；Tables 1/4/5 |
+| 候選架構 | NSGA-II top-10 與 BERT/RoBERTa/XLNet top-10 做 index union，再以 MMR 選三句 | Independent lexical／semantic／sparse-graph proposals、route reservation、weighted RRF、逐句 provenance | `ARCHITECTURE.md`、prediction schema | [x] p.2 Method steps 3–5；p.3 Eq. (12)–(13) |
+| Selector | NSGA-II 是主要品質敘事；MMR 是 union 後 final selector | Greedy／MMR／NSGA-II matched-input isolation；NSGA-II 因負證據降為 comparator | D2、selector pilot、F-63–F-65 | [x] pp.2–3 Eq. (7)–(13)；p.3 Tables 1–3 |
+| Objective／constraint | TF-ISF、length、position 與三個 NSGA-II objectives | Shared objective factory、length-normalized importance、source/candidate feasibility、fail-loud output contract | `src/objectives/`、F-14/F-17 | [x] pp.2–3 Eq. (1)–(10) |
+| Baselines | BERT/RoBERTa/XLNet similarity、Greedy、GRASP、NSGA-II；無 Lead/LexRank/PacSum/SBERT-MMR 強矩陣 | 本地同 pipeline 的 Lead、Random、TextRank、LexRank、PacSum TF-IDF/SBERT、SBERT centroid/MMR | `GATE2_BASELINE_STATUS.md` | [x] p.3 Table 1 |
+| 統計 | Tables 1/4/5 只有 aggregate point estimates，無 paired CI 或 multiplicity correction | Per-example artifacts、paired bootstrap、Holm、selection-aware Bonferroni、失敗 profile 保留 | Gate 2、D1–E3 evidence | [x] pp.3–4 Tables 1/4/5 |
+| 評測協定 | 只寫 ROUGE-1/2/L F1；沒有 published-evaluator parity | Internal ROUGE golden + GovReport official Stanza/Perl ROUGE parity（E1 完成） | `E1_OFFICIAL_EVALUATOR_STATUS.md` | [x] p.2 evaluation paragraph；p.3 Section IV |
+| 效能與成本 | Per-article timing；Tables 2–3 標題寫 microseconds、cells 卻是 ms，另有 SciTLDR Table 6 | Cold/warm end-to-end latency、peak RAM、cache state、document-length scaling（CPU E2 完成） | `E2_COST_SCALING_STATUS.md` | [x] p.3 Tables 2–3；p.4 Table 6 |
+| Ablation | Table 1 比 component methods、Table 4 比三個 ensembles，但無 matched route/provenance isolation | Capacity-aware route removal + fixed-pool weighted/index-only provenance removal（E3 完成） | `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md` | [x] pp.3–4 Tables 1/4 |
+| 適用範圍 | 結論宣稱 robust evidence／generalization；CNN/DailyMail 與 SciTLDR-AIC | GovReport 正證據與 Multi-News R-2 負結果並列，限制寫入摘要／結論 | D3b paired summary、claim matrix | [x] pp.4–5 SciTLDR discussion與Conclusion |
+| 可重現性 | 無 config/data/artifact SHA、failed-attempt log 或 CI | Config/data/manifest SHA、dependency pins、failed-attempt retention、CI、provenance verifier | `runs_v2/`、F-51/F-70/F-71 | [x] 全文未見相應 artifact chain |
 
 ## 投稿前必填
 
 - [ ] ICACT 完整書目與 DOI。
 - [ ] ICACT「傑出論文獎（Outstanding Paper Award）」的正式獎項名稱與可引用證明。
-- [ ] ICACT camera-ready 每項 contribution 的頁碼、公式、表格與圖號。
+- [x] ICACT 六頁 PDF 的每項 contribution、公式與表格已逐頁核對；見 evidence JSON。
 - [ ] IEEE Access 新稿對應章節、表格、圖號。
 - [ ] Cover letter 逐項說明 substantial extension，而非只寫「增加更多實驗」。
 - [ ] 正式 similarity report；不得以本地 n-gram diagnostic 代替。
@@ -48,4 +49,5 @@
 > result together with a negative Multi-News boundary condition. NSGA-II is retained as
 > a controlled comparator rather than being presented as the quality-leading method.
 
-此句必須在 camera-ready 核對與全部 evidence 完成後再定稿。
+技術內容與 E1～E3 已核對；此句仍須在 DOI／正式書目、獎項證明與 similarity report
+完成後再定稿。

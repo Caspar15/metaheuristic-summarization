@@ -57,7 +57,8 @@ ablation。不可把它與 E1 的 Stanza + Perl ROUGE-1.5.5 官方尺度混成�
 
 ## 尚未完成
 
-- ICACT camera-ready 的逐頁 extension 核對（repo 目前沒有 camera-ready 原稿）。
-- Pre-test freeze audit、GovReport test data policy 與老師／完整作者群簽字。
+- ICACT 六頁技術內容已逐頁核對；正式 DOI／獎項證明／similarity report 仍待投稿前補齊。
+- Pre-test freeze audit 已完成並發現 frozen-policy ordering conflict；GovReport test data
+  policy、exact execution package 與老師／完整作者群兩階段簽字仍未完成。
 
-E3 完成不會自動解鎖 test；下一步是 freeze package，而不是新增 dev 搜尋。
+E3 完成不會自動解鎖 test；下一步是解決 freeze governance，而不是新增 dev 搜尋。

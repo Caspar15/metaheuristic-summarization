@@ -4,7 +4,8 @@
 
 > D1 是已完成的 frozen-dev sensitivity evidence，不是目前待跑工作。其後 Gate 2、
 > D2、D3a、D3b 已完成；v1 雙-primary gate 失敗後，作者端改採 GovReport-centered
-> 定位並停止配置搜尋。下一步只做 E1～E3，不重開 D1 或讀 dev-test/test。
+> 定位並停止配置搜尋。E1～E3 亦已完成；目前只處理 pre-test freeze governance，
+> 不重開 D1 或讀 dev-test/test。
 
 ## 邊界與目前進度
 
@@ -338,5 +339,6 @@ adaptive quality-cost 判斷。
    都已完成；配置搜尋依停止條件關閉。
 2. GovReport D3b 對 strongest local SBERT+MMR 的 internal-evaluator macro 為
    `+0.004636`；Multi-News 對 PacSum 為 `−0.001323` 且 R-2 顯著較差。
-3. 尚待 E1 official evaluator、E2 controlled cost/scaling、E3 final route/provenance
-   ablation 與完整簽字。任何 dev-test promotion 或 test 目前仍禁止。
+3. E1 official evaluator、E2 controlled cost/scaling、E3 final route/provenance
+   ablation 均已完成；尚待 test-policy ordering 決議、兩階段簽核與 exact execution
+   package。任何 dev-test promotion 或 test 目前仍禁止。

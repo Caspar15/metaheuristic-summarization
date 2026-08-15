@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 
 import pytest
@@ -6,6 +7,7 @@ from scripts.audit.verify_govreport_freeze_package import (
     FreezePackageError,
     REPO_ROOT,
     _assert_decision_contract,
+    _assert_evidence_contract,
     _assert_lock_contract,
     _require_sha,
     validate_freeze_package,
@@ -43,6 +45,13 @@ def test_committed_govreport_freeze_package_is_internally_consistent():
     assert report["boundary_dataset"] == "Multi-News"
     assert report["protected_splits_unlocked"] is False
     assert report["test_split_accessed"] is False
+    assert report["evidence_completion_status"] == "E1_E2_E3_complete"
+    assert report["policy_sequence_status"] == "blocked_by_frozen_contract_ordering_conflict"
+    assert report["ready_for_policy_materialization_authorization"] is True
+    assert report["ready_for_final_freeze_signature"] is False
+    assert report["human_signature_status"] == "pending"
+    assert report["test_policy_materialized"] is False
+    assert report["ready_for_test"] is False
     assert report["local_evidence_status"] in {
         "complete",
         "deferred_missing_untracked_artifacts",
@@ -102,3 +111,18 @@ def test_strict_local_evidence_mode_rejects_missing_artifact(tmp_path):
             "0" * 64,
             "gitignored dev artifact",
         )
+
+
+def test_evidence_contract_rejects_posthoc_claim_downgrade_drift():
+    index = json.loads(
+        (REPO_ROOT / "configs/preregistrations/govreport_pretest_evidence_index_v1.json")
+        .read_text(encoding="utf-8")
+    )
+    loaded = {
+        label: json.loads((REPO_ROOT / index[label]["path"]).read_text(encoding="utf-8"))
+        for label in ("E1", "E2", "E3")
+    }
+    drifted = deepcopy(loaded["E3"])
+    drifted["required_claim_downgrades"] = ["graph_quality_contribution"]
+    with pytest.raises(FreezePackageError, match="requires a claim downgrade"):
+        _assert_evidence_contract(index, loaded["E1"], loaded["E2"], drifted)

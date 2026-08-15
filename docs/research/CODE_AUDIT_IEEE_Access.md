@@ -15,7 +15,7 @@
 > 部分為抽樣、且未做 paired significance test，標籤維持 diagnostic。
 > 少數分析（如 370/500 換行雜訊統計）尚未版本化，仍須重做。
 > 後續修正狀態以 §0.0、`ACTION_PLAN.md` 與目前測試結果為準；下方 legacy 敘述不會隨 working tree 改寫。
-> **2026-08-11 v2 freeze-package 覆核**：作者端已核准 GovReport-centered 定位；
+> **2026-08-11 v2 freeze-package 覆核（歷史 checkpoint）**：作者端已核准 GovReport-centered 定位；
 > GovReport 是唯一 primary，Multi-News 是 boundary evidence。F-72 登錄官方 evaluator
 > mismatch risk；459 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
 > **2026-08-06 selector evidence（歷史 pilot，已由 D2 更正）**：200-row reference-blind matched pilot 與五 seed
@@ -23,7 +23,8 @@
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
 > Greedy、selection Jaccard 僅 `0.639`。當時暫採 MMR、NSGA-II 降為 comparator；
 > 2026-08-09 full-dev D2 後改採 task-profile policy，GovReport 才使用 TF-IDF MMR λ=0.7，
-> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；E1～E3 已完成，現在只待 final freeze package。
+> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；E1～E3 與 pre-test audit 已完成，現在只待
+> frozen-policy ordering 決議、test policy、exact execution package 與兩階段簽核。
 > **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
 > Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime
@@ -49,9 +50,9 @@
 |---|---|---|---|---|
 | **F-0** | 系統未贏 Lead | 🔴 成立 | 🔴 **Gate 2 dev 失敗** | route matched evidence 有正訊號，但正式 paired finalists 顯示 S02b 對 Multi-News P08 與 GovReport SBERT+MMR 的 macro CI 均全負；selection-aware wins 0。不得進 dev-test，見 F-62 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
-| F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
+| F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修與驗證 | `src/eval/rouge.py`；E1 已完成 GovReport 官方 Stanza + Perl ROUGE parity，內部與官方尺度分表 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
-| F-4 | PLM 每篇重載模型 | 🔴 成立 | ✅ 程式已修 | `load_encoder()` 快取。**但正式計時數字仍須依鎖定 protocol 重測** |
+| F-4 | PLM 每篇重載模型 | 🔴 成立 | ✅ 已修與量測 | `load_encoder()` 快取；E2 已完成 frozen protocol 的 cold/warm、process-tree RSS 與 scaling |
 | F-5 | 相似度矩陣就地竄改 | 🔴 成立 | ✅ 已修 + regression test | `src/features/graph.py` |
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
@@ -64,13 +65,14 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🟡 **v1 Gate 2／D3b 雙-primary gate 失敗；v2 evidence 待補** —— 後續 D3b GovReport
+1. 🟡 **v1 Gate 2／D3b 雙-primary gate 失敗；v2 freeze governance 待完成** —— 後續 D3b GovReport
    已對 strongest baseline 顯著勝出，但 Multi-News 仍低且 R-2 顯著較差；作者端已核准
-   GovReport-centered 縮窄，不得再搜尋或進 protected split
+   GovReport-centered 縮窄，E1～E3 已完成；test-policy ordering 與作者簽核仍未完成，
+   不得再搜尋或進 protected split
 2. ✅ **F-9 baseline 工程矩陣已完整** —— non-PLM、PLM、greedy reference 與 paired finalists 均完成；完成矩陣不等於方法有效，反而提供 redesign 的否證基準
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
-5. 🔴 **F-72 GovReport official evaluator parity**；🟡 **F-4 正式 cold/warm timing、memory、scaling**
+5. ✅ **F-72 GovReport official evaluator parity**與 **F-4 正式 cold/warm timing、memory、scaling** 均已由 E1／E2 完成
 6. 🟡 **F-14 的 legacy_unprofiled raw-sum 例外**與 **F-15 的 legacy unmatched ablation**；兩者不得被誤當成新 canonical pipeline 的 matched evidence
 
 ---
@@ -84,9 +86,9 @@
 | 審稿人的指控 | 稽核結果 |
 |---|---|
 | R4 #3：oracle 邏輯矛盾 | ✅ **0.136 的錯誤來源已找到**；0.514 是非官方三句 greedy diagnostic，不是真 exact oracle，不能拿來重現官方 52.4 |
-| R1-2：ROUGE-L 異常低 | ✅ 已確認舊碼算的是單序列 ROUGE-L；改按目前多句內部 Lsum 協定後由 0.201 → **0.388**，published-protocol parity 仍待驗證 |
+| R1-2：ROUGE-L 異常低 | ✅ 已確認舊碼算的是單序列 ROUGE-L；改按目前多句內部 Lsum 協定後由 0.201 → **0.388**，E1 另完成 GovReport published-protocol parity |
 | R4 #5：PLM 貢獻幾乎為零 | ✅ **證實，但原因不是「PLM 沒用」，而是 Stage 2 根本沒有 PLM** |
-| R4 #4：BERT/RoBERTa 執行時間差 | ⚠️ 程式確實每篇重載模型。**純推論比值 ≈1.0 為穩定結論**（1.04× / 1.02×）；載入佔比不穩定（78% / 93%），不可引用特定數字。腳本 `scripts/audit/plm_timing.py`，須依鎖定 protocol 重測 |
+| R4 #4：BERT/RoBERTa 執行時間差 | ⚠️ legacy 程式確實每篇重載模型。舊「純推論比值」只保留為歷史診斷；正式新 pipeline 成本主張改由 E2 frozen cold/warm、RSS、scaling 證據支撐 |
 | R2/R4：超參數缺失 | ✅ **比審稿人想的更嚴重**：部分超參數寫在 config 裡但程式從未讀取 |
 | R2/R4：baseline 太弱、選擇性報告 | 🔴 **比審稿人想的嚴重得多 —— 見下方 F-0，這是最致命的一條** |
 
@@ -2479,3 +2481,21 @@ provenance 不能只停留在 candidate membership。
 
 本階段完整 pytest **469 passed／5 subtests passed**，`compileall -f src tests scripts`
 通過；既有 provenance verifier 為 `468 checked / 468 legacy / 0 fail`。
+
+## F-76 — Final test policy 與 human signature 的 frozen ordering 互相循環
+
+**嚴重度：P0（protected-split governance，待人員決議）**
+
+E1～E3 完成後覆核 final unlock contract，發現 `govreport_centered_repositioning_v2.json`
+要求 immutable final test policy 是完整作者簽署前的必要證據；但同檔 protected policy 與
+`govreport_centered_final_evaluation_v1.json` 又要求 unlock／簽字前 test policy 不得
+materialize，且不得讀 test membership/payload。正式 policy 必須包含 membership count、
+exclusions、source checksums 與 fingerprint，因此不存取 official test 不可能填完。
+
+這不是可用程式自行猜測的語意。Freeze verifier 已加入 E1/E2/E3 hash 與 completion
+guards，且明列 `policy_sequence_status=blocked_by_frozen_contract_ordering_conflict`、
+`ready_for_test=false`。建議由老師／完整作者群批准兩階段流程：Stage A 只授權 data
+steward materialize policy、禁止 predictions/scores；policy 與 exact execution package
+凍結後，Stage B 再簽 one-shot execution。完整建議與簽核欄見
+`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`。在決議前不修改 frozen data policy，
+不建立 `govreport_test_v1.json`，也不執行 test。

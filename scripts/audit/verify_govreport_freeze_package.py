@@ -29,6 +29,9 @@ EVIDENCE_PREREG = Path(
 FINAL_PREREG = Path(
     "configs/preregistrations/govreport_centered_final_evaluation_v1.json"
 )
+PRETEST_EVIDENCE_INDEX = Path(
+    "configs/preregistrations/govreport_pretest_evidence_index_v1.json"
+)
 
 
 class FreezePackageError(RuntimeError):
@@ -137,14 +140,87 @@ def _assert_lock_contract(
         )
 
 
+def _assert_evidence_contract(
+    index: Mapping[str, Any],
+    e1: Mapping[str, Any],
+    e2: Mapping[str, Any],
+    e3: Mapping[str, Any],
+) -> None:
+    if index.get("status") != "e1_e2_e3_complete_before_test_access":
+        raise FreezePackageError("pretest evidence index is not marked complete")
+    protected = index.get("protected_split", {})
+    for key in (
+        "dev_test_accessed",
+        "test_split_accessed",
+        "test_policy_materialized",
+        "test_execution_authorized",
+    ):
+        _require_false(protected.get(key), f"pretest index {key}")
+
+    studies = (("E1", e1), ("E2", e2), ("E3", e3))
+    for label, evidence in studies:
+        expected = index[label]
+        if evidence.get("status") != "completed":
+            raise FreezePackageError(f"{label} evidence is not completed")
+        if evidence.get("study_id") != expected["study_id"]:
+            raise FreezePackageError(f"{label} study identity drifted")
+        _require_false(evidence.get("dev_test_accessed"), f"{label} dev_test_accessed")
+        _require_false(evidence.get("test_split_accessed"), f"{label} test_split_accessed")
+
+    e1_primary = e1.get("primary_proposed_vs_sbert_mmr_lambda_0.9", {})
+    if e1.get("rows") != index["E1"]["expected_rows"]:
+        raise FreezePackageError("E1 row count drifted")
+    for key in ("macro_pass", "component_guard_pass", "official_dev_comparison_survives"):
+        if e1_primary.get(key) is not True:
+            raise FreezePackageError(f"E1 {key} is not true")
+    if e1.get("decision") != index["E1"]["required_decision"]:
+        raise FreezePackageError("E1 decision drifted")
+
+    systems = e2.get("systems", {})
+    if len(systems) != index["E2"]["expected_systems"]:
+        raise FreezePackageError("E2 system count drifted")
+    repetitions = index["E2"]["required_measured_repetitions_per_state"]
+    for name, system in systems.items():
+        for state in ("cold", "warm_cache"):
+            if system.get(state, {}).get("measured_repetitions") != repetitions:
+                raise FreezePackageError(f"E2 {name}/{state} repetitions drifted")
+    identities = e2.get("cross_state_selected_indices_identity", {})
+    if set(identities) != set(systems) or not all(
+        value.get("identical") is True for value in identities.values()
+    ):
+        raise FreezePackageError("E2 selected-index identity audit failed")
+
+    if e3.get("rows") != index["E3"]["expected_rows"]:
+        raise FreezePackageError("E3 row count drifted")
+    if e3.get("holm_family_size") != index["E3"]["expected_holm_family_size"]:
+        raise FreezePackageError("E3 Holm family size drifted")
+    if e3.get("bootstrap_resamples") != index["E3"]["expected_bootstrap_resamples"]:
+        raise FreezePackageError("E3 bootstrap count drifted")
+    if e3.get("required_claim_downgrades") != index["E3"]["required_claim_downgrades"]:
+        raise FreezePackageError("E3 requires a claim downgrade")
+    decisions = e3.get("claim_decisions", {})
+    if len(decisions) != 5 or not all(value is True for value in decisions.values()):
+        raise FreezePackageError("E3 claim decision gate failed")
+
+
 def validate_freeze_package(
     root: Path = REPO_ROOT, *, require_local_evidence: bool = False
 ) -> dict[str, Any]:
     addendum = _load_json(root, ADDENDUM)
     evidence = _load_json(root, EVIDENCE_PREREG)
     final = _load_json(root, FINAL_PREREG)
+    pretest_index = _load_json(root, PRETEST_EVIDENCE_INDEX)
     _assert_decision_contract(addendum)
     _assert_lock_contract(evidence, final, root)
+
+    completed: dict[str, dict[str, Any]] = {}
+    for label in ("E1", "E2", "E3"):
+        pin = pretest_index[label]
+        _require_sha(root, pin["path"], pin["sha256"], f"{label} completion evidence")
+        completed[label] = _load_json(root, Path(pin["path"]))
+    _assert_evidence_contract(
+        pretest_index, completed["E1"], completed["E2"], completed["E3"]
+    )
 
     _require_sha(
         root,
@@ -302,6 +378,13 @@ def validate_freeze_package(
         "local_evidence_checked": len(local_checked),
         "local_evidence_deferred": len(local_deferred),
         "deferred_paths": local_deferred,
+        "evidence_completion_status": "E1_E2_E3_complete",
+        "policy_sequence_status": "blocked_by_frozen_contract_ordering_conflict",
+        "ready_for_policy_materialization_authorization": True,
+        "ready_for_final_freeze_signature": False,
+        "human_signature_status": "pending",
+        "test_policy_materialized": False,
+        "ready_for_test": False,
     }
 
 

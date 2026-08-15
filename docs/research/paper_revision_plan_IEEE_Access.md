@@ -18,12 +18,15 @@ quality domain，Multi-News 只保留既有 D3b 負結果作 boundary-condition 
 後文「兩個 primary」與 Multi-News official test 的文字保留為 v1 歷史規格，用來解釋
 A1～D3b 決策，不再授權新的 Multi-News dev-test/test。GovReport official evaluator
 parity、cold/warm runtime-memory-scaling 與 route/provenance ablation 已完成；下一步只
-整理 freeze audit、test policy 與老師／完整作者群簽字。**簽字前不准讀 test。**
+處理 frozen-policy ordering、test policy、exact execution package 與老師／完整作者群
+兩階段簽字。**取得 Stage A 授權前不准讀 test membership/payload；Stage B 前不准跑分。**
 
 截至本次覆核，A1～D3b、完整 baseline matrix、greedy reference、paired inference，
 以及 E1 official evaluator、E2 controlled cost/scaling、E3 route/provenance ablation
-都已完成；尚未完成的是 ICACT camera-ready 逐頁核對、GovReport test data policy、
-freeze audit 與 final signatures。因此目前是「準備 final freeze」，不是已授權 final test。
+都已完成；ICACT 六頁技術內容核對與 pre-test freeze audit 也已完成。尚未完成的是
+test-policy ordering 決議、GovReport test data policy、exact runner/environment freeze、
+正式 DOI／獎項／similarity 證據與 final signatures。因此目前是「等待 Stage A 決議」，
+不是已授權 final test。
 
 ## 2026-08-06 selector-comparison update
 
@@ -1235,13 +1238,13 @@ IEEE Access 的 reproducibility guidance 特別要求 artifact dependencies、in
 - [x] 新 canonical pipeline 的 Stage 2 使用真實、可追溯的 PLM/graph/statistical route scores；route 效果仍待 validation ablation。
 - [x] 新 canonical pipeline 的 NSGA effective parameters、seed、objective 與 Pareto artifact 可追溯；最終 output policy 仍待 validation freeze。
 - [x] 新 canonical pipeline 的 candidate／feature／optimizer failure 無 silent fallback；legacy 路徑不得產生新稿結果。
-- [ ] GovReport official Stanza + Perl ROUGE-1.5.5 parity 完成並成為主文權威；內部 ROUGE-Lsum 只作 secondary diagnostic。Multi-News 不新增 v2 evaluation。
+- [x] GovReport official Stanza + Perl ROUGE-1.5.5 parity 完成並成為主文權威；內部 ROUGE-Lsum 只作 secondary diagnostic。Multi-News 不新增 v2 evaluation。
 - [x] 強 baseline 已在兩 primary frozen dev、同一 evaluator／長度協定下重跑；Gate 2 quality gate 失敗。
-- [ ] 5 至 10 seeds、paired 95% CI、multiple-comparison correction。
-- [ ] full pipeline runtime、memory、hardware 完整。
-- [ ] frozen full 與五個事前指定 route/provenance ablations 的結論符合 100k paired CI／Holm-20。
+- [x] Deterministic main candidate、10-seed Random、NSGA-II stability、paired 95% CI 與 multiple-comparison correction 均按各預註冊 family 完成。
+- [x] E2 full-pipeline CPU cold/warm runtime、peak process-tree memory、hardware/dependency 與 scaling 完成。
+- [x] Frozen full 與五個事前指定 route/provenance ablations 已完成 100k paired CI／Holm-20，五項主張均未降級。
 - [ ] 論文沒有 global optimum、coherence、speedup 等 unsupported claim。
-- [~] ICACT extension matrix 草案已建立；仍須 camera-ready 頁碼／原表格核對、正式引用與 similarity 合規。
+- [~] ICACT 六頁技術內容、公式與 Tables 1–6 已核對；正式 DOI／引用、獎項證明與 similarity 合規仍待完成。
 - [ ] code/data artifact 可由第三人重現。
 - [ ] AI-assisted text 依 IEEE 規定揭露。
 - [ ] 主文、supplement、code、tables 的數字逐項一致。

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "audit_id": "icact-camera-ready-content-audit-v1",
+  "status": "six_page_content_audited_bibliographic_metadata_and_award_proof_pending",
+  "audited_at_utc": "2026-08-15T11:24:43.0944532Z",
+  "source": {
+    "path_from_repository": "../ICACT/Meta-Heuristic Approaches with LM-based Selectors for Extractive Summarization.pdf",
+    "sha256_raw_bytes": "fa4c0c188c395f07f3b4359c98e1e1b2b8044ca58f7661d32a10c52b158a4577",
+    "bytes": 462075,
+    "pages": 6,
+    "title": "Meta-Heuristic Approaches with LM-based Selectors for Extractive Summarization"
+  },
+  "page_map": {
+    "1": "Abstract, Introduction, Related Works; broad efficiency and quality claims",
+    "2": "Method steps 1-5; TF-ISF, length, position and similarity equations (1)-(6); NSGA-II begins",
+    "3": "NSGA-II equations (7)-(10), LM centroid equation (11), union/MMR equations (12)-(13), Performance Evaluation, Tables 1-3",
+    "4": "CNN/DailyMail interpretation, two-stage ensemble Table 4, SciTLDR-AIC Tables 5-6",
+    "5": "SciTLDR interpretation, Conclusion, References, author biographies",
+    "6": "Remaining author biography"
+  },
+  "material_findings": [
+    "The conference method is NSGA-II plus BERT/RoBERTa/XLNet top-10 candidate union followed by MMR, not the revised lexical-semantic-sparse-graph weighted-RRF architecture.",
+    "The conference experiments use CNN/DailyMail three-sentence outputs and SciTLDR-AIC one-sentence outputs; GovReport is absent.",
+    "Tables 1-6 do not provide paired confidence intervals or multiplicity-aware inference.",
+    "Runtime Tables 2-3 label microseconds while displayed cell values use milliseconds; the revised manuscript must not reuse those claims.",
+    "The conclusion presents NSGA-II/metaheuristics as quality-leading, which conflicts with the revised controlled evidence and must be explicitly superseded."
+  ],
+  "still_pending": [
+    "official ICACT bibliographic entry and DOI",
+    "formal Outstanding Paper Award name and citable proof",
+    "IEEE Access draft section/table/figure numbers after manuscript layout exists",
+    "formal similarity report"
+  ],
+  "test_split_accessed": false
+}

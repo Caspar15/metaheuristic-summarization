@@ -3,11 +3,10 @@
 > 對應 `paper_revision_plan_IEEE_Access.md` §14 的 reproducibility artifact。
 > 本文件只記錄已驗證的環境契約；硬體時間不可跨機器直接比較。
 
-> **2026-08-15 狀態**：既有 timing 都是歷史診斷或特定 baseline evidence，不能代替
-> 預註冊 E2。正式 E2 尚未執行；須在 frozen GovReport dev 的 reference-blind 30-document
-> sample 上，對 C01、full-source SBERT+MMR、matched Greedy 與 NSGA-II 各量 cold/warm
-> 三次、peak process-tree RSS 與 scaling。不得同時跑 timed jobs，也不得以 GPU 結果取代
-> CPU 主報告。
+> **2026-08-15 狀態**：預註冊 E2 已在 frozen GovReport dev 的 reference-blind
+> 30-document sample 完成。九系統各有 cold/warm 三次 measured fresh subprocess、peak
+> process-tree RSS 與 scaling；54/54 selected-index identities 一致，且沒有重疊 timed jobs。
+> CPU 主表與 cache lifecycle 見 `E2_COST_SCALING_STATUS.md`；GPU 不取代主報告。
 
 ## TextRank／LexRank 的 tokenizer 契約
 
@@ -135,10 +134,10 @@ TextRank 與第一次 LexRank 同時執行時，TextRank 的
 PR #14 合併 head 的 GitHub Linux run 實際為 `15 failed, 270 passed, 4 skipped`；
 15 個 failure 都源自乾淨 runner 找不到 `punkt_tab`，不能視為綠燈。PR #15 hotfix
 改成 `preserve_line=True` 後，Windows 本機完整結果為 `289 passed`，GitHub Linux CI
-亦已綠燈。其後 GovReport-centered 分支本機完整結果為 **459 passed**，PR #17
+亦已綠燈。其後 GovReport-centered 分支曾有本機完整結果 **459 passed**，PR #17
 clean-clone Linux CI 為 **454 passed／5 skipped**。skips 仍須依 CI artifact 判讀；
-E2／E3 執行前需在實際實驗環境確認 `pymoo` 與全部 runtime dependencies 已安裝，
-不能把 unit-test CI 當成正式實驗環境驗收。
+E2／E3 已在實際實驗環境完成並各自保存 dependency evidence；未來 final test 前仍須
+重新 pin exact execution environment，不能把 unit-test CI 當成正式實驗環境驗收。
 
 跨平台驗收至少包含 Linux CI 與 Windows 本機 suite。路徑測試必須以
 `pathlib.Path`／normalized path component 比較，不能硬編碼 `/`。

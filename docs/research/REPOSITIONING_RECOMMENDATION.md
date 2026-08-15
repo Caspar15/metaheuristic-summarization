@@ -1,8 +1,9 @@
 # IEEE Access 重新定位建議書
 
 > **2026-08-15 執行狀態**：選項 A 已定案，無須再選 A/B/C。配置搜尋已停止；
-> 現在只執行 E1～E3，完成後把本建議書升級成 freeze audit 交老師與完整作者群簽字。
-> GovReport test policy 尚未建立，dev-test/test 仍鎖定。
+> E1～E3 與 ICACT 六頁技術 audit 已完成。Pre-test freeze 建議另見
+> `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`；GovReport test policy 尚未建立，
+> frozen ordering conflict 待作者群決議，dev-test/test 仍鎖定。
 
 ## 決策摘要（2026-08-09）
 
@@ -32,7 +33,7 @@ dataset。這不改寫原雙-primary gate 的失敗，也不解鎖 protected spl
 - `configs/preregistrations/govreport_centered_evidence_completion_v1.json`：official evaluator、成本／scaling、route/provenance ablation 的非搜尋預註冊。
 - `configs/preregistrations/govreport_centered_final_evaluation_v1.json`：仍鎖定的 one-shot final protocol。
 
-現在的下一步是完成預註冊 evidence，不是再選資料集或繼續調參。
+預註冊 evidence 已完成；現在的下一步是解決 freeze policy 順序並簽核，不是再選資料集或繼續調參。
 
 ## 凍結證據
 

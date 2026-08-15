@@ -45,7 +45,8 @@
 
 > 狀態：**Target Architecture v2（GovReport-centered），方向已定案／final freeze 尚未簽字**
 > freeze 條件：official evaluator parity、cost/scaling、final route/provenance ablation
-> 已完成；尚待 extension audit、test policy 與完整作者簽字，且沒有新的品質導向調參。
+> 與 ICACT 六頁 technical extension audit 已完成；尚待 test-policy ordering 決議、
+> immutable test policy、exact execution package 與完整作者簽字，且沒有新的品質導向調參。
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。
 
 ## 0. 結論
@@ -147,13 +148,13 @@ MVP 的通過條件沿用 §10 Freeze gate 的第一條，但只要求單一 pri
 
 | 角色 | 資料集 | 決策 | 原因與限制 |
 |---|---|---|---|
-| Primary quality domain | **GovReport** | 保留；作為 v2 唯一主要品質資料集 | 使用作者官方 archive（非扁平 mirror）。validation canonical 973；dev 681／dev-test 292。D3b frozen dev 對 strongest baseline 有正證據，但 official evaluator 與 test 仍鎖定。 |
+| Primary quality domain | **GovReport** | 保留；作為 v2 唯一主要品質資料集 | 使用作者官方 archive（非扁平 mirror）。validation canonical 973；dev 681／dev-test 292。D3b frozen dev 對 strongest baseline 有正證據，E1 official evaluator 已通過；dev-test/test 仍鎖定。 |
 | Boundary condition | **Multi-News** | 保留既有 negative evidence，不再是 v2 共同 promotion gate | Frozen dev 仍低於 PacSum，R-2 CI 全負。不新增 grid、dev-test 或 test；該結果用來定義適用邊界，不得隱藏。 |
-| Required data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | 必跑 validation paired sensitivity | 由 frozen 72-row manifest 從 5,621-row main 排除，得到 5,549 rows；只回答 replacement-character rows 是否改變結論，不等於 retrieval cleaning。main 結果仍是 primary。 |
-| Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v1 不跑 | 原版有錯誤 retrieval 與無關文件，但兩個外部 variant 的清理規則與現有 U+FFFD clean sensitivity 不同；若日後納入，必須另存 mapping、版本與移除規則。 |
-| Optional sanity | CNN/DailyMail | Gate 3 後才決定，v1 不阻塞 | 官方 test 11,490；lead bias 強、文件較短。只有兩個 primary 已過 gate 且資源允許，才以 frozen method 跑 appendix sanity，不用它調參或支撐核心主張。 |
-| Excluded from v1 | SciTLDR-AIC | 不排程 | 官方單句抽取使 redundancy 與 subset search 幾乎失效，與核心多句方法不匹配。若日後重新納入，必須在看結果前修改矩陣並先通過 files2rouge、single-sentence 與 max-R1-reference conformance。 |
-| Reserve | PubMed | GovReport 不可用或 pilot 失敗時再評估 | 長科學文件可作替代，但不要一開始同時擴張三個主資料集。 |
+| Historical v1 data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | v2 不再執行 | 原計畫由 frozen 72-row manifest 從 5,621-row main 排除得到 5,549 rows；GovReport-centered 定位後不再新增 Multi-News analysis，避免以 post-hoc sensitivity 重開搜尋。 |
+| Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v2 不跑 | 原版有錯誤 retrieval 與無關文件，但外部 variant 的清理規則與 U+FFFD manifest 不同；若日後另立研究，必須重新預註冊 mapping、版本與移除規則。 |
+| Excluded from v2 | CNN/DailyMail | 不排程 | Lead bias 強、文件較短；不屬 GovReport-centered freeze matrix，不能在 test 前臨時加入。 |
+| Excluded from v2 | SciTLDR-AIC | 不排程 | 官方單句抽取使 redundancy 與 subset search 幾乎失效，與核心多句方法不匹配。 |
+| Excluded from v2 | PubMed | 不排程 | 長科學文件可供未來獨立研究，但不屬本次 ICACT→IEEE Access 修訂資料集矩陣。 |
 
 ### 1.2 不可再共用的「假統一」
 

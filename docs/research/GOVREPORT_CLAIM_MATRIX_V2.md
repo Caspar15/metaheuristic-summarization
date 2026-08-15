@@ -2,9 +2,9 @@
 
 > **執行狀態覆核：2026-08-15。** Candidate、主張範圍與 E1～E3 protocol 已凍結；
 > E1 已完成且官方尺度 primary comparison 通過；E2 cost/memory/scaling 與 E3
-> route/provenance ablation 也已完成。camera-ready extension audit、test data policy 與
-> final signatures 仍未完成。
-> 因此現在是 pre-test evidence completion，不是可執行 final test 的狀態。
+> route/provenance ablation 也已完成，ICACT 六頁 technical extension audit 已核對。
+> Test-policy ordering、immutable test policy、exact execution package 與 final signatures
+> 仍未完成。因此現在是 pre-test governance resolution，不是可執行 final test 的狀態。
 
 ## 決策狀態
 
@@ -71,8 +71,8 @@ global optimum、已在 test 勝出，或把不同 split／evaluator 的文獻�
 - [x] GovReport 作者官方 Stanza + Perl ROUGE-1.5.5 protocol 已版本化並完成 parity/ranking check。
 - [x] Frozen candidate、SBERT+MMR 與必要 baselines 的 CPU cold/warm runtime、peak process-tree RSS、scaling 完成；GPU VRAM 不適用於本 CPU-only 主報告。
 - [x] Route-removal 與 provenance-removal ablation 依預註冊完成；沒有新增搜尋。
-- [ ] ICACT → IEEE Access extension table 已由 camera-ready 逐頁核對。
+- [x] ICACT → IEEE Access technical extension table 已由六頁 PDF 逐頁核對；DOI／獎項證明／similarity report 是投稿行政待辦。
 - [ ] GovReport test data policy 在**未看分數**的狀態下建立並 pin 完成。
-- [ ] 老師／完整作者群簽署 final freeze。
+- [!] 老師／完整作者群簽署 final freeze：目前 frozen policy ordering conflict 待決議；建議採 policy-materialization／execution 兩階段簽核。
 
 任何一項未完成，都不能執行 test。

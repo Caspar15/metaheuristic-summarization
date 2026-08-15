@@ -2,7 +2,8 @@
 
 > **2026-08-15 狀態覆核**：Gate 2 的工程矩陣與 paired diagnosis 已全部完成；
 > quality gate 失敗是結果，不是待補 baseline。其後 D2/D3a/D3b 已完成並停止搜尋。
-> GovReport v2 主線下一步是 E1～E3；本文件不授權任何新 baseline grid 或 test。
+> GovReport v2 的 E1～E3 亦已完成；目前只處理 pre-test freeze governance。
+> 本文件不授權任何新 baseline grid 或 test。
 
 ## 2026-08-09 final checkpoint：Gate 2 dev diagnosis 完成、品質 gate 未通過
 
@@ -215,5 +216,6 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    Multi-News 失敗，`all_profiles_eligible=false`。
 2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。作者端已批准
    GovReport-centered claim matrix；data-policy addendum 與 evidence/final preregistrations
-   已版本化。下一步是 official evaluator、成本/scaling、route/provenance ablation，不是搜尋。
+   已版本化。E1 official evaluator、E2 成本/scaling、E3 route/provenance ablation
+   已完成；下一步是 freeze policy 與簽核，不是搜尋。
 3. `dev-test` 與 `test` 仍鎖定；目前沒有符合規則的解鎖條件。
