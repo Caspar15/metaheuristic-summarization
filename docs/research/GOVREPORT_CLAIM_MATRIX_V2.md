@@ -1,7 +1,7 @@
 # GovReport-centered Claim Matrix v2
 
 > **執行狀態覆核：2026-08-15。** Candidate、主張範圍與 E1～E3 protocol 已凍結；
-> E1 已完成且官方尺度 primary comparison 通過。E2、E3、camera-ready extension audit、
+> E1 已完成且官方尺度 primary comparison 通過；E2 cost/memory/scaling 已完成。E3、camera-ready extension audit、
 > test data policy 與 final signatures 仍未完成。
 > 因此現在是 pre-test evidence completion，不是可執行 final test 的狀態。
 
@@ -68,7 +68,7 @@ global optimum、已在 test 勝出，或把不同 split／evaluator 的文獻�
 ## 解鎖 final evaluation 前的 DoD
 
 - [x] GovReport 作者官方 Stanza + Perl ROUGE-1.5.5 protocol 已版本化並完成 parity/ranking check。
-- [ ] Frozen candidate、SBERT+MMR 與必要 baselines 的 cold/warm runtime、peak RAM/VRAM、scaling 完成。
+- [x] Frozen candidate、SBERT+MMR 與必要 baselines 的 CPU cold/warm runtime、peak process-tree RSS、scaling 完成；GPU VRAM 不適用於本 CPU-only 主報告。
 - [ ] Route-removal 與 provenance-removal ablation 依預註冊完成；沒有新增搜尋。
 - [ ] ICACT → IEEE Access extension table 已由 camera-ready 逐頁核對。
 - [ ] GovReport test data policy 在**未看分數**的狀態下建立並 pin 完成。

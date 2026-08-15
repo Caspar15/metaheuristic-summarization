@@ -454,6 +454,7 @@ def _quantiles(values: Sequence[float]) -> dict[str, float]:
 
 def analyze(evidence: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]]) -> dict[str, Any]:
     systems: dict[str, Any] = {}
+    cross_state_identity: dict[str, dict[str, Any]] = {}
     for system, states in evidence.items():
         systems[system] = {}
         for state, runs in states.items():
@@ -463,6 +464,9 @@ def analyze(evidence: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]]) -
             digests = {run["selected_indices_sha256"] for run in measured}
             if len(digests) != 1:
                 raise ValueError(f"E2 selected indices changed across repetitions: {system}/{state}")
+            cache_flags = {bool(run["cache"]["applicable"]) for run in measured}
+            if len(cache_flags) != 1:
+                raise ValueError(f"E2 cache applicability changed across repetitions: {system}/{state}")
             totals = {
                 field: _quantiles([float(run["measurement"][field]) for run in measured])
                 for field in ("wall_seconds", "cpu_process_tree_seconds", "peak_process_tree_rss_bytes")
@@ -487,6 +491,7 @@ def analyze(evidence: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]]) -
             y = np.log([max(1e-9, row["document_wall_seconds"]) for row in all_docs])
             systems[system][state] = {
                 "measured_repetitions": 3,
+                "cache_applicable": next(iter(cache_flags)),
                 "selected_indices_sha256": next(iter(digests)),
                 "total_run": totals,
                 "strata": strata,
@@ -495,12 +500,25 @@ def analyze(evidence: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]]) -
                     "wall_vs_source_words": float(np.polyfit(x_words, y, 1)[0]),
                 },
             }
+        state_digests = {
+            value["selected_indices_sha256"] for value in systems[system].values()
+        }
+        if len(state_digests) != 1:
+            raise ValueError(f"E2 selected indices changed between cold and warm: {system}")
+        cross_state_identity[system] = {
+            "identical": True,
+            "selected_indices_sha256": next(iter(state_digests)),
+        }
     return {
         "evidence_schema_version": "1.0",
         "measured_at_utc": _utc_now(),
         "status": "completed",
         "study_id": "govreport-cost-scaling-v1",
         "systems": systems,
+        "cross_state_selected_indices_identity": cross_state_identity,
+        "sample_manifest_sha256": _sha256(SAMPLE),
+        "cost_addendum_sha256": _sha256(ADDENDUM),
+        "cache_classification_erratum_sha256": _sha256(CACHE_ERRATUM),
         "interpretation": "Cost evidence only; no timing outcome can promote or tune a method.",
         "dev_test_accessed": False,
         "test_split_accessed": False,
@@ -545,6 +563,13 @@ def run(selected_systems: Sequence[str], *, resume: bool) -> dict[str, Any] | No
     if set(selected_systems) == set(SYSTEM_ORDER):
         analysis = analyze(collected)
         _write_json(OUTPUT_ROOT / "analysis.json", analysis)
+        timing_commits = sorted({
+            run["implementation_commit"]
+            for states in collected.values()
+            for runs in states.values()
+            for run in runs
+        })
+        cache_erratum = json.loads(CACHE_ERRATUM.read_text(encoding="utf-8"))
         _write_json(OUTPUT_ROOT / "environment.json", {
             "measured_at_utc": _utc_now(),
             "platform": platform.platform(),
@@ -553,6 +578,19 @@ def run(selected_systems: Sequence[str], *, resume: bool) -> dict[str, Any] | No
             "physical_cpu_count": psutil.cpu_count(logical=False),
             "total_memory_bytes": psutil.virtual_memory().total,
             "no_overlapping_timed_jobs": True,
+            "timing_implementation_commits": timing_commits,
+            "timing_runner_sha256": cache_erratum["corrected_runner_sha256"],
+            "analysis_runner_sha256": _sha256(Path(__file__).resolve()),
+            "cost_addendum_sha256": _sha256(ADDENDUM),
+            "cache_classification_erratum_sha256": _sha256(CACHE_ERRATUM),
+            "sample_manifest_sha256": _sha256(SAMPLE),
+            "completed_timing_attempts": sum(
+                len(runs) for states in collected.values() for runs in states.values()
+            ) + sum(1 for system in selected_systems if system in PLM_SYSTEMS),
+            "excluded_failed_attempts": [
+                "runs_v2/govreport_cost_scaling_v1/D2_matched_greedy_tfidf_anchor/attempts/attempt_01_interrupted_wrong_cache_classification/evidence.json"
+            ],
+            "quality_scores_used_for_timing_selection": False,
             "dev_test_accessed": False,
             "test_split_accessed": False,
         })

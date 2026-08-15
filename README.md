@@ -16,7 +16,10 @@
   `[+0.002467,+0.006680]`、`p=0.000020`；R-L 單項未顯著。接下來只執行 E2
   cold/warm runtime-memory-scaling 與 E3 route/provenance ablation；它們不是新調參，
   也不是 final test。完整表見
-  [`E1_OFFICIAL_EVALUATOR_STATUS.md`](docs/research/E1_OFFICIAL_EVALUATOR_STATUS.md)。
+  [`E1_OFFICIAL_EVALUATOR_STATUS.md`](docs/research/E1_OFFICIAL_EVALUATOR_STATUS.md)。E2 亦已
+  完成：Proposed cold/warm `176.03/10.52s`，primary SBERT+MMR `177.81/12.45s`，
+  NSGA-II `222.61/56.74s`；完整 memory/scaling 證據見
+  [`E2_COST_SCALING_STATUS.md`](docs/research/E2_COST_SCALING_STATUS.md)。現在只剩 E3。
 - E1～E3 完成後要先寫 freeze audit、建立尚未 materialize 的 GovReport test policy，
   並取得老師與完整作者群簽字；只有全部通過才可能 one-shot 跑 official test。
 
@@ -98,7 +101,7 @@
   唯一一次 A1 dev-test 都已完成並凍結；兩 primary non-PLM matrix 與 Multi-News PLM
   已完成；GovReport PLM、兩 primary greedy reference 與正式 paired finalist diagnostic
   隨後也完成。Gate 2 結論是 S02b 顯著輸強 baseline；其後 D2/D3a/D3b dev redesign
-  已完成並停止搜尋。現在轉入 GovReport E1～E3，test split 仍鎖定。
+  已完成並停止搜尋。GovReport E1/E2 已完成，現在只執行 E3，test split 仍鎖定。
 - A1 Multi-News 已依預註冊規則選定 200–250 words：dev-test cross-method macro
   `0.310382`，相對 max-only250／median220／p75-cap260 的 paired-bootstrap 95% CI
   全為正，三個 Holm-adjusted `p=0.000600`。這個勝負主要來自 Greedy stopping，不能
@@ -149,7 +152,7 @@
 | Baseline／最終方法 gate | 🟡 **v1 雙-primary gate 失敗；v2 方向已核准、證據尚未補完** —— GovReport 對 SBERT+MMR macro `+0.004636` 且多重校正通過；Multi-News 低 PacSum `0.001323` 且 R-2 顯著較差。v2 將 GovReport 定為唯一 primary、Multi-News 定為 boundary；protected splits 仍鎖定。見 `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **464 local tests passed**（2026-08-15）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-73） |
+| 測試 | ✅ **466 local tests passed / 5 subtests passed**（2026-08-15）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-74） |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 

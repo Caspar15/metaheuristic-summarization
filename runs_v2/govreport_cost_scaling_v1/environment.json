@@ -1,0 +1,25 @@
+{
+  "measured_at_utc": "2026-08-15T10:58:57.263652+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "logical_cpu_count": 20,
+  "physical_cpu_count": 14,
+  "total_memory_bytes": 34088599552,
+  "no_overlapping_timed_jobs": true,
+  "timing_implementation_commits": [
+    "45595ed8ba9e8eea921b58dacaaafc935f96457d",
+    "965e20d9f671e538aaf2c91783c392996b05900d"
+  ],
+  "timing_runner_sha256": "9a9f9549db1e8f9ccbd90c656137f48b6034f4360c4ef4a478ba35ecd5596522",
+  "analysis_runner_sha256": "d1e13906b2911ab964e3058c2dbcaaadcee45b77ee4d46189711ed5ae9feed7a",
+  "cost_addendum_sha256": "01cc834045658d41a6ebceaf99fe33ee1b1f8d2ad5501e00f0abe438912ed777",
+  "cache_classification_erratum_sha256": "adf5e874e4b8b86e7ea1782f66fa5ef4e0adf0caf25ff257ed907d7067e5c0a5",
+  "sample_manifest_sha256": "8dc26882288fa8167381b08c5eedab43142a138513e2c91fb8629373e458db4d",
+  "completed_timing_attempts": 78,
+  "excluded_failed_attempts": [
+    "runs_v2/govreport_cost_scaling_v1/D2_matched_greedy_tfidf_anchor/attempts/attempt_01_interrupted_wrong_cache_classification/evidence.json"
+  ],
+  "quality_scores_used_for_timing_selection": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -2428,3 +2428,26 @@ alias 與相同 WordNet plaintext 重建平台原生 DB 解決；ROUGE script、
 仍回報 `protected_splits_unlocked=false`、`dev_test_accessed=false`、
 `test_split_accessed=false`。F-72 的官方 parity blocker 因此關閉，但 E2、E3、test policy
 與完整簽字仍是 final test 前硬條件。
+
+## F-74 — E2 以 selector 名稱判斷 cache applicability，錯列兩個 semantic-route systems
+
+**嚴重度：P1 已關閉（cost-claim validity）**
+
+2026-08-15 E2 執行時發現，`D2_matched_greedy_tfidf_anchor` 與
+`D2_matched_nsga2_tfidf` 雖以 TF-IDF 作 selector salience，兩者 frozen S02b YAML 的
+`compute_budget.enabled_routes` 都含 `semantic`，仍需建立 sentence-embedding cache。
+第一版 runner 卻只按 system label 將兩者排除於 cache-aware set，會讓 `warm_cache`
+實際重新 encoding，導致 cold/warm 標籤無效。
+
+在第一個 affected cold smoke 尚未完成時主動中斷；170.41 秒 partial、751,341,568-byte
+partial peak RSS、13,521,272-byte cache 與 SHA 均保留，且 `timing_used_in_analysis=false`。
+erratum 誠實標記 unaffected timings 與 partial elapsed 已被觀察，但修正由 frozen config
+靜態結構唯一決定，沒有改 sample、system set、repetitions、metrics 或 quality selection。
+修正後兩個 systems 都先建立並 byte-verify 13.73 MB warm cache，所有 cold 使用獨立空
+cache。新增 regression 機械驗證兩個 YAML 的 semantic route 與 cache-aware membership。
+
+E2 最終為 78 completed + 1 preserved failure；54/54 measured repetitions、九系統的
+cold/warm selected-index digest 均一致。Proposed median cold/warm wall time 為
+`176.03/10.52s`，full-source SBERT+MMR `177.81/12.45s`，matched NSGA-II
+`222.61/56.74s`。完整 memory/scaling 表見 `E2_COST_SCALING_STATUS.md`。
+dev-test/test 均未存取；timing outcome 不可用於調參或 promotion。
