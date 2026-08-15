@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "study_id": "govreport-centered-final-evaluation-v1",
+  "status": "authorized_for_one_shot_execution",
+  "activated_at_utc": "2026-08-15T17:34:49.0112860Z",
+  "authorization_provenance": {
+    "path": "configs/data_policies/govreport_test_authorization_v1.json",
+    "sha256": "64184a537f25bbdbad7c2701ef32735304b6ee8b659a59342ad8b46780f4e277",
+    "basis": "The requesting author attests teacher and author-side approval of Stage A and conditional Stage B. No independent signature artifact is claimed."
+  },
+  "freeze_manifest_path": "configs/preregistrations/govreport_final_execution_freeze_v1.json",
+  "freeze_manifest_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "score_free_dry_run": {
+    "path": "docs/research/evidence/govreport_final_dry_run_v1.json",
+    "sha256": "29ad773afb44d917401182d41d1e26916c0d1da90aba1593248ba79dc0774e56"
+  },
+  "activation_conditions": {
+    "stage_A_policy_and_health_pinned": true,
+    "nine_system_runner_fail_closed": true,
+    "official_evaluator_fail_closed": true,
+    "scientific_commit_environment_commands_outputs_frozen": true,
+    "score_free_dry_run_passed": true,
+    "test_predictions_generated_before_activation": false,
+    "test_scores_observed_before_activation": false
+  },
+  "execution": {
+    "dataset": "GovReport official test",
+    "rows": 973,
+    "one_shot": true,
+    "workers": 16,
+    "ascii_subst_alias": "R:",
+    "exact_command": ".venv/Scripts/python.exe -m scripts.audit.run_govreport_final_test --mode execute --expected-freeze-sha256 5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92 --expected-activation-sha256 <this_file_sha256> --workers 16 --ascii-alias R:"
+  },
+  "after_score_rule": "The result must be reported whether favorable or unfavorable. No candidate, baseline, data exclusion, length contract, evaluator, or inference change is authorized after any test score is observed.",
+  "ready_for_test": true
+}

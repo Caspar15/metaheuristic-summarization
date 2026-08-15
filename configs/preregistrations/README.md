@@ -8,8 +8,10 @@ were resolved through `../data_policies/govreport_test_authorization_v1.json`. S
 policy materialization is complete. The exact runner, scientific commit, environment,
 commands, output paths, nine system families, and evaluator resources are pinned by
 `govreport_final_execution_freeze_v1.json` before any test prediction or score. Test
-scoring remains locked until the score-free dry run is committed and an activation file
-pins that evidence.
+The score-free dry run subsequently passed with 973 IDs/references and zero predictions or
+scores; `govreport_final_execution_activation_v1.json` pins that evidence and authorizes
+the exact one-shot command. Any different freeze, activation, command family, or changed
+scientific file must fail closed.
 
 每個 freeze 前實驗都必須先在這裡寫明：改什麼、預期什麼、成功／刪除條件、會看幾次
 dev-test，以及多重比較 family。`status=frozen_before_candidate_system_scores` 只代表該份

@@ -38,6 +38,18 @@ TEST_AUTHORIZATION = Path(
 TEST_AUTHORIZATION_SHA256 = (
     "64184a537f25bbdbad7c2701ef32735304b6ee8b659a59342ad8b46780f4e277"
 )
+FINAL_EXECUTION_FREEZE = Path(
+    "configs/preregistrations/govreport_final_execution_freeze_v1.json"
+)
+FINAL_EXECUTION_FREEZE_SHA256 = (
+    "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92"
+)
+FINAL_EXECUTION_ACTIVATION = Path(
+    "configs/preregistrations/govreport_final_execution_activation_v1.json"
+)
+FINAL_EXECUTION_ACTIVATION_SHA256 = (
+    "5b9dd5ba54ab5c67679d66d8e1e7c3b47e184497bcc6a2da0bd8bc6c51d2a8b6"
+)
 
 
 class FreezePackageError(RuntimeError):
@@ -172,6 +184,62 @@ def _assert_test_policy_contract(policy: Mapping[str, Any]) -> None:
         raise FreezePackageError("GovReport test exclusion count drifted")
 
 
+def _assert_final_execution_contract(
+    freeze: Mapping[str, Any],
+    activation: Mapping[str, Any],
+    dry_run: Mapping[str, Any],
+) -> None:
+    if freeze.get("status") != "frozen_before_test_predictions_or_scores":
+        raise FreezePackageError("final execution package is not score-blind frozen")
+    if freeze.get("one_shot") is not True or freeze.get("official_test_rows") != 973:
+        raise FreezePackageError("final execution row/one-shot contract drifted")
+    _require_false(
+        freeze.get("test_predictions_generated_at_freeze"),
+        "final freeze test_predictions_generated_at_freeze",
+    )
+    _require_false(
+        freeze.get("test_scores_observed_at_freeze"),
+        "final freeze test_scores_observed_at_freeze",
+    )
+    if activation.get("status") != "authorized_for_one_shot_execution":
+        raise FreezePackageError("Stage B activation status drifted")
+    if activation.get("freeze_manifest_sha256") != FINAL_EXECUTION_FREEZE_SHA256:
+        raise FreezePackageError("Stage B activation points to a different freeze")
+    if activation.get("ready_for_test") is not True:
+        raise FreezePackageError("Stage B activation is not ready for test")
+    conditions = activation.get("activation_conditions", {})
+    required_true = (
+        "stage_A_policy_and_health_pinned",
+        "nine_system_runner_fail_closed",
+        "official_evaluator_fail_closed",
+        "scientific_commit_environment_commands_outputs_frozen",
+        "score_free_dry_run_passed",
+    )
+    if not all(conditions.get(key) is True for key in required_true):
+        raise FreezePackageError("one or more Stage B activation conditions drifted")
+    _require_false(
+        conditions.get("test_predictions_generated_before_activation"),
+        "activation test_predictions_generated_before_activation",
+    )
+    _require_false(
+        conditions.get("test_scores_observed_before_activation"),
+        "activation test_scores_observed_before_activation",
+    )
+    dry_pin = activation.get("score_free_dry_run", {})
+    if dry_pin.get("path") != "docs/research/evidence/govreport_final_dry_run_v1.json":
+        raise FreezePackageError("score-free dry-run path drifted")
+    if dry_run.get("status") != "passed_without_predictions_or_scores":
+        raise FreezePackageError("score-free dry run did not pass")
+    if dry_run.get("freeze_manifest_sha256") != FINAL_EXECUTION_FREEZE_SHA256:
+        raise FreezePackageError("score-free dry run used a different freeze")
+    if dry_run.get("rows") != 973 or dry_run.get("references_present") != 973:
+        raise FreezePackageError("score-free dry-run row contract drifted")
+    if dry_run.get("tracked_worktree_clean") is not True:
+        raise FreezePackageError("score-free dry run did not use a clean worktree")
+    _require_false(dry_run.get("test_predictions_generated"), "dry-run predictions")
+    _require_false(dry_run.get("test_scores_observed"), "dry-run scores")
+
+
 def _assert_evidence_contract(
     index: Mapping[str, Any],
     e1: Mapping[str, Any],
@@ -251,6 +319,25 @@ def validate_freeze_package(
     )
     _assert_decision_contract(addendum)
     _assert_lock_contract(evidence, final, root, authorization)
+
+    _require_sha(
+        root,
+        FINAL_EXECUTION_FREEZE.as_posix(),
+        FINAL_EXECUTION_FREEZE_SHA256,
+        "final execution freeze",
+    )
+    _require_sha(
+        root,
+        FINAL_EXECUTION_ACTIVATION.as_posix(),
+        FINAL_EXECUTION_ACTIVATION_SHA256,
+        "final execution activation",
+    )
+    freeze = _load_json(root, FINAL_EXECUTION_FREEZE)
+    activation = _load_json(root, FINAL_EXECUTION_ACTIVATION)
+    dry_pin = activation["score_free_dry_run"]
+    _require_sha(root, dry_pin["path"], dry_pin["sha256"], "score-free dry run")
+    dry_run = _load_json(root, Path(dry_pin["path"]))
+    _assert_final_execution_contract(freeze, activation, dry_run)
 
     test_policy_path = Path(final["protected_split"]["canonical_policy_path"])
     test_policy = _load_json(root, test_policy_path)
@@ -427,8 +514,10 @@ def validate_freeze_package(
         "final_study_id": final["study_id"],
         "primary_dataset": "GovReport",
         "boundary_dataset": "Multi-News",
-        "protected_splits_unlocked": False,
+        "protected_splits_unlocked": True,
         "test_split_accessed": True,
+        "test_predictions_generated": False,
+        "test_scores_observed": False,
         "local_evidence_status": (
             "complete" if not local_deferred else "deferred_missing_untracked_artifacts"
         ),
@@ -438,10 +527,12 @@ def validate_freeze_package(
         "evidence_completion_status": "E1_E2_E3_complete",
         "policy_sequence_status": "resolved_by_authorized_two_stage_addendum",
         "ready_for_policy_materialization_authorization": True,
-        "ready_for_final_freeze_signature": False,
+        "ready_for_final_freeze_signature": True,
         "human_signature_status": "reported_approved_by_requesting_author",
         "test_policy_materialized": True,
-        "ready_for_test": False,
+        "final_execution_activated": True,
+        "score_free_dry_run_status": "passed_without_predictions_or_scores",
+        "ready_for_test": True,
     }
 
 

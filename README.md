@@ -27,8 +27,10 @@
 - 2026-08-16：老師／作者端的兩階段核准已由提出請求的作者轉述；Stage A test policy
   已在零 prediction、零 score 狀態完成，973/973 rows 保留。One-shot runner、
   scientific commit、環境、指令、輸出路徑、九個系統與 official evaluator 資源也已
-  在零分數狀態凍結。下一步是 score-free dry run 與 Stage B activation，仍不能
-  手動繞過 runner 直接計分。見 [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md)。
+  在零分數狀態凍結。Score-free dry run 已通過，Stage B activation 已釘住該證據；
+  現在 `ready_for_test=true`，下一步是由 fail-closed runner 執行唯一一次 GovReport
+  official test。仍不能手動繞過 runner 直接計分。見
+  [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md)。
 
 ## 2026-08-09 full-dev selector checkpoint
 

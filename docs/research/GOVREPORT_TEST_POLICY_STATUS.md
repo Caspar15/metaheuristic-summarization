@@ -30,7 +30,11 @@ Frozen identity：
 - 已凍結 exact scientific commit `36919f222a697fd84d25600b23ba1633ff908ae9`、
   environment、commands 與 output paths。
 - 執行凍結檔：`configs/preregistrations/govreport_final_execution_freeze_v1.json`。
-- 尚未執行：score-free dry run、Stage B activation 與唯一一次正式計分。
+- Score-free dry run 已通過：973 IDs／973 references、九個 system families、
+  10 個 random seeds 與 official evaluator resources 全部通過，且仍為零
+  prediction／零 score。
+- Stage B activation 已釘住 freeze 與 dry-run evidence，`ready_for_test=true`。
+- 尚未執行：唯一一次 GovReport official-test 正式計分。
 
 此凍結當下 `test_predictions_generated_at_freeze=false` 且
 `test_scores_observed_at_freeze=false`；最終分數不得回頭影響方法、baseline、

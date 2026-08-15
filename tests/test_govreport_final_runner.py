@@ -6,6 +6,7 @@ from scripts.audit.run_govreport_final_test import (
     RANDOM_SEEDS,
     _baseline_config,
     _baseline_method,
+    _load_activation,
     _load_freeze,
 )
 from src.data.policy import sha256_file
@@ -91,3 +92,16 @@ def test_committed_execution_freeze_is_score_blind_and_fully_pinned():
     assert freeze["test_predictions_generated_at_freeze"] is False
     assert freeze["test_scores_observed_at_freeze"] is False
     assert freeze["execution"]["workers"] == 16
+
+
+def test_committed_activation_pins_the_score_free_dry_run():
+    activation = _load_activation(
+        Path(
+            "configs/preregistrations/"
+            "govreport_final_execution_activation_v1.json"
+        ),
+        "5b9dd5ba54ab5c67679d66d8e1e7c3b47e184497bcc6a2da0bd8bc6c51d2a8b6",
+        "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+    )
+    assert activation["ready_for_test"] is True
+    assert activation["activation_conditions"]["test_scores_observed_before_activation"] is False

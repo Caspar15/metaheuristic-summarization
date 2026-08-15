@@ -2514,3 +2514,20 @@ Canonical SHA-256 為 `3ff10e66...7026dfc`，dataset fingerprint 為
 `c5ae4fbb...6cb9c6`。Freeze verifier 現回報 ordering resolved、policy materialized，
 但 `ready_for_test=false`，因九系統 runner、score-free dry run 與 exact execution
 package 尚未凍結。本階段沒有產生 prediction 或 ROUGE。
+
+## F-78 — Stage B exact execution freeze 與 score-free dry run 已通過
+
+**嚴重度：已治理（one-shot execution governance）**
+
+2026-08-16，在任何 official-test prediction 或 score 前，已將 scientific code commit
+`36919f222a697fd84d25600b23ba1633ff908ae9`、final config、973-row canonical test、
+九個 system families、10 個 random seeds、official Stanza/Perl ROUGE resources、
+Python dependencies、16 workers、exact commands 與 output root 釘進
+`govreport_final_execution_freeze_v1.json`。建立 freeze 時明確為零 prediction／零 score。
+
+Score-free dry run 後驗證 973 ordered IDs、973 references、九個 family labels、資源
+hashes 與套件版本，狀態為 `passed_without_predictions_or_scores`。Stage B activation
+再釘住 freeze SHA-256 `5dbd5490...6d7d92` 與 dry-run SHA-256
+`29ad773a...74e56`。Freeze verifier 因此回報 `ready_for_test=true`；此狀態只授權
+精確 one-shot command，不授權任何根據 test 分數的方法、baseline、長度、排除規則、
+evaluator 或 inference 變更。
