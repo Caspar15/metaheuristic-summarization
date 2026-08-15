@@ -2,7 +2,8 @@
 
 ## 決議摘要（2026-08-15）
 
-**建議：有條件批准進入 official-test policy materialization；目前不批准直接跑 test。**
+**2026-08-16 更新：Stage A 已核准並完成；Stage B 已獲原則核准，但只在 exact runner
+與 dry run 全部通過後才自動啟動。**
 
 品質搜尋已在 D3b 後停止，E1 official evaluator、E2 controlled cost/scaling、E3
 route/provenance ablation 全部完成且通過各自的預註冊判準。這代表「方法是否值得送 final
@@ -17,7 +18,7 @@ references 或 scores，都會違反既有 frozen protocol。
 | E1 official evaluator | Proposed official macro `0.458257`；對 SBERT+MMR `+0.004569`，95% CI `[+0.002467,+0.006680]`，`p=0.000020`；R-L 單項未顯著 | 通過，保留 GovReport superiority 假說到 untouched test |
 | E2 cost/scaling | Proposed cold/warm `176.03/10.52s`；SBERT+MMR `177.81/12.45s`；NSGA-II `222.61/56.74s`；54/54 measured identity 一致 | 通過；主方法無 wall-time 劣勢證據，但 RAM 略高 |
 | E3 ablation | 五個 C01−ablation macro CI 全正，Holm-20 均 `0.000400`；每案 681/681 feasible | 通過；semantic、graph、capacity-matched non-lexical routes、weighted RRF、selector provenance 均可保留 |
-| Regression | `470 passed / 5 subtests passed`；compileall pass | 通過 |
+| Regression | `473 passed / 5 subtests passed`；compileall pass | 通過（Stage A 後） |
 | ICACT content extension | 六頁 PDF 已逐頁核對，方法、Eq. (1)–(13)、Tables 1–6 與舊 claims 已定位 | 技術 audit 完成；DOI／獎項證明／similarity report 仍屬投稿行政待辦 |
 
 Machine-readable evidence index：
@@ -70,12 +71,12 @@ score 後不得修改 candidate、baseline、長度、evaluator、排除列或�
 
 ## 現在仍缺的完成條件
 
-- [ ] 老師與完整作者群同意上述兩階段順序，或提供另一個不矛盾的 frozen policy 修正。
-- [ ] Stage A authorization 簽字。
-- [ ] `configs/data_policies/govreport_test_v1.json` 與 test canonical health evidence 在零分數狀態下建立並 pin。
+- [x] 老師／作者端同意兩階段順序（由提出請求的作者轉述；未偽造外部簽名）。
+- [x] Stage A authorization 已記錄於 `govreport_test_authorization_v1.json`。
+- [x] `configs/data_policies/govreport_test_v1.json` 與 test canonical health evidence 已在零分數狀態建立並 pin。
 - [ ] Test-only preprocessing／nine-system one-shot runner／official evaluator adapter 綁定該 policy，完成 fail-closed dry run。
 - [ ] Exact scientific code commit、environment、commands 與 output locations 凍結。
-- [ ] Stage B final execution freeze 由老師與完整作者群簽字。
+- [~] Stage B 原則核准已由提出請求的作者轉述；仍須 runner／environment／commands freeze 完成才可啟動。
 
 上列任何一項未完成，`ready_for_test` 必須保持 `false`。
 

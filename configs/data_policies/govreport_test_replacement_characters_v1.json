@@ -1,0 +1,24 @@
+{
+  "manifest_schema_version": "1.0",
+  "dataset": "GovReport",
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "split": "test",
+  "rule": "retain and record every canonical row containing U+FFFD without text repair",
+  "rows": [
+    {
+      "id": "test_gao_GAO-20-300",
+      "source_replacement_characters": 1,
+      "reference_replacement_characters": 0,
+      "total_replacement_characters": 1
+    },
+    {
+      "id": "test_gao_GAO-19-531",
+      "source_replacement_characters": 1,
+      "reference_replacement_characters": 0,
+      "total_replacement_characters": 1
+    }
+  ],
+  "row_count": 2,
+  "character_count": 2,
+  "created_before_predictions_or_scores": true
+}

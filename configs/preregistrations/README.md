@@ -4,7 +4,9 @@
 and the frozen-dev E1-E3 evidence-completion study is complete. Its post-evidence inventory
 is `govreport_pretest_evidence_index_v1.json`. `govreport_centered_final_evaluation_v1.json`
 remains a locked protocol, not permission to access test; policy ordering and human sign-off
-must be resolved first.
+were resolved through `../data_policies/govreport_test_authorization_v1.json`. Stage A
+policy materialization is complete; test scoring stays locked until the exact runner,
+environment, commands, and output paths pass the score-free execution freeze.
 
 每個 freeze 前實驗都必須先在這裡寫明：改什麼、預期什麼、成功／刪除條件、會看幾次
 dev-test，以及多重比較 family。`status=frozen_before_candidate_system_scores` 只代表該份

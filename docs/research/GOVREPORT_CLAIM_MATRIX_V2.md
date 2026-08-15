@@ -72,7 +72,7 @@ global optimum、已在 test 勝出，或把不同 split／evaluator 的文獻�
 - [x] Frozen candidate、SBERT+MMR 與必要 baselines 的 CPU cold/warm runtime、peak process-tree RSS、scaling 完成；GPU VRAM 不適用於本 CPU-only 主報告。
 - [x] Route-removal 與 provenance-removal ablation 依預註冊完成；沒有新增搜尋。
 - [x] ICACT → IEEE Access technical extension table 已由六頁 PDF 逐頁核對；DOI／獎項證明／similarity report 是投稿行政待辦。
-- [ ] GovReport test data policy 在**未看分數**的狀態下建立並 pin 完成。
-- [!] 老師／完整作者群簽署 final freeze：目前 frozen policy ordering conflict 待決議；建議採 policy-materialization／execution 兩階段簽核。
+- [x] GovReport test data policy 已在**未產生 prediction、未看分數**的狀態建立並 pin 完成。
+- [~] 兩階段核准已由提出請求的作者轉述；Stage B 仍須 exact runner／environment／commands freeze 完成才啟動。
 
 任何一項未完成，都不能執行 test。

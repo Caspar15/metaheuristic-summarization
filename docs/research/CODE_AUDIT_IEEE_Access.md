@@ -2499,3 +2499,18 @@ steward materialize policy、禁止 predictions/scores；policy 與 exact execut
 凍結後，Stage B 再簽 one-shot execution。完整建議與簽核欄見
 `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`。在決議前不修改 frozen data policy，
 不建立 `govreport_test_v1.json`，也不執行 test。
+
+## F-77 — Stage A test policy 已在零 prediction／零 score 下 materialize
+
+**嚴重度：已治理（protected-split data identity）**
+
+2026-08-16，提出請求的作者轉述老師／作者端已同意兩階段順序與條件式 Stage B。
+新增 authorization addendum，不覆寫 F-76 所指的兩份 frozen 原檔，也不偽造外部簽名。
+Stage A 自動 canonicalizer 讀取 official test membership/payload：CRS 362 + GAO 611 =
+973 rows；canonical 保留 973、pre-score exclusions 0。兩列 source 各有一個 U+FFFD，
+依事前規則原樣保留並寫 manifest；健康檢查 286,080 sentences、valid=true。
+
+Canonical SHA-256 為 `3ff10e66...7026dfc`，dataset fingerprint 為
+`c5ae4fbb...6cb9c6`。Freeze verifier 現回報 ordering resolved、policy materialized，
+但 `ready_for_test=false`，因九系統 runner、score-free dry run 與 exact execution
+package 尚未凍結。本階段沒有產生 prediction 或 ROUGE。

@@ -1,10 +1,9 @@
-"""Build canonical GovReport validation rows from the authors' archive.
+"""Build governed canonical GovReport rows from the authors' archive.
 
-Only the two official ``*_valid.ids`` membership files and their referenced
-payloads are read. The streaming archive pass may encounter other member
-names, but it never reads test membership or test payload bytes. Report
-section/paragraph structure is retained in canonical sections and sentence
-metadata.
+The requested split's two official membership files and only their referenced
+payloads are read. Report section/paragraph structure is retained in canonical
+sections and sentence metadata. Validation remains the default for backward
+compatibility; official test requires an explicit ``--split test`` invocation.
 """
 
 from __future__ import annotations
@@ -37,6 +36,19 @@ VALIDATION_ID_MEMBERS = {
     "gao": "gov-report/split_ids/gao_valid.ids",
 }
 EXPECTED_VALIDATION_ROWS = {"crs": 362, "gao": 612}
+TEST_ID_MEMBERS = {
+    "crs": "gov-report/split_ids/crs_test.ids",
+    "gao": "gov-report/split_ids/gao_test.ids",
+}
+EXPECTED_TEST_ROWS = {"crs": 362, "gao": 611}
+SPLIT_ID_MEMBERS = {
+    "validation": VALIDATION_ID_MEMBERS,
+    "test": TEST_ID_MEMBERS,
+}
+EXPECTED_SPLIT_ROWS = {
+    "validation": EXPECTED_VALIDATION_ROWS,
+    "test": EXPECTED_TEST_ROWS,
+}
 KNOWN_CANONICAL_EXCLUSIONS = {
     ("crs", "98-228"): {
         "reason": "empty_official_reference",
@@ -77,29 +89,42 @@ def _read_member_bytes(archive: tarfile.TarFile, member_name: str) -> bytes:
     return stream.read()
 
 
-def load_validation_ids(archive: tarfile.TarFile) -> dict[str, list[str]]:
-    """Read only official validation membership and validate exact counts."""
+def load_split_ids(
+    archive: tarfile.TarFile, split: str
+) -> dict[str, list[str]]:
+    """Read one official split membership and validate exact counts."""
+
+    if split not in SPLIT_ID_MEMBERS:
+        raise GovReportPreprocessingError(
+            f"unsupported GovReport split {split!r}; choose one of {sorted(SPLIT_ID_MEMBERS)}"
+        )
 
     result: dict[str, list[str]] = {}
     globally_seen: set[str] = set()
-    for agency, member_name in VALIDATION_ID_MEMBERS.items():
+    for agency, member_name in SPLIT_ID_MEMBERS[split].items():
         raw = _read_member_bytes(archive, member_name)
         row_ids = [line.strip() for line in raw.decode("utf-8").splitlines() if line.strip()]
-        if len(row_ids) != EXPECTED_VALIDATION_ROWS[agency]:
+        if len(row_ids) != EXPECTED_SPLIT_ROWS[split][agency]:
             raise GovReportPreprocessingError(
-                f"{agency} validation IDs contain {len(row_ids)} rows; "
-                f"expected {EXPECTED_VALIDATION_ROWS[agency]}"
+                f"{agency} {split} IDs contain {len(row_ids)} rows; "
+                f"expected {EXPECTED_SPLIT_ROWS[split][agency]}"
             )
         if len(set(row_ids)) != len(row_ids):
-            raise GovReportPreprocessingError(f"duplicate {agency} validation ID")
+            raise GovReportPreprocessingError(f"duplicate {agency} {split} ID")
         overlap = globally_seen & set(row_ids)
         if overlap:
             raise GovReportPreprocessingError(
-                f"cross-agency validation ID collision: {sorted(overlap)[:5]}"
+                f"cross-agency {split} ID collision: {sorted(overlap)[:5]}"
             )
         globally_seen.update(row_ids)
         result[agency] = row_ids
     return result
+
+
+def load_validation_ids(archive: tarfile.TarFile) -> dict[str, list[str]]:
+    """Backward-compatible validation-only membership wrapper."""
+
+    return load_split_ids(archive, "validation")
 
 
 def _child_sections(node: Mapping[str, Any]) -> Sequence[Mapping[str, Any]]:
@@ -184,15 +209,18 @@ def process_example(
     *,
     agency: str,
     source_bytes: bytes,
+    split: str = "validation",
 ) -> dict[str, Any]:
-    """Convert one official validation payload to canonical structured form."""
+    """Convert one official payload to canonical structured form."""
 
     if agency not in {"crs", "gao"}:
         raise GovReportPreprocessingError(f"unknown GovReport agency {agency!r}")
+    if split not in SPLIT_ID_MEMBERS:
+        raise GovReportPreprocessingError(f"unsupported GovReport split {split!r}")
     source_id = payload.get("id")
     if not isinstance(source_id, str) or not source_id.strip():
         raise GovReportPreprocessingError("payload id must be a non-empty string")
-    example_id = f"validation_{agency}_{source_id}"
+    example_id = f"{split}_{agency}_{source_id}"
     canonical_sections: list[dict[str, Any]] = []
     document_position = 0
     ignored_empty_nodes = 0
@@ -288,7 +316,7 @@ def process_example(
     example: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "id": example_id,
-        "split": "validation",
+        "split": split,
         "documents": [
             {
                 "document_id": f"{example_id}:d000",
@@ -314,17 +342,23 @@ def process_example(
     return example
 
 
-def iter_validation_examples(
+def iter_split_examples(
     archive_path: Path,
     *,
+    split: str,
     exclusion_records: list[dict[str, Any]] | None = None,
+    allow_unpinned_empty_reference_exclusions: bool = False,
 ) -> Iterable[dict[str, Any]]:
-    """Yield governed validation rows; never read test IDs.
+    """Yield one governed split without reading any other split's membership.
 
-    Official validation membership contains 974 IDs. One pinned CRS payload
-    has an empty official reference and is recorded in ``exclusion_records``
-    rather than fabricated, silently dropped, or allowed to fail evaluation.
+    Validation's one historical exclusion is pinned by raw hash. During the
+    separately authorized Stage-A test-policy materialization only, an empty
+    official reference may be recorded before any model score; every other
+    structural problem fails loud.
     """
+
+    if split not in SPLIT_ID_MEMBERS:
+        raise GovReportPreprocessingError(f"unsupported GovReport split {split!r}")
 
     actual_sha256 = sha256_binary_file(str(archive_path))
     if actual_sha256 != OFFICIAL_ARCHIVE_SHA256:
@@ -337,11 +371,11 @@ def iter_validation_examples(
     # implementation). Read membership once, then collect desired payloads in
     # one sequential archive pass.
     with tarfile.open(archive_path, mode="r:gz") as archive:
-        validation_ids = load_validation_ids(archive)
+        split_ids = load_split_ids(archive, split)
     wanted = {
         f"gov-report/{agency}/{source_id}.json": (agency, source_id)
         for agency in ("crs", "gao")
-        for source_id in validation_ids[agency]
+        for source_id in split_ids[agency]
     }
     payload_bytes: dict[tuple[str, str], bytes] = {}
     with tarfile.open(archive_path, mode="r|gz") as archive:
@@ -351,23 +385,23 @@ def iter_validation_examples(
                 continue
             if not member.isfile():
                 raise GovReportPreprocessingError(
-                    f"validation member is not a file: {member.name}"
+                    f"{split} member is not a file: {member.name}"
                 )
             stream = archive.extractfile(member)
             if stream is None:
                 raise GovReportPreprocessingError(
-                    f"cannot read validation member: {member.name}"
+                    f"cannot read {split} member: {member.name}"
                 )
             payload_bytes[key] = stream.read()
     missing_members = set(wanted.values()) - set(payload_bytes)
     if missing_members:
         raise GovReportPreprocessingError(
-            f"archive is missing {len(missing_members)} validation payloads; "
+            f"archive is missing {len(missing_members)} {split} payloads; "
             f"first={sorted(missing_members)[:5]}"
         )
 
     for agency in ("crs", "gao"):
-        for source_id in validation_ids[agency]:
+        for source_id in split_ids[agency]:
             member_name = f"gov-report/{agency}/{source_id}.json"
             source_bytes = payload_bytes[(agency, source_id)]
             try:
@@ -384,7 +418,11 @@ def iter_validation_examples(
                 raise GovReportPreprocessingError(
                     f"member {member_name} contains id {payload.get('id')!r}"
                 )
-            exclusion = KNOWN_CANONICAL_EXCLUSIONS.get((agency, source_id))
+            exclusion = (
+                KNOWN_CANONICAL_EXCLUSIONS.get((agency, source_id))
+                if split == "validation"
+                else None
+            )
             if exclusion is not None:
                 raw_sha256 = _sha256_bytes(source_bytes)
                 if raw_sha256 != exclusion["raw_json_sha256"]:
@@ -402,7 +440,7 @@ def iter_validation_examples(
                         {
                             "agency": agency.upper(),
                             "source_report_id": source_id,
-                            "official_split": "validation",
+                            "official_split": split,
                             "reason": exclusion["reason"],
                             "raw_json_sha256": raw_sha256,
                         }
@@ -410,12 +448,60 @@ def iter_validation_examples(
                 continue
             try:
                 yield process_example(
-                    payload, agency=agency, source_bytes=source_bytes
+                    payload,
+                    agency=agency,
+                    source_bytes=source_bytes,
+                    split=split,
                 )
             except GovReportPreprocessingError as error:
+                if (
+                    split == "test"
+                    and allow_unpinned_empty_reference_exclusions
+                    and str(error) == "reference summary contains no paragraphs"
+                ):
+                    if exclusion_records is not None:
+                        exclusion_records.append(
+                            {
+                                "agency": agency.upper(),
+                                "source_report_id": source_id,
+                                "official_split": split,
+                                "reason": "empty_official_reference",
+                                "raw_json_sha256": _sha256_bytes(source_bytes),
+                            }
+                        )
+                    continue
                 raise GovReportPreprocessingError(
                     f"{agency}/{source_id}: {error}"
                 ) from error
+
+
+def iter_validation_examples(
+    archive_path: Path,
+    *,
+    exclusion_records: list[dict[str, Any]] | None = None,
+) -> Iterable[dict[str, Any]]:
+    """Backward-compatible governed validation iterator."""
+
+    yield from iter_split_examples(
+        archive_path,
+        split="validation",
+        exclusion_records=exclusion_records,
+    )
+
+
+def iter_test_examples(
+    archive_path: Path,
+    *,
+    exclusion_records: list[dict[str, Any]] | None = None,
+) -> Iterable[dict[str, Any]]:
+    """Authorized Stage-A test iterator with a pre-score empty-reference rule."""
+
+    yield from iter_split_examples(
+        archive_path,
+        split="test",
+        exclusion_records=exclusion_records,
+        allow_unpinned_empty_reference_exclusions=True,
+    )
 
 
 def main() -> None:
@@ -423,15 +509,19 @@ def main() -> None:
     parser.add_argument("--archive", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--exclusion_manifest", required=True)
+    parser.add_argument("--split", choices=sorted(SPLIT_ID_MEMBERS), default="validation")
     args = parser.parse_args()
     exclusion_records: list[dict[str, Any]] = []
     write_jsonl_atomic(
         args.output,
-        iter_validation_examples(
-            Path(args.archive), exclusion_records=exclusion_records
+        iter_split_examples(
+            Path(args.archive),
+            split=args.split,
+            exclusion_records=exclusion_records,
+            allow_unpinned_empty_reference_exclusions=args.split == "test",
         ),
     )
-    if exclusion_records != [
+    expected_validation_exclusions = [
         {
             "agency": "CRS",
             "source_report_id": "98-228",
@@ -439,7 +529,8 @@ def main() -> None:
             "reason": "empty_official_reference",
             "raw_json_sha256": "246a634dfe0eb44a73fe8916d9ae7db553fc8396aedee349a570b131ae50902c",
         }
-    ]:
+    ]
+    if args.split == "validation" and exclusion_records != expected_validation_exclusions:
         raise GovReportPreprocessingError(
             f"unexpected exclusion set after preprocessing: {exclusion_records}"
         )
@@ -447,9 +538,9 @@ def main() -> None:
         "manifest_schema_version": "1.0",
         "dataset": DATASET_NAME,
         "dataset_revision": DATASET_REVISION,
-        "official_split": "validation",
-        "official_membership_rows": sum(EXPECTED_VALIDATION_ROWS.values()),
-        "canonical_rows": sum(EXPECTED_VALIDATION_ROWS.values())
+        "official_split": args.split,
+        "official_membership_rows": sum(EXPECTED_SPLIT_ROWS[args.split].values()),
+        "canonical_rows": sum(EXPECTED_SPLIT_ROWS[args.split].values())
         - len(exclusion_records),
         "rule": "exclude only rows with a pinned empty official reference; never fabricate a target",
         "excluded_rows": exclusion_records,
@@ -463,7 +554,7 @@ def main() -> None:
         newline="\n",
     )
     temporary_manifest.replace(manifest_path)
-    print(f"Wrote canonical GovReport validation to {args.output}")
+    print(f"Wrote canonical GovReport {args.split} to {args.output}")
 
 
 if __name__ == "__main__":

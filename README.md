@@ -26,6 +26,9 @@
   全部通過，才可能 one-shot 跑 official test。
   Freeze audit 已發現既有政策對「policy 與簽字誰先」形成循環，建議改採兩階段簽核；
   詳見 [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md)。
+- 2026-08-16：老師／作者端的兩階段核准已由提出請求的作者轉述；Stage A test policy
+  已在零 prediction、零 score 狀態完成，973/973 rows 保留。下一步是凍結 one-shot runner，
+  仍不能手動繞過 runner 直接計分。見 [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md)。
 
 ## 2026-08-09 full-dev selector checkpoint
 
@@ -156,7 +159,7 @@
 | Baseline／最終方法 gate | 🟡 **v1 雙-primary gate 失敗；v2 E1～E3 已完成、freeze 尚未簽字** —— GovReport 官方尺度對 SBERT+MMR macro `+0.004569` 且預註冊檢定通過；E3 五項 component claims 亦通過。Multi-News 負結果保留為 boundary；protected splits 仍鎖定。見 `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **470 local tests passed / 5 subtests passed**（2026-08-15）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-76） |
+| 測試 | ✅ **473 local tests passed / 5 subtests passed**（2026-08-16）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-77） |
 
 **簡言之：程式可以跑，但目前的輸出不能當研究結論。**
 
@@ -179,6 +182,7 @@
 | [`GOVREPORT_CLAIM_MATRIX_V2.md`](docs/research/GOVREPORT_CLAIM_MATRIX_V2.md) | GovReport-centered 可寫／不可寫主張與證據門檻 |
 | [`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`](docs/research/E3_ROUTE_PROVENANCE_ABLATION_STATUS.md) | 五個 frozen-dev route/provenance 消融與 Holm-20 結果 |
 | [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md) | Pre-test freeze 建議、剩餘 blockers 與 Stage A 簽核欄 |
+| [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md) | Official-test Stage A policy、canonical identity 與零分數健康檢查 |
 | [`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`](docs/research/ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md) | ICACT→IEEE Access 六頁逐項差異；DOI／獎項證明待補 |
 | [`REPO_CLEANUP.md`](docs/research/REPO_CLEANUP.md) | 專案整理計畫 |
 

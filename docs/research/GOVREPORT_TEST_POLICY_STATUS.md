@@ -1,0 +1,34 @@
+# GovReport official-test policy status
+
+## Stage A result（2026-08-16 Asia/Taipei）
+
+Stage A 已由提出請求的作者轉述老師與作者端核准，並在任何 test prediction 或 ROUGE
+之前完成。核准來源誠實記為 project collaboration message；repo 沒有偽造手寫簽名或
+宣稱獨立驗證外部訊息。
+
+| 項目 | 結果 |
+|---|---:|
+| Official membership | CRS 362 + GAO 611 = **973** |
+| Canonical rows | **973** |
+| Pre-score exclusions | **0** |
+| U+FFFD | **2 rows / 2 source characters**，原樣保留 |
+| Canonical sentences | **286,080** |
+| Health validation | **pass** |
+| Predictions / scores | **0 / 0** |
+
+Frozen identity：
+
+- Policy：`configs/data_policies/govreport_test_v1.json`
+- Canonical SHA-256：`3ff10e66ec902b20f0aee0ca1a36a66a2827d24d353473f54c9f7a8df7026dfc`
+- Dataset fingerprint：`c5ae4fbb2595d0f27abe8894edf163563a7bc00dbf7713d386ba29987c6cb9c6`
+- Health evidence：`docs/research/evidence/govreport_test_canonical_health_v1.json`
+- Authorization：`configs/data_policies/govreport_test_authorization_v1.json`
+
+## 尚未完成
+
+- 九系統 one-shot runner 與 official evaluator 的 test-only fail-closed 接線。
+- Score-free dry run。
+- Exact scientific commit、environment、commands、output paths freeze。
+- Stage B activation 與一次性正式執行。
+
+Stage A 完成只代表資料 policy 可以使用，不代表可以在 runner 未凍結時臨時執行方法。

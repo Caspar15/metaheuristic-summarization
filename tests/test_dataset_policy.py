@@ -12,13 +12,33 @@ from src.data.freeze_multinews_policy import (
     freeze_policy,
     materialize_clean_sensitivity,
 )
-from src.data.policy import sha256_file, validate_dataset_policy_request, verify_pin
+from src.data.policy import (
+    load_frozen_policy,
+    sha256_file,
+    validate_dataset_policy_request,
+    verify_pin,
+)
 from src.data.preprocess_multinews import DATASET_REVISION
 from src.data.schemas import build_document_example
 from src.utils.io import write_jsonl
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_load_frozen_policy_accepts_test_policy_frozen_before_scores(policy_tmp_dir):
+    path = policy_tmp_dir / "test_policy.json"
+    path.write_text(
+        json.dumps(
+            {
+                "policy_schema_version": "1.0",
+                "status": "frozen_before_test_results",
+                "analyses": {"main": {}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert load_frozen_policy(str(path))["status"] == "frozen_before_test_results"
 
 
 @pytest.fixture

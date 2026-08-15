@@ -7,6 +7,10 @@
 > 配置搜尋已停止，pre-test freeze audit 亦已完成。下一個工作包須先由老師／完整作者群
 > 決議 test-policy ordering，再建立 policy、exact execution package 並完成兩階段簽字。
 > E1～E3 都只讀 frozen GovReport dev，不是 test；目前仍禁止 dev-test/test。
+>
+> **2026-08-16 Stage A addendum**：老師／作者端的兩階段核准已由提出請求的作者轉述；
+> GovReport test policy 與 canonical health 已在零 prediction／零 score 下建立並 pin。
+> 現在只允許完成 fail-closed runner 與 exact execution freeze，尚未開始正式計分。
 
 - [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
       SHA-256 排序、固定 seed `3407` 凍結為 dev `3,935`（70.005%）與
@@ -590,7 +594,8 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
       78 success + 1 preserved failure；見 `E2_COST_SCALING_STATUS.md`
 - [x] E3：五個事前指定 ablations 已在 frozen GovReport dev 681 rows 完成；全數 681/681 feasible，20 個 endpoint 的 C01−ablation CI 全正且 Holm-20 均通過。見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`
 - [x] ICACT 六頁 PDF 已逐頁核對，舊 Eq. (1)–(13)、Tables 1–6、方法與 claims 已映射到 extension matrix；正式 DOI／獎項證明／similarity report 留至投稿稽核
-- [!] Pre-test freeze 建議書已建立，但 frozen policy 對「test policy 與簽字誰先」互相矛盾；需老師／完整作者群先批准兩階段順序。見 `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`
+- [x] Frozen ordering conflict 已由兩階段 authorization addendum 解決；Stage A policy materialization 完成，973 canonical rows、0 exclusions、2 U+FFFD rows 原樣保留。見 `GOVREPORT_TEST_POLICY_STATUS.md`
+- [ ] 完成九系統 fail-closed runner、score-free dry run 與 exact execution freeze 後，才啟動 Stage B one-shot test
 
 **Gate 3 v1（歷史）** 🔴：
 - 在 validation 上，至少一個主 benchmark明顯勝過強 no-task-training baseline；另一個至少 non-inferior 或形成預先定義的 cost Pareto 優勢
@@ -680,7 +685,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag 與 invalid-run 標記均已版本化；final execution freeze 仍屬 Phase 3d |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | Pre-test freeze audit 後完整回歸 470 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、兩套歷史 policies/partitions、A1～E3 與 F-51～F-76 guards 已完成；final-output policy 仍待兩階段簽核後 materialize |
+| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | Stage A policy 後完整回歸 473 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3 與 F-51～F-77 guards 已完成；final-output runner 仍待 Stage B freeze |
 | 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
 | 3 方法開發 | `[~]` | ❌ v1 雙-primary gate；✅ v2 dev evidence／🟡 freeze 未簽 | D3b 後停止配置搜尋；E1 official evaluator、E2 cost/scaling、E3 ablation 均完成。尚待 freeze audit、test policy 與完整作者群簽字，不進 dev-test/test |
 | 4 正式 test | `[ ]` | | |

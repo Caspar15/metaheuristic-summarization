@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "authorization_id": "govreport-test-two-stage-authorization-v1",
+  "recorded_at_utc": "2026-08-15T17:06:36.1901331Z",
+  "status": "requesting_author_attests_teacher_and_author_side_approved_both_stages",
+  "approval_provenance": {
+    "source": "project collaboration message from the requesting author",
+    "requesting_author_statement": "The teacher has approved; proceed with data preparation and the final one-shot scoring, with all approvals granted.",
+    "independent_signature_artifact_attached": false,
+    "interpretation": "Operational authorization is accepted from the requesting author. This record does not fabricate handwritten signatures or claim independent verification of an external message."
+  },
+  "supersedes_ordering_only": {
+    "policy": "configs/data_policies/govreport_centered_repositioning_v2.json",
+    "final_protocol": "configs/preregistrations/govreport_centered_final_evaluation_v1.json",
+    "resolution": "Use two stages: policy materialization first, then exact execution freeze and one-shot scoring.",
+    "preserved": [
+      "all frozen scientific choices",
+      "all existing validation and development evidence",
+      "the prohibition on score-guided changes",
+      "the one-shot official-test decision rule"
+    ]
+  },
+  "stage_A": {
+    "authorized": true,
+    "allowed": [
+      "read official test membership and payload through an automated canonicalizer",
+      "validate structural reference presence without reporting ROUGE or method quality",
+      "create the canonical artifact, exclusion and replacement-character manifests, health evidence, checksums, and immutable data policy"
+    ],
+    "forbidden": [
+      "run proposed or baseline predictions",
+      "calculate or inspect any ROUGE score",
+      "change scientific choices based on official-test content"
+    ]
+  },
+  "stage_B": {
+    "authorized": true,
+    "activation_conditions": [
+      "Stage A policy and health evidence are pinned",
+      "the nine-system runner and official evaluator are fail-closed",
+      "the exact scientific commit, environment, commands, and output paths are frozen",
+      "a score-free dry run passes"
+    ],
+    "execution": "one-shot GovReport official test only",
+    "after_score_rule": "Report pass or fail without changing the candidate, baselines, data exclusions, length contract, evaluator, or inference."
+  },
+  "protected_state_at_authorization": {
+    "test_membership_accessed": false,
+    "test_payload_accessed": false,
+    "test_predictions_generated": false,
+    "test_scores_observed": false
+  }
+}

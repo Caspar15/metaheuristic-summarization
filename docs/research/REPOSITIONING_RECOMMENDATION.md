@@ -2,8 +2,9 @@
 
 > **2026-08-15 執行狀態**：選項 A 已定案，無須再選 A/B/C。配置搜尋已停止；
 > E1～E3 與 ICACT 六頁技術 audit 已完成。Pre-test freeze 建議另見
-> `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`；GovReport test policy 尚未建立，
-> frozen ordering conflict 待作者群決議，dev-test/test 仍鎖定。
+> `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`。2026-08-16 兩階段順序已由提出請求的
+> 作者轉述核准，GovReport test policy 在零 prediction／零 score 下完成；目前只進行
+> fail-closed runner 與 exact execution freeze，尚未產生正式分數。
 
 ## 決策摘要（2026-08-09）
 

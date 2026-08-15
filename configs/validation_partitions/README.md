@@ -14,4 +14,6 @@
 - GovReport：reference-blind frozen membership，dev 681／dev-test 292。
 
 v2 只允許 GovReport frozen dev 執行 E1～E3 evidence completion。現有 dev-test 不再
-用於新候選選擇；test 不在本目錄，且 GovReport test policy 目前刻意尚未 materialize。
+用於新候選選擇；test 不在本目錄。GovReport official-test policy 已於 2026-08-16
+依兩階段核准另存於 `configs/data_policies/govreport_test_v1.json`，不使用 validation
+partition manifest，也不得把本目錄的 dev/dev-test ID 套到 official test。

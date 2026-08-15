@@ -44,13 +44,13 @@ def test_committed_govreport_freeze_package_is_internally_consistent():
     assert report["primary_dataset"] == "GovReport"
     assert report["boundary_dataset"] == "Multi-News"
     assert report["protected_splits_unlocked"] is False
-    assert report["test_split_accessed"] is False
+    assert report["test_split_accessed"] is True
     assert report["evidence_completion_status"] == "E1_E2_E3_complete"
-    assert report["policy_sequence_status"] == "blocked_by_frozen_contract_ordering_conflict"
+    assert report["policy_sequence_status"] == "resolved_by_authorized_two_stage_addendum"
     assert report["ready_for_policy_materialization_authorization"] is True
     assert report["ready_for_final_freeze_signature"] is False
-    assert report["human_signature_status"] == "pending"
-    assert report["test_policy_materialized"] is False
+    assert report["human_signature_status"] == "reported_approved_by_requesting_author"
+    assert report["test_policy_materialized"] is True
     assert report["ready_for_test"] is False
     assert report["local_evidence_status"] in {
         "complete",

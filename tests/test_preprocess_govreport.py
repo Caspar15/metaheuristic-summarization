@@ -87,6 +87,40 @@ def test_gao_excludes_letter_paragraphs_but_keeps_letter_subsections():
     assert row["references"] == ["Finding."]
 
 
+def test_explicit_test_split_changes_only_governed_identity_fields():
+    payload = {
+        "id": "R-test",
+        "summary": ["Reference."],
+        "reports": {
+            "section_title": "Body",
+            "paragraphs": ["Source sentence."],
+            "subsections": [],
+        },
+    }
+    row = process_example(
+        payload,
+        agency="crs",
+        source_bytes=json.dumps(payload).encode("utf-8"),
+        split="test",
+    )
+    validate_document_example(row)
+    assert row["id"] == "test_crs_R-test"
+    assert row["split"] == "test"
+    assert row["documents"][0]["document_id"] == "test_crs_R-test:d000"
+    assert row["references"] == ["Reference."]
+
+
+def test_unknown_split_fails_before_building_a_row():
+    payload = {"id": "R", "summary": ["Reference."], "reports": {}}
+    with pytest.raises(GovReportPreprocessingError, match="unsupported GovReport split"):
+        process_example(
+            payload,
+            agency="crs",
+            source_bytes=json.dumps(payload).encode("utf-8"),
+            split="private",
+        )
+
+
 @pytest.mark.parametrize(
     "payload, agency, message",
     [

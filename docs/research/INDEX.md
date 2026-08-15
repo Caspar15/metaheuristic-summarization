@@ -16,9 +16,10 @@ route/provenance ablations 亦已完成，五個 macro 差異 CI 全正且 Holm-
 681/681 rows 可行。完整表見 [`E1_OFFICIAL_EVALUATOR_STATUS.md`](E1_OFFICIAL_EVALUATOR_STATUS.md)、
 [`E2_COST_SCALING_STATUS.md`](E2_COST_SCALING_STATUS.md) 與
 [`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`](E3_ROUTE_PROVENANCE_ABLATION_STATUS.md)。
-Pre-test freeze audit 已產出 `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`；目前因 frozen
-policy 對 test-policy materialization 與簽字先後形成循環，等待老師／完整作者群核准
-兩階段解鎖順序。test 仍未讀取。
+Pre-test freeze audit 曾發現 frozen policy 對 materialization 與簽字先後形成循環；
+2026-08-16 Stage A 由提出請求的作者轉述老師／作者端核准兩階段順序後，official test policy
+已在零 prediction／零 score 下 materialize。973/973 rows 保留、0 exclusions、2 個
+U+FFFD source characters 原樣記錄。下一步是凍結 fail-closed one-shot runner。
 
 Multi-News full-dev D2 已依事前凍結規格完成 14/14 selector candidates，只讀 dev
 3,935 rows。固定 S02b 候選時 Greedy-TFIDF macro `0.328077` 勝 NSGA-II+TF-IDF
@@ -82,7 +83,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | 🟡 **大部分完成** —— route/provenance/shared objectives、兩套歷史資料 policy 與 partition、official evaluator parity、成本量測與 final ablation 已完成；只剩 final-output policy／freeze audit 與簽字；見 `ACTION_PLAN.md` Phase 3d |
-| 測試 | ✅ Pre-test freeze audit 後完整回歸 **470 passed／5 subtests passed**；compileall 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped** |
+| 測試 | ✅ Stage A policy 後完整回歸 **473 passed／5 subtests passed**；compileall 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped** |
 | **baseline** | ✅ **矩陣與 diagnosis 完成；quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；其後已完成 D2/D3a/D3b，不再重開 baseline grid。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
@@ -126,6 +127,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | `GATE2_BASELINE_STATUS.md` | 最新 baseline family 分數、證據與未完成項目 | 追 Gate 2 進度時 |
 | `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md` | 五個 GovReport route/provenance matched ablations | 判斷各模組能否列為貢獻時 |
 | `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md` | E1～E3 freeze 建議、政策衝突與 Stage A 簽核欄 | 準備請老師／作者核准時 |
+| `GOVREPORT_TEST_POLICY_STATUS.md` | Official-test Stage A policy 與 canonical health | Runner freeze 前核對 |
 | `STRATEGY_ASSESSMENT.md` | 可行性評估、病因診斷、資料集選擇、兩份計畫對照 | 需要判斷「還有沒有救、主場選哪裡」 |
 | `REPOSITIONING_RECOMMENDATION.md` | D3b 停止決策、凍結數字與已批准的 GovReport-centered 選項 | 查決策沿革時 |
 | `GOVREPORT_CLAIM_MATRIX_V2.md` | v2 主張、證據與禁止事項 | 寫摘要／結果／結論前 |

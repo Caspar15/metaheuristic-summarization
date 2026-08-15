@@ -32,6 +32,12 @@ FINAL_PREREG = Path(
 PRETEST_EVIDENCE_INDEX = Path(
     "configs/preregistrations/govreport_pretest_evidence_index_v1.json"
 )
+TEST_AUTHORIZATION = Path(
+    "configs/data_policies/govreport_test_authorization_v1.json"
+)
+TEST_AUTHORIZATION_SHA256 = (
+    "64184a537f25bbdbad7c2701ef32735304b6ee8b659a59342ad8b46780f4e277"
+)
 
 
 class FreezePackageError(RuntimeError):
@@ -101,7 +107,10 @@ def _assert_decision_contract(addendum: Mapping[str, Any]) -> None:
 
 
 def _assert_lock_contract(
-    evidence: Mapping[str, Any], final: Mapping[str, Any], root: Path
+    evidence: Mapping[str, Any],
+    final: Mapping[str, Any],
+    root: Path,
+    authorization: Mapping[str, Any] | None = None,
 ) -> None:
     if evidence.get("partition") != "GovReport frozen dev only":
         raise FreezePackageError("evidence completion is not restricted to frozen dev")
@@ -134,10 +143,33 @@ def _assert_lock_contract(
 
     future_test_policy = root / protected.get("canonical_policy_path", "")
     if future_test_policy.is_file():
-        raise FreezePackageError(
-            "locked preregistration says the test policy is not materialized, "
-            f"but it exists: {future_test_policy}"
-        )
+        if authorization is None or authorization.get("stage_A", {}).get("authorized") is not True:
+            raise FreezePackageError(
+                "test policy exists without a Stage-A authorization addendum: "
+                f"{future_test_policy}"
+            )
+        if authorization.get("supersedes_ordering_only", {}).get("resolution") != (
+            "Use two stages: policy materialization first, then exact execution "
+            "freeze and one-shot scoring."
+        ):
+            raise FreezePackageError("Stage-A authorization ordering resolution drifted")
+
+
+def _assert_test_policy_contract(policy: Mapping[str, Any]) -> None:
+    if policy.get("status") != "frozen_before_test_results":
+        raise FreezePackageError("GovReport test policy is not frozen before scores")
+    if policy.get("test_predictions_generated") is not False:
+        raise FreezePackageError("test policy reports predictions before execution freeze")
+    if policy.get("test_scores_observed") is not False:
+        raise FreezePackageError("test policy reports scores before execution freeze")
+    dataset = policy.get("dataset", {})
+    if dataset.get("name") != "GovReport" or dataset.get("split") != "test":
+        raise FreezePackageError("GovReport test policy dataset identity drifted")
+    analysis = policy.get("analyses", {}).get("main", {})
+    if analysis.get("role") != "primary_test" or analysis.get("expected_rows") != 973:
+        raise FreezePackageError("GovReport test policy analysis contract drifted")
+    if policy.get("canonical_exclusions", {}).get("expected_rows") != 0:
+        raise FreezePackageError("GovReport test exclusion count drifted")
 
 
 def _assert_evidence_contract(
@@ -210,8 +242,27 @@ def validate_freeze_package(
     evidence = _load_json(root, EVIDENCE_PREREG)
     final = _load_json(root, FINAL_PREREG)
     pretest_index = _load_json(root, PRETEST_EVIDENCE_INDEX)
+    authorization = _load_json(root, TEST_AUTHORIZATION)
+    _require_sha(
+        root,
+        TEST_AUTHORIZATION.as_posix(),
+        TEST_AUTHORIZATION_SHA256,
+        "test two-stage authorization",
+    )
     _assert_decision_contract(addendum)
-    _assert_lock_contract(evidence, final, root)
+    _assert_lock_contract(evidence, final, root, authorization)
+
+    test_policy_path = Path(final["protected_split"]["canonical_policy_path"])
+    test_policy = _load_json(root, test_policy_path)
+    _assert_test_policy_contract(test_policy)
+    for label, pin in (
+        ("test exclusion manifest", test_policy["canonical_exclusions"]),
+        ("test replacement manifest", test_policy["replacement_character_manifest"]),
+        ("test canonical health", test_policy["canonical_health_evidence"]),
+    ):
+        path_key = "manifest_path" if label == "test exclusion manifest" else "path"
+        sha_key = "manifest_file_sha256" if label == "test exclusion manifest" else "file_sha256"
+        _require_sha(root, pin[path_key], pin[sha_key], label)
 
     completed: dict[str, dict[str, Any]] = {}
     for label in ("E1", "E2", "E3"):
@@ -320,6 +371,12 @@ def validate_freeze_package(
         proposed["per_example_sha256"],
         "proposed per-example",
     )
+    test_analysis = test_policy["analyses"]["main"]
+    check_local(
+        test_analysis["artifact_path"],
+        test_analysis["expected_file_sha256"],
+        "GovReport canonical test artifact",
+    )
     selection = inputs["baseline_selection_evidence"]
     _require_sha(
         root,
@@ -371,7 +428,7 @@ def validate_freeze_package(
         "primary_dataset": "GovReport",
         "boundary_dataset": "Multi-News",
         "protected_splits_unlocked": False,
-        "test_split_accessed": False,
+        "test_split_accessed": True,
         "local_evidence_status": (
             "complete" if not local_deferred else "deferred_missing_untracked_artifacts"
         ),
@@ -379,11 +436,11 @@ def validate_freeze_package(
         "local_evidence_deferred": len(local_deferred),
         "deferred_paths": local_deferred,
         "evidence_completion_status": "E1_E2_E3_complete",
-        "policy_sequence_status": "blocked_by_frozen_contract_ordering_conflict",
+        "policy_sequence_status": "resolved_by_authorized_two_stage_addendum",
         "ready_for_policy_materialization_authorization": True,
         "ready_for_final_freeze_signature": False,
-        "human_signature_status": "pending",
-        "test_policy_materialized": False,
+        "human_signature_status": "reported_approved_by_requesting_author",
+        "test_policy_materialized": True,
         "ready_for_test": False,
     }
 
