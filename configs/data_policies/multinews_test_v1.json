@@ -1,0 +1,50 @@
+{
+  "policy_schema_version": "1.0",
+  "policy_id": "multinews-test-v1",
+  "status": "frozen_before_revised_pipeline_test_predictions_or_scores",
+  "dataset": {
+    "name": "Multi-News",
+    "dataset_id": "alexfabbri/multi_news",
+    "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
+    "dataset_data_dir": "default",
+    "official_split": "test",
+    "official_rows": 5622,
+    "source_file": "multi_news-test.parquet",
+    "source_url": "hf://datasets/alexfabbri/multi_news@1f20a01dbf6463236108a8d7fd39f3ae9750dcc3/default/multi_news-test.parquet",
+    "source_binary_sha256": "276e73711437cfd5ccf10479862cae84c5836c7ed5d0468276a60ba7199e322b",
+    "preprocessor_version": "multinews-canonical-v3",
+    "license": "other (dataset card); do not redistribute raw or canonical article text from this repository"
+  },
+  "authorization": {
+    "path": "configs/data_policies/multinews_test_authorization_v1.json",
+    "file_sha256": "78138d10b32eb7ce2e64b3725e2754e6fb16aedd96dec21aa2eea1c27f8a0f3d",
+    "stage": "data materialization and frozen final execution authorized before revised-pipeline test predictions or scores"
+  },
+  "canonical_exclusions": {
+    "expected_rows": 1,
+    "source_row_indices": [4736],
+    "rule": "exclude only an official row whose entire source cluster is empty; never fabricate source content",
+    "manifest_path": "data/processed/multi_news_test_canonical_excluded_rows_manifest.jsonl",
+    "manifest_file_sha256": "3b46a85bd12390bd2254e4483c9f7a1f3884480d45239bf48eeb9c0ea302f7be"
+  },
+  "analyses": {
+    "main": {
+      "role": "secondary_official_test",
+      "artifact_path": "data/processed/multi_news_test_canonical.jsonl",
+      "row_policy": "include every structurally valid official row and retain U+FFFD unchanged",
+      "text_repair": "forbidden",
+      "expected_rows": 5621,
+      "expected_dataset_fingerprint": "2dfa16428915bacb8ed0ffa7fca72027dd05a00074b75358df627db3a7fb0b25",
+      "expected_file_sha256": "b1efdf91c71438d5ce4513e490e5e9a0e8737cbc7eba79e727cfe0793824e2ac",
+      "expected_replacement_rows": 70,
+      "expected_replacement_characters": 733,
+      "allow_replacement_character": true
+    }
+  },
+  "health_evidence": {
+    "path": "docs/research/evidence/multinews_test_canonical_health_v1.json",
+    "file_sha256": "37e67d6a1707f07e380ca8983fc042e4956f0056a15c818a343245cfe4184818",
+    "valid": true
+  },
+  "final_use_rule": "Run only the pre-frozen revised system and baselines. Report R-1, R-2, R-Lsum, their arithmetic macro, paired uncertainty, and all unfavorable outcomes. Never tune after test execution."
+}

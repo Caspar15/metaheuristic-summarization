@@ -92,6 +92,7 @@ def build_manifest(
     partition_manifest_path: Path,
     partition_manifest_sha256: str,
     per_stratum: int = 10,
+    dataset: str = "GovReport",
 ) -> dict:
     dev_set = set(dev_ids)
     if len(dev_set) != len(dev_ids):
@@ -115,8 +116,8 @@ def build_manifest(
         "manifest_schema_version": "1.0",
         "status": "frozen_before_any_e2_timing",
         "frozen_at_utc": datetime.now(timezone.utc).isoformat(),
-        "purpose": "reference_blind_govreport_dev_cost_scaling_sample",
-        "dataset": "GovReport",
+        "purpose": f"reference_blind_{dataset.lower().replace('-', '')}_dev_cost_scaling_sample",
+        "dataset": dataset,
         "base_split": "validation",
         "partition": "frozen dev",
         "input_path": input_path.as_posix(),
@@ -147,6 +148,7 @@ def main() -> None:
     parser.add_argument("--partition-manifest", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--per-stratum", type=int, default=10)
+    parser.add_argument("--dataset", default="GovReport")
     args = parser.parse_args()
 
     input_path = Path(args.input)
@@ -161,6 +163,7 @@ def main() -> None:
         partition_manifest_path=partition_path,
         partition_manifest_sha256=_sha256_file(partition_path),
         per_stratum=args.per_stratum,
+        dataset=args.dataset,
     )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)

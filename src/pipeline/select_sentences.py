@@ -100,10 +100,21 @@ def validate_experiment_request(cfg: Mapping, requested_split: str) -> None:
     if not isinstance(data_policy.get("analysis"), str):
         raise ValueError("data_policy.analysis must be declared")
     if status == "final_test_only":
-        if _normalized_dataset_name(experiment.get("dataset")) != "govreport":
-            raise ValueError("final_test_only is frozen for GovReport only")
-        if data_policy.get("policy_path") != "configs/data_policies/govreport_test_v1.json":
-            raise ValueError("final_test_only requires the frozen GovReport test policy")
+        dataset_name = _normalized_dataset_name(experiment.get("dataset"))
+        frozen_test_policies = {
+            "govreport": "configs/data_policies/govreport_test_v1.json",
+            "multinews": "configs/data_policies/multinews_test_v1.json",
+        }
+        expected_policy = frozen_test_policies.get(dataset_name)
+        if expected_policy is None:
+            raise ValueError(
+                "final_test_only is frozen only for GovReport and Multi-News"
+            )
+        if data_policy.get("policy_path") != expected_policy:
+            raise ValueError(
+                f"final_test_only requires the frozen {experiment.get('dataset')} "
+                "test policy"
+            )
         if cfg.get("experiment_partition") is not None:
             raise ValueError("final_test_only must evaluate the complete official test policy")
 
