@@ -43,7 +43,7 @@
   },
   "health_evidence": {
     "path": "docs/research/evidence/multinews_test_canonical_health_v1.json",
-    "file_sha256": "37e67d6a1707f07e380ca8983fc042e4956f0056a15c818a343245cfe4184818",
+    "file_sha256": "5c120a19dd52176eea6742ba12f5dddd33d2a55da59f0ed3395bde3ff2301855",
     "valid": true
   },
   "final_use_rule": "Run only the pre-frozen revised system and baselines. Report R-1, R-2, R-Lsum, their arithmetic macro, paired uncertainty, and all unfavorable outcomes. Never tune after test execution."

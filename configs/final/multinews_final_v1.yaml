@@ -3,7 +3,7 @@ experiment:
   dataset: Multi-News
 data_policy:
   policy_path: configs/data_policies/multinews_test_v1.json
-  policy_sha256: ad4bfd9593113c1f30f132e82b1363eb6ae11ce3e94bbf8072219b21cd6f2ef1
+  policy_sha256: 7203b303f8b49212fc1870a7968d8786d4ff43980574b3739197a1c443d62a9a
   analysis: main
 seed: 3407
 features:
