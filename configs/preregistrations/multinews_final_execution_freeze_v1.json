@@ -27,7 +27,7 @@
   "pins": {
     "final_config": {
       "path": "configs/final/multinews_final_v1.yaml",
-      "sha256": "6e92b8ffdbd3b3616dd87ebe296c76bcb312fb91a933a050919a3fc02edb09b5"
+      "sha256": "b628d348ba078d8e58cbdaf1d6f53c26e293862beb777dc8cb51bdcf8b71f818"
     },
     "runner": {
       "path": "scripts/audit/run_multinews_final_test.py",
@@ -39,7 +39,7 @@
     },
     "test_policy": {
       "path": "configs/data_policies/multinews_test_v1.json",
-      "sha256": "7203b303f8b49212fc1870a7968d8786d4ff43980574b3739197a1c443d62a9a"
+      "sha256": "95d9ea7cb664f50175c6964f2272c76fda37ea2a3141b51ce268c4cfef9b7ef2"
     },
     "canonical_test": {
       "path": "data/processed/multi_news_test_canonical.jsonl",
@@ -49,13 +49,17 @@
       "path": "docs/research/evidence/multinews_test_canonical_health_v1.json",
       "sha256": "5c120a19dd52176eea6742ba12f5dddd33d2a55da59f0ed3395bde3ff2301855"
     },
+    "replacement_character_manifest": {
+      "path": "configs/data_policies/multinews_test_replacement_rows_v1.jsonl",
+      "sha256": "47e801bf4418989131344dc9f114e471a2890db2dee6c13c035073564e707be8"
+    },
     "authorization": {
       "path": "configs/data_policies/multinews_test_authorization_v1.json",
       "sha256": "78138d10b32eb7ce2e64b3725e2754e6fb16aedd96dec21aa2eea1c27f8a0f3d"
     },
     "final_preregistration": {
       "path": "configs/preregistrations/multinews_secondary_evidence_completion_v1.json",
-      "sha256": "c7f6aca367a3fe355c3cc89564b8a3fd68ada9a2d613a5bf6c8843b76f6a905a"
+      "sha256": "9bf4c08a062a95ec054a923587d14ffa8d5cf54d7aa63bf6a865b2824734afed"
     },
     "frozen_d3b_source_config": {
       "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",

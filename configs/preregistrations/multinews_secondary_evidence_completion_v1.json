@@ -10,7 +10,7 @@
   },
   "frozen_proposed": {
     "config_path": "configs/final/multinews_final_v1.yaml",
-    "config_sha256": "6e92b8ffdbd3b3616dd87ebe296c76bcb312fb91a933a050919a3fc02edb09b5",
+    "config_sha256": "b628d348ba078d8e58cbdaf1d6f53c26e293862beb777dc8cb51bdcf8b71f818",
     "scientific_source_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
     "scientific_source_sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f",
     "selector": "Greedy",
@@ -21,7 +21,7 @@
   },
   "final_test": {
     "policy_path": "configs/data_policies/multinews_test_v1.json",
-    "policy_sha256": "7203b303f8b49212fc1870a7968d8786d4ff43980574b3739197a1c443d62a9a",
+    "policy_sha256": "95d9ea7cb664f50175c6964f2272c76fda37ea2a3141b51ce268c4cfef9b7ef2",
     "canonical_rows": 5621,
     "one_shot": true,
     "random_seeds": [3407, 2024, 42, 1337, 2026, 20260810, 7, 17, 23, 101],

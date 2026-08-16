@@ -75,7 +75,7 @@ def test_multinews_test_policy_was_frozen_before_revised_scores():
     policy = json.loads(
         (ROOT / "configs/data_policies/multinews_test_v1.json").read_text(encoding="utf-8")
     )
-    assert policy["status"] == "frozen_before_revised_pipeline_test_predictions_or_scores"
+    assert policy["status"] == "frozen_before_test_results"
     assert policy["dataset"]["official_rows"] == 5622
     assert policy["canonical_exclusions"]["source_row_indices"] == [4736]
     assert policy["analyses"]["main"]["expected_rows"] == 5621

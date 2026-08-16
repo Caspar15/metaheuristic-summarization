@@ -1,12 +1,13 @@
 {
   "policy_schema_version": "1.0",
   "policy_id": "multinews-test-v1",
-  "status": "frozen_before_revised_pipeline_test_predictions_or_scores",
+  "status": "frozen_before_test_results",
   "dataset": {
     "name": "Multi-News",
     "dataset_id": "alexfabbri/multi_news",
     "dataset_revision": "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3",
     "dataset_data_dir": "default",
+    "split": "test",
     "official_split": "test",
     "official_rows": 5622,
     "source_file": "multi_news-test.parquet",
@@ -26,6 +27,13 @@
     "rule": "exclude only an official row whose entire source cluster is empty; never fabricate source content",
     "manifest_path": "data/processed/multi_news_test_canonical_excluded_rows_manifest.jsonl",
     "manifest_file_sha256": "3b46a85bd12390bd2254e4483c9f7a1f3884480d45239bf48eeb9c0ea302f7be"
+  },
+  "replacement_character_manifest": {
+    "path": "configs/data_policies/multinews_test_replacement_rows_v1.jsonl",
+    "rows": 70,
+    "characters": 733,
+    "row_ids_sha256": "b88ecc4c551eca85c75f59bed2e424d28521753ba3ff06821512888ab94c7bac",
+    "file_sha256": "47e801bf4418989131344dc9f114e471a2890db2dee6c13c035073564e707be8"
   },
   "analyses": {
     "main": {
