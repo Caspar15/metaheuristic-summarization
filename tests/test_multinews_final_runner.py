@@ -10,8 +10,10 @@ from scripts.audit.run_multinews_final_test import (
     SCIENTIFIC_FIELDS,
     _baseline_config,
     _baseline_method,
+    _load_freeze,
     _scientific_view,
 )
+from src.data.policy import sha256_file
 from src.pipeline.select_sentences import validate_experiment_request
 from src.utils.io import load_yaml
 
@@ -79,3 +81,17 @@ def test_multinews_test_policy_was_frozen_before_revised_scores():
     assert policy["analyses"]["main"]["expected_rows"] == 5621
     assert policy["analyses"]["main"]["expected_replacement_rows"] == 70
     assert policy["final_use_rule"].endswith("Never tune after test execution.")
+
+
+def test_multinews_execution_freeze_is_score_blind_and_fully_pinned():
+    relative = Path(
+        "configs/preregistrations/multinews_final_execution_freeze_v1.json"
+    )
+    freeze = _load_freeze(relative, sha256_file(str(ROOT / relative)))
+    assert freeze["scientific_code_commit"] == (
+        "dba612f4252b7552824737817db58e8fd0414cd9"
+    )
+    assert freeze["official_test_rows"] == 5621
+    assert freeze["test_predictions_generated_at_freeze"] is False
+    assert freeze["test_scores_observed_at_freeze"] is False
+    assert freeze["execution"]["workers"] == 16
