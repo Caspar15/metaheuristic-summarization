@@ -45,8 +45,8 @@ def test_committed_govreport_freeze_package_is_internally_consistent():
     assert report["boundary_dataset"] == "Multi-News"
     assert report["protected_splits_unlocked"] is True
     assert report["test_split_accessed"] is True
-    assert report["test_predictions_generated"] is False
-    assert report["test_scores_observed"] is False
+    assert report["test_predictions_generated"] is True
+    assert report["test_scores_observed"] is True
     assert report["evidence_completion_status"] == "E1_E2_E3_complete"
     assert report["policy_sequence_status"] == "resolved_by_authorized_two_stage_addendum"
     assert report["ready_for_policy_materialization_authorization"] is True
@@ -55,7 +55,9 @@ def test_committed_govreport_freeze_package_is_internally_consistent():
     assert report["test_policy_materialized"] is True
     assert report["final_execution_activated"] is True
     assert report["score_free_dry_run_status"] == "passed_without_predictions_or_scores"
-    assert report["ready_for_test"] is True
+    assert report["final_execution_status"] == "completed_via_score_preserving_recovery"
+    assert report["final_decision"] == "retain GovReport-scoped superiority claim"
+    assert report["ready_for_test"] is False
     assert report["local_evidence_status"] in {
         "complete",
         "deferred_missing_untracked_artifacts",

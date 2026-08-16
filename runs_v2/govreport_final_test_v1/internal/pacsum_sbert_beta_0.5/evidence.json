@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "pacsum_sbert_beta_0.5",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.5730701031010398,
+    "rouge2": 0.24187322025056648,
+    "rougeLsum": 0.5428041611193504,
+    "macro_rouge": 0.45258249482365226
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/pacsum_sbert_beta_0.5/per_example.jsonl",
+  "per_example_sha256": "b7e16b4620cd30a346b1ebba2fe012da9f8dbd37f7a20df09e886f8d3ee796af",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

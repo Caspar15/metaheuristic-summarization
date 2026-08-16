@@ -34,7 +34,12 @@ Frozen identity：
   10 個 random seeds 與 official evaluator resources 全部通過，且仍為零
   prediction／零 score。
 - Stage B activation 已釘住 freeze 與 dry-run evidence，`ready_for_test=true`。
-- 尚未執行：唯一一次 GovReport official-test 正式計分。
+- 唯一一次 GovReport official-test 已完成；973/973 rows、9 system families 均納入。
+- Proposed official macro `0.459943`，排名第一；對 SBERT+MMR 差
+  `+0.003700`，95% CI `[+0.002008,+0.005420]`，`p=0.000040`。
+- 最終 `final_confirmatory_pass=true`，但 R-L 單項未顯著，不可宣稱三分項全顯著。
+- 完整結果與 post-score aggregation erratum 見
+  `docs/research/GOVREPORT_FINAL_TEST_RESULTS.md`。
 
 此凍結當下 `test_predictions_generated_at_freeze=false` 且
 `test_scores_observed_at_freeze=false`；最終分數不得回頭影響方法、baseline、

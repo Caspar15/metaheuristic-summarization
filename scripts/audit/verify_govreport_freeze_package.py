@@ -50,6 +50,14 @@ FINAL_EXECUTION_ACTIVATION = Path(
 FINAL_EXECUTION_ACTIVATION_SHA256 = (
     "5b9dd5ba54ab5c67679d66d8e1e7c3b47e184497bcc6a2da0bd8bc6c51d2a8b6"
 )
+FINAL_ANALYSIS = Path("runs_v2/govreport_final_test_v1/analysis.json")
+FINAL_ANALYSIS_SHA256 = "a6a0bbec2393d0c050ab6fd2d8521915c4d66fe7caebbb23f5c65307567a976d"
+FINAL_EXECUTION_EVIDENCE = Path(
+    "runs_v2/govreport_final_test_v1/execution_evidence.json"
+)
+FINAL_EXECUTION_EVIDENCE_SHA256 = (
+    "98740904308dc9a00b78ae98da835c0baddf2ea04d9688a9fcfa0b695ad6cbd2"
+)
 
 
 class FreezePackageError(RuntimeError):
@@ -339,6 +347,26 @@ def validate_freeze_package(
     dry_run = _load_json(root, Path(dry_pin["path"]))
     _assert_final_execution_contract(freeze, activation, dry_run)
 
+    _require_sha(
+        root, FINAL_ANALYSIS.as_posix(), FINAL_ANALYSIS_SHA256, "final analysis"
+    )
+    _require_sha(
+        root,
+        FINAL_EXECUTION_EVIDENCE.as_posix(),
+        FINAL_EXECUTION_EVIDENCE_SHA256,
+        "final execution evidence",
+    )
+    final_analysis = _load_json(root, FINAL_ANALYSIS)
+    final_execution = _load_json(root, FINAL_EXECUTION_EVIDENCE)
+    if final_analysis.get("rows") != 973 or final_analysis.get("status") != "completed":
+        raise FreezePackageError("final analysis row/status contract drifted")
+    if final_analysis.get("decision") != "retain GovReport-scoped superiority claim":
+        raise FreezePackageError("final analysis decision drifted")
+    if final_analysis.get("source_scores_modified") is not False:
+        raise FreezePackageError("final recovery reports modified source scores")
+    if final_execution.get("post_score_tuning_permitted") is not False:
+        raise FreezePackageError("final execution permits post-score tuning")
+
     test_policy_path = Path(final["protected_split"]["canonical_policy_path"])
     test_policy = _load_json(root, test_policy_path)
     _assert_test_policy_contract(test_policy)
@@ -516,8 +544,8 @@ def validate_freeze_package(
         "boundary_dataset": "Multi-News",
         "protected_splits_unlocked": True,
         "test_split_accessed": True,
-        "test_predictions_generated": False,
-        "test_scores_observed": False,
+        "test_predictions_generated": True,
+        "test_scores_observed": True,
         "local_evidence_status": (
             "complete" if not local_deferred else "deferred_missing_untracked_artifacts"
         ),
@@ -532,7 +560,9 @@ def validate_freeze_package(
         "test_policy_materialized": True,
         "final_execution_activated": True,
         "score_free_dry_run_status": "passed_without_predictions_or_scores",
-        "ready_for_test": True,
+        "final_execution_status": "completed_via_score_preserving_recovery",
+        "final_decision": "retain GovReport-scoped superiority claim",
+        "ready_for_test": False,
     }
 
 

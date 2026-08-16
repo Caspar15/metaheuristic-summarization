@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "lexrank",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.5748014648720984,
+    "rouge2": 0.2387909451473631,
+    "rougeLsum": 0.5440404479781438,
+    "macro_rouge": 0.4525442859992017
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/lexrank/per_example.jsonl",
+  "per_example_sha256": "0d8ee4a7e9273df9b397a9fe53b3e091ef71d463ce4b519469dcdbc9fb51d13f",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

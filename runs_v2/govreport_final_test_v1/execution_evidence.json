@@ -1,0 +1,29 @@
+{
+  "status": "completed_via_score_preserving_recovery",
+  "study_id": "govreport-centered-final-evaluation-v1",
+  "completed_at_utc": "2026-08-16T04:50:38.190260Z",
+  "freeze_manifest_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "activation_sha256": "5b9dd5ba54ab5c67679d66d8e1e7c3b47e184497bcc6a2da0bd8bc6c51d2a8b6",
+  "scientific_code_commit": "36919f222a697fd84d25600b23ba1633ff908ae9",
+  "recovery_commit": "540cf421208f9c098904fa2a554b60ba4e433dfb",
+  "failed_attempt_path": "runs_v2/govreport_final_test_v1/attempts/attempt_20260815T234414Z_failed/evidence.json",
+  "failed_attempt_sha256": "018dd4d65b89a78198d85a24a1b22a6a5a92e3cdc252db88c4a433180f42e6e8",
+  "recovery_scope": "derive missing internal random per-row macro and complete frozen analyses only",
+  "predictions_rerun": false,
+  "official_evaluator_rerun": false,
+  "source_scores_modified": false,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "dependencies": {
+    "numpy": "1.26.4",
+    "rouge-score": "0.1.2"
+  },
+  "analysis_path": "runs_v2/govreport_final_test_v1/analysis.json",
+  "analysis_sha256": "a6a0bbec2393d0c050ab6fd2d8521915c4d66fe7caebbb23f5c65307567a976d",
+  "internal_summary_path": "runs_v2/govreport_final_test_v1/internal_summary.json",
+  "internal_summary_sha256": "9449f5fd79c1847f20d99972392afe0af2739ab9d0214135016567ad88124006",
+  "decision": "retain GovReport-scoped superiority claim",
+  "post_score_tuning_permitted": false,
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

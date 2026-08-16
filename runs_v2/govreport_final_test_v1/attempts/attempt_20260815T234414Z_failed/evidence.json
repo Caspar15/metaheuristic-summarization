@@ -1,0 +1,11 @@
+{
+  "status": "failed",
+  "failed_at_utc": "2026-08-15T23:44:14.880044Z",
+  "failure": "KeyError: 'macro_rouge'",
+  "freeze_manifest_path": "configs/preregistrations/govreport_final_execution_freeze_v1.json",
+  "expected_freeze_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "activation_path": "configs/preregistrations/govreport_final_execution_activation_v1.json",
+  "expected_activation_sha256": "5b9dd5ba54ab5c67679d66d8e1e7c3b47e184497bcc6a2da0bd8bc6c51d2a8b6",
+  "scientific_changes_permitted": false,
+  "resume_policy": "exact checkpoint only"
+}

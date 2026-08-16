@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "pacsum_tfidf_P07",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.5440477937450282,
+    "rouge2": 0.2119950951789306,
+    "rougeLsum": 0.5142096418328662,
+    "macro_rouge": 0.42341751025227503
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/pacsum_tfidf_P07/per_example.jsonl",
+  "per_example_sha256": "d9f373c726fdaebbb9a3edc6d9d4be117616f77efa1a0dc99723308e547bdf23",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

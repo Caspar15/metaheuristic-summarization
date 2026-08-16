@@ -2,6 +2,13 @@
 
 ## 2026-08-15 pre-test evidence checkpoint
 
+> **2026-08-16 final outcome:** GovReport official test 973/973 rows 已完成。Proposed
+> R-1/R-2/R-L/macro = `0.58374/0.24711/0.54898/0.459943`，排名第一；
+> 對預註冊 SBERT+MMR comparator macro `+0.003700`，95% CI
+> `[+0.002008,+0.005420]`，`p=0.000040`，final confirmatory gate 通過。
+> Claim 限 GovReport no-task-training 設定，R-L 單項未顯著。見
+> [`GOVREPORT_FINAL_TEST_RESULTS.md`](docs/research/GOVREPORT_FINAL_TEST_RESULTS.md)。
+
 - Multi-News canonical validation 已在任何新 optimization score 前，以固定 seed 3407
   reference-blind 凍結為 dev 3,935／dev-test 1,686。proposed-method 與 baseline runner
   會先驗完整 frozen data policy，再依相同 manifest 過濾，並保存 partition provenance。

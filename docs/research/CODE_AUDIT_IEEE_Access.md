@@ -2546,3 +2546,8 @@ evaluator 或分數失敗。
 recovery，唯一修復是對每列已存 R1/R2/R-Lsum 取算術平均，再依原預註冊
 seeds、bootstrap 與 Holm family 完成分析。不重跑 prediction、tokenization 或 ROUGE，
 不修改任何 source score，且 `post_score_tuning_permitted=false`。
+
+Recovery 已成功完成原預註冊分析。Proposed official macro `0.459943`，對
+SBERT+MMR 為 `+0.003700`、95% CI `[+0.002008,+0.005420]`、`p=0.000040`；
+macro pass 與 component guard 均通過，最終決策為
+`retain GovReport-scoped superiority claim`。R-L 單項 CI 跨 0，不宣稱三分項全顯著。

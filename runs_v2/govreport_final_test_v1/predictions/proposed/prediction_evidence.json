@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "proposed",
+  "rows": 973,
+  "feasible_rows": 973,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 647.0832476875643,
+    "min": 396,
+    "max": 650
+  },
+  "selection_seconds": 28.520095699990634,
+  "predictions_path": "runs_v2/govreport_final_test_v1/predictions/proposed/predictions.jsonl",
+  "predictions_sha256": "8399d3e4dfbbf8c4f0309d6a51cdd90015981e02f7cd4210ed7634b56ea35863",
+  "selected_indices_sha256": "8e36a12b0383c5ad127cf2d8691d64e8470122f71075079bf1a6c6432e037281",
+  "freeze_manifest_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "implementation_commit": "faab8fb32009b13c990e089506e8869b83f446a0",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "provenance_aware_multiroute_mmr",
+  "workers": 16,
+  "config_path": "runs_v2/govreport_final_test_v1/predictions/proposed/resolved_config.yaml",
+  "config_sha256": "bdf651a3e4514bcce249258479f3e7e04b23c2a548895eab6359e5f5926dfc36"
+}

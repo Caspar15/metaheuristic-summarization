@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "random_seed_17",
+  "rows": 973,
+  "feasible_rows": 973,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 649.2795477903392,
+    "min": 396,
+    "max": 650
+  },
+  "selection_seconds": 15.947034399956465,
+  "predictions_path": "runs_v2/govreport_final_test_v1/predictions/random_seed_17/predictions.jsonl",
+  "predictions_sha256": "c5d7723a983a424c05da42060924a2abc28980b26056d726024a8961fdb8694d",
+  "selected_indices_sha256": "9d8e616ea4f1db746628d4a1616289c02787fa06926042802dce41e384de9d3e",
+  "freeze_manifest_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "implementation_commit": "faab8fb32009b13c990e089506e8869b83f446a0",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "random",
+  "seed": 17,
+  "config_path": "runs_v2/govreport_final_test_v1/predictions/random_seed_17/resolved_config.yaml",
+  "config_sha256": "bdf651a3e4514bcce249258479f3e7e04b23c2a548895eab6359e5f5926dfc36"
+}

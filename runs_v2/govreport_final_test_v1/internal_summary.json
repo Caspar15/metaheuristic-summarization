@@ -1,0 +1,72 @@
+{
+  "status": "completed",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "completion_mode": "score_preserving_post_failure_recovery",
+  "corpus_ranking": [
+    {
+      "system": "proposed",
+      "rouge1": 0.5823111884980299,
+      "rouge2": 0.24697853726501803,
+      "rougeLsum": 0.5476558942240908,
+      "macro_rouge": 0.4589818733290462
+    },
+    {
+      "system": "sbert_mmr_lambda_0.9",
+      "rouge1": 0.5789711228176546,
+      "rouge2": 0.24078924484113126,
+      "rougeLsum": 0.546157085014415,
+      "macro_rouge": 0.4553058175577336
+    },
+    {
+      "system": "sbert_centroid",
+      "rouge1": 0.5766969394971914,
+      "rouge2": 0.2409455272479018,
+      "rougeLsum": 0.5440510349383768,
+      "macro_rouge": 0.45389783389448995
+    },
+    {
+      "system": "pacsum_sbert_beta_0.5",
+      "rouge1": 0.5730701031010398,
+      "rouge2": 0.24187322025056648,
+      "rougeLsum": 0.5428041611193504,
+      "macro_rouge": 0.45258249482365226
+    },
+    {
+      "system": "lexrank",
+      "rouge1": 0.5748014648720984,
+      "rouge2": 0.2387909451473631,
+      "rougeLsum": 0.5440404479781438,
+      "macro_rouge": 0.4525442859992017
+    },
+    {
+      "system": "textrank",
+      "rouge1": 0.5555518962495256,
+      "rouge2": 0.22149928705863306,
+      "rougeLsum": 0.5208143958608784,
+      "macro_rouge": 0.4326218597230123
+    },
+    {
+      "system": "pacsum_tfidf_P07",
+      "rouge1": 0.5440477937450282,
+      "rouge2": 0.2119950951789306,
+      "rougeLsum": 0.5142096418328662,
+      "macro_rouge": 0.42341751025227503
+    },
+    {
+      "system": "random_mean_10_seeds",
+      "rouge1": 0.5425344501899719,
+      "rouge2": 0.18243048417798424,
+      "rougeLsum": 0.5116231684925411,
+      "macro_rouge": 0.4121960342868324
+    },
+    {
+      "system": "lead",
+      "rouge1": 0.5259053450515451,
+      "rouge2": 0.20304488301656398,
+      "rougeLsum": 0.5006544821886799,
+      "macro_rouge": 0.409868236752263
+    }
+  ],
+  "source_scores_modified": false,
+  "test_scores_observed": true
+}

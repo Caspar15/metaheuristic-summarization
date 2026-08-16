@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "sbert_mmr_lambda_0.9",
+  "rows": 973,
+  "feasible_rows": 973,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 649.4326824254882,
+    "min": 396,
+    "max": 650
+  },
+  "selection_seconds": 211.17765670001972,
+  "predictions_path": "runs_v2/govreport_final_test_v1/predictions/sbert_mmr_lambda_0.9/predictions.jsonl",
+  "predictions_sha256": "6f73ee3126103e26d91dd172d780b01e61306321cc79698ae286c1907818ccf4",
+  "selected_indices_sha256": "eb0c8a4dfe54db050714fdb9c71590f36e02d797575faaa80ac0c1eef9068795",
+  "freeze_manifest_sha256": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+  "implementation_commit": "faab8fb32009b13c990e089506e8869b83f446a0",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "sbert_mmr",
+  "seed": null,
+  "config_path": "runs_v2/govreport_final_test_v1/predictions/sbert_mmr_lambda_0.9/resolved_config.yaml",
+  "config_sha256": "bdf651a3e4514bcce249258479f3e7e04b23c2a548895eab6359e5f5926dfc36"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "random_seed_23",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.543780724852185,
+    "rouge2": 0.1837884207463622,
+    "rougeLsum": 0.5126011066868258,
+    "macro_rouge": 0.41339008409512434
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/random_seed_23/per_example.jsonl",
+  "per_example_sha256": "1cce11e862cccaa60d4c5baef7cab2dafb03a177069b15d21d0f09694c44f2c4",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

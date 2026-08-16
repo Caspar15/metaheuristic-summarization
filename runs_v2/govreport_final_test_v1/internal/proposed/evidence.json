@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "proposed",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.5823111884980299,
+    "rouge2": 0.24697853726501803,
+    "rougeLsum": 0.5476558942240908,
+    "macro_rouge": 0.4589818733290462
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/proposed/per_example.jsonl",
+  "per_example_sha256": "91bac8ce9a73f9efa79b31c74de35d4762eaeef3c63987483536ef95fd441ca5",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}
