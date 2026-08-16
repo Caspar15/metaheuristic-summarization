@@ -2531,3 +2531,18 @@ hashes 與套件版本，狀態為 `passed_without_predictions_or_scores`。Stag
 `29ad773a...74e56`。Freeze verifier 因此回報 `ready_for_test=true`；此狀態只授權
 精確 one-shot command，不授權任何根據 test 分數的方法、baseline、長度、排除規則、
 evaluator 或 inference 變更。
+
+## F-79 — Final runner 在全部 evaluator runs 完成後的 internal Random 聚合失敗
+
+**嚴重度：P1 分析基礎設施（score-preserving recovery）**
+
+2026-08-16，18 個實際 prediction runs 的 official 與 internal per-row scores 全部完成，
+official Random 10-seed 聚合也完成後，frozen runner 在 internal Random 聚合讀取
+`row["macro_rouge"]` 時發生 `KeyError`。Internal per-example 檔依既有契約只存
+R1/R2/R-Lsum；corpus evidence 才有 macro，因此這是聚合器 schema bug，不是選句、
+evaluator 或分數失敗。
+
+保留 `attempt_20260815T234414Z_failed/evidence.json`，不覆寫 frozen runner；新增只讀
+recovery，唯一修復是對每列已存 R1/R2/R-Lsum 取算術平均，再依原預註冊
+seeds、bootstrap 與 Holm family 完成分析。不重跑 prediction、tokenization 或 ROUGE，
+不修改任何 source score，且 `post_score_tuning_permitted=false`。
