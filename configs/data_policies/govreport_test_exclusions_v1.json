@@ -1,0 +1,11 @@
+{
+  "manifest_schema_version": "1.0",
+  "dataset": "GovReport",
+  "dataset_revision": "official-author-archive-2021-04-01",
+  "official_split": "test",
+  "official_membership_rows": 973,
+  "canonical_rows": 973,
+  "rule": "exclude only rows whose official reference has zero paragraphs; never fabricate a target",
+  "excluded_rows": [],
+  "created_before_predictions_or_scores": true
+}

@@ -1,5 +1,15 @@
 # Gate 2 baseline 狀態報告
 
+> **2026-08-20 historical-stage note:** 本文件是 dev-time Gate 2 診斷，不是 final table。
+> GovReport／Multi-News official test 與 final E2/E3 其後均完成；權威結果見
+> `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。Gate 2 的失敗仍保留，不能以 final result
+> 回寫成當時 promotion 成功。
+
+> **2026-08-15 狀態覆核**：Gate 2 的工程矩陣與 paired diagnosis 已全部完成；
+> quality gate 失敗是結果，不是待補 baseline。其後 D2/D3a/D3b 已完成並停止搜尋。
+> GovReport v2 的 E1～E3 亦已完成；目前只處理 pre-test freeze governance。
+> 本文件不授權任何新 baseline grid 或 test。
+
 ## 2026-08-09 final checkpoint：Gate 2 dev diagnosis 完成、品質 gate 未通過
 
 - 兩 primary 的 non-PLM 各 23/23、PLM 各 27/27、metric-specific greedy reference
@@ -171,8 +181,9 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - P08 仍有 1/3,935 row score-degenerate。它與 frozen Lead 只有 166/3,935 rows 的
   `selected_indices` 完全相同，平均 selection Jaccard `0.617715`，並非單純複製 Lead。
 - baseline family 表中的單列數字是 point estimates；greedy reference 與正式 paired
-  finalists 已完成，但 S02b 對兩個 adversarial winners 均顯著落後。Multi-News clean
-  sensitivity 與 redesign 尚未完成；**Gate 2 quality gate 未通過，也不讀 dev-test**。
+  finalists 已完成，但 S02b 對兩個 adversarial winners 均顯著落後。其後 D2/D3a/D3b
+  redesign 已完成；Multi-News 在 v2 只保留 boundary evidence，不再追加 clean sensitivity。
+  **Gate 2 quality gate 未通過，也不讀 dev-test**。
 
 ### 證據
 
@@ -192,7 +203,7 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
 - runner：`scripts/audit/run_gate2_baseline_matrix.py`
 - family verifier：`scripts/audit/summarize_gate2_baseline_family.py`
 
-### 停止後待作者決策
+### 停止後的 v2 決策與待辦
 
 1. selector-only D2 已完成：Multi-News 採 Greedy，GovReport 採 TF-IDF-MMR λ=0.7；
    兩者仍低 adversarial winner，沒有 dev-test promotion。下一輪只在 dev 搜尋尚未掃完的
@@ -208,7 +219,8 @@ LexRank 比 frozen Lead macro 高 `+0.052388`，比 proposed S02b 高 `+0.033758
    100,000 次 paired bootstrap、Holm-8 與 340-opportunity correction。任一 profile
    未過 gate 即依停止條件寫重新定位建議。D3b 現已完成：GovReport 通過，但
    Multi-News 失敗，`all_profiles_eligible=false`。
-2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。若作者批准
-   GovReport-centered claim matrix，須先正式修改 data policy 並另行預註冊；否則接受
-   IEEE Access 方法稿 No-Go。
+2. 不再執行 Multi-News clean sensitivity、新 grid 或 protected split。作者端已批准
+   GovReport-centered claim matrix；data-policy addendum 與 evidence/final preregistrations
+   已版本化。E1 official evaluator、E2 成本/scaling、E3 route/provenance ablation
+   已完成；下一步是 freeze policy 與簽核，不是搜尋。
 3. `dev-test` 與 `test` 仍鎖定；目前沒有符合規則的解鎖條件。

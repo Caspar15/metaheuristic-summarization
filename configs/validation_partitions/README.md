@@ -1,5 +1,9 @@
 # Validation development partitions
 
+> **Final-state note (2026-08-20):** these manifests remain the immutable development
+> audit trail. Final official tests were executed from separate test policies; do not
+> reinterpret validation dev/dev-test as official test or reopen configuration search.
+
 這裡的 manifest 只在 canonical upstream `validation` 內定義 dev／dev-test membership；
 不改 row 的 `split`，也不取代 `configs/data_policies/` 的完整資料驗證。
 
@@ -8,5 +12,12 @@
 - test：freeze 簽字前禁止。
 
 產生與驗證方式見 `scripts/audit/freeze_validation_partitions.py` 與
-`src/data/partitions.py`。Multi-News v1 使用 seed 3407；GovReport 必須在首次
-optimization score 前另建 manifest。
+`src/data/partitions.py`。兩份 v1 manifest 都已在任何 optimization score 前完成：
+
+- Multi-News：seed 3407，dev 3,935／dev-test 1,686；
+- GovReport：reference-blind frozen membership，dev 681／dev-test 292。
+
+v2 只允許 GovReport frozen dev 執行 E1～E3 evidence completion。現有 dev-test 不再
+用於新候選選擇；test 不在本目錄。GovReport official-test policy 已於 2026-08-16
+依兩階段核准另存於 `configs/data_policies/govreport_test_v1.json`，不使用 validation
+partition manifest，也不得把本目錄的 dev/dev-test ID 套到 official test。

@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "preregistration_id": "multinews-secondary-evidence-completion-v1",
+  "status": "frozen_before_new_e2_e3_or_revised_pipeline_test_scores",
+  "registered_at_utc": "2026-08-16T14:19:04.759925Z",
+  "purpose": "Complete the Multi-News secondary benchmark with a frozen official-test table plus final-architecture ablation and controlled cost evidence. None of these results may select or modify the method.",
+  "dataset_role": {
+    "GovReport": "primary confirmatory long-single-document benchmark; completed final test is unchanged",
+    "Multi-News": "secondary multi-document benchmark with its own dev-frozen task profile and official final test"
+  },
+  "frozen_proposed": {
+    "config_path": "configs/final/multinews_final_v1.yaml",
+    "config_sha256": "b628d348ba078d8e58cbdaf1d6f53c26e293862beb777dc8cb51bdcf8b71f818",
+    "scientific_source_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "scientific_source_sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f",
+    "selector": "Greedy",
+    "length_words": [200, 250],
+    "routes": ["lexical", "semantic", "graph"],
+    "candidate_total": 80,
+    "route_weight_override": {"graph": 2.0}
+  },
+  "final_test": {
+    "policy_path": "configs/data_policies/multinews_test_v1.json",
+    "policy_sha256": "95d9ea7cb664f50175c6964f2272c76fda37ea2a3141b51ce268c4cfef9b7ef2",
+    "canonical_rows": 5621,
+    "one_shot": true,
+    "random_seeds": [3407, 2024, 42, 1337, 2026, 20260810, 7, 17, 23, 101],
+    "system_families": [
+      "proposed",
+      "lead",
+      "random_mean_10_seeds",
+      "textrank",
+      "lexrank",
+      "pacsum_tfidf_P08",
+      "sbert_centroid",
+      "sbert_mmr_lambda_0.7",
+      "pacsum_sbert_P03"
+    ],
+    "primary_comparison": "proposed vs pacsum_tfidf_P08, selected as the strongest frozen-dev baseline before test",
+    "metrics": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+    "published_scale_secondary": "Stanza tokenize,mwt plus Perl ROUGE-1.5.5, reported separately from internal rouge-score R-Lsum",
+    "paired_inference": {
+      "resamples": 100000,
+      "base_seed": 20260901,
+      "confidence": 0.95,
+      "component_adjustment": "Holm over 3 components",
+      "secondary_adjustment": "Holm over 8 comparators x 4 metrics = 32 endpoints"
+    },
+    "outcome_rule": "Report all metrics and uncertainty. Macro superiority is supported only if delta, CI lower bound, and two-sided p all pass; failure does not permit tuning or rerun."
+  },
+  "e3_final_architecture_ablation": {
+    "partition": "frozen Multi-News validation dev, 3935 rows",
+    "anchor_predictions_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/predictions.jsonl",
+    "anchor_predictions_sha256": "1403a48396712b4db837af21ced66c97b79a1254863d4b9afaebd38576643e5d",
+    "variants": {
+      "A01_no_semantic": "remove semantic while preserving graph x2 and total capacity 80",
+      "A02_no_graph": "remove graph while preserving lexical+semantic and total capacity 80",
+      "A03_lexical_only_capacity_80": "lexical-only route with route_top_k and total both 80",
+      "A04_equal_rank_rrf": "same fixed anchor candidate pool, replace graph x2 by equal route weights",
+      "A05_index_only_lexical": "same fixed anchor candidate pool, replace provenance fusion salience by lexical percentile"
+    },
+    "paired_inference": {
+      "resamples": 100000,
+      "base_seed": 20260920,
+      "family": "5 variants x 4 metrics = 20 endpoints",
+      "adjustment": "Holm-20"
+    },
+    "claim_rule": "A component claim is Multi-News-supported only when full-minus-ablation macro CI is positive and Holm-20 p <= 0.05. Unsuccessful claims are downgraded, not tuned."
+  },
+  "e2_controlled_cost": {
+    "partition": "reference-blind frozen-dev sample",
+    "sample_manifest_path": "configs/pilot_manifests/multinews_cost_scaling_sample_v1.json",
+    "sample_manifest_sha256": "f1a9355a1910f78d9b87c596698acedee3a97f0d15feb884b865561e1c5d2c81",
+    "sample_rows": 30,
+    "strata": ["q10 source sentences", "q50 source sentences", "q90 source sentences"],
+    "systems": [
+      "frozen_C01_proposed",
+      "pacsum_tfidf_P08",
+      "pacsum_sbert_P03",
+      "full_source_sbert_mmr_lambda_0.7",
+      "sbert_centroid",
+      "matched_nsga2_tfidf",
+      "lead",
+      "textrank",
+      "lexrank"
+    ],
+    "states": ["cold", "warm_cache"],
+    "discarded_instrumentation_smokes_per_system_state": 1,
+    "measured_repetitions_per_system_state": 3,
+    "no_overlapping_timed_jobs": true,
+    "peak_process_tree_rss_sample_interval_ms_max": 50,
+    "selected_indices_must_match_across_repetitions": true,
+    "reported_measures": [
+      "wall seconds",
+      "CPU process-tree seconds",
+      "peak process-tree RSS bytes",
+      "per-document latency by source-length stratum",
+      "cold-to-warm ratio"
+    ],
+    "decision_rule": "Cost evidence is descriptive and cannot select a different system or alter quality claims."
+  },
+  "protected_split_rules": {
+    "E2_and_E3_use_test": false,
+    "test_can_change_E2_or_E3_design": false,
+    "post_test_tuning": false,
+    "exact_checkpoint_resume_only": true
+  },
+  "scores_observed_before_registration": {
+    "new_controlled_E2": false,
+    "new_final_architecture_E3": false,
+    "revised_pipeline_official_test": false
+  }
+}

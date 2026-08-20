@@ -1,6 +1,11 @@
 # D1 Greedy 敏感度研究狀態
 
-更新日期：2026-08-08（由系統時間取得）
+初始更新日期：2026-08-08 ｜ 後續狀態覆核：2026-08-15
+
+> D1 是已完成的 frozen-dev sensitivity evidence，不是目前待跑工作。其後 Gate 2、
+> D2、D3a、D3b 已完成；v1 雙-primary gate 失敗後，作者端改採 GovReport-centered
+> 定位並停止配置搜尋。E1～E3 亦已完成；目前只處理 pre-test freeze governance，
+> 不重開 D1 或讀 dev-test/test。
 
 ## 邊界與目前進度
 
@@ -11,8 +16,8 @@
 - 目前完成兩個 primary 的 **lexical/objective family**、**cheap-multiroute family**，
   以及兩個 primary 的 semantic 原 family 與 capacity-correct follow-up；Multi-News
   每個完整 run 為 3,935 rows、GovReport 為 681 rows。capacity-matched route
-  ablation 與事前註冊的 paired inference 已完成；強 baseline 尚未齊，因此沒有配置可晉級，
-  也尚未做 D1 的一次性 dev-test。
+  ablation 與事前註冊的 paired inference已完成。其後強 baseline、D2 與 D3 均已完成；
+  D1 本身沒有也不再執行一次性 dev-test。
 
 | Primary | lexical/objective | cheap multiroute | semantic |
 |---|---:|---:|---:|
@@ -328,10 +333,12 @@ adaptive quality-cost 判斷。
   64-endpoint paired finalists 顯示 S02b 對 Multi-News P08 macro `−0.003663`、對
   GovReport SBERT+MMR `−0.034906`，兩者 Holm-significant，仍不得進 dev-test。
 
-## 還沒做
+## D1 之後的狀態
 
-1. Gate 2 dev diagnosis 已完成但 quality gate 失敗：兩 primary non-PLM 各 23/23、PLM
-   各 27/27、greedy reference 6/6 與 paired finalists 均完成；下一步是只用 dev 的
-   candidate coverage／fusion／selector／salience redesign。
-2. candidate recall/headroom、adaptive cost rule 與 selector Greedy/MMR/NSGA-II full-dev。
-3. 任何 dev-test promotion 或 test。test 在 freeze 簽字前仍禁止。
+1. Gate 2、candidate recall/headroom、D2 Greedy/MMR/NSGA-II full-dev、D3a 與 D3b
+   都已完成；配置搜尋依停止條件關閉。
+2. GovReport D3b 對 strongest local SBERT+MMR 的 internal-evaluator macro 為
+   `+0.004636`；Multi-News 對 PacSum 為 `−0.001323` 且 R-2 顯著較差。
+3. E1 official evaluator、E2 controlled cost/scaling、E3 final route/provenance
+   ablation 均已完成；尚待 test-policy ordering 決議、兩階段簽核與 exact execution
+   package。任何 dev-test promotion 或 test 目前仍禁止。

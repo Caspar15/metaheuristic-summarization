@@ -1,6 +1,34 @@
 # ACTION PLAN —— 到底要做什麼
 
-## 2026-08-08 freeze 前自治執行狀態
+## 2026-08-20 final-run closeout
+
+> **目前執行點：正式自動實驗已完成，不再跑品質搜尋。** GovReport／Multi-News
+> official test、E2、E3 都有 frozen evidence。最終狀態見
+> `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。本文件下方尚未勾選的舊 test/freeze
+> 排程若與該狀態衝突，視為已被 one-shot execution 取代，而不是要求再跑一次。
+
+- [x] GovReport official test：973/973 rows，主要 paired confirmatory gate 通過。
+- [x] Multi-News official test：5,621/5,621 rows；macro 排名第一但不顯著勝 PacSum，
+      component trade-off 已完整揭露。
+- [x] GovReport 與 Multi-News E2 cold/warm runtime、CPU、RSS、q10/q50/q90 scaling 完成。
+- [x] GovReport 與 Multi-News E3 五組 route/provenance ablation 完成 Holm-20。
+- [ ] 依 frozen tables 撰寫 IEEE Access 主文、reviewer response 與 limitations。
+- [ ] 補質性案例；若做人評，另立不改方法／主結果的預註冊。
+- [ ] clean-clone 重製、lockfile/container、表圖一鍵生成與 code/data availability。
+- [ ] ICACT DOI／Outstanding Paper Award 證明／similarity／ORCID／biography／AI disclosure。
+- [ ] equation-code-config-result、主文／supplement／repo 數字與英文終審。
+
+## 2026-08-15 freeze 前自治執行狀態
+
+> **目前執行點**：A1～D3b、baseline matrix、GovReport-centered 定位與 E1 官方
+> evaluator、E2 cold/warm runtime-memory-scaling 與 E3 route/provenance ablation 已完成；
+> 配置搜尋已停止，pre-test freeze audit 亦已完成。下一個工作包須先由老師／完整作者群
+> 決議 test-policy ordering，再建立 policy、exact execution package 並完成兩階段簽字。
+> E1～E3 都只讀 frozen GovReport dev，不是 test；目前仍禁止 dev-test/test。
+>
+> **2026-08-16 Stage A addendum**：老師／作者端的兩階段核准已由提出請求的作者轉述；
+> GovReport test policy 與 canonical health 已在零 prediction／零 score 下建立並 pin。
+> 現在只允許完成 fail-closed runner 與 exact execution freeze，尚未開始正式計分。
 
 - [x] 在任何新配置分數產生前，將 frozen Multi-News validation 以 reference-blind
       SHA-256 排序、固定 seed `3407` 凍結為 dev `3,935`（70.005%）與
@@ -22,8 +50,9 @@
 - [x] A1 已完成兩 primary 的 reference-only 統計、預註冊、dev 與唯一一次 dev-test；
       Multi-News 依預註冊規則選定 200–250 words，GovReport 選定 500–650 words；
       A2 greedy-reference correctness、A3 GovReport 資料層與兩 primary 的 B 階段
-      partition freeze、Gate 2 baseline／greedy／paired diagnosis 已完成；quality gate 失敗，
-      dev redesign/search 尚未完成。
+      partition freeze、Gate 2 baseline／greedy／paired diagnosis與 D2/D3a/D3b dev redesign
+      已完成；v1 雙-primary quality gate 失敗後已停止搜尋，v2 GovReport-centered E1～E3
+      evidence completion 亦已完成。
       **test split 仍為硬禁止；到 freeze 簽字前不執行。**
 - [x] A1 的 Multi-News dev reference-only 統計已完成（3,935 rows：mean 215.52、
       median 218、p75 260），且四個候選協定、三個 cheap method、dev/dev-test
@@ -234,7 +263,7 @@
 - [x] 選定主 benchmark：**GovReport + 原版 Multi-News**；目前 frozen 的 Multi-News clean variant 只作 U+FFFD paired sensitivity，PubMed 是需另作資料／成本 pilot 的替代
       → CNN/DM 是通過 Gate 3 後才考慮的 optional sanity；SciTLDR 不列入 v1 排程
 - [x] 寫下 **Go/No-Go 條件**（研究主計畫 §9 與 `ARCHITECTURE.md` freeze gate）；最終 configuration 仍須 validation 後簽字凍結
-- [x] 寫下 **canonical method specification**：`ARCHITECTURE.md` 為技術規格來源；目前是 Target Architecture v1，尚未 freeze
+- [x] 寫下 **canonical method specification**：`ARCHITECTURE.md` 為技術規格來源；目前是 GovReport-centered Target Architecture v2，final freeze 尚未簽字
 
 ### 凍結
 
@@ -399,6 +428,9 @@
 
 ### 2.0 執行資料集矩陣 v1（2026-07-30 決定）
 
+> **歷史規格，已由 §2.1 additive addendum 取代目前角色。** 本節保留用來解釋
+> A1～D3b 為何按雙-primary gate 執行；不得再用本節解鎖 Multi-News dev-test/test。
+
 | 資料集／分析 | v1 決策 | Phase 2–3 | Phase 4 locked test | 是否阻塞主線 |
 |---|---|---|---|---|
 | **原版 Multi-News main** | **必跑 Primary B** | 5,621-row frozen validation | configuration freeze 後跑 canonical official test | ✅ 是 |
@@ -410,6 +442,32 @@
 | PubMed／Multi-XScience | **reserve，目前不跑** | 不跑 | 不跑 | ❌ 否 |
 
 > 「不用 train」只表示 proposed method 不做 task-specific training；若日後納入需要訓練的比較系統，必須另列 training regime，不能混入 no-task-training 主表。
+
+### 2.1 GovReport-centered pre-test 資料集矩陣 v2（2026-08-10 作者端定案）
+
+> **歷史 pre-test 規格。** 它凍結了 GovReport confirmatory role 與停止搜尋規則；
+> 其後作者另行核准的 one-shot final execution 結果見 §2.2，不可用本節要求重跑。
+
+| 資料集／分析 | v2 角色 | freeze 前工作 | protected split |
+|---|---|---|---|
+| **GovReport** | **唯一 primary quality domain** | 只在既有 frozen dev outputs／membership 上完成 official evaluator、成本／scaling 與 route/provenance ablation | 老師／完整作者群簽字前 dev-test/test 均鎖定；簽字後也只允許已凍結 final protocol 的 one-shot test |
+| **Multi-News** | **boundary-condition evidence** | 保留 D3b 的 macro 與 R-2 負結果，禁止新增配置、重跑搜尋或用 clean subset 翻案 | 不跑新的 dev-test/test |
+| CNN/DailyMail、SciTLDR-AIC、其他 reserve | 不屬 v2 主線 | 不跑 | 不解鎖；若要新增，視為修改已凍結 dataset matrix |
+
+機器可讀權威為
+`configs/data_policies/govreport_centered_repositioning_v2.json`。v2 是對既有 policy 的
+addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
+
+### 2.2 Final execution addendum（2026-08-20 現況）
+
+| 資料集 | 最終角色 | 已完成 | 現在的限制 |
+|---|---|---|---|
+| **GovReport** | 唯一 confirmatory primary | frozen official test 973 rows、E1/E2/E3 | 不得依 test 調參；superiority claim 只限此設定 |
+| **Multi-News** | secondary benchmark | frozen official test 5,621 rows、E2/E3 | 不宣稱顯著勝 PacSum；保留 R-2 負向 trade-off |
+| CNN/DailyMail、SciTLDR-AIC、其他 reserve | 不納入本修訂 | 未執行 | 若新增即改變 frozen dataset matrix，需另立研究決策 |
+
+兩個 official test 都已完成，並不把 test 重新變成可搜尋資料；完整權威結論見
+`FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
 
 - [~] **兩個 primary 的 Lead frozen-dev point estimate 已由 A1 同 pipeline 產生**；
       Multi-News `0.326291`、GovReport `0.399232`。仍須收斂進 Gate 2 governed matrix、
@@ -498,12 +556,16 @@
 
 - [x] Provenance-preserving RRF fusion 已把 route rank/score 傳入 selector；Gate 2 顯示它仍
       不足，後續可比較 unique-preserving fusion，但不得退回 index-only membership
-- [ ] Budget-aware adaptive routing（依文件特性決定要不要啟用 PLM）
-- [ ] 重新設計 `position` 特徵（legacy greedy-reference 位置中位數探索值為 **0.46**；須在 validation 重做）
+- [x] Budget-aware adaptive routing 已決定**不納入 frozen v2**：現行只允許 fixed routes，
+      `adaptive` 設定會 fail loud；E2/E3 只量成本與 route contribution，不新增 router 搜尋
+- [x] `position` 已改為 document-aware scope，且 D3a/D3b 在 frozen dev 完成驗證；
+      Multi-News C01 使用 position 0.2，GovReport C01 的位置設定由 resolved config 固定
 - [x] profiled multi-sentence objective 已禁止 raw sum，D1 採 length-normalized；後續只在
       預註冊搜尋中比較，不再沿用 legacy raw-sum
-- [ ] 依 `ARCHITECTURE.md` 跑 task-profile/objective 啟用矩陣，不按 dataset 名稱偷換公式
-- [ ] 明確的 Pareto 選解規則（knee point / reference point，權重只能在 validation 定）
+- [x] task-profile selector policy 已由 D2 完成：multi-document 用 Greedy-TFIDF、
+      single-document multi-sentence 用 TF-IDF-MMR λ=0.7；v2 只凍結 GovReport profile
+- [x] Pareto policy 不再阻塞主線：NSGA-II 已降為 comparator，D2 comparator 的
+      weighted policy 已預先固定；frozen C01 使用 MMR，不從 Pareto front 選 final output
 
 ### 3c. Validation 實驗
 
@@ -542,22 +604,44 @@
       與 228-opportunity correction `0.045595`；但仍低 adversarial baseline `0.006614`。
       兩資料集無共同近最優 selector，依預註冊採 task-profile policy；promotion=false，
       不進 dev-test。
-- [ ] Ablation：No-statistical / No-graph / No-PLM / No-provenance / No-routing
-- [ ] Route utility：各路 unique candidate recall、quality delta、latency 與 peak memory；無增量效果的 route 刪除
-- [ ] 原版 Multi-News main 與 frozen 5,549-row U+FFFD clean sensitivity 作 paired validation 分析；bad-retrieval-removed／Multi-News+ 是未排程的另一種 retrieval-contamination 研究，不得混稱
+- [x] Ablation：§3d 凍結的五個 GovReport variants 已完成；五個 macro CI 全正且 Holm-20 均通過，沒有臨時增加組合
+- [x] Route utility：D1 route recall/exclusive-hit、E2 latency/RSS 與 E3 quality delta 已合併完成；semantic、graph 與 provenance 刪除條件均未觸發
+- [~] 原版 Multi-News main／clean sensitivity 是 v1 未完成工作；v2 已將 Multi-News
+      改為 boundary evidence，因此不再執行這個分析，也不得用 clean subset 翻轉 D3b 負結果
 
-**Gate 3** 🔴：
+### 3d. GovReport-centered freeze 前證據補完（v2）
+
+- [x] 作者端核准選項 A；GovReport primary、Multi-News boundary 的 addendum 與 claim matrix 已版本化
+- [x] `govreport_centered_evidence_completion_v1.json` 已在任何新增 evidence 前凍結：
+      E1 official evaluator、E2 cold/warm runtime-memory-scaling、E3 route/provenance ablation
+- [x] `govreport_centered_final_evaluation_v1.json` 已固定 final candidate、baseline matrix、
+      authoritative evaluator 與 paired test；`execution_status=locked`，尚未建立 test data policy
+- [x] E1：九個 frozen GovReport dev systems 已以官方 Stanza + Perl ROUGE-1.5.5
+      protocol 重評（681/681）。Proposed macro `0.458257`，相對 full-source
+      SBERT+MMR `+0.004569`，95% CI `[+0.002467,+0.006680]`、`p=0.000020`；
+      R-1/R-2 通過 Holm-3，R-L 未顯著。見 `E1_OFFICIAL_EVALUATOR_STATUS.md`
+- [x] E2：reference-blind 30-document sample 的 9-system CPU cold/warm、peak process-tree
+      RSS 與 scaling 已完成。54/54 measured repetitions identity 一致；Proposed cold/warm
+      `176.03/10.52s`、SBERT+MMR `177.81/12.45s`、NSGA-II `222.61/56.74s`。
+      78 success + 1 preserved failure；見 `E2_COST_SCALING_STATUS.md`
+- [x] E3：五個事前指定 ablations 已在 frozen GovReport dev 681 rows 完成；全數 681/681 feasible，20 個 endpoint 的 C01−ablation CI 全正且 Holm-20 均通過。見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`
+- [x] ICACT 六頁 PDF 已逐頁核對，舊 Eq. (1)–(13)、Tables 1–6、方法與 claims 已映射到 extension matrix；正式 DOI／獎項證明／similarity report 留至投稿稽核
+- [x] Frozen ordering conflict 已由兩階段 authorization addendum 解決；Stage A policy materialization 完成，973 canonical rows、0 exclusions、2 U+FFFD rows 原樣保留。見 `GOVREPORT_TEST_POLICY_STATUS.md`
+- [ ] 完成九系統 fail-closed runner、score-free dry run 與 exact execution freeze 後，才啟動 Stage B one-shot test
+
+**Gate 3 v1（歷史）** 🔴：
 - 在 validation 上，至少一個主 benchmark明顯勝過強 no-task-training baseline；另一個至少 non-inferior 或形成預先定義的 cost Pareto 優勢
 - candidate recall 與 lead-overlap 診斷可解釋，且至少一條非 lexical route 有可重現的獨立效益；不要求為了好看而機械式降低 lead overlap
 - [x] NSGA-II 未在 matched pilot 或 Multi-News full-dev 提供增益，已移出標題與主方法；只作 comparator
 - data schema、budget semantics、objective matrix、route set 與 output policy 全部通過 `ARCHITECTURE.md` freeze gate
-- → 通過才 **freeze config**，解鎖 test
+- → v1 未通過且已停止。v2 不沿用「兩 primary 都通過」的解鎖條件；改以 §3d evidence
+  package 與老師／完整作者群簽字為必要條件，且現在仍未解鎖 test
 
 ---
 
 ## Phase 4：正式 test ⏱️ 約 1 週計算
 
-- [ ] 兩個 frozen primary datasets、全 seeds（≥5，建議 10）、一次性執行；只有在 Phase 2.0 已預先納入的 optional dataset 才能追加
+- [ ] 只在 v2 final freeze 簽字後，一次性執行 GovReport official test；Multi-News 與 optional datasets 不執行
 - [ ] Paired bootstrap（≥10,000 resamples）、95% CI、Holm correction
 - [ ] Runtime / memory：模型只載入一次，分開報 cold-start 與 warmed inference
 - [ ] Quality–latency Pareto 圖（**用完整 pipeline 成本**，不是單一元件）
@@ -576,7 +660,7 @@
 - [ ] （加分）Human evaluation 50–100 篇 × 3 人
 - [ ] 依研究主計畫 §11 的骨架重寫論文
 - [ ] Reviewer response matrix：四位審稿人每一條意見逐項對應
-- [ ] Conference extension table（ICACT → IEEE Access 新增了什麼）
+- [x] Conference extension 的六頁技術內容已逐項核對；正式引用、獎項證明與 similarity report 留在 Phase 6
 
 ---
 
@@ -631,13 +715,13 @@
 
 | Phase | 狀態 | Gate 通過 | 備註 |
 |---|---|---|---|
-| −1 決策與凍結 | `[x]` | ✅ | 研究路線、primary benchmarks、Go/No-Go、Target Architecture v1、legacy tag 與 invalid-run 標記均已版本化；最終 configuration freeze 屬 Phase 3 |
+| −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag、invalid-run 標記與兩資料集 final execution freeze 均已版本化 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | 453 local tests、PR #16 Linux CI（2026-08-10）、snapshot、shared objectives、兩 primary policies/partitions、A1/D1/Gate 2/D2/D3a/D3b runners/analyzers 與 F-51～F-71 guards 已完成；外部 evaluator parity、正式成本 pilot 與 validation-frozen output policy 仍待補 |
-| 2 Baseline | `[~]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。clean sensitivity／reporting 收尾仍待完成，但不得進 dev-test，回 Phase 3 redesign |
-| 3 方法開發 | `[x]` | ❌ 雙 primary promotion gate；觸發重新定位停止條件 | D3b 已完成：GovReport 對 strongest baseline `+0.004636` 且所有校正通過；Multi-News `−0.001323`、R-2 顯著落後。依預註冊不再搜尋、不進 dev-test/test；等待作者批准 GovReport-centered claim matrix或接受 No-Go |
-| 4 正式 test | `[ ]` | | |
-| 5 分析寫作 | `[ ]` | | |
+| 1 正確性重構 | `[x]` | ✅ | 2026-08-20 完整回歸 486 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-81 guards 已完成 |
+| 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
+| 3 方法開發 | `[x]` | ❌ v1 雙-primary gate；✅ GovReport-centered final package | D3b 後已停止配置搜尋；兩資料集 official-evaluator、E2 cost/scaling 與 E3 ablation 均完成，不再依 test 建新配置 |
+| 4 正式 test | `[x]` | ✅ GovReport confirmatory；Multi-News secondary tie/trade-off | GovReport 973 rows、Multi-News 5,621 rows 的 frozen one-shot official test 均完成 |
+| 5 分析寫作 | `[~]` | | 自動量化實驗已齊；開始論文主文、表圖與 claim-by-claim 數字稽核，質性／人評若新增須另行預註冊 |
 | 6 投稿稽核 | `[ ]` | | |
 ## 2026-08-09 Gate 2 PLM execution checkpoint
 
@@ -646,7 +730,8 @@
       `0.000282`；最佳 full-source SBERT-MMR λ=0.7 macro `0.322581`。
 - [x] F-51 execution-only embedding cache 已實作；scientific config/candidate hash 不變，
       cache key、原子寫入、corruption fail-loud 與 evidence summary 均有測試；完整回歸
-      F-51 當時 **386 passed**；目前含 F-70/F-71 跨平台與 provenance guards 為 **453 passed**。
+      F-51 當時 **386 passed**；PR #16 含 F-70/F-71 跨平台與 provenance guards 為
+      **453 passed**；v2 另增 6 個 freeze-package guards，現行完整回歸為 **459 passed**。
 - [x] F-51 全量等價 audit 已在任何 cached rerun 前預註冊：同一既有 SBERT-centroid
       scientific config 先 cold-populate、再 warm-hit；script 無 split CLI，固定 frozen dev。
 - [x] F-51 3,935-row audit 通過：cold/warm 的逐篇 `selected_indices`、summary、
@@ -659,4 +744,5 @@
       resume 成功。winner MMR λ=0.9 macro `0.452768`，只高 LexRank `0.001148`；
       27×681 cache row accesses 全數通過 F-53。
 - [x] 兩 primary greedy reference 6/6 與 paired matrix 已完成；Gate 2 quality gate 未過，
-      dev-test/test 未讀，下一步回 frozen-dev redesign。
+      dev-test/test 未讀；其後 D2/D3a/D3b redesign 已完成並依停止條件關閉搜尋。
+      E1/E2/E3 已完成；下一步固定為 pre-test freeze audit、test policy 與簽字。

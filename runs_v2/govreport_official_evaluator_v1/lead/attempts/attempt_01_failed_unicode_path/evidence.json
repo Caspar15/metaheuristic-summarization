@@ -1,0 +1,19 @@
+{
+  "evidence_schema_version": "1.0",
+  "recorded_at_utc": "2026-08-15T07:06:07.3299611Z",
+  "failure_observed_at_local_from_terminal": "2026-08-15T15:04:04+08:00",
+  "status": "failed_before_any_rouge_score",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "lead",
+  "completed_before_failure": {
+    "stanza_reference_rows": 681,
+    "stanza_system_rows": 681,
+    "pyrouge_reference_conversions": 681,
+    "pyrouge_system_conversions": 681
+  },
+  "failure": "Perl ROUGE exit 255: Cannot open exception db file for reading because Strawberry Perl decoded the repository's Chinese path with the active Windows locale.",
+  "resolution": "Keep the same bytes and evaluator; expose this repository through a temporary ASCII-only R: subst alias for the Perl subprocess, then reuse the completed tokenization/conversion cache.",
+  "official_scores_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

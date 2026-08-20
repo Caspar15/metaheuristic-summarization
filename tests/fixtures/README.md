@@ -1,5 +1,10 @@
 # tests/fixtures/ provenance
 
+> **Scope check 2026-08-15:** this document describes regression-fixture
+> provenance only. Passing these fixtures supports code correctness; it does
+> not complete E1 official-evaluator parity, E2 cost measurement, E3 ablation,
+> or authorize access to a protected test split.
+
 `data/` is `.gitignore`d and not present in CI, so any test that wants a
 "real data, not a synthetic toy case" sample must check a small, versioned
 copy into `tests/fixtures/` instead of reading `data/processed/` directly.

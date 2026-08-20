@@ -1,0 +1,58 @@
+{
+  "path": "data/processed/multi_news_test_canonical.jsonl",
+  "rows": 5621,
+  "documents": 15324,
+  "sentences": 459092,
+  "references": 5621,
+  "errors": [],
+  "valid": true,
+  "dataset_fingerprint": "2dfa16428915bacb8ed0ffa7fca72027dd05a00074b75358df627db3a7fb0b25",
+  "health": {
+    "split_counts": {
+      "test": 5621
+    },
+    "dataset_names": {
+      "Multi-News": 5621
+    },
+    "dataset_revisions": {
+      "1f20a01dbf6463236108a8d7fd39f3ae9750dcc3": 5621
+    },
+    "structurally_valid_rows": 5621,
+    "documents_per_example": {
+      "1": 71,
+      "2": 3022,
+      "3": 1540,
+      "4": 609,
+      "5": 219,
+      "6": 96,
+      "7": 40,
+      "8": 15,
+      "9": 8,
+      "10": 1
+    },
+    "references_per_example": {
+      "1": 5621
+    },
+    "sentences_per_example": {
+      "mean": 81.6744351538872,
+      "min": 1,
+      "p50": 59,
+      "p95": 211,
+      "p99": 434,
+      "max": 3476,
+      "under_20": 417,
+      "under_40": 1590
+    },
+    "sentence_words": {
+      "mean": 21.998466538297336,
+      "p50": 19,
+      "p95": 47,
+      "p99": 72,
+      "max": 90848,
+      "over_80": 3173
+    },
+    "unicode_replacement_characters": 733,
+    "unicode_replacement_rows": 70,
+    "debug_subset_rows": 0
+  }
+}

@@ -218,9 +218,13 @@ def load_frozen_policy(path: str) -> Dict[str, Any]:
         raise ValueError(
             f"unsupported dataset policy schema {policy.get('policy_schema_version')!r}"
         )
-    if policy.get("status") != "frozen_before_validation_results":
+    allowed_statuses = {
+        "frozen_before_validation_results",
+        "frozen_before_test_results",
+    }
+    if policy.get("status") not in allowed_statuses:
         raise ValueError(
-            "formal runs require a policy frozen before validation results"
+            "formal runs require a policy frozen before the governed split's results"
         )
     if not isinstance(policy.get("analyses"), dict):
         raise ValueError("dataset policy must declare analyses")

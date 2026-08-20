@@ -1,0 +1,17 @@
+{
+  "measured_at_utc": "2026-08-15T08:57:27.923443+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "implementation_commit": "96744a0b7e727fa1663810f9662d7ef25fb3f1a6",
+  "stanza": "1.10.1",
+  "pyrouge": "0.1.3",
+  "perl": "C:\\Strawberry\\perl\\bin\\perl.exe",
+  "rouge_home": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\.tmp\\rouge-windows-runtime",
+  "preregistration_sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2",
+  "execution_addendum_sha256": "2486dbfb29560fe599256995356e291d28c7ebf9d21b478e22166151d013ab8c",
+  "windows_runtime_addendum_sha256": "307af93df0bd71186f7e418a7fc744b85446077ccd584377c17aeec338a925d4",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "canonical_input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

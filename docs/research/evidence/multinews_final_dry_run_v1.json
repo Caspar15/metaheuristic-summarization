@@ -1,0 +1,38 @@
+{
+  "evidence_schema_version": "1.0",
+  "study_id": "multinews-secondary-final-evaluation-v1",
+  "measured_at_utc": "2026-08-16T14:29:17.316252Z",
+  "status": "passed_without_predictions_or_scores",
+  "freeze_manifest_path": "configs/preregistrations/multinews_final_execution_freeze_v1.json",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "rows": 5621,
+  "ordered_ids_sha256": "8d9c8020924f7e361935e2706240ecbbe562a0cbfb5c97eaa89f9ed818992014",
+  "references_present": 5621,
+  "system_families": [
+    "proposed",
+    "lead",
+    "random_mean_10_seeds",
+    "textrank",
+    "lexrank",
+    "pacsum_tfidf_P08",
+    "sbert_centroid",
+    "sbert_mmr_lambda_0.7",
+    "pacsum_sbert_P03"
+  ],
+  "random_seeds": [
+    3407,
+    2024,
+    42,
+    1337,
+    2026,
+    20260810,
+    7,
+    17,
+    23,
+    101
+  ],
+  "implementation_commit": "967e1df4dd7e21650fd659d907110a496004b76b",
+  "tracked_worktree_clean": true,
+  "test_predictions_generated": false,
+  "test_scores_observed": false
+}

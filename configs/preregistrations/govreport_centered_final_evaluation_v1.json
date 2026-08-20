@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "study_id": "govreport-centered-final-evaluation-v1",
+  "status": "protocol_frozen_but_execution_locked_pending_evidence_policy_and_signatures",
+  "registered_at_utc": "2026-08-10T15:50:24.5072384Z",
+  "implementation_parent_commit": "03aef0557fceb11adbe031f9918053582c771443",
+  "registration_timing": "after D3b frozen-dev outcomes and GovReport-centered repositioning, before test membership, test payload, test references, test predictions, or test scores are accessed",
+  "repositioning_addendum": {
+    "path": "configs/data_policies/govreport_centered_repositioning_v2.json",
+    "sha256": "656c2996b0fcd208ccb0e9d794ee369c6ae1132bbeb9591e03983f367e32bee6"
+  },
+  "evidence_completion_preregistration": {
+    "path": "configs/preregistrations/govreport_centered_evidence_completion_v1.json",
+    "sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2",
+    "must_complete_before_execution": true
+  },
+  "protected_split": {
+    "dataset": "GovReport",
+    "split": "official test",
+    "upstream_paper_reported_rows": 973,
+    "canonical_policy_path": "configs/data_policies/govreport_test_v1.json",
+    "canonical_policy_status": "not_materialized_and_must_not_be_materialized_before_unlock",
+    "test_membership_accessed": false,
+    "test_payload_accessed": false,
+    "test_references_accessed": false,
+    "test_scores_accessed": false,
+    "execution_locked": true
+  },
+  "unlock_requirements": [
+    "E1 published-evaluator conformance completed without reversing the frozen GovReport primary comparison",
+    "E2 controlled cold/warm runtime, memory, and scaling report completed",
+    "E3 route/provenance ablation completed and manuscript claims downgraded where required",
+    "GovReport official-test canonical policy, membership count, exclusions, source checksums, fingerprint, and license are pinned before any model score",
+    "final code commit, dependency lock, hardware manifest, output paths, and exact commands are frozen",
+    "teacher and full author group sign the freeze recommendation",
+    "a dry-run guard proves that no command can resolve a non-test or unpinned test policy by accident"
+  ],
+  "frozen_proposed_system": {
+    "candidate": "C01_combined_salience_route_weight",
+    "source_config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "source_config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481",
+    "candidate_hash": "35a9a22431e36c196e6166b324496a7ce0cc6532974c23ae15e692f31443e637",
+    "task_profile": "single_document + multi_sentence",
+    "routes": ["lexical", "semantic", "sparse graph"],
+    "selector": "TF-IDF MMR lambda 0.7",
+    "length_contract": "500-650 whitespace words",
+    "candidate_contract": "route_top_k=40, requested min_per_route=20, total=80, weighted RRF lexical=0.5",
+    "seeds": "deterministic one-shot; seed remains 3407 for any deterministic tie or library call",
+    "allowed_test_time_change": "replace validation policy/partition fields with the signed test policy only; no scientific field may change"
+  },
+  "frozen_baselines": {
+    "selection_source": {
+      "path": "runs_v2/gate2_paired_finalists_v1/summary.json",
+      "sha256": "1781ebe5ea64291857acc8d68b4bef8053284f21cb4dba185b23f60736120941"
+    },
+    "lead": "document-order first-fit under the 500-650 word contract",
+    "random": {
+      "method": "seeded random order first-fit under the same contract",
+      "seeds": [3407, 2024, 42, 1337, 2026, 20260810, 7, 17, 23, 101],
+      "report": "per-seed and seed-mean; no seed may be dropped"
+    },
+    "textrank": "Gate 2 frozen implementation and defaults",
+    "lexrank": "Gate 2 frozen implementation and defaults",
+    "pacsum_tfidf": "beta=0.0, lambda_previous=-0.7, lambda_following=0.3",
+    "sbert_centroid": "frozen full-source SBERT centroid",
+    "sbert_mmr": "full-source SBERT+MMR lambda_relevance=0.9; preregistered primary adversarial comparator",
+    "pacsum_sbert": "beta=0.5, lambda_previous=0.0, lambda_following=1.0",
+    "trained_models": "May be listed in a separate literature/trained-system context table only if locally reproduced under a separately frozen protocol; they do not enter the no-task-training primary hypothesis."
+  },
+  "evaluation": {
+    "paper_authoritative_protocol": {
+      "source_repository": "https://github.com/luyang-huang96/LongDocSum",
+      "source_commit": "ee0dd33f2fde9d19b9a15d81884418d68320e5ca",
+      "tokenization": "Stanza tokenize,mwt with tokens joined by spaces and sentences by newlines",
+      "rouge": "original Perl ROUGE-1.5.5 through pyrouge Rouge155",
+      "arguments": "-c 95 -r 1000 -n 2 -m",
+      "metrics": ["ROUGE-1 Average_F", "ROUGE-2 Average_F", "ROUGE-L Average_F"],
+      "macro": "unweighted mean of the three Average_F values"
+    },
+    "secondary_protocol": "current internal multisentence_lsum evaluator, reported for continuity but not used to replace an unfavorable official result",
+    "all_rows_denominator": true,
+    "failed_or_infeasible_rows": "retained with the frozen F-17 contract; no row deletion after score observation",
+    "summary_length": "report mean, median, min, max, and full distribution for every system"
+  },
+  "confirmatory_inference": {
+    "primary_hypothesis": "proposed official-protocol macro minus full-source SBERT+MMR lambda-0.9 macro is greater than zero",
+    "primary_test": "100,000 paired bootstrap resamples of per-row official-protocol differences, seed 20260830, percentile 95% CI and finite-corrected two-sided p",
+    "primary_success": "point delta >0, CI lower >0, and p<=0.05",
+    "component_guard": "For R1/R2/RL, Holm-adjust three component p-values; no component may have a 95% CI upper below zero",
+    "secondary_family": "8 proposed-versus-baseline comparisons x R1/R2/RL/macro = 32 Holm-adjusted endpoints; descriptive support, not a replacement primary hypothesis",
+    "random_baseline_inference": "pair against the fixed 10-seed per-row mean and also report every seed",
+    "selection_disclosure": "The domain, proposed candidate, and primary adversarial baseline were selected from frozen dev evidence after the original dual-primary gate failed; the untouched test is the confirmatory check."
+  },
+  "decision_rule": {
+    "pass": "Primary success holds, no component guard is violated, official-evaluator E1 did not reverse the dev comparison, and every execution/provenance audit passes.",
+    "fail": "Report the final result and stop; do not change the candidate, baseline parameters, length, evaluator, exclusions, or inference after test access.",
+    "claim_scope_if_pass": "GovReport long single-document no-task-training setting only; Multi-News remains a negative boundary condition.",
+    "never_authorized": "cross-dataset SOTA, general extractive-summarization superiority, or NSGA-II-as-best claims"
+  },
+  "execution": {
+    "one_shot": true,
+    "datasets_run": ["GovReport official test only"],
+    "Multi_News_test": "not run under this repositioning",
+    "resume": "only exact checkpoint resume after infrastructure interruption; no scientific config change",
+    "artifacts": [
+      "signed test data policy and preflight",
+      "resolved configs and hashes",
+      "per-row predictions, selected indices, feasibility and provenance",
+      "official and secondary per-row metrics",
+      "paired inference with all declared endpoints",
+      "cold/warm cost and peak-memory report",
+      "dependency, hardware, date, commit, and exact command evidence"
+    ],
+    "test_split_accessed": false
+  },
+  "scores_observed_after_registration": false
+}

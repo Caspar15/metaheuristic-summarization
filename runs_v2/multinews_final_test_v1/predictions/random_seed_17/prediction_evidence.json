@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "random_seed_17",
+  "rows": 5621,
+  "feasible_rows": 5621,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 246.77174879914605,
+    "min": 33,
+    "max": 250
+  },
+  "selection_seconds": 17.92475960002048,
+  "predictions_path": "runs_v2/multinews_final_test_v1/predictions/random_seed_17/predictions.jsonl",
+  "predictions_sha256": "b393476f71774e8f05b8e47408b3e2c2ed4f6c65c55ba714d1212149fac7d22c",
+  "selected_indices_sha256": "1c15e6c937802805a453ad9bb76340281e69d90c0ab9ee37f24d966b3eefa493",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "implementation_commit": "8d75aad7a0b297c969cb3466e702aa68d68afefa",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "random",
+  "seed": 17,
+  "config_path": "runs_v2/multinews_final_test_v1/predictions/random_seed_17/resolved_config.yaml",
+  "config_sha256": "1b210fb83d2ccbdc39ced7105406f6e57540df97f02690d44b1204b21d5860df"
+}

@@ -1,0 +1,94 @@
+{
+  "evidence_schema_version": "1.0",
+  "study_id": "govreport-test-policy-materialization-v1",
+  "recorded_at_utc": "2026-08-15T17:13:34.745959Z",
+  "status": "completed_before_predictions_or_scores",
+  "authorization_path": "configs/data_policies/govreport_test_authorization_v1.json",
+  "authorization_sha256": "64184a537f25bbdbad7c2701ef32735304b6ee8b659a59342ad8b46780f4e277",
+  "source_archive": {
+    "path": "data/raw/gov-report.tar.gz",
+    "binary_sha256": "bedf7a780910afbaa8bb64e794742722f3faea06d3c156fd1cedc1a7b5c4cd3c"
+  },
+  "membership": {
+    "crs": {
+      "member_path": "gov-report/split_ids/crs_test.ids",
+      "rows": 362,
+      "file_sha256": "e3c934cac49704a53c5b6ad96b82cb3184f902470890921151da0cbbeb132f55",
+      "ordered_ids_sha256": "e3c934cac49704a53c5b6ad96b82cb3184f902470890921151da0cbbeb132f55"
+    },
+    "gao": {
+      "member_path": "gov-report/split_ids/gao_test.ids",
+      "rows": 611,
+      "file_sha256": "058415581095834ff803fe252f46b48f0bc2464fbeac79b74a808d91f36603db",
+      "ordered_ids_sha256": "058415581095834ff803fe252f46b48f0bc2464fbeac79b74a808d91f36603db"
+    }
+  },
+  "canonical": {
+    "path": "data/processed/govreport_test_canonical.jsonl",
+    "file_sha256": "3ff10e66ec902b20f0aee0ca1a36a66a2827d24d353473f54c9f7a8df7026dfc",
+    "dataset_fingerprint": "c5ae4fbb2595d0f27abe8894edf163563a7bc00dbf7713d386ba29987c6cb9c6",
+    "rows": 973
+  },
+  "exclusion_manifest": {
+    "path": "configs/data_policies/govreport_test_exclusions_v1.json",
+    "file_sha256": "638adbc74d166b4131bd7d86fe4c64f2de49b554ef1bc11c7f540e5d83f28d73",
+    "rows": 0
+  },
+  "replacement_character_manifest": {
+    "path": "configs/data_policies/govreport_test_replacement_characters_v1.json",
+    "file_sha256": "623d358f4f1129383edcfa7cd6b01f4489a2b6b163b76794a8a5f23fef058d96",
+    "rows": 2,
+    "characters": 2
+  },
+  "health": {
+    "path": "C:\\Users\\caspa\\Desktop\\台灣科技大學\\國實院計畫\\metaheuristic-summarization-project\\metaheuristic-summarization\\data\\processed\\govreport_test_canonical.jsonl",
+    "rows": 973,
+    "documents": 973,
+    "sentences": 286080,
+    "references": 973,
+    "errors": [],
+    "valid": true,
+    "dataset_fingerprint": "c5ae4fbb2595d0f27abe8894edf163563a7bc00dbf7713d386ba29987c6cb9c6",
+    "health": {
+      "split_counts": {
+        "test": 973
+      },
+      "dataset_names": {
+        "GovReport": 973
+      },
+      "dataset_revisions": {
+        "official-author-archive-2021-04-01": 973
+      },
+      "structurally_valid_rows": 973,
+      "documents_per_example": {
+        "1": 973
+      },
+      "references_per_example": {
+        "1": 973
+      },
+      "sentences_per_example": {
+        "mean": 294.0184994861254,
+        "min": 18,
+        "p50": 260,
+        "p95": 619,
+        "p99": 960,
+        "max": 1399,
+        "under_20": 1,
+        "under_40": 4
+      },
+      "sentence_words": {
+        "mean": 25.10303062080537,
+        "p50": 24,
+        "p95": 48,
+        "p99": 65,
+        "max": 512,
+        "over_80": 1006
+      },
+      "unicode_replacement_characters": 2,
+      "unicode_replacement_rows": 2,
+      "debug_subset_rows": 0
+    }
+  },
+  "test_predictions_generated": false,
+  "test_scores_observed": false
+}

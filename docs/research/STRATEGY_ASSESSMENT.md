@@ -1,6 +1,19 @@
 # 總體可行性評估 —— 設計是否有救、主場在哪、文件如何分工
 
-> 初稿日期：2026-07-26 ｜ 程式／資料狀態覆核：2026-08-02
+## 2026-08-20 evidence-based final assessment
+
+目前已不是「有沒有分數可投」的未知狀態。GovReport official test 對強 SBERT+MMR
+顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，R-2 明顯較弱。
+兩資料集 E3 都支持三路與 provenance，E2 則支持 Greedy 取代 NSGA-II 作最終 selector。
+
+投稿判斷：**有合理 IEEE Access 機會，但不是穩收，也不能寫跨資料集 SOTA。** 可辯護的
+貢獻是嚴格 split/evaluator 下的 no-task-training provenance-aware multi-route framework、
+task-specific selector policy、component evidence 與完整 quality-cost trade-off。最大的
+剩餘風險是 Multi-News R-2、方法組合式 novelty、缺人評／質性案例，以及 ICACT extension
+與 reproducibility 包裝。權威數字見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`；下方早期
+「現在投不出去／尚未跑 final」是診斷沿革，不是現況評分。
+
+> 初稿日期：2026-07-26 ｜ 最新策略狀態覆核：2026-08-15
 > 對象問題：「是不是設計本身就有問題？分數這麼低還投得出去嗎？我們的優勢在哪？架構還有救嗎？」
 > 本文件是策略 memo，不是數字權威來源。Legacy Multi-News 的 ROUGE/Lead 已重現。
 > headroom、位置與 oracle overlap 的腳本**已版本化**至 `scripts/audit/`
@@ -10,7 +23,8 @@
 > selector 路線當時因此暫定為 MMR main／Greedy reference／NSGA-II comparator。這只是
 > selector gate；兩 primary 的 strongest non-PLM baseline 都已勝 proposed S02b。Multi-News
 > PLM 27/27 之後最強仍是 non-PLM PacSum P08；GovReport PLM winner MMR λ=0.9 只高
-> LexRank `0.001148`、卻高 S02b `0.034906`。是否值得投稿仍取決於 dev 優化與完整 paired gate。
+> LexRank `0.001148`、卻高 S02b `0.034906`。這是 D3b 前的歷史狀態；後續 dev 優化與
+> paired gate 已完成，現行判斷見 §3.4。
 > 2026-08-09 full-dev D2 更正：Multi-News 3,935-row selector isolation 中，Greedy-TFIDF
 > macro `0.328077` 勝所有 MMR／NSGA-II；最佳新候選 NSGA-II+TF-IDF 為 `0.322615`，
 > 最佳 MMR+TF-IDF 為 `0.321744`。200-row pilot 的 MMR 優勢未外推，NSGA-II 的
@@ -18,6 +32,12 @@
 > 對 Greedy `+0.028293` 且 multiplicity-corrected paired gate 通過，但仍低 full-source
 > SBERT+MMR `0.006614`。沒有共同近最優 selector；下一輪採 task-profile policy，
 > 但兩 primary 都不具 dev-test promotion 資格。
+
+> **現行決策（取代本文早期的雙-primary 推薦）**：D3b 後已停止搜尋，作者端已核准
+> GovReport-centered 選項 A。GovReport 是唯一 primary；Multi-News 只保留既有負面
+> boundary evidence。E1～E3 evidence completion 已完成；下一步是 freeze audit、test
+> policy 與 final freeze 簽字，不是
+> 重新選資料集、重新調參或跑 test。本文較早的三資料集／雙-primary討論保留作決策沿革。
 
 ---
 
@@ -168,7 +188,7 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 > **但「實作完成」不等於「有效」** —— 三項的效益都還沒量測，仍須通過 validation pilot。
 > 以下保留原始診斷與驗收條件，狀態另以標籤標示。
 
-**① 打破候選池的 lead bias —— 這是最關鍵的一刀**　【✅ 契約已實作／⏳ 效益未驗證】
+**① 打破候選池的 lead bias —— 這是最關鍵的一刀**　【✅ 契約與 recall 驗收已完成】
 
 原診斷：候選池由 lead-biased 分數單獨決定 → 後續 route 無法找回已被排除的句子。
 
@@ -178,8 +198,10 @@ SciTLDR 的舊勝負尚未成立，而且它也不適合當主戰場：
 - ✅ position / document / section strata coverage guard 可獨立設定，並標為 `guard:*` 而非第四個語意 route
 - ✅ 不可行的保留額組合會 fail loud，不會默默犧牲某個 route
 
-⏳ **仍未完成的驗收**：候選池對 validated oracle／greedy-reference 的 **recall@K**。
-22.8% 是 legacy exploratory 值；新 pipeline 的數字**還沒量過**，提升門檻也還沒訂。
+✅ **後續驗收已完成**：兩個 frozen-dev profile 的 metric-specific greedy references、
+candidate-union recall 與 final-selection recall 已量測。Multi-News S02b union recall 約
+82–86%、final recall 約 30%；GovReport union recall 約 47–56%、final recall 約 12–13%。
+它們證明候選與 selector/salience 都仍是瓶頸；greedy reference 不是 exact oracle。
 
 > 這仍是最關鍵的一刀 —— 但現在的問題已從「有沒有做」變成「做了有沒有用」。
 
@@ -233,8 +255,9 @@ D3b 在 GovReport 對 full-source SBERT+MMR macro `+0.004636`，100k paired CI
 `[+0.002507,+0.006745]`，Holm-8 與 Bonferroni-340 均通過；這支持長篇單文件、
 training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低 PacSum
 `0.001323`，且 R-2 `−0.008565` 的 CI 全負；因此它同時否定跨 multi-document profile
-的普遍 superiority claim。策略不再是繼續調參，而是由作者決定是否批准
-`REPOSITIONING_RECOMMENDATION.md` 的 GovReport-centered claim matrix。
+的普遍 superiority claim。作者端已於 2026-08-10 批准 GovReport-centered 選項 A；
+策略不再是繼續調參，而是按已凍結 preregistration 補 official evaluator、成本／scaling
+與 route/provenance ablation，再交老師與完整作者群作 final freeze 簽字。
 
 ---
 
@@ -265,7 +288,7 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 | **計時分解**：載入遠大於推論、純推論比值 ≈1.0 | 腳本已版本化（`scripts/audit/plm_timing.py`）。**載入佔比在兩次執行間為 78% 與 93%，不穩定，不可引用特定百分比**；只有「推論比值 ≈1.0」是穩定結論。須依鎖定 runtime protocol 重測 |
 | legacy greedy references：SciTLDR 3 句 0.5136、Multi-News 約 0.59 | 只能診斷，非 exact upper bound、非 official protocol，不可直接引用 |
 | **pymoo mutation 實測**：per-individual 1.0、per-gene 1/n_var≈0.02 | 直接回答 R4 的疑問 |
-| **Phase 1 canonical 主路徑已重構** | 453 local tests、PR #16 Linux CI（含 pinned CPU encoder dependencies、pytest invocation/tmp portability 與 CRLF-era pin errata）、snapshot、shared objectives、candidate provenance、兩 primary frozen policy/partitions 與 A1/D1/D2/D3a/D3b runners/analyzers 已通過。D1 route evidence、兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 完成；published-protocol parity、clean sensitivity 與正式成本 reporting 尚未完成；CNN/DM 是 Gate 3 後 optional |
+| **Phase 1 canonical 主路徑已重構** | 459 local tests（2026-08-11）、PR #17 clean-clone Linux CI 454 passed／5 skipped、snapshot、shared objectives、candidate provenance、兩套歷史 frozen policies/partitions 與 A1～D3b runners/analyzers 已通過；v2 GovReport role/claim addendum 與 6 個 freeze guards 已納入回歸。published GovReport evaluator、正式成本與 route/provenance final ablation 尚未完成 |
 
 ### 4.3 我必須修正自己的一個地方
 
@@ -297,9 +320,9 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 在投入任何重構之前，先接受兩個事實：
 
-- [ ] 承認 **F-0 的正確範圍**：legacy Multi-News 沒有贏過同協定 Lead；CNN/DM 尚無公平勝負，研究主計畫 §6.1 的 redesign gate 已觸發
-- [ ] 承認 **P0-01**：11 個 tuning/ablation runs 在 Multi-News test 上選設定，受此流程影響的 legacy 主結果**不能用於新稿**
-- [ ] 決定路線：建議研究主計畫的「路線 A（方法型）」，並把「打破候選池 lead bias」列為優先驗證的假設
+- [x] 已承認 **F-0 的正確範圍**：legacy Multi-News 沒有贏過同協定 Lead；CNN/DM 無公平勝負，舊主張不再使用
+- [x] 已承認 **P0-01**：11 個 test-tuned runs 只保留為 legacy diagnostic，不能用於新稿
+- [x] 已完成路線決策：作者端於 2026-08-10 核准 GovReport-centered 選項 A；後續定位與證據 gate 見 §3.4
 
 ### Phase 0–6：依研究主計畫與 `ACTION_PLAN.md` 執行
 
@@ -309,11 +332,11 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 
 | 插入位置 | 新增項目 |
 |---|---|
-| Phase 1（correctness refactor） | canonical 主路徑的 453 local tests、PR #16 Linux CI、snapshot、shared objectives、兩 primary frozen-policy preflight、partition enforcement、exact batched Greedy additions與 F-51～F-71/D3a/D3b guards 已完成；published-protocol parity 與 validation-frozen output policy仍未完成 |
+| Phase 1（correctness refactor） | 459 local tests、PR #17 clean-clone Linux CI 454 passed／5 skipped、snapshot、shared objectives、historical frozen-policy preflight、partition enforcement、exact batched Greedy 與 F-51～F-72/D3a/D3b guards 已完成；published-protocol parity 與 final-output policy仍未完成 |
 | Phase 2（baseline validation） | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成。Multi-News S02b/P08 headroom `1.41%/3.30%`；GovReport S02b/SBERT+MMR `8.64%/22.98%`。S02b 對兩 adversarial winners 的 macro paired loss 均 Holm-significant，Gate 2 quality gate 失敗 |
 | Phase 3（方法實驗） | D3b 已完成：GovReport 對 strongest baseline `+0.004636`，Holm-8 與 Bonferroni-340 通過；Multi-News `−0.001323` 且 R-2 顯著落後。雙 primary gate 失敗，依預註冊停止搜尋並寫重新定位建議 |
-| Phase 1–2 | 重建 GovReport 與原版 Multi-News 作兩個 primary benchmarks；frozen U+FFFD clean 作 paired sensitivity，external retrieval-cleaned variants 與 PubMed 只作備案 |
-| Phase 4（locked test）之前 | **先在 validation 上確認贏過 Lead**。沒贏就不要解鎖 test |
+| v2 dataset role | GovReport 是唯一 primary；Multi-News 只保留既有 D3b boundary evidence，不執行新 dev-test/test；其他資料集不納入 |
+| locked test 之前 | 完成 E1 official evaluator、E2 cost/scaling、E3 ablation，且老師／完整作者群簽署 final freeze；否則不解鎖 test |
 
 ### 最重要的一個中途檢查點
 
@@ -330,12 +353,13 @@ training-free、provenance-preserving 的 task-profile claim。Multi-News 仍低
 - **現在直接投** → 我判斷**幾乎確定被拒**。test-set 調參（P0-01）+ 輸給 Lead（F-0）任一被抓到就結束
 - **只修 evaluator、補 baseline、改寫文字後投** → 仍然 No-Go。因為修正後會**更清楚地顯示輸給 Lead**
 - **改採 GovReport-centered 的長篇單文件／可審計 training-free 定位** → 有條件的機會；
-  必須先由老師與作者批准新的 claim matrix，再補 evaluator parity、成本/scaling 與寫作證據
+  作者端已批准新的 claim matrix，下一關是 evaluator parity、成本/scaling、route/provenance
+  ablation 與老師／完整作者群 final freeze 簽字
 - **保留兩 primary 都須勝 strongest baseline 的原 gate** → D3b 已判定 No-Go，不應再跑同一搜尋空間
 
 **時間**：研究主計畫的 Phase −1 至 6 原始工作量約 6–9 週；納入核心方法改動與新資料集後，保守估計 **8–12 週**。
 
 **最後一句實話**：核心概念在 GovReport 已有 multiplicity-corrected 正證據，但
 Multi-News 的 R-2 缺陷仍明確，跨資料集主張已失敗。現在不能再優化同一 dev 搜尋空間，
-也不能直接投稿；應先由老師與作者審核 `REPOSITIONING_RECOMMENDATION.md`，決定縮窄為
-GovReport-centered 修訂稿，或接受 IEEE Access 方法稿 No-Go。
+也不能直接投稿；GovReport-centered 方向已定案，現在須如實完成已預註冊證據。若 official
+evaluator 使排名反轉或 route/provenance 不支持貢獻，應撤回對應 claim，而不是再調參。

@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "lexrank",
+  "rows": 5621,
+  "feasible_rows": 5621,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 246.92937199786516,
+    "min": 33,
+    "max": 250
+  },
+  "selection_seconds": 654.9082119999803,
+  "predictions_path": "runs_v2/multinews_final_test_v1/predictions/lexrank/predictions.jsonl",
+  "predictions_sha256": "e318028000979b20fb47715e6f0cc46ca149f21e95637d14ac3e3925d09bd64d",
+  "selected_indices_sha256": "4e11662c8a6faac1ce9cf6b36b483f87c1c2a98a3ece27a0eeb504a057795fa7",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "implementation_commit": "8d75aad7a0b297c969cb3466e702aa68d68afefa",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "lexrank",
+  "seed": null,
+  "config_path": "runs_v2/multinews_final_test_v1/predictions/lexrank/resolved_config.yaml",
+  "config_sha256": "1b210fb83d2ccbdc39ced7105406f6e57540df97f02690d44b1204b21d5860df"
+}

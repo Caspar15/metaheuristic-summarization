@@ -1,0 +1,309 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-20T13:30:53.991383+00:00",
+  "status": "completed",
+  "study_id": "multinews-e3-route-provenance-v1",
+  "partition": "Multi-News frozen dev",
+  "rows": 3935,
+  "variants": {
+    "A01_no_semantic": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-20T13:21:55.837768+00:00",
+      "started_at_utc": "2026-08-20T13:20:07.474853+00:00",
+      "status": "completed",
+      "study_id": "multinews-e3-route-provenance-v1",
+      "variant": "A01_no_semantic",
+      "partition": "Multi-News frozen dev",
+      "rows": 3935,
+      "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A01_no_semantic/resolved_config.yaml",
+      "config_sha256": "30e2ca4cef711252c02a45a3e20654448c8a943857efb4a7462fd1ab498ad461",
+      "candidate_hash": "ec9b8351c33b093b786144d0e28b9377f70e85f43edb5930b9418b7ad964ac06",
+      "implementation_commit": "f002d28eaf08e0cb74f82a250276173329550141",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "execution": {
+        "workers": 16,
+        "threads_per_worker": 1,
+        "wall_seconds": 108.40692880004644,
+        "cpu_process_tree_seconds": 345.484375,
+        "peak_process_tree_rss_bytes": 3450949632,
+        "rss_sample_interval_ms": 50,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.441419803596281,
+          "rouge2": 0.1401780750081725,
+          "rougeLsum": 0.40390234342839204
+        },
+        "macro_rouge": 0.32850007401094855,
+        "feasible_rows": 3930,
+        "infeasible_rows": 5,
+        "summary_words": {
+          "mean": 244.0566709021601,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A01_no_semantic/predictions.jsonl",
+      "predictions_sha256": "ac0401f8edf1fc8349772372d4d4cdc4219577e3d1978cae772983ac291fa09e",
+      "selected_indices_sha256": "3bdfe1a86ee418ff8c4664eeec8db5f9367104d88682086ff28b6640d49b1890",
+      "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A01_no_semantic/per_example.jsonl",
+      "per_example_sha256": "f3ed1f2181597f17616b1698e5af9de5c3a7ec4fc13e8924654fa03c9476cc02",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "A02_no_graph": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-20T13:24:18.877621+00:00",
+      "started_at_utc": "2026-08-20T13:21:55.897062+00:00",
+      "status": "completed",
+      "study_id": "multinews-e3-route-provenance-v1",
+      "variant": "A02_no_graph",
+      "partition": "Multi-News frozen dev",
+      "rows": 3935,
+      "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/resolved_config.yaml",
+      "config_sha256": "3fa165bb8adf87b2e7fab1c892c6404643be80b0e0cc4b30b26dee8a24fe3181",
+      "candidate_hash": "ceaaae465bcbc4c89f1b03fa2d45f62e32990483d4c0eb055ba162671f1b426c",
+      "implementation_commit": "f002d28eaf08e0cb74f82a250276173329550141",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "execution": {
+        "workers": 16,
+        "threads_per_worker": 1,
+        "wall_seconds": 143.0240662000142,
+        "cpu_process_tree_seconds": 473.546875,
+        "peak_process_tree_rss_bytes": 7022288896,
+        "rss_sample_interval_ms": 50,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43895708960613283,
+          "rouge2": 0.13824602544960696,
+          "rougeLsum": 0.4008950325088961
+        },
+        "macro_rouge": 0.32603271585487864,
+        "feasible_rows": 3930,
+        "infeasible_rows": 5,
+        "summary_words": {
+          "mean": 243.9423125794155,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/predictions.jsonl",
+      "predictions_sha256": "a0422dbf4231884c828873a7249b8fef6afc54cbae8edc703e95306fe868cbc1",
+      "selected_indices_sha256": "dc1213a9efc58f925cff0d941f5afd629a5c722e7ff9c6f2c55f583140222f85",
+      "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/per_example.jsonl",
+      "per_example_sha256": "6f3d465b6dc476f2924a65848754782818f3e4ff22b9036cc510b388b59b94a9",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "A03_lexical_only_capacity_80": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-20T13:26:08.321230+00:00",
+      "started_at_utc": "2026-08-20T13:24:18.926828+00:00",
+      "status": "completed",
+      "study_id": "multinews-e3-route-provenance-v1",
+      "variant": "A03_lexical_only_capacity_80",
+      "partition": "Multi-News frozen dev",
+      "rows": 3935,
+      "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/resolved_config.yaml",
+      "config_sha256": "490b9e620a356cac557c9e54e54448436f75067d0e885207cd7ad352afb71e76",
+      "candidate_hash": "7be0db3c2bda51dadc6c42768b52077d1283fb34ac749e92068ffcfd9338ff6e",
+      "implementation_commit": "f002d28eaf08e0cb74f82a250276173329550141",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "execution": {
+        "workers": 16,
+        "threads_per_worker": 1,
+        "wall_seconds": 109.43809650000185,
+        "cpu_process_tree_seconds": 342.578125,
+        "peak_process_tree_rss_bytes": 3257126912,
+        "rss_sample_interval_ms": 50,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4322646692543018,
+          "rouge2": 0.13490942711555617,
+          "rougeLsum": 0.39264300106581157
+        },
+        "macro_rouge": 0.31993903247855654,
+        "feasible_rows": 3931,
+        "infeasible_rows": 4,
+        "summary_words": {
+          "mean": 244.90597204574334,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/predictions.jsonl",
+      "predictions_sha256": "4316f4c1cac46f09ef025759eea69032826205879e0b4116b5eba39e48712351",
+      "selected_indices_sha256": "6dddd14f5f1ffcf029b2c077176cc8e11d80bc722958bdec4a04cb5423cd0fd0",
+      "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/per_example.jsonl",
+      "per_example_sha256": "f6e3db0e94773591d7b26d58bd1fbcd8281c9123fc326c092152ca316eb5d219",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "A04_equal_rank_rrf": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-20T13:28:11.767389+00:00",
+      "started_at_utc": "2026-08-20T13:26:08.377981+00:00",
+      "status": "completed",
+      "study_id": "multinews-e3-route-provenance-v1",
+      "variant": "A04_equal_rank_rrf",
+      "partition": "Multi-News frozen dev",
+      "rows": 3935,
+      "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A04_equal_rank_rrf/resolved_config.yaml",
+      "config_sha256": "02b7759627bda7a56fd2c954a4005ea418511b35e2fcca48fb3cb68600187b04",
+      "candidate_hash": "03f8e7cf3599d0315ebb9a937941e4b81f638bcc5d1ae5631abfd2d469e29ed9",
+      "implementation_commit": "f002d28eaf08e0cb74f82a250276173329550141",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "execution": {
+        "workers": 16,
+        "threads_per_worker": 1,
+        "wall_seconds": 123.45102070004214,
+        "cpu_process_tree_seconds": 536.1875,
+        "peak_process_tree_rss_bytes": 7276470272,
+        "rss_sample_interval_ms": 50,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.4426599458514139,
+          "rouge2": 0.14102211076407573,
+          "rougeLsum": 0.40534278342627456
+        },
+        "macro_rouge": 0.32967494668058805,
+        "feasible_rows": 3930,
+        "infeasible_rows": 5,
+        "summary_words": {
+          "mean": 244.60914866581956,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A04_equal_rank_rrf/predictions.jsonl",
+      "predictions_sha256": "4b89561e7de654149307a54302ef4f5d6eff8e100dddd6e481122d3762877d95",
+      "selected_indices_sha256": "397c96cf025bd680e2c11905e9a7c71ef1d773c68b0ddc230e9167e82cbb7a5c",
+      "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A04_equal_rank_rrf/per_example.jsonl",
+      "per_example_sha256": "0035da4e87a8585725eb7ea837a74b446a4993a9433fe9785eea126bcd6425d1",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "A05_index_only_lexical": {
+      "evidence_schema_version": "1.0",
+      "measured_at_utc": "2026-08-20T13:30:14.934216+00:00",
+      "started_at_utc": "2026-08-20T13:28:11.836087+00:00",
+      "status": "completed",
+      "study_id": "multinews-e3-route-provenance-v1",
+      "variant": "A05_index_only_lexical",
+      "partition": "Multi-News frozen dev",
+      "rows": 3935,
+      "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A05_index_only_lexical/resolved_config.yaml",
+      "config_sha256": "04dbea58d3e5414e33750c6f53094c5d95ab2947e37f012ab502fc9d3d77933b",
+      "candidate_hash": "ae5c4439963010bfd01fd47e1221ea44b170a4b6bd59dd6375083de178414c4c",
+      "implementation_commit": "f002d28eaf08e0cb74f82a250276173329550141",
+      "dependency_versions": {
+        "python": "3.12.7",
+        "numpy": "1.26.4",
+        "scikit-learn": "1.7.1",
+        "nltk": "3.10.0",
+        "rouge-score": "0.1.2",
+        "PyYAML": "6.0.2",
+        "torch": "2.8.0+cpu",
+        "transformers": "4.56.0",
+        "tokenizers": "0.22.0",
+        "sentence-transformers": "5.1.0"
+      },
+      "execution": {
+        "workers": 16,
+        "threads_per_worker": 1,
+        "wall_seconds": 123.1456998999929,
+        "cpu_process_tree_seconds": 531.21875,
+        "peak_process_tree_rss_bytes": 7313321984,
+        "rss_sample_interval_ms": 50,
+        "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+      },
+      "metrics": {
+        "evaluation_protocol": "multisentence_lsum",
+        "rows": 3935,
+        "rouge": {
+          "rouge1": 0.43595965005793746,
+          "rouge2": 0.1365126886258574,
+          "rougeLsum": 0.39736186051864747
+        },
+        "macro_rouge": 0.3232780664008141,
+        "feasible_rows": 3931,
+        "infeasible_rows": 4,
+        "summary_words": {
+          "mean": 245.09250317662008,
+          "min": 36,
+          "max": 250
+        }
+      },
+      "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A05_index_only_lexical/predictions.jsonl",
+      "predictions_sha256": "b758a4ffe7adfb7696cc3014f0e281176073da766a8ebe3b169ce2dc7cf65ec4",
+      "selected_indices_sha256": "72ddbc98880a0dcfb63e7ffa8f826e69be4a144662a7681e30a0a936f483f5de",
+      "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A05_index_only_lexical/per_example.jsonl",
+      "per_example_sha256": "d6694ea1bd92cbc6b27e53e37656e58cc37a9247379d83bdc72c446b0f5ba0eb",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    }
+  },
+  "analysis_path": "runs_v2/multinews_e3_route_provenance_v1/analysis.json",
+  "analysis_sha256": "1dbcf78c0b54c9064d5d4ac3af9440def5263e4577eb9427decb6a3f3d5f1c1d",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

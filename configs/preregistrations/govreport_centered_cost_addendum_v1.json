@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "govreport-centered-cost-addendum-v1",
+  "status": "frozen_before_any_e2_timing",
+  "registered_at_utc": "2026-08-15T06:41:31.8434851Z",
+  "parent_preregistration": {
+    "path": "configs/preregistrations/govreport_centered_evidence_completion_v1.json",
+    "sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2"
+  },
+  "reason": "Resolve the parent E2 label to its actual frozen D2 artifact and add descriptive baseline cost context requested before timing began. The original four-system confirmatory cost comparison is not removed or replaced.",
+  "sample_manifest": {
+    "path": "configs/pilot_manifests/govreport_cost_scaling_sample_v1.json",
+    "sha256": "8dc26882288fa8167381b08c5eedab43142a138513e2c91fb8629373e458db4d",
+    "rows": 30,
+    "selected_ids_sha256": "09237d2395f96dd53956705b933cebf420ab4b4b311fd5085aeacab4437f1228",
+    "references_or_predictions_read_for_sampling": false
+  },
+  "core_systems": {
+    "frozen_C01_proposed": {
+      "config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+      "config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481"
+    },
+    "full_source_sbert_mmr_lambda_0.9": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/config_used.json",
+      "config_sha256": "59d47c427ceffc141787a09625d5f93348c387e1148ca4cd84b05b7748b3d7ab"
+    },
+    "D2_matched_greedy_tfidf_anchor": {
+      "clarification": "The parent label is correct, but the artifact is D2's reused S00 anchor from D1, not S01_greedy_sbert.",
+      "config_path": "runs_v2/d1_three_route_followup/govreport/dev/S02b_three_route_capacity_80/resolved_config.yaml",
+      "config_sha256": "f3cf22b9fdd2ea7b2457cfd34f66ba0c71b4faaac6fd1aa6479099c82a7c42d2"
+    },
+    "D2_matched_nsga2_tfidf": {
+      "config_path": "runs_v2/d2_selector_full_dev_v1/govreport/dev/S12_nsga2_tfidf_seed3407/resolved_config.yaml",
+      "config_sha256": "cc62b0f632865310aa73a1bd555cdfe99f7c3d372b74d96700fa6a93d3bce669"
+    }
+  },
+  "descriptive_baseline_systems": {
+    "lead": {
+      "config_path": "runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run/config_used.json",
+      "config_sha256": "1cd679a095145b52ae6ec60267692fda0e3d3691f5ef7c8a103d0b9e74cbe203"
+    },
+    "lexrank": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/lexrank/lexrank/run/config_used.json",
+      "config_sha256": "cd1087aa62aabbf4705610cac8ce09aa742b2dd54f296aa28c71497618c664ec"
+    },
+    "pacsum_tfidf_P07": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/pacsum_tfidf/run/config_used.json",
+      "config_sha256": "115d07344c597f6d773a69b8ebbd04b3c916b448953c1c8577a4ba01c6d8dbd7"
+    },
+    "pacsum_sbert_beta_0.5": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B05_beta_0.5/pacsum_sbert/run/config_used.json",
+      "config_sha256": "dda5d9502da18a10d44632e893b05ab124b22952b9b091a74daba7f8780c4fbf"
+    },
+    "sbert_centroid": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_centroid/sbert_centroid/run/config_used.json",
+      "config_sha256": "3119584574ebca3a8e63c7cf48d6bb3f56a48f76cbc0126946d177c62b34e8f5"
+    }
+  },
+  "measurement_contract": {
+    "states": ["cold", "warm_cache"],
+    "discarded_instrumentation_smokes_per_system_state": 1,
+    "measured_repetitions_per_system_state": 3,
+    "no_overlapping_timed_jobs": true,
+    "peak_process_tree_rss_sample_interval_ms_max": 50,
+    "selected_indices_must_match_across_repetitions": true,
+    "quality_scores_used_for_timing_selection": false,
+    "descriptive_baselines_can_change_method_selection": false
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "timings_observed_before_registration": false
+}

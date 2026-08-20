@@ -1,0 +1,301 @@
+{
+  "manifest_schema_version": "1.0",
+  "status": "frozen_before_any_e2_timing",
+  "frozen_at_utc": "2026-08-15T06:40:48.834139+00:00",
+  "purpose": "reference_blind_govreport_dev_cost_scaling_sample",
+  "dataset": "GovReport",
+  "base_split": "validation",
+  "partition": "frozen dev",
+  "input_path": "data/processed/govreport_validation_canonical.jsonl",
+  "input_sha256": "db8aa2b7aa8a3042e2cb5b0b1f7e03773a37178479e4eedf17860984549de678",
+  "partition_manifest_path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+  "partition_manifest_sha256": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+  "partition_rows": 681,
+  "references_or_predictions_read_for_sampling": false,
+  "selection_algorithm": "on log1p(source sentence count), visit q10/q50/q90 in that order; take the 10 nearest still-unselected IDs, tie by canonical ID",
+  "quantile_method": "numpy.quantile default linear",
+  "per_stratum": 10,
+  "sample_rows": 30,
+  "quantile_targets_log1p_sentences": {
+    "q10": 4.787491742782046,
+    "q50": 5.58724865840025,
+    "q90": 6.297109319933935
+  },
+  "selected_ids_sha256": "09237d2395f96dd53956705b933cebf420ab4b4b311fd5085aeacab4437f1228",
+  "selected_ids": [
+    "validation_crs_R44245",
+    "validation_crs_R45345",
+    "validation_crs_RS21282",
+    "validation_gao_GAO-18-236",
+    "validation_crs_R41326",
+    "validation_gao_GAO-18-701T",
+    "validation_crs_R45100",
+    "validation_gao_GAO-18-330",
+    "validation_crs_R45548",
+    "validation_gao_GAO-19-44",
+    "validation_gao_GAO-18-389",
+    "validation_crs_RL33745",
+    "validation_gao_GAO-18-71",
+    "validation_gao_GAO-18-103",
+    "validation_gao_GAO-19-231",
+    "validation_gao_GAO-19-29",
+    "validation_gao_GAO-19-38",
+    "validation_gao_GAO-18-660T",
+    "validation_crs_R40985",
+    "validation_gao_GAO-19-90",
+    "validation_crs_R45539",
+    "validation_crs_RL32934",
+    "validation_gao_GAO-19-60",
+    "validation_crs_R40425",
+    "validation_gao_GAO-18-281",
+    "validation_crs_R40082",
+    "validation_gao_GAO-18-12",
+    "validation_crs_RS21852",
+    "validation_gao_GAO-18-126",
+    "validation_crs_R45618"
+  ],
+  "rows": [
+    {
+      "id": "validation_crs_R44245",
+      "stratum": "q10",
+      "source_sentences": 119,
+      "log1p_source_sentences": 4.787491742782046,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.0
+    },
+    {
+      "id": "validation_crs_R45345",
+      "stratum": "q10",
+      "source_sentences": 119,
+      "log1p_source_sentences": 4.787491742782046,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.0
+    },
+    {
+      "id": "validation_crs_RS21282",
+      "stratum": "q10",
+      "source_sentences": 119,
+      "log1p_source_sentences": 4.787491742782046,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.0
+    },
+    {
+      "id": "validation_gao_GAO-18-236",
+      "stratum": "q10",
+      "source_sentences": 120,
+      "log1p_source_sentences": 4.795790545596741,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.008298802814695527
+    },
+    {
+      "id": "validation_crs_R41326",
+      "stratum": "q10",
+      "source_sentences": 121,
+      "log1p_source_sentences": 4.804021044733257,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.01652930195121094
+    },
+    {
+      "id": "validation_gao_GAO-18-701T",
+      "stratum": "q10",
+      "source_sentences": 121,
+      "log1p_source_sentences": 4.804021044733257,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.01652930195121094
+    },
+    {
+      "id": "validation_crs_R45100",
+      "stratum": "q10",
+      "source_sentences": 117,
+      "log1p_source_sentences": 4.770684624465665,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.01680711831638071
+    },
+    {
+      "id": "validation_gao_GAO-18-330",
+      "stratum": "q10",
+      "source_sentences": 117,
+      "log1p_source_sentences": 4.770684624465665,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.01680711831638071
+    },
+    {
+      "id": "validation_crs_R45548",
+      "stratum": "q10",
+      "source_sentences": 122,
+      "log1p_source_sentences": 4.812184355372417,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.024692612590371255
+    },
+    {
+      "id": "validation_gao_GAO-19-44",
+      "stratum": "q10",
+      "source_sentences": 122,
+      "log1p_source_sentences": 4.812184355372417,
+      "target_log1p_source_sentences": 4.787491742782046,
+      "absolute_target_distance": 0.024692612590371255
+    },
+    {
+      "id": "validation_gao_GAO-18-389",
+      "stratum": "q50",
+      "source_sentences": 266,
+      "log1p_source_sentences": 5.58724865840025,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.0
+    },
+    {
+      "id": "validation_crs_RL33745",
+      "stratum": "q50",
+      "source_sentences": 267,
+      "log1p_source_sentences": 5.5909869805108565,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.003738322110606873
+    },
+    {
+      "id": "validation_gao_GAO-18-71",
+      "stratum": "q50",
+      "source_sentences": 267,
+      "log1p_source_sentences": 5.5909869805108565,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.003738322110606873
+    },
+    {
+      "id": "validation_gao_GAO-18-103",
+      "stratum": "q50",
+      "source_sentences": 265,
+      "log1p_source_sentences": 5.583496308781699,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.0037523496185505323
+    },
+    {
+      "id": "validation_gao_GAO-19-231",
+      "stratum": "q50",
+      "source_sentences": 268,
+      "log1p_source_sentences": 5.594711379601839,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.007462721201589417
+    },
+    {
+      "id": "validation_gao_GAO-19-29",
+      "stratum": "q50",
+      "source_sentences": 268,
+      "log1p_source_sentences": 5.594711379601839,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.007462721201589417
+    },
+    {
+      "id": "validation_gao_GAO-19-38",
+      "stratum": "q50",
+      "source_sentences": 268,
+      "log1p_source_sentences": 5.594711379601839,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.007462721201589417
+    },
+    {
+      "id": "validation_gao_GAO-18-660T",
+      "stratum": "q50",
+      "source_sentences": 264,
+      "log1p_source_sentences": 5.579729825986222,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.007518832414027621
+    },
+    {
+      "id": "validation_crs_R40985",
+      "stratum": "q50",
+      "source_sentences": 269,
+      "log1p_source_sentences": 5.598421958998375,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.01117330059812538
+    },
+    {
+      "id": "validation_gao_GAO-19-90",
+      "stratum": "q50",
+      "source_sentences": 269,
+      "log1p_source_sentences": 5.598421958998375,
+      "target_log1p_source_sentences": 5.58724865840025,
+      "absolute_target_distance": 0.01117330059812538
+    },
+    {
+      "id": "validation_crs_R45539",
+      "stratum": "q90",
+      "source_sentences": 542,
+      "log1p_source_sentences": 6.297109319933935,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.0
+    },
+    {
+      "id": "validation_crs_RL32934",
+      "stratum": "q90",
+      "source_sentences": 541,
+      "log1p_source_sentences": 6.295266001439646,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.0018433184942887593
+    },
+    {
+      "id": "validation_gao_GAO-19-60",
+      "stratum": "q90",
+      "source_sentences": 541,
+      "log1p_source_sentences": 6.295266001439646,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.0018433184942887593
+    },
+    {
+      "id": "validation_crs_R40425",
+      "stratum": "q90",
+      "source_sentences": 539,
+      "log1p_source_sentences": 6.29156913955832,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.005540180375614767
+    },
+    {
+      "id": "validation_gao_GAO-18-281",
+      "stratum": "q90",
+      "source_sentences": 536,
+      "log1p_source_sentences": 6.285998094508865,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.011111225425070259
+    },
+    {
+      "id": "validation_crs_R40082",
+      "stratum": "q90",
+      "source_sentences": 532,
+      "log1p_source_sentences": 6.278521424165844,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.018587895768090945
+    },
+    {
+      "id": "validation_gao_GAO-18-12",
+      "stratum": "q90",
+      "source_sentences": 555,
+      "log1p_source_sentences": 6.320768294250582,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.023658974316647097
+    },
+    {
+      "id": "validation_crs_RS21852",
+      "stratum": "q90",
+      "source_sentences": 560,
+      "log1p_source_sentences": 6.329720905522696,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.03261158558876076
+    },
+    {
+      "id": "validation_gao_GAO-18-126",
+      "stratum": "q90",
+      "source_sentences": 561,
+      "log1p_source_sentences": 6.331501849893691,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.03439252995975561
+    },
+    {
+      "id": "validation_crs_R45618",
+      "stratum": "q90",
+      "source_sentences": 567,
+      "log1p_source_sentences": 6.342121418721152,
+      "target_log1p_source_sentences": 6.297109319933935,
+      "absolute_target_distance": 0.04501209878721646
+    }
+  ],
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

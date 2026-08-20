@@ -3,7 +3,7 @@
 
 > 稽核日期：2026-07-26
 > 稽核對象：repo 根目錄（commit `1b9fe6f`）
-> 新 pipeline 狀態覆核：2026-08-02（master 已含 PR #10）
+> 新 pipeline 狀態覆核：2026-08-20（兩資料集 official test／E2／E3 與 F-81 已納入）
 > 與 `paper_revision_plan_IEEE_Access.md` 的關係：**本文件是 evidence ledger，不取代研究主計畫**。
 > 研究主計畫定義「論文該怎麼改」；本文件記錄「legacy 程式碼與 artifact 實際上做了什麼」。
 > 本文件是 legacy snapshot 的 evidence ledger，不是目前 working tree 的驗收證書。
@@ -15,11 +15,16 @@
 > 部分為抽樣、且未做 paired significance test，標籤維持 diagnostic。
 > 少數分析（如 370/500 換行雜訊統計）尚未版本化，仍須重做。
 > 後續修正狀態以 §0.0、`ACTION_PLAN.md` 與目前測試結果為準；下方 legacy 敘述不會隨 working tree 改寫。
-> **2026-08-06 selector evidence**：200-row reference-blind matched pilot 與五 seed
+> **2026-08-11 v2 freeze-package 覆核（歷史 checkpoint）**：作者端已核准 GovReport-centered 定位；
+> GovReport 是唯一 primary，Multi-News 是 boundary evidence。F-72 登錄官方 evaluator
+> mismatch risk；459 tests、freeze verifier 與 provenance audit 已通過，protected splits 仍鎖定。
+> **2026-08-06 selector evidence（歷史 pilot，已由 D2 更正）**：200-row reference-blind matched pilot 與五 seed
 > NSGA-II stability extension 已完成。MMR 對 Greedy 的 R-1/R-2 paired gain 為
 > `+0.01488/+0.01472` 且 Holm-significant；NSGA-II 五 seed mean 均低於
-> Greedy、selection Jaccard 僅 `0.639`。selector 因此採 MMR，NSGA-II 降為
-> comparator；這仍未回答 full-source MMR／PacSum／兩 primary 的 system gate。
+> Greedy、selection Jaccard 僅 `0.639`。當時暫採 MMR、NSGA-II 降為 comparator；
+> 2026-08-09 full-dev D2 後改採 task-profile policy，GovReport 才使用 TF-IDF MMR λ=0.7，
+> Multi-News 由 Greedy 勝出。D3b 搜尋已停止；E1～E3 與 pre-test audit 已完成，現在只待
+> frozen-policy ordering 決議、test policy、exact execution package 與兩階段簽核。
 > **2026-08-08 development-split governance**：先前所有 validation pilot 都直接使用
 > full validation，沒有可供「反覆搜尋」與「單次確認」分離的 manifest。F-20 已為
 > Multi-News 與 GovReport 都已補上 reference-blind dev/dev-test 凍結與 runtime
@@ -43,11 +48,11 @@
 
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
-| **F-0** | 系統未贏 Lead | 🔴 成立 | 🔴 **Gate 2 dev 失敗** | route matched evidence 有正訊號，但正式 paired finalists 顯示 S02b 對 Multi-News P08 與 GovReport SBERT+MMR 的 macro CI 均全負；selection-aware wins 0。不得進 dev-test，見 F-62 |
+| **F-0** | 系統未贏 Lead | 🔴 成立 | ✅ **final 結論已取代舊診斷** | GovReport official test 顯著勝 SBERT+MMR；Multi-News official macro 排名第一但與 PacSum 統計同級，且 R-2 顯著較低。不得寫 universal superiority；見 F-80～F-81 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
-| F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修 | `src/eval/rouge.py`；published-protocol parity 仍待驗證 |
+| F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修與驗證 | `src/eval/rouge.py`；E1 已完成 GovReport 官方 Stanza + Perl ROUGE parity，內部與官方尺度分表 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
-| F-4 | PLM 每篇重載模型 | 🔴 成立 | ✅ 程式已修 | `load_encoder()` 快取。**但正式計時數字仍須依鎖定 protocol 重測** |
+| F-4 | PLM 每篇重載模型 | 🔴 成立 | ✅ 已修與量測 | `load_encoder()` 快取；E2 已完成 frozen protocol 的 cold/warm、process-tree RSS 與 scaling |
 | F-5 | 相似度矩陣就地竄改 | 🔴 成立 | ✅ 已修 + regression test | `src/features/graph.py` |
 | F-6 | `pop_size`/`n_gen`/`seed` 未接線 | 🔴 成立 | ✅ 已修 | `optimizer_dispatch.py` |
 | F-7 | salience 用總和 → 基數偏誤 | 🔴 成立 | 🟡 部分禁止（僅限有 `task_profile` 的 profiled multi_sentence；例外詳見 F-14） | `objectives/factory.py` 拒絕 profiled multi_sentence config 用 raw sum；legacy_unprofiled（無 `task_profile`）與 legacy 保留 sum |
@@ -60,11 +65,14 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🔴 **F-0／F-62：Gate 2 dev quality gate 失敗** —— S02b 對兩 primary adversarial winner 的 macro paired CI 均全負，selection-aware wins 0；不得進 dev-test
+1. ✅ **v1 Gate 2／D3b 雙-primary gate 的失敗已由 GovReport-centered v2 正式收束** ——
+   GovReport official confirmatory test 顯著勝 SBERT+MMR；Multi-News secondary test 的
+   macro 與 PacSum 統計同級且 R-2 顯著較差。兩資料集 E2/E3 均完成，配置搜尋關閉；
+   不得用 test 結果再調參或重開 protected split
 2. ✅ **F-9 baseline 工程矩陣已完整** —— non-PLM、PLM、greedy reference 與 paired finalists 均完成；完成矩陣不等於方法有效，反而提供 redesign 的否證基準
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
-5. 🟡 **F-4 的正式計時數字**、**F-2 的 published-protocol parity**
+5. ✅ **F-72 official evaluator parity**與 **F-4 正式 cold/warm timing、memory、scaling** 已完成；GovReport 與 Multi-News 的 final evidence 都已版本化
 6. 🟡 **F-14 的 legacy_unprofiled raw-sum 例外**與 **F-15 的 legacy unmatched ablation**；兩者不得被誤當成新 canonical pipeline 的 matched evidence
 
 ---
@@ -78,9 +86,9 @@
 | 審稿人的指控 | 稽核結果 |
 |---|---|
 | R4 #3：oracle 邏輯矛盾 | ✅ **0.136 的錯誤來源已找到**；0.514 是非官方三句 greedy diagnostic，不是真 exact oracle，不能拿來重現官方 52.4 |
-| R1-2：ROUGE-L 異常低 | ✅ 已確認舊碼算的是單序列 ROUGE-L；改按目前多句內部 Lsum 協定後由 0.201 → **0.388**，published-protocol parity 仍待驗證 |
+| R1-2：ROUGE-L 異常低 | ✅ 已確認舊碼算的是單序列 ROUGE-L；改按目前多句內部 Lsum 協定後由 0.201 → **0.388**，E1 另完成 GovReport published-protocol parity |
 | R4 #5：PLM 貢獻幾乎為零 | ✅ **證實，但原因不是「PLM 沒用」，而是 Stage 2 根本沒有 PLM** |
-| R4 #4：BERT/RoBERTa 執行時間差 | ⚠️ 程式確實每篇重載模型。**純推論比值 ≈1.0 為穩定結論**（1.04× / 1.02×）；載入佔比不穩定（78% / 93%），不可引用特定數字。腳本 `scripts/audit/plm_timing.py`，須依鎖定 protocol 重測 |
+| R4 #4：BERT/RoBERTa 執行時間差 | ⚠️ legacy 程式確實每篇重載模型。舊「純推論比值」只保留為歷史診斷；正式新 pipeline 成本主張改由 E2 frozen cold/warm、RSS、scaling 證據支撐 |
 | R2/R4：超參數缺失 | ✅ **比審稿人想的更嚴重**：部分超參數寫在 config 裡但程式從未讀取 |
 | R2/R4：baseline 太弱、選擇性報告 | 🔴 **比審稿人想的嚴重得多 —— 見下方 F-0，這是最致命的一條** |
 
@@ -2360,3 +2368,230 @@ preregistration、evidence 或實驗數字，也未存取 dev-test/test。Window
 system-temp basetemp 後，bare `pytest` 完整回歸為 **453 passed**，全樹
 `compileall -f src tests scripts` 亦通過。此修正只修復 provenance/CI
 portability，不構成新的方法效果證據。
+
+## F-72 — GovReport 內部 evaluator 尚未證明等同 published official protocol
+
+**嚴重度：P0（claim validity／final-evaluation governance）**
+
+2026-08-10 檢查 GovReport 論文與作者官方 repository 後，確認官方評測不是本 repo
+目前的 Google `rouge_score` + 共用 Punkt ROUGE-Lsum 路徑。官方
+`LongDocSum` repository（檢查 commit
+`ee0dd33f2fde9d19b9a15d81884418d68320e5ca`）在 `Model/eval_model.py` 使用
+Stanza `Pipeline(lang='en', processors='tokenize,mwt')`，把 token 以空白連接、句子以換行
+連接；`Model/evaluate.py` 再透過 `pyrouge.Rouge155` 呼叫 Perl ROUGE-1.5.5，參數含
+`-c 95 -r 1000 -n 2 -m`。因此目前 D3b 的內部 evaluator 結果可作 development evidence，
+但在 parity 完成前不能直接稱為 GovReport published-protocol main result。
+
+**修正／守門：**
+
+- 新增 `configs/preregistrations/govreport_centered_evidence_completion_v1.json`，固定在已
+  凍結 GovReport dev outputs 上重算 proposed 與八個 baselines；official protocol 為
+  manuscript authoritative，內部 evaluator 只作 secondary diagnostic。
+- 若 official protocol 使 proposed 與預指定 strongest baseline 的排序反轉，立即撤回
+  GovReport quality-superiority claim；不得再調 selector、route、budget 或 weights。
+- 新增 `configs/preregistrations/govreport_centered_final_evaluation_v1.json`，但 execution
+  維持 `locked`，且不建立 test data policy；老師／完整作者群簽字前不可執行。
+- 新增 `scripts/audit/verify_govreport_freeze_package.py` 與 regression guards，驗證
+  dataset role、frozen config、protected-split lock 與 final execution lock。clean clone
+  一律嚴格驗 committed metadata；gitignored dev artifacts 若存在就驗 SHA，若不存在則
+  明列 deferred。研究工作站可用 `--require-local-evidence` 要求全部本地 evidence 存在。
+  此 verifier 不開啟任何 dataset split。
+
+**重現來源：** GovReport paper `https://arxiv.org/abs/2104.02112`；官方程式
+`https://github.com/luyang-huang96/LongDocSum`。本條沒有產生新的 ROUGE 分數，也沒有
+存取 dev-test/test；它只登錄 evaluator mismatch risk 與 freeze 前必做的驗證。
+
+驗證結果（2026-08-11）：freeze-package targeted 6/6、完整 pytest **459 passed**、
+strict local-evidence mode 驗 10 個 artifacts／0 deferred；
+`compileall -f src tests scripts` 通過，provenance audit 為
+`468 checked / 468 legacy / 0 fail`；freeze verifier 回報 protected splits locked、
+`test_split_accessed=false`。
+
+## F-73 — Official GovReport evaluator 已對齊；Windows runtime 需要原生 WordNet DB
+
+**嚴重度：P0 已關閉（evaluator parity）／P2 portability limitation**
+
+2026-08-15 在任何 test 存取前完成 E1。九個 immutable prediction artifacts 均在
+GovReport frozen dev 681 rows，以官方 Stanza `tokenize,mwt` 與 Perl ROUGE-1.5.5
+`-c 95 -r 1000 -n 2 -m` 重評。Proposed 官方 macro `0.458257`，相對預註冊
+full-source SBERT+MMR comparator 為 `+0.004569`，100,000 次 paired bootstrap
+95% CI `[+0.002467,+0.006680]`、`p=0.000020`。R-1/R-2 通過 Holm-3；R-L
+CI 跨 0、Holm-3 `p=0.063219`，不得宣稱三分項全顯著。完整表與證據索引見
+`E1_OFFICIAL_EVALUATOR_STATUS.md`。
+
+score-blind 啟動期間發現三個 Windows portability 問題並完整保留失敗 evidence：含中文的
+repository path 無法由 Perl/DB_File 正確開啟、第一次 ASCII alias guard 有拼字錯誤、
+上游預建 Unix Berkeley DB 無法由 Windows Strawberry Perl 讀取。最終以 ASCII `R:`
+alias 與相同 WordNet plaintext 重建平台原生 DB 解決；ROUGE script、plaintext、native DB
+與 builder hashes 均在 execution/runtime addenda 凍結。Lead corpus smoke 證明 `-d`
+前後總分完全相同。
+
+本階段完整 pytest **464 passed**、`compileall -f src tests scripts` 通過；freeze verifier
+仍回報 `protected_splits_unlocked=false`、`dev_test_accessed=false`、
+`test_split_accessed=false`。F-72 的官方 parity blocker 因此關閉；E2/E3 後續也已完成，
+目前 test policy、freeze audit 與完整簽字仍是 final test 前硬條件。
+
+## F-74 — E2 以 selector 名稱判斷 cache applicability，錯列兩個 semantic-route systems
+
+**嚴重度：P1 已關閉（cost-claim validity）**
+
+2026-08-15 E2 執行時發現，`D2_matched_greedy_tfidf_anchor` 與
+`D2_matched_nsga2_tfidf` 雖以 TF-IDF 作 selector salience，兩者 frozen S02b YAML 的
+`compute_budget.enabled_routes` 都含 `semantic`，仍需建立 sentence-embedding cache。
+第一版 runner 卻只按 system label 將兩者排除於 cache-aware set，會讓 `warm_cache`
+實際重新 encoding，導致 cold/warm 標籤無效。
+
+在第一個 affected cold smoke 尚未完成時主動中斷；170.41 秒 partial、751,341,568-byte
+partial peak RSS、13,521,272-byte cache 與 SHA 均保留，且 `timing_used_in_analysis=false`。
+erratum 誠實標記 unaffected timings 與 partial elapsed 已被觀察，但修正由 frozen config
+靜態結構唯一決定，沒有改 sample、system set、repetitions、metrics 或 quality selection。
+修正後兩個 systems 都先建立並 byte-verify 13.73 MB warm cache，所有 cold 使用獨立空
+cache。新增 regression 機械驗證兩個 YAML 的 semantic route 與 cache-aware membership。
+
+E2 最終為 78 completed + 1 preserved failure；54/54 measured repetitions、九系統的
+cold/warm selected-index digest 均一致。Proposed median cold/warm wall time 為
+`176.03/10.52s`，full-source SBERT+MMR `177.81/12.45s`，matched NSGA-II
+`222.61/56.74s`。完整 memory/scaling 表見 `E2_COST_SCALING_STATUS.md`。
+dev-test/test 均未存取；timing outcome 不可用於調參或 promotion。
+
+## F-75 — E3 schema guard 啟動錯誤已留證；五個 route/provenance ablations 全部通過
+
+**嚴重度：P1 已關閉（runner correctness）／P0 claim evidence 已完成**
+
+2026-08-15 第一次 E3 invocation 在 worker 或分數產生前，以 `KeyError: 'partition'`
+中止。runner 把 `_load_study()` 回傳的 dataset spec 誤當成 partition object；正確凍結
+身分位於 `study['manifest_object']['partitions']['dev']`。修正只抽出 fail-loud manifest
+identity guard，驗證 rows、selected ID 型別與 SHA；三個 regression tests 覆蓋正常、
+membership drift 與 row-count drift。第二次 invocation 因 Windows sandbox 禁止建立
+worker pipe 而在任何 prediction／score 前失敗。兩次 attempt 都保留並進 search log，
+相同 frozen scientific configs 最後在 sandbox 外以 16 workers 完成。
+
+E3 五案均為 GovReport frozen dev 681/681 feasible、dev-test/test 未存取。完整 C01
+內部 macro `0.457404`；no-semantic `0.442022`、no-graph `0.448370`、capacity-80
+lexical-only `0.359463`、exact-pool equal-RRF `0.449608`、exact-pool lexical-salience
+`0.359569`。五個 C01−ablation macro 95% CI 全正，20-endpoint Holm-adjusted
+`p=0.000400`；所有 20 個 ROUGE endpoints 也都通過。A03 排除單純候選容量解釋；
+A04/A05 在固定 C01 membership 下分離 weighted fusion 與 selector salience，確認
+provenance 不能只停留在 candidate membership。
+
+完整 evidence 見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md` 與
+`runs_v2/govreport_e3_route_provenance_v1/`。本消融使用預註冊內部
+`rouge_score`/Lsum，不可與 E1 official Perl 尺度混表；結論限 GovReport frozen dev，
+不外推 Multi-News，也不解鎖 test。
+
+本階段完整 pytest **469 passed／5 subtests passed**，`compileall -f src tests scripts`
+通過；既有 provenance verifier 為 `468 checked / 468 legacy / 0 fail`。
+
+## F-76 — Final test policy 與 human signature 的 frozen ordering 互相循環
+
+**嚴重度：P0（protected-split governance，待人員決議）**
+
+E1～E3 完成後覆核 final unlock contract，發現 `govreport_centered_repositioning_v2.json`
+要求 immutable final test policy 是完整作者簽署前的必要證據；但同檔 protected policy 與
+`govreport_centered_final_evaluation_v1.json` 又要求 unlock／簽字前 test policy 不得
+materialize，且不得讀 test membership/payload。正式 policy 必須包含 membership count、
+exclusions、source checksums 與 fingerprint，因此不存取 official test 不可能填完。
+
+這不是可用程式自行猜測的語意。Freeze verifier 已加入 E1/E2/E3 hash 與 completion
+guards，且明列 `policy_sequence_status=blocked_by_frozen_contract_ordering_conflict`、
+`ready_for_test=false`。建議由老師／完整作者群批准兩階段流程：Stage A 只授權 data
+steward materialize policy、禁止 predictions/scores；policy 與 exact execution package
+凍結後，Stage B 再簽 one-shot execution。完整建議與簽核欄見
+`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`。在決議前不修改 frozen data policy，
+不建立 `govreport_test_v1.json`，也不執行 test。
+
+## F-77 — Stage A test policy 已在零 prediction／零 score 下 materialize
+
+**嚴重度：已治理（protected-split data identity）**
+
+2026-08-16，提出請求的作者轉述老師／作者端已同意兩階段順序與條件式 Stage B。
+新增 authorization addendum，不覆寫 F-76 所指的兩份 frozen 原檔，也不偽造外部簽名。
+Stage A 自動 canonicalizer 讀取 official test membership/payload：CRS 362 + GAO 611 =
+973 rows；canonical 保留 973、pre-score exclusions 0。兩列 source 各有一個 U+FFFD，
+依事前規則原樣保留並寫 manifest；健康檢查 286,080 sentences、valid=true。
+
+Canonical SHA-256 為 `3ff10e66...7026dfc`，dataset fingerprint 為
+`c5ae4fbb...6cb9c6`。Freeze verifier 現回報 ordering resolved、policy materialized，
+但 `ready_for_test=false`，因九系統 runner、score-free dry run 與 exact execution
+package 尚未凍結。本階段沒有產生 prediction 或 ROUGE。
+
+## F-78 — Stage B exact execution freeze 與 score-free dry run 已通過
+
+**嚴重度：已治理（one-shot execution governance）**
+
+2026-08-16，在任何 official-test prediction 或 score 前，已將 scientific code commit
+`36919f222a697fd84d25600b23ba1633ff908ae9`、final config、973-row canonical test、
+九個 system families、10 個 random seeds、official Stanza/Perl ROUGE resources、
+Python dependencies、16 workers、exact commands 與 output root 釘進
+`govreport_final_execution_freeze_v1.json`。建立 freeze 時明確為零 prediction／零 score。
+
+Score-free dry run 後驗證 973 ordered IDs、973 references、九個 family labels、資源
+hashes 與套件版本，狀態為 `passed_without_predictions_or_scores`。Stage B activation
+再釘住 freeze SHA-256 `5dbd5490...6d7d92` 與 dry-run SHA-256
+`29ad773a...74e56`。Freeze verifier 因此回報 `ready_for_test=true`；此狀態只授權
+精確 one-shot command，不授權任何根據 test 分數的方法、baseline、長度、排除規則、
+evaluator 或 inference 變更。
+
+## F-79 — Final runner 在全部 evaluator runs 完成後的 internal Random 聚合失敗
+
+**嚴重度：P1 分析基礎設施（score-preserving recovery）**
+
+2026-08-16，18 個實際 prediction runs 的 official 與 internal per-row scores 全部完成，
+official Random 10-seed 聚合也完成後，frozen runner 在 internal Random 聚合讀取
+`row["macro_rouge"]` 時發生 `KeyError`。Internal per-example 檔依既有契約只存
+R1/R2/R-Lsum；corpus evidence 才有 macro，因此這是聚合器 schema bug，不是選句、
+evaluator 或分數失敗。
+
+保留 `attempt_20260815T234414Z_failed/evidence.json`，不覆寫 frozen runner；新增只讀
+recovery，唯一修復是對每列已存 R1/R2/R-Lsum 取算術平均，再依原預註冊
+seeds、bootstrap 與 Holm family 完成分析。不重跑 prediction、tokenization 或 ROUGE，
+不修改任何 source score，且 `post_score_tuning_permitted=false`。
+
+Recovery 已成功完成原預註冊分析。Proposed official macro `0.459943`，對
+SBERT+MMR 為 `+0.003700`、95% CI `[+0.002008,+0.005420]`、`p=0.000040`；
+macro pass 與 component guard 均通過，最終決策為
+`retain GovReport-scoped superiority claim`。R-L 單項 CI 跨 0，不宣稱三分項全顯著。
+
+## F-80 — Multi-News frozen final test 完成；macro 第一但不得宣稱勝過 PacSum
+
+**嚴重度：研究結論已定案（secondary benchmark）**
+
+2026-08-16 至 17，Multi-News 依 score-blind policy、execution freeze 與 activation，
+完成 5,621/5,621 official test rows、九個 system families 與 10-seed Random。Proposed
+官方 R-1/R-2/R-L/macro 為 `0.45011/0.14314/0.41351/0.335587`，macro 排名第一。
+
+主要預註冊比較 Proposed−PacSum-TFIDF P08 macro 為 `+0.000091`，95% CI
+`[-0.001542,+0.001730]`、`p=0.907111`，不支持 macro superiority。分項則為 R-1
+`+0.002389`、Holm-3 `p=0.003520`；R-2 `-0.006758`、Holm-3 `p=0.000060`；
+R-L `+0.004641`、Holm-3 `p=0.000060`。相對 PacSum-SBERT macro 亦不顯著；相對
+Lead、Random、TextRank、LexRank、SBERT centroid 與 SBERT+MMR 的 macro 在 Holm-32
+後顯著為正。
+
+因此舊文件把 Multi-News 寫成「只會輸／不跑 test」已過時，但也不能反向改成「全面
+勝過 baseline」。正確寫法是 macro 排名第一、與最強 PacSum 統計同級、R-1/R-L 與
+R-2 有顯著 trade-off。Canonical analysis SHA-256 為
+`fd2410f28c9c27dd8c7087fa7346fda20886b8e9e435b8558721a203219b45c7`；
+`post_score_tuning_permitted=false`。
+
+## F-81 — Multi-News E3 首次完整 run 混用依賴；parity guard 修正後正式 E2/E3 完成
+
+**嚴重度：P1 已關閉（ablation provenance）／E2-E3 evidence complete**
+
+Multi-News E3 第一次 sandbox 外完整 run 誤用使用者 Anaconda 環境：scikit-learn
+1.5.1、NLTK 3.9.1、PyYAML 6.0.1、Torch 2.5.1+cu121；frozen C01 anchor 則是
+1.7.1、3.10.0、6.0.2、2.8.0+cpu。雖聚合差距很小，A02/A04 的逐篇 selected-index
+digests 確實改變，因此不能與 frozen anchor 配對。該完整 attempt、analysis SHA
+`cd5a8db2...6e1ef` 與五個 search-log rows 均保留並標記 excluded。
+
+runner 新增 dependency-parity fail-loud guard；專案 `.venv` 的 exact-parity rerun 才是
+權威 E3。Full macro `0.330417`；full−no-semantic `+0.001917`、no-graph
+`+0.004385`、capacity-80 lexical-only `+0.010478`、exact-pool equal-RRF
+`+0.000742`、exact-pool lexical-salience `+0.007139`。五項 macro 95% CI 均全正且
+Holm-20 通過；A04 `p=0.049440` 位於門檻邊緣，必須保守描述。
+
+同日完成 Multi-News E2：九系統、77 completed attempts、30 篇 reference-blind dev
+sample，所有 repetition 與 cold/warm selected indices 一致。Proposed median cold/warm
+為 `47.85/9.23s`、peak RSS `594.6/398.9 MiB`；PacSum-SBERT `46.05/7.27s`、
+SBERT+MMR `47.19/7.90s`；matched NSGA-II `91.69/50.07s`。這支持 Greedy 作 final
+selector、NSGA-II 作 ICACT 延伸的 matched comparator。E2/E3 均未存取 dev-test/test，
+也不能依結果回頭改方法。

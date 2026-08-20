@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "index_id": "govreport-pretest-evidence-index-v1",
+  "status": "e1_e2_e3_complete_before_test_access",
+  "recorded_at_utc": "2026-08-15T11:24:43.0944532Z",
+  "evidence_snapshot_commit": "64e2603a51bf954155363371a14e245b39ba306e",
+  "purpose": "Machine-verifiable inventory of the preregistered E1-E3 completion evidence; this is an after-evidence freeze index, not a new scientific preregistration.",
+  "E1": {
+    "path": "runs_v2/govreport_official_evaluator_v1/analysis.json",
+    "sha256": "88e7ec2db626079b30046f48012a0152c55e86a4f883ca34049e21e3f6bd5749",
+    "study_id": "govreport-official-evaluator-v1",
+    "expected_rows": 681,
+    "required_decision": "retain GovReport superiority claim for the later untouched-test gate"
+  },
+  "E2": {
+    "path": "runs_v2/govreport_cost_scaling_v1/analysis.json",
+    "sha256": "5b6c539681e96387107c4e6215159f2fa57d1ecb1fe698a0d1c74598b0a340e0",
+    "study_id": "govreport-cost-scaling-v1",
+    "expected_systems": 9,
+    "required_measured_repetitions_per_state": 3
+  },
+  "E3": {
+    "path": "runs_v2/govreport_e3_route_provenance_v1/analysis.json",
+    "sha256": "3ed32a547f1f7f343f1e5845f08fbd11b2cdee50112174f4aa43af47b3fff71a",
+    "study_id": "govreport-e3-route-provenance-v1",
+    "expected_rows": 681,
+    "expected_holm_family_size": 20,
+    "expected_bootstrap_resamples": 100000,
+    "required_claim_downgrades": []
+  },
+  "regression": {
+    "command": ".venv\\Scripts\\python.exe -m pytest -q --basetemp <isolated-system-temp>",
+    "passed": 469,
+    "subtests_passed": 5,
+    "compileall": "pass"
+  },
+  "protected_split": {
+    "dev_test_accessed": false,
+    "test_split_accessed": false,
+    "test_policy_materialized": false,
+    "test_execution_authorized": false
+  }
+}

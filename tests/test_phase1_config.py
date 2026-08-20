@@ -78,6 +78,22 @@ def test_unknown_experiment_status_fails_closed():
         validate_experiment_request(cfg, "validation")
 
 
+def test_final_test_only_requires_exact_govreport_policy_and_full_test():
+    cfg = _phase1_config()
+    cfg["experiment"] = {"status": "final_test_only", "dataset": "GovReport"}
+    cfg["data_policy"] = {
+        "policy_path": "configs/data_policies/govreport_test_v1.json",
+        "policy_sha256": "0" * 64,
+        "analysis": "main",
+    }
+    validate_experiment_request(cfg, "test")
+    with pytest.raises(ValueError, match="may only access the test split"):
+        validate_experiment_request(cfg, "validation")
+    cfg["experiment_partition"] = {"name": "dev"}
+    with pytest.raises(ValueError, match="complete official test"):
+        validate_experiment_request(cfg, "test")
+
+
 def test_governed_experiment_cannot_omit_data_policy():
     cfg = _phase1_config()
     del cfg["data_policy"]

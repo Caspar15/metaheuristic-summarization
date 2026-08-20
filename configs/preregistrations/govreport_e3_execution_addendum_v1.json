@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "govreport-e3-execution-addendum-v1",
+  "status": "frozen_before_any_e3_ablation_score",
+  "registered_at_utc": "2026-08-15T06:52:22.5417179Z",
+  "parent_preregistration": {
+    "path": "configs/preregistrations/govreport_centered_evidence_completion_v1.json",
+    "sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2"
+  },
+  "anchor": {
+    "prediction_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+    "prediction_sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2",
+    "selected_indices_sha256": "96d588a9798e0a14ae0843257ecf87adb7044d5f49a51416b47471fd2a9b7517",
+    "config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481"
+  },
+  "variant_resolution": {
+    "A01_no_semantic": {
+      "compute_budget.enabled_routes": ["lexical", "graph"],
+      "candidates.route_weights": {"lexical": 0.5, "graph": 1.0},
+      "all_other_scientific_fields": "C01 unchanged"
+    },
+    "A02_no_graph": {
+      "compute_budget.enabled_routes": ["lexical", "semantic"],
+      "candidates.route_weights": {"lexical": 0.5, "semantic": 1.0},
+      "all_other_scientific_fields": "C01 unchanged"
+    },
+    "A03_lexical_only_capacity_80": {
+      "compute_budget.enabled_routes": ["lexical"],
+      "candidate_budget": {"route_top_k": 80, "min_per_route": 0, "total": 80},
+      "candidates.route_weights": {"lexical": 1.0},
+      "coverage_guard": "C01 unchanged",
+      "all_other_scientific_fields": "C01 unchanged"
+    },
+    "A04_equal_rank_rrf": {
+      "candidate_membership": "exact per-row C01 candidate original indices",
+      "route_score_reconstruction": "recompute lexical, semantic, and graph ranks over the full eligible source",
+      "rrf_weights": {"lexical": 1.0, "semantic": 1.0, "graph": 1.0},
+      "rrf_constant": 60,
+      "normalization": "min-max over all eligible-source equal-weight RRF scores before filtering to the exact C01 pool",
+      "selector": "C01 TF-IDF MMR lambda 0.7 unchanged"
+    },
+    "A05_index_only_lexical": {
+      "candidate_membership": "exact per-row C01 candidate original indices",
+      "route_score_reconstruction": "recompute lexical ranks over the full eligible source; other routes may be recomputed only to retain an auditable C01-like provenance record",
+      "selector_salience": "lexical_percentile = 1 - (full-source lexical rank - 1)/(eligible source rows - 1)",
+      "ignored_by_selector": ["route membership", "route agreement", "weighted RRF score", "semantic rank", "graph rank"],
+      "selector": "C01 TF-IDF MMR lambda 0.7 unchanged"
+    }
+  },
+  "execution": {
+    "partition": "all 681 frozen GovReport dev rows",
+    "workers_max": 16,
+    "threads_per_worker": 1,
+    "embedding_cache": "reuse the previously equivalence-verified frozen GovReport cache; scientific values unchanged",
+    "predictions_written_atomically": true,
+    "failed_attempts_preserved": true,
+    "no_dev_test_or_test_code_path": true
+  },
+  "inference": {
+    "comparisons": ["C01-A01", "C01-A02", "C01-A03", "C01-A04", "C01-A05"],
+    "endpoints": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+    "holm_family_size": 20,
+    "paired_bootstrap_resamples": 100000,
+    "base_seed": 20260820,
+    "seed_assignment": "variant order A01..A05, within each variant endpoint order R1,R2,RLsum,macro; add zero-based endpoint index to base seed"
+  },
+  "scores_observed_before_registration": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

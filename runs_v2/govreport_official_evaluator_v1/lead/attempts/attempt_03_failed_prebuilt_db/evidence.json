@@ -1,0 +1,13 @@
+{
+  "evidence_schema_version": "1.0",
+  "recorded_at_utc": "2026-08-15T07:07:36.3132139Z",
+  "status": "failed_before_any_rouge_score",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "lead",
+  "failure": "Perl reached the ASCII R: toolkit path, but Strawberry Perl DB_File could not open the mirror's prebuilt Unix Berkeley DB WordNet-2.0.exc.db.",
+  "prebuilt_db_sha256": "de39665d1d0a0e5d24895b25dfee7015cd84632e13f0dd02340bd9b6010d5a78",
+  "resolution": "Preserve the mirror, copy the toolkit to a Windows runtime directory, and use its released buildExeptionDB.pl plus the byte-pinned WordNet plaintext exception files to generate a platform-native DB before any score.",
+  "official_scores_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

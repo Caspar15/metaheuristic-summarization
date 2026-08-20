@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "study_id": "govreport-centered-evidence-completion-v1",
+  "status": "frozen_before_new_evidence_scores_or_timings",
+  "registered_at_utc": "2026-08-10T15:50:24.5072384Z",
+  "implementation_parent_commit": "03aef0557fceb11adbe031f9918053582c771443",
+  "repositioning_addendum": {
+    "path": "configs/data_policies/govreport_centered_repositioning_v2.json",
+    "sha256": "656c2996b0fcd208ccb0e9d794ee369c6ae1132bbeb9591e03983f367e32bee6"
+  },
+  "registration_timing": "after D3b frozen-dev outcomes and author-side option-A approval, before any official-evaluator score, new ablation score, or controlled cost measurement",
+  "purpose": "Complete non-search evidence required for the GovReport-centered IEEE Access claim without reopening method selection.",
+  "partition": "GovReport frozen dev only",
+  "rows": 681,
+  "further_dev_test_access": "forbidden",
+  "dev_test_accessed_by_this_study": false,
+  "test_split_prohibited": true,
+  "test_split_accessed": false,
+  "frozen_inputs": {
+    "policy": {
+      "path": "configs/data_policies/govreport_validation_v1.json",
+      "sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e"
+    },
+    "partition_manifest": {
+      "path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "legacy_crlf_pin": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "lf_canonical_sha256": "c37b9507da30d1579e799c39d72fb56d7695d9fa36f004c6352d6426667977ff"
+    },
+    "length_policy": {
+      "path": "configs/length_policies/govreport_v1.json",
+      "sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515"
+    },
+    "proposed": {
+      "candidate": "C01_combined_salience_route_weight",
+      "config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+      "config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481",
+      "predictions_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+      "predictions_sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2",
+      "per_example_sha256": "9538f20d53b5374c0e0006b6f38ac1a3a0e882067d77210ad468e1b8530e486d",
+      "selected_indices_sha256": "96d588a9798e0a14ae0843257ecf87adb7044d5f49a51416b47471fd2a9b7517"
+    },
+    "baseline_selection_evidence": {
+      "preregistration_path": "configs/preregistrations/gate2_baseline_matrix_v1.json",
+      "preregistration_sha256": "b6a38e53d2f25f6340d2ed7b9552d56e6b159748093f77922faa42c0b41078bd",
+      "paired_summary_path": "runs_v2/gate2_paired_finalists_v1/summary.json",
+      "paired_summary_sha256": "1781ebe5ea64291857acc8d68b4bef8053284f21cb4dba185b23f60736120941"
+    }
+  },
+  "work_packages": {
+    "E1_published_evaluator": {
+      "question": "Does the GovReport conclusion survive the dataset authors' released preprocessing and original Perl ROUGE protocol?",
+      "authoritative_source": {
+        "paper": "Huang et al., Efficient Attentions for Long Document Summarization, NAACL 2021",
+        "paper_url": "https://arxiv.org/abs/2104.02112",
+        "repository": "https://github.com/luyang-huang96/LongDocSum",
+        "repository_commit": "ee0dd33f2fde9d19b9a15d81884418d68320e5ca",
+        "scripts": ["Model/eval_model.py", "Model/evaluate.py"],
+        "tokenization": "stanza Pipeline(lang='en', processors='tokenize,mwt'); tokens joined by spaces and sentences by newlines",
+        "rouge": "pyrouge Rouge155 calling ROUGE-1.5.5.pl",
+        "rouge_arguments": "-c 95 -r 1000 -n 2 -m",
+        "reported_components": ["ROUGE-1 Average_F", "ROUGE-2 Average_F", "ROUGE-L Average_F"]
+      },
+      "systems": {
+        "proposed": ["runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl", "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2"],
+        "lead": ["runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/lead/run/predictions.jsonl", "4a24a4cfedda60bd094cc9a4563d78fc7f965d7686474e8610f822d166337215"],
+        "random_seed_3407": ["runs_v2/a1_length_contract/govreport/dev/dev_iqr_band_500_650/random/run/predictions.jsonl", "76fa5233fe851ea922b6d30106a99fc685bfaf0608726524c6beeadf4d959b81"],
+        "textrank": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/textrank/textrank/run/predictions.jsonl", "bad461da4ed860a3adb3b373dc1770402ee45ebce5687acaee46634f20a04d54"],
+        "lexrank": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/lexrank/lexrank/run/predictions.jsonl", "c2e17bcf31f90f2d8ece3edcfede77620886b57a1566f0e1df7cd66f3c69da47"],
+        "pacsum_tfidf_P07": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/pacsum_tfidf/run/predictions.jsonl", "8c83fd2f118a93464b3bb86e21ea0b6228e163e9803e83bf002496f5bd507770"],
+        "sbert_centroid": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_centroid/sbert_centroid/run/predictions.jsonl", "8ea532e90797d5df6112adf8d46f39a9053d98ed90ba19c770c7a91af49258cc"],
+        "sbert_mmr_lambda_0.9": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/sbert_mmr_lambda_0.9/sbert_mmr/run/predictions.jsonl", "7a39388eba1b75753ae3fe59da39a9ce290fd77d07d78590dfb44bcd3e85611e"],
+        "pacsum_sbert_beta_0.5": ["runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/pacsum_sbert_B05_beta_0.5/pacsum_sbert/run/predictions.jsonl", "9d206b258a36257f2e5cb86ac29346ee8a148e4ccf4331232994dc429a040520"]
+      },
+      "execution": "Evaluate the already-frozen 681-row outputs; no summarizer rerun and no system selection. Version the adapter and record Perl ROUGE, pyrouge, Stanza model, Java/Perl, OS, input SHA, and output SHA.",
+      "comparison": "Report official corpus scores, per-row official scores when technically valid, absolute deltas from the internal evaluator, and system ranking under both protocols.",
+      "decision_rule": "The official protocol becomes manuscript-authoritative. If proposed no longer exceeds the preregistered SBERT+MMR lambda-0.9 comparator on the unweighted macro of R1/R2/RL, or any component becomes clearly negative under paired inference, revoke the GovReport superiority claim; do not change the method or evaluator."
+    },
+    "E2_cost_scaling": {
+      "question": "What are the end-to-end cold/warm cost and memory scaling of the frozen proposed system and its relevant comparators?",
+      "sample": {
+        "source": "681-row frozen GovReport dev only",
+        "reference_blind_rule": "Compute source sentence counts only. At the q10, q50, and q90 log1p(sentence-count) targets, select the 10 closest unique rows per target; ties use canonical ID. Freeze the resulting 30 IDs before any timing.",
+        "references_or_rouge_used_for_sampling": false
+      },
+      "systems": [
+        "frozen C01 proposed",
+        "full-source SBERT+MMR lambda 0.9",
+        "D2 matched Greedy-TFIDF anchor",
+        "D2 matched NSGA-II+TF-IDF comparator"
+      ],
+      "states": {
+        "cold": "fresh process, empty task-specific embedding cache, model load and all preprocessing included",
+        "warm_cache": "fresh process, byte-verified populated embedding cache, all non-cache setup included"
+      },
+      "replication": "3 measured repetitions per system/state after one discarded instrumentation smoke; deterministic selected indices must be identical across repetitions",
+      "environment": "Primary report uses the frozen CPU device protocol. Optional GPU numbers require a separate selected-index equivalence check and are supplementary only.",
+      "measurements": [
+        "wall-clock end-to-end seconds",
+        "CPU process-tree seconds",
+        "peak process-tree RSS sampled at no more than 50 ms",
+        "peak GPU allocated/reserved memory when applicable",
+        "embedding cache hits/misses and bytes",
+        "source words, sentences, sections, candidate count, selected count"
+      ],
+      "scaling_analysis": "Report medians/IQRs by q10/q50/q90 stratum and descriptive log-log slopes versus source words and source sentences. No cost threshold promotes a new method.",
+      "failure_rule": "A selected-index mismatch, unverified cache state, overlapping timed jobs, or missing peak-memory trace invalidates that repetition and must be preserved as failed evidence rather than silently discarded."
+    },
+    "E3_route_and_provenance_ablation": {
+      "question": "Do non-lexical routes and route provenance contribute under the frozen GovReport configuration?",
+      "partition": "all 681 frozen GovReport dev rows",
+      "anchor": "C01 full routes + weighted RRF + TF-IDF MMR lambda 0.7",
+      "variants": {
+        "A01_no_semantic": "lexical + graph, route_top_k=40 each, total=80; every other frozen setting unchanged",
+        "A02_no_graph": "lexical + semantic, route_top_k=40 each, total=80; every other frozen setting unchanged",
+        "A03_lexical_only_capacity_80": "lexical only with route_top_k=80 and total=80; explicit capacity-matched route ablation",
+        "A04_equal_rank_rrf": "reuse each row's exact full C01 candidate pool; recompute selector salience with equal route weights and no quality-directed tuning",
+        "A05_index_only_lexical": "reuse each row's exact full C01 candidate pool; selector receives normalized lexical importance only and ignores route membership/agreement/fusion"
+      },
+      "no_additional_variants": true,
+      "quality_metrics": ["ROUGE-1", "ROUGE-2", "ROUGE-Lsum", "unweighted macro"],
+      "diagnostics": [
+        "actual summary words and selected sentences",
+        "candidate pool size and route proposals",
+        "route unique candidates and unique selected sentences",
+        "metric-specific greedy-reference recall as a reference-aware diagnostic only",
+        "wall time and peak process-tree RSS"
+      ],
+      "inference": "Five anchor-versus-ablation paired comparisons x four quality endpoints = Holm family of 20; 100,000 paired bootstrap resamples, base seed 20260820. All-row denominator; infeasible rows remain.",
+      "claim_rules": {
+        "semantic_quality_contribution": "full minus A01 macro must be positive with 95% CI lower >0 and Holm-20 p<=0.05",
+        "graph_quality_contribution": "full minus A02 macro must be positive with 95% CI lower >0 and Holm-20 p<=0.05",
+        "combined_nonlexical_contribution": "full minus A03 macro must be positive with 95% CI lower >0 and Holm-20 p<=0.05",
+        "provenance_contribution": "full must beat both A04 and A05 on macro with CI lower >0 and Holm-20 p<=0.05",
+        "failure": "Downgrade the unsupported component claim; do not create another weight, route, budget, or selector search."
+      }
+    }
+  },
+  "global_stop_rule": "After E1-E3, write a freeze audit. No outcome authorizes another dev grid or any dev-test/test access. If E1 reverses the primary comparison, the quality-superiority route is No-Go even if E2/E3 are favorable.",
+  "scores_observed_after_registration": false,
+  "timings_observed_after_registration": false
+}

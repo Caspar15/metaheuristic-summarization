@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "sbert_centroid",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 973,
+  "metrics": {
+    "rouge1": 0.5766969394971914,
+    "rouge2": 0.2409455272479018,
+    "rougeLsum": 0.5440510349383768,
+    "macro_rouge": 0.45389783389448995
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/internal/sbert_centroid/per_example.jsonl",
+  "per_example_sha256": "44f40d16620729d819e4771bf716cd7858a91a29bf6a24b04b35d18bf65d803e",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

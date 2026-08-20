@@ -1,0 +1,41 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T08:23:30.144226+00:00",
+  "status": "completed",
+  "study_id": "govreport-official-evaluator-v1",
+  "system": "pacsum_tfidf_P07",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "prediction_path": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/non_plm/pacsum_tfidf_P07_previous_-0.7/pacsum_tfidf/run/predictions.jsonl",
+  "prediction_sha256": "8c83fd2f118a93464b3bb86e21ea0b6228e163e9803e83bf002496f5bd507770",
+  "metrics": {
+    "rouge1": 0.53841,
+    "rouge2": 0.2083,
+    "rougeL": 0.50759,
+    "macro_rouge": 0.41809999999999997
+  },
+  "per_example_path": "runs_v2/govreport_official_evaluator_v1/pacsum_tfidf_P07/per_example.jsonl",
+  "per_example_sha256": "43a927b7a5dd56f898959eb7d2ad5e223493da97310e4a56e8d949102c365815",
+  "raw_output_path": "runs_v2/govreport_official_evaluator_v1/pacsum_tfidf_P07/rouge_raw.txt",
+  "raw_output_sha256": "2fb57c393b8e88f0cb0abf507e4a5b6c134280df073626f1362623fe1732dcec",
+  "execution_seconds": 162.07463030004874,
+  "command": [
+    "C:\\Strawberry\\perl\\bin\\perl.exe",
+    "R:\\.tmp\\rouge-windows-runtime\\ROUGE-1.5.5.pl",
+    "-e",
+    "R:\\.tmp\\rouge-windows-runtime\\data",
+    "-c",
+    "95",
+    "-r",
+    "1000",
+    "-n",
+    "2",
+    "-m",
+    "-d",
+    "-a",
+    "R:\\runs_v2\\govreport_official_evaluator_v1\\pacsum_tfidf_P07\\rouge_workspace\\settings.xml"
+  ],
+  "d_flag_corpus_parity_smoke": null,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

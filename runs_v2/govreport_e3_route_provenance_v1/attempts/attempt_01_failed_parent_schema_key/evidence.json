@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "study_id": "govreport-e3-route-provenance-v1",
+  "attempt": "attempt_01_failed_parent_schema_key",
+  "status": "failed",
+  "phase": "preflight_before_workers_or_scores",
+  "recorded_at_utc": "2026-08-15T11:03:49.6651973+00:00",
+  "implementation_commit": "9baf84f035f44f712c5b3dbdfdaef98cd36acd66",
+  "command": ".venv\\Scripts\\python.exe -m scripts.audit.run_govreport_e3_ablation --workers 16 --resume",
+  "requested_workers": 16,
+  "exception_type": "KeyError",
+  "exception_message": "'partition'",
+  "cause": "The runner incorrectly read study['partition'] although the frozen dev identity is nested under study['manifest_object']['partitions']['dev'].",
+  "parent_preregistration_path": "configs/preregistrations/govreport_centered_evidence_completion_v1.json",
+  "parent_preregistration_sha256": "9527368d5f2b862e5be477985ad262bc4e941f762f0077a8477b096fc27813a2",
+  "execution_addendum_path": "configs/preregistrations/govreport_e3_execution_addendum_v1.json",
+  "execution_addendum_sha256": "1acfcc90195e7e1f04f1026b7ef599707f45482ef9a40be98fa766ea99e3d6c6",
+  "workers_started": false,
+  "predictions_written": false,
+  "scores_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

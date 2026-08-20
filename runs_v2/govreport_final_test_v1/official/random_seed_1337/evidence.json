@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "system": "random_seed_1337",
+  "rows": 973,
+  "prediction_path": "runs_v2/govreport_final_test_v1/predictions/random_seed_1337/predictions.jsonl",
+  "prediction_sha256": "b0959eb402685a2c8c8bccf7de26b195b85dd3d463bda3a494844a1651af2a55",
+  "metrics": {
+    "rouge1": 0.54477,
+    "rouge2": 0.18309,
+    "rougeL": 0.51317,
+    "macro_rouge": 0.4136766666666667
+  },
+  "per_example_path": "runs_v2/govreport_final_test_v1/official/random_seed_1337/per_example.jsonl",
+  "per_example_sha256": "6c2f70db50f51d36e6d0127ec66667e38657eac828ca792449c09b597446faad",
+  "raw_output_path": "runs_v2/govreport_final_test_v1/official/random_seed_1337/rouge_raw.txt",
+  "raw_output_sha256": "d04fb63dae77be7cceb884ffe63d70442a6805f87381921d82e5aec52aa9ea9c",
+  "execution_seconds": 233.88456680002855,
+  "command": [
+    "C:\\Strawberry\\perl\\bin\\perl.exe",
+    "R:\\.tmp\\rouge-windows-runtime\\ROUGE-1.5.5.pl",
+    "-e",
+    "R:\\.tmp\\rouge-windows-runtime\\data",
+    "-c",
+    "95",
+    "-r",
+    "1000",
+    "-n",
+    "2",
+    "-m",
+    "-d",
+    "-a",
+    "R:\\runs_v2\\govreport_final_test_v1\\official\\random_seed_1337\\rouge_workspace\\settings.xml"
+  ],
+  "d_flag_corpus_parity_smoke": null,
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

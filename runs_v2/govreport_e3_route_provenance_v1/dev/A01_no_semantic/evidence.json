@@ -1,0 +1,59 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-15T11:07:46.227968+00:00",
+  "started_at_utc": "2026-08-15T11:06:31.681379+00:00",
+  "status": "completed",
+  "study_id": "govreport-e3-route-provenance-v1",
+  "variant": "A01_no_semantic",
+  "partition": "GovReport frozen dev",
+  "rows": 681,
+  "config_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A01_no_semantic/resolved_config.yaml",
+  "config_sha256": "5a2a2a9becadd923c2a8d501689c628deae4a9fb05fba208fdc30435b22e28a6",
+  "candidate_hash": "25b2ec3d03f634676b8c5602a51e5cd98c0cec4c1a8724d3bd36a9c16f26c3f9",
+  "implementation_commit": "36bcb8b6b3245c64e353d307f3ccdb86439f3ff3",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 74.58902780001517,
+    "cpu_process_tree_seconds": 190.546875,
+    "peak_process_tree_rss_bytes": 3421757440,
+    "rss_sample_interval_ms": 50,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5647642308992493,
+      "rouge2": 0.23252350385469253,
+      "rougeLsum": 0.5287775385268028
+    },
+    "macro_rouge": 0.44202175776024816,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 646.5638766519824,
+      "min": 627,
+      "max": 650
+    }
+  },
+  "predictions_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A01_no_semantic/predictions.jsonl",
+  "predictions_sha256": "f3d7e4abd91105272ba02ac83d212a7970d8066e83b42dffa21630568f39db5b",
+  "selected_indices_sha256": "fc357220b1cb3a1f158435e29ecddf99bf0b425148ca7032168828d4c5458fc5",
+  "per_example_path": "runs_v2/govreport_e3_route_provenance_v1/dev/A01_no_semantic/per_example.jsonl",
+  "per_example_sha256": "d8e3d84dd0d070230f60cff0cfefcb50a36db95a6fbfd5781a73cac9ce068d01",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

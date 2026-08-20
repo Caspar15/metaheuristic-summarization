@@ -76,15 +76,19 @@ def validate_experiment_request(cfg: Mapping, requested_split: str) -> None:
     if not isinstance(experiment, Mapping):
         raise ValueError("experiment configuration must be an object")
     status = experiment.get("status")
-    if status != "validation_pilot_only":
+    allowed_split = {
+        "validation_pilot_only": "validation",
+        "final_test_only": "test",
+    }.get(status)
+    if allowed_split is None:
         raise ValueError(
-            f"unknown experiment.status {status!r}; only "
-            "'validation_pilot_only' is currently implemented"
+            f"unknown experiment.status {status!r}; choose one of "
+            "'validation_pilot_only' or 'final_test_only'"
         )
-    if requested_split != "validation":
+    if requested_split != allowed_split:
         raise ValueError(
-            "experiment.status='validation_pilot_only' may only access the "
-            f"validation split, not {requested_split!r}"
+            f"experiment.status={status!r} may only access the "
+            f"{allowed_split} split, not {requested_split!r}"
         )
     data_policy = cfg.get("data_policy")
     if not isinstance(data_policy, Mapping):
@@ -95,6 +99,24 @@ def validate_experiment_request(cfg: Mapping, requested_split: str) -> None:
         raise ValueError("data_policy.policy_sha256 must be declared")
     if not isinstance(data_policy.get("analysis"), str):
         raise ValueError("data_policy.analysis must be declared")
+    if status == "final_test_only":
+        dataset_name = _normalized_dataset_name(experiment.get("dataset"))
+        frozen_test_policies = {
+            "govreport": "configs/data_policies/govreport_test_v1.json",
+            "multinews": "configs/data_policies/multinews_test_v1.json",
+        }
+        expected_policy = frozen_test_policies.get(dataset_name)
+        if expected_policy is None:
+            raise ValueError(
+                "final_test_only is frozen only for GovReport and Multi-News"
+            )
+        if data_policy.get("policy_path") != expected_policy:
+            raise ValueError(
+                f"final_test_only requires the frozen {experiment.get('dataset')} "
+                "test policy"
+            )
+        if cfg.get("experiment_partition") is not None:
+            raise ValueError("final_test_only must evaluate the complete official test policy")
 
 
 def _normalized_dataset_name(value: object) -> str:
@@ -173,7 +195,27 @@ def _numeric_sha256(values, dtype: str) -> str | None:
     return hashlib.sha256(array.tobytes(order="C")).hexdigest()
 
 
-def summarize_one(doc: Dict, cfg: Dict) -> Dict:
+def summarize_one(
+    doc: Dict,
+    cfg: Dict,
+    *,
+    fixed_candidate_original_indices: List[int] | None = None,
+    audit_route_weights: Dict[str, float] | None = None,
+) -> Dict:
+    """Summarize one canonical row.
+
+    The two keyword-only overrides exist solely for preregistered selector-
+    provenance ablations.  They are intentionally unavailable from the
+    production CLI/config schema: the normal inference path must construct its
+    own pool.  When supplied, route scores are still recomputed over the full
+    eligible source, then the selector is restricted to the exact frozen pool.
+    This isolates selector evidence without accidentally changing membership.
+    """
+
+    if audit_route_weights is not None and fixed_candidate_original_indices is None:
+        raise ValueError(
+            "audit_route_weights requires fixed_candidate_original_indices"
+        )
     validate_experiment_document(cfg, doc)
     sentence_records = flatten_sentence_records(doc)
     sentences: List[str] = [record["text"] for record in sentence_records]
@@ -371,20 +413,30 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
         if sim is not None
         else None
     )
+    audit_fixed_pool = fixed_candidate_original_indices is not None
+    build_k = len(eligible_records) if audit_fixed_pool else k
+    build_total_budget = None if audit_fixed_pool else total_candidate_budget
+    build_min_per_route = 0 if audit_fixed_pool else min_per_route
+    build_coverage_guard = {} if audit_fixed_pool else (cfg.get("coverage_guard", {}) or {})
+    build_route_weights = (
+        audit_route_weights
+        if audit_route_weights is not None
+        else cand_cfg.get("route_weights")
+    )
     candidate_pool_result = (
         build_candidate_pool(
             eligible_records,
             eligible_scores,
-            k,
+            build_k,
             sources,
             sim_matrix=eligible_sim,
             threshold=g_thresh,
-            total_budget=total_candidate_budget,
-            min_per_route=min_per_route,
+            total_budget=build_total_budget,
+            min_per_route=build_min_per_route,
             route_config=cfg.get("routes", {}) or {},
-            coverage_guard=cfg.get("coverage_guard", {}) or {},
+            coverage_guard=build_coverage_guard,
             rrf_constant=int(cand_cfg.get("rrf_constant", 60)),
-            route_weights=cand_cfg.get("route_weights"),
+            route_weights=build_route_weights,
             precomputed_route_data=precomputed_route_data,
         )
         if use_cand
@@ -394,6 +446,59 @@ def summarize_one(doc: Dict, cfg: Dict) -> Dict:
             "allocation": {"actual_size": 0},
         }
     )
+    if audit_fixed_pool:
+        requested = list(fixed_candidate_original_indices or [])
+        if len(requested) != len(set(requested)):
+            raise ValueError("fixed candidate pool contains duplicate indices")
+        eligible_set = set(selection_eligible_indices)
+        invalid = sorted(set(requested) - eligible_set)
+        if invalid:
+            raise ValueError(
+                f"fixed candidate pool contains ineligible indices: {invalid[:5]}"
+            )
+        all_records = {
+            int(record["original_index"]): record
+            for record in candidate_pool_result["records"]
+        }
+        missing = sorted(set(requested) - set(all_records))
+        if missing:
+            raise ValueError(
+                f"full-route reconstruction missed fixed pool indices: {missing[:5]}"
+            )
+        fixed_records = [all_records[index] for index in sorted(requested)]
+        for record in fixed_records:
+            selected_routes = [
+                route
+                for route, score in record["route_scores"].items()
+                if int(score["rank"]) <= k
+            ]
+            record["selected_by_routes"] = selected_routes
+            record["route_agreement"] = len(selected_routes)
+            record["inclusion_reasons"] = ["audit:fixed_C01_candidate_pool"]
+        candidate_pool_result["records"] = fixed_records
+        requested_set = set(requested)
+        candidate_pool_result["route_proposals"] = {
+            route: [
+                {
+                    **proposal,
+                    "selected_in_final_pool": (
+                        int(proposal["original_index"]) in requested_set
+                    ),
+                }
+                for proposal in proposals[:k]
+            ]
+            for route, proposals in candidate_pool_result["route_proposals"].items()
+        }
+        candidate_pool_result["allocation"] = {
+            **candidate_pool_result["allocation"],
+            "actual_size": len(requested),
+            "audit_fixed_candidate_pool": True,
+            "audit_fixed_candidate_original_indices_sha256": _numeric_sha256(
+                sorted(requested), "<i8"
+            ),
+            "audit_route_weights": build_route_weights,
+            "route_scores_recomputed_over_full_eligible_source": True,
+        }
     candidate_records = candidate_pool_result["records"]
     cand_idx = [record["original_index"] for record in candidate_records]
     salience_source = str(selector_cfg.get("salience_source", "base_score"))

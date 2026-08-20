@@ -1,0 +1,11 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-20T12:52:18.601454+00:00",
+  "started_at_utc": "2026-08-20T12:52:18.577126+00:00",
+  "status": "failed",
+  "study_id": "multinews-e3-route-provenance-v1",
+  "variant": "A01_no_semantic",
+  "failure": "PermissionError: [WinError 5] 存取被拒。",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

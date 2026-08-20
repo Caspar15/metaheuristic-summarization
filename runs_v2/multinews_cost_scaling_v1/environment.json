@@ -1,0 +1,22 @@
+{
+  "measured_at_utc": "2026-08-20T14:07:24.369072+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "logical_cpu_count": 20,
+  "physical_cpu_count": 14,
+  "total_memory_bytes": 34088599552,
+  "no_overlapping_timed_jobs": true,
+  "timing_implementation_commits": [
+    "7b8ca554c7073fc5bd75355d566183ec17c7cda0"
+  ],
+  "timing_runner_sha256": "71a520d9fbc2a7d870f29bc0d43df878bb0830204293ef607a060b5c369b1f0e",
+  "analysis_runner_sha256": "88f71cdd7af794f81dd7bee0f0ecfc17bf2202181496b7e93c591cb3eb7cbfba",
+  "cost_addendum_sha256": "33fdf2f2130c565146f95e32086ee514ec399fd742604c5e05b1d421932f40a1",
+  "cache_classification_erratum_sha256": "358fbfe757e7206458966d334b6cebb5e48dcad7bbc15bbf923d4e6b4b0962c6",
+  "sample_manifest_sha256": "f1a9355a1910f78d9b87c596698acedee3a97f0d15feb884b865561e1c5d2c81",
+  "completed_timing_attempts": 77,
+  "excluded_failed_attempts": [],
+  "quality_scores_used_for_timing_selection": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

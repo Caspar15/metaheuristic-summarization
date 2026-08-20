@@ -1,5 +1,18 @@
 # scripts/audit — 稽核診斷腳本
 
+> **2026-08-20 final state:** official tests and both datasets' E2/E3 studies are
+> complete. `run_multinews_final_test.py`, `run_multinews_e3_ablation.py` and
+> `run_multinews_e2_cost.py` are frozen reproduction/audit entry points, not permission
+> to rerun test or tune configurations. See
+> `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
+> **2026-08-15 現行入口狀態**：A1～D3b、Gate 2、greedy reference 與 paired analyses
+> 已完成；下方多數命令是重現已封存 development evidence，不是下一個待跑 grid。
+> 下一步是依 `govreport_centered_evidence_completion_v1.json` 實作／執行 E1～E3；目前
+> 本目錄尚無完成版 E1 official Perl evaluator、E2 controlled profiler 或 E3 final-ablation
+> runner。新增這三支工具時只能讀 frozen GovReport dev，且必須先保留 instrumentation
+> smoke 的失敗紀錄；不得提供 dev-test/test 入口。
+
 這些腳本把先前只存在暫存目錄的稽核分析**版本化**，讓 `CODE_AUDIT_IEEE_Access.md`
 與 `STRATEGY_ASSESSMENT.md` 引用的數字可以被獨立重現。
 
@@ -15,7 +28,7 @@
 完整性、partition guards、排名與 PacSum 退化端點，輸出 `analysis_summary.json`；它同樣沒有
 partition CLI，不得用來讀 dev-test/test。
 
-> 正式結果必須走 `ACTION_PLAN.md` Phase 2–4 的鎖定流程。
+> 投稿級結果必須走 `ACTION_PLAN.md` Phase 3d～4 的鎖定流程；目前停在 Phase 3d E1～E3。
 
 > 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；
 > 本目錄的 `lead_vs_system.py` 仍只用來重現 test-tuned legacy F-0，不是 Phase 2

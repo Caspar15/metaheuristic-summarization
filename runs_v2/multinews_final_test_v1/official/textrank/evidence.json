@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "system": "textrank",
+  "rows": 5621,
+  "prediction_path": "runs_v2/multinews_final_test_v1/predictions/textrank/predictions.jsonl",
+  "prediction_sha256": "fa2528b4d44b9547773d34cd8f1a3c21661f399e1ead62e6f9ff964e95437768",
+  "metrics": {
+    "rouge1": 0.41947,
+    "rouge2": 0.12991,
+    "rougeL": 0.37792,
+    "macro_rouge": 0.3091
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/official/textrank/per_example.jsonl",
+  "per_example_sha256": "a8d3a489ef10aaa69f54da6b0b44b255e20a8a49b3adb1c616538ac52ea2bae9",
+  "raw_output_path": "runs_v2/multinews_final_test_v1/official/textrank/rouge_raw.txt",
+  "raw_output_sha256": "68e9cf428091c35cbda458c67e9186c66e33bca9e173094cef54511fd0911117",
+  "execution_seconds": 301.0521370000206,
+  "command": [
+    "C:\\Strawberry\\perl\\bin\\perl.exe",
+    "R:\\.tmp\\rouge-windows-runtime\\ROUGE-1.5.5.pl",
+    "-e",
+    "R:\\.tmp\\rouge-windows-runtime\\data",
+    "-c",
+    "95",
+    "-r",
+    "1000",
+    "-n",
+    "2",
+    "-m",
+    "-d",
+    "-a",
+    "R:\\runs_v2\\multinews_final_test_v1\\official\\textrank\\rouge_workspace\\settings.xml"
+  ],
+  "d_flag_corpus_parity_smoke": null,
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

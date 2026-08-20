@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 *.so
 .cache/
+.tmp/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
@@ -116,3 +117,8 @@ runs_v2/**/per_example.jsonl
 runs_v2/**/*.partial
 runs_v2/**/_embedding_cache/
 runs_v2/**/.locks/
+runs_v2/**/tokenized_plain/
+runs_v2/**/reference_plain/
+runs_v2/**/reference_rouge/
+runs_v2/**/rouge_workspace/
+runs_v2/**/rss_trace.jsonl

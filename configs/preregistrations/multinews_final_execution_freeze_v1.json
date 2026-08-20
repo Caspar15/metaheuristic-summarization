@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "study_id": "multinews-secondary-final-evaluation-v1",
+  "status": "frozen_before_test_predictions_or_scores",
+  "frozen_at_utc": "2026-08-16T14:23:29.9934039Z",
+  "authorization_basis": {
+    "path": "configs/data_policies/multinews_test_authorization_v1.json",
+    "statement": "The requesting author reported teacher approval for final data preparation and execution and explicitly requested the frozen Multi-News final evaluation."
+  },
+  "scientific_code_commit": "dba612f4252b7552824737817db58e8fd0414cd9",
+  "one_shot": true,
+  "official_test_rows": 5621,
+  "test_predictions_generated_at_freeze": false,
+  "test_scores_observed_at_freeze": false,
+  "system_families": [
+    "proposed",
+    "lead",
+    "random_mean_10_seeds",
+    "textrank",
+    "lexrank",
+    "pacsum_tfidf_P08",
+    "sbert_centroid",
+    "sbert_mmr_lambda_0.7",
+    "pacsum_sbert_P03"
+  ],
+  "random_seeds": [3407, 2024, 42, 1337, 2026, 20260810, 7, 17, 23, 101],
+  "pins": {
+    "final_config": {
+      "path": "configs/final/multinews_final_v1.yaml",
+      "sha256": "b628d348ba078d8e58cbdaf1d6f53c26e293862beb777dc8cb51bdcf8b71f818"
+    },
+    "runner": {
+      "path": "scripts/audit/run_multinews_final_test.py",
+      "sha256": "cc93b09de294387c4ff91d5acecab600489e76b64cb30aee173e784a78e0041b"
+    },
+    "shared_final_helpers": {
+      "path": "scripts/audit/run_govreport_final_test.py",
+      "sha256": "beec0830fcd24190a0af4d7f56c2eb759136dda396febac5b6c74f83cc9e1f90"
+    },
+    "test_policy": {
+      "path": "configs/data_policies/multinews_test_v1.json",
+      "sha256": "95d9ea7cb664f50175c6964f2272c76fda37ea2a3141b51ce268c4cfef9b7ef2"
+    },
+    "canonical_test": {
+      "path": "data/processed/multi_news_test_canonical.jsonl",
+      "sha256": "b1efdf91c71438d5ce4513e490e5e9a0e8737cbc7eba79e727cfe0793824e2ac"
+    },
+    "canonical_health": {
+      "path": "docs/research/evidence/multinews_test_canonical_health_v1.json",
+      "sha256": "5c120a19dd52176eea6742ba12f5dddd33d2a55da59f0ed3395bde3ff2301855"
+    },
+    "replacement_character_manifest": {
+      "path": "configs/data_policies/multinews_test_replacement_rows_v1.jsonl",
+      "sha256": "47e801bf4418989131344dc9f114e471a2890db2dee6c13c035073564e707be8"
+    },
+    "authorization": {
+      "path": "configs/data_policies/multinews_test_authorization_v1.json",
+      "sha256": "78138d10b32eb7ce2e64b3725e2754e6fb16aedd96dec21aa2eea1c27f8a0f3d"
+    },
+    "final_preregistration": {
+      "path": "configs/preregistrations/multinews_secondary_evidence_completion_v1.json",
+      "sha256": "9bf4c08a062a95ec054a923587d14ffa8d5cf54d7aa63bf6a865b2824734afed"
+    },
+    "frozen_d3b_source_config": {
+      "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+      "sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f"
+    },
+    "requirements": {
+      "path": "requirements.txt",
+      "sha256": "bb81d96acff0b096cd2ff391b6c01502712f642aff4f30f7287c6380a0b52803"
+    },
+    "official_evaluator_addendum": {
+      "path": "configs/preregistrations/govreport_official_evaluator_execution_addendum_v1.json",
+      "sha256": "2486dbfb29560fe599256995356e291d28c7ebf9d21b478e22166151d013ab8c"
+    },
+    "official_evaluator_windows_runtime_addendum": {
+      "path": "configs/preregistrations/govreport_official_evaluator_windows_runtime_addendum_v1.json",
+      "sha256": "307af93df0bd71186f7e418a7fc744b85446077ccd584377c17aeec338a925d4"
+    }
+  },
+  "official_evaluator": {
+    "protocol": "Cross-dataset Stanza tokenize,mwt plus Perl ROUGE-1.5.5 parity scale; internal rouge-score R-Lsum remains the primary cross-method implementation scale",
+    "arguments": "-c 95 -r 1000 -n 2 -m",
+    "stanza_resources": ".tmp/stanza_resources",
+    "stanza_version": "1.10.1",
+    "pyrouge_version": "0.1.3",
+    "perl_path": "C:/Strawberry/perl/bin/perl.exe",
+    "rouge_home": ".tmp/rouge-windows-runtime",
+    "stanza_resources_json": {
+      "path": ".tmp/stanza_resources/resources.json",
+      "sha256": "3efb2833a67c0184fac2ea9986c04f9585bfb89fb943a4ab1a6bcbed641d6be0"
+    },
+    "stanza_tokenize_model": {
+      "path": ".tmp/stanza_resources/en/tokenize/combined.pt",
+      "sha256": "6280da0f82125c267e22f5fb912c4e090cb02804232d17a2df9a174df7c8fef1"
+    },
+    "stanza_mwt_model": {
+      "path": ".tmp/stanza_resources/en/mwt/combined.pt",
+      "sha256": "5f7579111def1f6212c98fa8154ff964bf0eafb9218845ecfa3a1d5a931be237"
+    },
+    "rouge_script": {
+      "path": ".tmp/rouge-windows-runtime/ROUGE-1.5.5.pl",
+      "sha256": "158c72cf445719d76195b802854101c3373209aa6cb1e91f80d1ce165beaa0d2"
+    },
+    "wordnet_db": {
+      "path": ".tmp/rouge-windows-runtime/data/WordNet-2.0.exc.db",
+      "sha256": "7824d3fb1db9220dda7f15b60b3b9e441c633d01439261715b449e08bdf5a3db"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "machine": "AMD64",
+    "physical_cpu_cores": 14,
+    "logical_cpu_cores": 20,
+    "memory_bytes": 34088599552,
+    "python": "3.12.7",
+    "python_distribution": "Anaconda, Inc.",
+    "dependencies": {
+      "numpy": "1.26.4",
+      "scipy": "1.12.0",
+      "scikit-learn": "1.7.1",
+      "torch": "2.8.0+cpu",
+      "transformers": "4.56.0",
+      "sentence-transformers": "5.1.0",
+      "stanza": "1.10.1",
+      "pyrouge": "0.1.3",
+      "rouge-score": "0.1.2"
+    }
+  },
+  "execution": {
+    "workers": 16,
+    "ascii_subst_alias": "R:",
+    "output_root": "runs_v2/multinews_final_test_v1",
+    "dry_run_evidence": "docs/research/evidence/multinews_final_dry_run_v1.json",
+    "dry_run_command_template": ".venv/Scripts/python.exe -m scripts.audit.run_multinews_final_test --mode dry-run --expected-freeze-sha256 <freeze_sha256>",
+    "execute_command_template": ".venv/Scripts/python.exe -m scripts.audit.run_multinews_final_test --mode execute --expected-freeze-sha256 <freeze_sha256> --expected-activation-sha256 <activation_sha256> --workers 16 --ascii-alias R:"
+  },
+  "after_score_rule": "Report the frozen outcome without changing candidate, baselines, data exclusions, length contract, evaluator, or inference. Infrastructure interruption may resume exact verified checkpoints only."
+}

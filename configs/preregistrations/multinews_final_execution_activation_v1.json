@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "study_id": "multinews-secondary-final-evaluation-v1",
+  "status": "authorized_for_one_shot_execution",
+  "activated_at_utc": "2026-08-16T14:29:30.7380143Z",
+  "authorization_basis": "The requesting author reported teacher approval and explicitly instructed execution of the complete frozen Multi-News experiment.",
+  "freeze_manifest_path": "configs/preregistrations/multinews_final_execution_freeze_v1.json",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "score_free_dry_run": {
+    "path": "docs/research/evidence/multinews_final_dry_run_v1.json",
+    "sha256": "438e95c120137b1fbb9c8d01ae11bd206d5ab9bfc938454d50ef9bb45107ee14",
+    "status": "passed_without_predictions_or_scores",
+    "rows": 5621
+  },
+  "activation_conditions": {
+    "tracked_worktree_clean_at_dry_run": true,
+    "test_predictions_before_activation": false,
+    "test_scores_observed_before_activation": false,
+    "frozen_system_families": 9,
+    "post_score_tuning_permitted": false,
+    "failure_resume_policy": "exact verified checkpoints only"
+  },
+  "ready_for_test": true
+}

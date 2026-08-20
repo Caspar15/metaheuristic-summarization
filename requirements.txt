@@ -19,6 +19,11 @@ pymoo==0.6.1.1
 # NLP / evaluation
 # ---------------------------------------------------------------------------
 rouge-score>=0.1.2
+# GovReport paper-authoritative evaluator parity (E1).  The original Perl
+# ROUGE-1.5.5 toolkit remains an external resource and is hash-recorded by the
+# audit runner; it is not redistributed by this repository.
+stanza==1.10.1
+pyrouge==0.1.3
 # 精確 pin，不是下限：sumy 與專案 tokenizer 的 runtime code dependency。
 # centrality baseline 使用 word-only adapter，不下載或散布 NLTK data package；
 # 升版前仍須重跑 tokenizer parity 與 selected-index regression。
@@ -49,6 +54,8 @@ orjson>=3.9; platform_system == 'Windows'
 # Testing
 # ---------------------------------------------------------------------------
 pytest>=7.4
+# Controlled process-tree runtime/RSS measurement (E2).
+psutil==7.0.0
 
 # ---------------------------------------------------------------------------
 # Demo web app only — NOT required to reproduce any research result.

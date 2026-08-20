@@ -1,4 +1,22 @@
-# 最終候選架構規格 —— Provenance-Aware Adaptive Extractive Summarization
+# 最終候選架構規格 —— Provenance-Aware Multi-Route Extractive Summarization
+
+> **2026-08-20 architecture freeze outcome:** 最終架構仍是 lexical + pinned semantic +
+> sparse graph 的三路候選、route reservation、weighted RRF、provenance-aware selector
+> salience、coverage guard 與 task-specific deterministic selector；沒有改成 LLM+graph，
+> 也沒有刪除 ICACT 的 metaheuristic 脈絡。GovReport profile 使用 TF-IDF MMR，
+> Multi-News profile 使用 Greedy；NSGA-II 只保留 matched comparator。兩資料集 E3
+> 支持 semantic、graph 與 provenance 的增量，E2 顯示 NSGA-II 品質／成本皆不適合作主
+> selector。完整 final evidence 見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+>
+> 下方「freeze 尚未簽字／Multi-News 不跑 test」為先前 checkpoint，科學規格仍有效，
+> 執行狀態已由本增補取代。
+
+> **2026-08-15 文件同步**：架構與品質導向配置已凍結在 GovReport D3b candidate
+> `C01_combined_salience_route_weight`。預註冊的 E1 official-evaluator re-scoring、
+> E2 cost/scaling instrumentation 與 E3 五個 route/provenance ablations 已全部完成；
+> 不再改 route、weight、candidate budget、selector 或 length contract，也不讀 dev-test/test。
+> 現行 `compute_budget.mode` 是固定三路；adaptive allocator 從未實作，也不在 frozen v2
+> claim 或 E1～E3 中。下方 adaptive-routing 段落保留為 v1 歷史候選方向，不是現行方法。
 
 > 2026-08-06 implementation note：selector boundary 現已能固定同一 candidate
 > indices、SBERT semantic-raw salience、candidate×candidate similarity、
@@ -32,12 +50,14 @@
 > 2026-08-09 D3b final correction：最後一個 cross-profile combination 已完成。
 > GovReport 對 strongest baseline macro `+0.004636` 且 Holm-8／Bonferroni-340 通過；
 > Multi-News 仍 `−0.001323`，R-2 `−0.008565` 且 CI 全負。架構因此沒有取得
-> cross-profile freeze 資格；配置搜尋停止。可保留的候選定位是 GovReport-centered、
-> training-free、provenance-preserving long-document summarization，須待作者批准新的
-> claim matrix；詳見 `REPOSITIONING_RECOMMENDATION.md`。
+> cross-profile freeze 資格；配置搜尋停止。2026-08-10 作者端已定案
+> GovReport-centered、training-free、provenance-preserving long-document summarization；
+> Multi-News 保留為 boundary condition。權威主張見 `GOVREPORT_CLAIM_MATRIX_V2.md`。
 
-> 狀態：**Target Architecture v1，雙 primary freeze 失敗／等待重新定位決策**
-> freeze 條件：完成資料重建、validation pilot、selector isolation 與 route utility gate。  
+> 狀態：**Target Architecture v2（GovReport-centered），方向已定案／final freeze 尚未簽字**
+> freeze 條件：official evaluator parity、cost/scaling、final route/provenance ablation
+> 與 ICACT 六頁 technical extension audit 已完成；尚待 test-policy ordering 決議、
+> immutable test policy、exact execution package 與完整作者簽字，且沒有新的品質導向調參。
 > 研究標準與 Go/No-Go 仍以 `paper_revision_plan_IEEE_Access.md` 為準；本文件是技術架構的單一規格來源。
 
 ## 0. 結論
@@ -51,8 +71,9 @@
 3. **task-profiled objective factory**：依單句／多句、單文件／多文件決定有效 objective；不再把同一套 redundancy 強套所有資料集。
 4. **selector isolation**：同候選與表示下比較 MMR、Greedy 與 NSGA-II；full-dev
    Multi-News 不支持 MMR 或 NSGA-II 優於 Greedy，因此 Greedy 暫為 anchor，
-   NSGA-II 退出核心與標題；GovReport D3b 已通過 adversarial-baseline gate，但
-   Multi-News 未通過，故 task-profile system 整體仍不能 freeze。
+   NSGA-II 退出核心與標題；GovReport D3b 已通過 internal-evaluator adversarial-baseline gate，但
+   Multi-News 未通過，故 v1 雙-primary system 沒有取得 freeze 資格；v2 已縮窄為
+   GovReport-centered；E1～E3 evidence 已完成，仍須 freeze audit 與 final signature。
 
 這不是承諾「三路一定互補」；每一路都有明確刪除條件。
 
@@ -138,13 +159,13 @@ MVP 的通過條件沿用 §10 Freeze gate 的第一條，但只要求單一 pri
 
 | 角色 | 資料集 | 決策 | 原因與限制 |
 |---|---|---|---|
-| Primary A | **GovReport** | 保留；validation 資料層與 development partition 已凍結 | 使用作者官方 archive（非扁平 mirror）。官方 validation membership 974，空 reference 1 筆依 manifest 排除，canonical 973；dev 681／dev-test 292。nested section、paragraph position、archive/canonical SHA、CC-BY-4.0 與異常規則均已驗證。frozen-dev baseline／greedy-reference／paired diagnosis 已完成，proposed quality gate 失敗。 |
-| Primary B | **Multi-News** | 保留；validation 已重建，其他 split 待補 | 官方 split 44,972/5,622/5,622，適合 cross-document coverage 與去重。pinned validation 已重建為 5,621 筆 structurally valid canonical rows，保存 document boundaries，並凍結 main／clean sensitivity policy；train/test 仍待生成，legacy 扁平資料不得用於正式結果。 |
-| Required data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | 必跑 validation paired sensitivity | 由 frozen 72-row manifest 從 5,621-row main 排除，得到 5,549 rows；只回答 replacement-character rows 是否改變結論，不等於 retrieval cleaning。main 結果仍是 primary。 |
-| Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v1 不跑 | 原版有錯誤 retrieval 與無關文件，但兩個外部 variant 的清理規則與現有 U+FFFD clean sensitivity 不同；若日後納入，必須另存 mapping、版本與移除規則。 |
-| Optional sanity | CNN/DailyMail | Gate 3 後才決定，v1 不阻塞 | 官方 test 11,490；lead bias 強、文件較短。只有兩個 primary 已過 gate 且資源允許，才以 frozen method 跑 appendix sanity，不用它調參或支撐核心主張。 |
-| Excluded from v1 | SciTLDR-AIC | 不排程 | 官方單句抽取使 redundancy 與 subset search 幾乎失效，與核心多句方法不匹配。若日後重新納入，必須在看結果前修改矩陣並先通過 files2rouge、single-sentence 與 max-R1-reference conformance。 |
-| Reserve | PubMed | GovReport 不可用或 pilot 失敗時再評估 | 長科學文件可作替代，但不要一開始同時擴張三個主資料集。 |
+| Primary quality domain | **GovReport** | 保留；作為 v2 唯一主要品質資料集 | 使用作者官方 archive（非扁平 mirror）。validation canonical 973；dev 681／dev-test 292。D3b frozen dev 對 strongest baseline 有正證據，E1 official evaluator 已通過；dev-test/test 仍鎖定。 |
+| Boundary condition | **Multi-News** | 保留既有 negative evidence，不再是 v2 共同 promotion gate | Frozen dev 仍低於 PacSum，R-2 CI 全負。不新增 grid、dev-test 或 test；該結果用來定義適用邊界，不得隱藏。 |
+| Historical v1 data-quality sensitivity | **Multi-News U+FFFD clean sensitivity** | v2 不再執行 | 原計畫由 frozen 72-row manifest 從 5,621-row main 排除得到 5,549 rows；GovReport-centered 定位後不再新增 Multi-News analysis，避免以 post-hoc sensitivity 重開搜尋。 |
+| Optional retrieval sensitivity | **Multi-News bad-retrieval-removed / Multi-News+** | v2 不跑 | 原版有錯誤 retrieval 與無關文件，但外部 variant 的清理規則與 U+FFFD manifest 不同；若日後另立研究，必須重新預註冊 mapping、版本與移除規則。 |
+| Excluded from v2 | CNN/DailyMail | 不排程 | Lead bias 強、文件較短；不屬 GovReport-centered freeze matrix，不能在 test 前臨時加入。 |
+| Excluded from v2 | SciTLDR-AIC | 不排程 | 官方單句抽取使 redundancy 與 subset search 幾乎失效，與核心多句方法不匹配。 |
+| Excluded from v2 | PubMed | 不排程 | 長科學文件可供未來獨立研究，但不屬本次 ICACT→IEEE Access 修訂資料集矩陣。 |
 
 ### 1.2 不可再共用的「假統一」
 
@@ -183,7 +204,7 @@ flowchart LR
 - candidate、feature 與 graph 路徑仍有吞掉例外後回傳空值／fallback 的情況。
 - 單句與多句任務共用三目標 formulation，objective semantics 不成立。
 
-## 3. Target Architecture v1
+## 3. Target Architecture v2
 
 ```mermaid
 flowchart TD
@@ -293,10 +314,14 @@ CandidateRecord
 > **D1 route gate（2026-08-08）**：在 S02b total 80／guard cap 20 下，兩-primary
 > capacity-matched ablation 與預註冊 paired analysis 已完成。semantic 與 graph 的 12 個
 > route endpoints 均有正 95% CI，12-test Holm p=`0.002400`，31-config selection-aware
-> correction p=`0.037196`；因此 §5.3／§5.4 的直接刪除條件目前未觸發。這不凍結
-> always-on policy：semantic 的高成本仍須 §5.5 adaptive allocator／strong-baseline gate。
+> correction p=`0.037196`；因此 §5.3／§5.4 的直接刪除條件當時未觸發。現行 C01 已
+> 固定三路；semantic 的高成本改由 E2 成本量測與 E3 removal ablation 決定主張強度，
+> 不再新增 adaptive-routing 搜尋。
 
-### 5.5 Adaptive route budget allocator
+### 5.5 Adaptive route budget allocator（v1 歷史候選；v2 未採用）
+
+> 本節沒有 production implementation。`compute_budget.mode=adaptive` 目前會 fail loud；
+> frozen GovReport C01 使用 fixed routes。以下內容只保留研究沿革，不得寫入現行方法或貢獻。
 
 > **F-59 route/candidate gate（Multi-News frozen dev）**：S02b union-cap-80 對
 > metric-specific greedy selections 的 micro recall 為 R1/R2/Lsum
@@ -405,7 +430,9 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 - 在相同品質下提供可量化的 coverage/redundancy Pareto 優勢。
 - 在不同輸出 budget 上提供穩定、可解釋且 deterministic 方法無法達到的 operating points。
 
-若全部不成立：改投「provenance-aware adaptive extractive selection」架構，NSGA-II 降為負結果／附錄，論文標題移除 meta-heuristic。
+若全部不成立：NSGA-II 降為負結果／附錄，論文標題移除 meta-heuristic。v1 曾考慮
+改投 adaptive selection，但 v2 最終採固定的 provenance-aware multi-route 架構；
+不得因這段歷史條件句重新宣稱 adaptive routing。
 
 ## 8. Output policy 與可重現性
 
@@ -426,7 +453,7 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 | provenance 是否有用？ | index-only union vs rank-only vs full provenance |
 | semantic 是否有增量？ | lexical only vs +semantic |
 | graph 是否有增量？ | lexical+semantic vs +graph |
-| adaptive routing 是否值得？ | all-routes-always vs deterministic router |
+| adaptive routing 是否值得？ | **v1 歷史候選，v2 未實作／未納入 E3，不作現行 claim** |
 | NSGA-II 是否必要？ | greedy/MMR/facility-location vs NSGA-II，同候選同 objective |
 | objective 是否有基數偏誤？ | sum vs mean/length-normalized + length distribution |
 | U+FFFD rows 是否改變結論？ | frozen 5,621-row Multi-News main vs 共同 5,549 rows 的 clean sensitivity paired analysis；external retrieval-cleaned variants 不屬 v1 |
@@ -491,7 +518,13 @@ NSGA-II 只有同時滿足下列至少一項，才保留在論文核心：
 
 ### Freeze gate
 
-- 兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。
+> 下列第一條是 v1 雙-primary gate 的歷史規格，已失敗；v2 不刪除這個結果，但改以
+> GovReport official-evaluator parity、cost/scaling、route/provenance ablation 與 final
+> signature 作解鎖條件。機器可讀規格見 GovReport-centered 兩份 preregistration。
+
+- **v1 歷史（已失敗）**：兩個 primary validation 都至少不劣於同 regime 的強 baseline；其中一個有實質 quality 或 quality-cost 優勢。
+- **v2 現行**：GovReport frozen candidate 在 official evaluator 下維持預註冊比較方向；
+  E2 cost/scaling 與 E3 five-ablation package 完成；老師／完整作者群簽字前不解鎖 test。
 
 Gate 2 的 baseline tuning 不得在看分數後臨時擴張。`gate2-baseline-matrix-v1` 已固定每資料集
 50 個新 dev candidates：TextRank、LexRank、SBERT centroid、5 個 MMR λ、TF-IDF／SBERT

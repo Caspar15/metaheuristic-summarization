@@ -1,5 +1,20 @@
 # Frozen data policies
 
+**2026-08-20 final state:** GovReport remains the primary confirmatory domain and
+Multi-News is a frozen secondary benchmark. Both official-test policies were materialized
+score-blind and both one-shot executions are complete. These policies are immutable;
+they do not authorize test reruns or post-test method changes. See
+`docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
+Current role decision (checked 2026-08-15): GovReport is the sole primary
+quality domain, Multi-News was then frozen boundary evidence, and no new dataset was
+authorized. The validation policies below remain immutable historical data
+contracts. E1-E3 are complete. The frozen contracts originally disagreed on whether
+policy materialization or full-author signature came first (F-76); the requesting
+author subsequently reported teacher/author-side approval of a two-stage order.
+Stage A produced `govreport_test_v1.json` before any prediction or score (F-77).
+Stage B remains conditional on a fail-closed runner and exact execution freeze.
+
 `multinews_validation_v1.json` is the pre-result data contract for the Phase 1
 Multi-News validation pilot. It binds each allowed analysis to an exact row
 count, canonical content fingerprint, file SHA-256, source revision, U+FFFD
@@ -45,3 +60,11 @@ GovReport preprocessing reads validation membership only. Its streaming tar
 pass can encounter other archive member names, but does not read test
 membership or test payload bytes. Do not change the policy or inspect the test
 split before the human freeze decision.
+
+`govreport_centered_repositioning_v2.json` is an additive **role/claim-policy
+addendum**, not a replacement canonical-data policy.  It records the
+2026-08-10 author-side decision to use GovReport as the sole primary quality
+domain and Multi-News as a frozen boundary condition.  It pins the v1
+validation policies, manifests, length policy, D3b evidence, and final dev
+candidate.  It does not change any row, split, or existing result, and it keeps
+all protected splits locked until evidence completion and full human sign-off.

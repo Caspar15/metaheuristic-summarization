@@ -1,16 +1,32 @@
 # configs — 實驗設定
 
+> **2026-08-20:** final quality configs and both official-test protocols have executed.
+> Configs under `configs/final/` are frozen evidence inputs, not templates for further
+> tuning. Multi-News E2/E3 addenda and environment errata are indexed by
+> `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
+## 2026-08-15 現行設定入口
+
+品質導向搜尋已在 D3b 結束。現行 frozen 方法是 GovReport
+`C01_combined_salience_route_weight`；資料角色由
+`data_policies/govreport_centered_repositioning_v2.json` 固定，E1～E3 由
+`preregistrations/govreport_centered_evidence_completion_v1.json` 固定，one-shot test
+protocol 雖已預先註冊但仍鎖定。舊 numbered configs、Phase 1 MVP、selector pilot、
+Gate 2 與 D1～D3 configs 都是歷史重現或已完成 development evidence，不得再拿來開新 grid。
+
 ## Selector comparison
 
-`selector_comparison_multinews.yaml` 是 validation-only matched-selector config。
+`selector_comparison_multinews.yaml` 是已完成的 historical validation-only matched-selector config。
 用同一檔案分別覆寫 `--optimizer greedy`、`--optimizer mmr`、
 `--optimizer nsga2`；不要複製三份後各自修改其他欄位。它固定 semantic-raw
 SBERT salience、SBERT similarity/coverage、候選池與 output budget。正式 full
-validation 前仍須依成本 preflight 凍結 NSGA-II population/generations。
+validation 前凍結 NSGA-II population/generations 的要求已由 D2 preregistration 完成；
+目前不得修改後重跑。
 
 `pilot_manifests/multinews_selector_pilot_v1.json` 是在看 selector ROUGE 前
-凍結的 200-row reference-blind hash sample。它只供 pilot；正式 primary 仍是
-policy 所定義的全部 5,621 rows。不要重新抽樣或依 pilot 分數換 manifest。
+凍結的 200-row reference-blind hash sample。它只供 historical pilot；後續正式 selector
+comparison 已在 frozen dev（Multi-News 3,935／GovReport 681）完成。不要重新抽樣、
+依 pilot 分數換 manifest，或把 5,621-row 完整 validation 當成可反覆搜尋 partition。
 
 ## Governed A1/D1 studies
 
@@ -35,9 +51,9 @@ policy 所定義的全部 5,621 rows。不要重新抽樣或依 pilot 分數換 
 
 ## Phase 1 validation MVP
 
-| 檔案 | 用途 | 尚未完成 |
+| 檔案 | 用途 | 現行狀態 |
 |---|---|---|
-| `phase1_mvp_multinews.yaml` | canonical Multi-News 上隔離 lexical + pinned sentence encoder；top-K proposals、route reservations、RRF selector salience、total cap 與 document guard | provenance-aware 3-row smoke 已過；尚缺正式 cost、baseline reality check、route unique recall、budget freeze，未過 gate 前不可跑 test |
+| `phase1_mvp_multinews.yaml` | canonical Multi-News 上隔離 lexical + pinned sentence encoder；top-K proposals、route reservations、RRF selector salience、total cap 與 document guard | 歷史 MVP；後續 A1～D3b、baseline、route recall 與 budget evidence 已完成。不可當 final config；E1～E3 與 test lock 以 GovReport v2 preregistration 為準 |
 | `phase1_mvp_multinews_length_normalized.yaml` | F-18 validation-only diagnostic；與上一列只有 `importance_aggregation: mean → length_normalized` 一項實驗差異 | 不得當正式 frozen config 或 test config；結果須綁定 F-18 evidence manifest |
 
 此設定刻意不含 graph 與 NSGA-II：先確認 lexical + semantic MVP 能否勝過同協定 Lead／PacSum，再決定是否擴張完整架構。
@@ -51,10 +67,10 @@ PR #10 的 `src.baselines.cli` 會讀同一份 `phase1_mvp_multinews.yaml`，因
 source capacity、selected words 與 reason。正式 run 請明確指定 `--run_dir runs_v2`；
 CLI 目前的 `runs` 預設值不可當作新舊結果分界。
 
-截至 2026-08-08，Lead、Random、TextRank、LexRank、SBERT centroid/MMR，以及明確標示
-clean-room adaptation 的 `pacsum_tfidf`／`pacsum_sbert` 已接線；舊 full-validation artifacts
-只算 historical diagnostics。PacSum 與 SBERT 的兩-primary正式
-partitioned matrix 與 paired significance 仍是 Phase 2 待辦。
+截至 2026-08-15，Lead、Random、TextRank、LexRank、SBERT centroid/MMR，以及明確標示
+clean-room adaptation 的 `pacsum_tfidf`／`pacsum_sbert` 已完成兩個歷史 profile 的
+frozen-dev matrix；greedy reference 6/6 與 paired finalists 亦完成。舊 full-validation
+artifacts 仍只算 historical diagnostics；v2 不再新增 Multi-News baseline run。
 
 ---
 
@@ -157,5 +173,6 @@ python -m src.pipeline.select_sentences \
 
 `preregistrations/gate2_baseline_matrix_v1.json` 在正式 baseline 分數前凍結每個 primary
 的 non-PLM 23／PLM 27 candidates、dev-only selection score 與禁止 dev-test/test 的規則。
-截至 2026-08-09 只有 Multi-News non-PLM family 完成；不得因單一 family winner 改寫
-候選空間或提前讀 dev-test。
+截至 2026-08-15，兩個歷史 profile 的 non-PLM 23/23、PLM 27/27、greedy reference
+6/6 與 paired analysis 均完成。Gate 2 quality gate 失敗後已完成 D2/D3a/D3b；不得再
+改寫候選空間、重開 grid 或讀 dev-test/test。

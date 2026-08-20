@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "system": "pacsum_sbert_P03",
+  "rows": 5621,
+  "feasible_rows": 5621,
+  "infeasible_rows": 0,
+  "summary_words": {
+    "mean": 246.90304216331614,
+    "min": 33,
+    "max": 250
+  },
+  "selection_seconds": 41.59860640001716,
+  "predictions_path": "runs_v2/multinews_final_test_v1/predictions/pacsum_sbert_P03/predictions.jsonl",
+  "predictions_sha256": "186ddb60600f4ae9794455e356444d1ab48eeaaace982d647c778624640b3008",
+  "selected_indices_sha256": "45a10e10e5d81abb56479bba3840cdfa36d4c29f379437463575416239da6b43",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "implementation_commit": "8d75aad7a0b297c969cb3466e702aa68d68afefa",
+  "test_split_accessed": true,
+  "test_scores_observed": false,
+  "method": "pacsum_sbert",
+  "seed": null,
+  "config_path": "runs_v2/multinews_final_test_v1/predictions/pacsum_sbert_P03/resolved_config.yaml",
+  "config_sha256": "8c5d88fe8ec3641fa4ae283a08260d89285546ab61416156a46192bfc74a100c"
+}

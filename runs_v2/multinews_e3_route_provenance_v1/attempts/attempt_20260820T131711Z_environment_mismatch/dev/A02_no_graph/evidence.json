@@ -1,0 +1,59 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-20T13:10:23.317610+00:00",
+  "started_at_utc": "2026-08-20T12:54:57.594006+00:00",
+  "status": "completed",
+  "study_id": "multinews-e3-route-provenance-v1",
+  "variant": "A02_no_graph",
+  "partition": "Multi-News frozen dev",
+  "rows": 3935,
+  "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/resolved_config.yaml",
+  "config_sha256": "3fa165bb8adf87b2e7fab1c892c6404643be80b0e0cc4b30b26dee8a24fe3181",
+  "candidate_hash": "ceaaae465bcbc4c89f1b03fa2d45f62e32990483d4c0eb055ba162671f1b426c",
+  "implementation_commit": "731f6844b714fc19b7a1fabca1c6daa8eef4585e",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.5.1",
+    "nltk": "3.9.1",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.1",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 925.786147100036,
+    "cpu_process_tree_seconds": 11972.9375,
+    "peak_process_tree_rss_bytes": 13564575744,
+    "rss_sample_interval_ms": 50,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.43896717411431135,
+      "rouge2": 0.13826121247785988,
+      "rougeLsum": 0.40090612546789245
+    },
+    "macro_rouge": 0.3260448373533546,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 243.9423125794155,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/predictions.jsonl",
+  "predictions_sha256": "020eb2e0a6b05c34076d2577990880f6feb2dffae1a6bbd76fa601d68407e48a",
+  "selected_indices_sha256": "dc6fad5d4832a48e00bbec8a084e2fbd9cf9067842ba9af5740a3fead4f8a749",
+  "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A02_no_graph/per_example.jsonl",
+  "per_example_sha256": "e64d02eece7a88aadeb1d671146506e6c313d7ad66db0061e2396f7b4beae13f",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

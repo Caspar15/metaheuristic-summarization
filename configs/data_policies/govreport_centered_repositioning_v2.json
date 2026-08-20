@@ -1,0 +1,168 @@
+{
+  "repositioning_schema_version": "1.0",
+  "policy_id": "govreport-centered-repositioning-v2",
+  "status": "requesting_author_approved_teacher_signature_pending",
+  "decision_recorded_at_utc": "2026-08-10T15:50:24.5072384Z",
+  "decision": "Adopt option A: GovReport-centered long-document extractive summarization; retain Multi-News as an observed boundary condition rather than a co-primary promotion gate.",
+  "approval": {
+    "requesting_author_direction": "approved_in_project_collaboration",
+    "teacher_and_full_author_group_signature": "pending",
+    "protected_splits_unlocked": false
+  },
+  "scope": {
+    "changes": [
+      "dataset roles in the IEEE Access claim matrix",
+      "promotion and final-evaluation scope",
+      "allowed and prohibited manuscript claims"
+    ],
+    "does_not_change": [
+      "canonical dataset bytes or preprocessing",
+      "the frozen validation policies or reference-blind partition membership",
+      "the A1 length contracts",
+      "any preregistration or evidence already committed",
+      "any observed dev, dev-test, or test score"
+    ],
+    "superseded_decision": "The D3b requirement that both GovReport and Multi-News must pass the same superiority gate before any GovReport-centered paper can proceed.",
+    "preserved_historical_outcome": "The dual-primary D3b gate failed because Multi-News did not pass; that outcome remains valid and citable as the reason for repositioning."
+  },
+  "source_policies": {
+    "govreport_validation": {
+      "path": "configs/data_policies/govreport_validation_v1.json",
+      "sha256": "0677c7a24c77217d3139a8cc12c57a24fb68a0ae9c470fd2d627f85e1fb82a5e",
+      "role_change_only": "primary_validation becomes the sole primary quality domain for the revised claim matrix"
+    },
+    "multinews_validation": {
+      "path": "configs/data_policies/multinews_validation_v1.json",
+      "sha256": "dd72b2c39e92511cf7e3d1d944eb86e34ae7f197d0f188f46ada85076ef3c615",
+      "role_change_only": "co-primary promotion dataset becomes a frozen boundary-condition dataset; its negative result is retained"
+    }
+  },
+  "frozen_development_identity": {
+    "govreport_partition": {
+      "path": "configs/validation_partitions/govreport_validation_dev_v1.json",
+      "legacy_crlf_pin": "7a15ffbb87abe690fe4e72a1e0daf27bf34b3a3293371983ae8e362d06e2717e",
+      "lf_canonical_sha256": "c37b9507da30d1579e799c39d72fb56d7695d9fa36f004c6352d6426667977ff",
+      "partition": "dev",
+      "rows": 681
+    },
+    "govreport_length_policy": {
+      "path": "configs/length_policies/govreport_v1.json",
+      "sha256": "10927b0ed465beb8d35d051bb606b2957370544d938bd45c850fb74140cb8515",
+      "min_words": 500,
+      "max_words": 650
+    }
+  },
+  "evidence_basis": {
+    "d3b_preregistration": {
+      "path": "configs/preregistrations/d3b_cross_profile_combination_v1.json",
+      "sha256": "58c6c98c1953416463bf000c102d351a320ef3634be91d3fd478827ac12bc112"
+    },
+    "d3b_paired_summary": {
+      "path": "runs_v2/d3b_cross_profile_combination_v1/analysis/paired_summary.json",
+      "sha256": "484d8728101b057c3883099d7a01b86eaeb3d7847c9cfad7ec7f47168f07bfe7",
+      "dev_test_accessed": false,
+      "test_split_accessed": false
+    },
+    "govreport_result": {
+      "proposed_macro": 0.45740372774920507,
+      "strongest_local_baseline": "full-source SBERT+MMR lambda 0.9",
+      "baseline_macro": 0.4527681167755245,
+      "macro_delta": 0.004635610973680593,
+      "macro_ci_95": [0.002506653717325565, 0.006744759965547671],
+      "holm_8": 0.00023999760002399976,
+      "bonferroni_340": 0.013599864001359988,
+      "interpretation": "supported on frozen dev under the internal multisentence_lsum evaluator; published-evaluator conformance remains required"
+    },
+    "multinews_boundary_result": {
+      "macro_delta_vs_pacsum": -0.0013225745751507256,
+      "rouge2_delta": -0.008565164650189774,
+      "rouge2_ci_95": [-0.010923867338876877, -0.006220504231011972],
+      "interpretation": "the revised method does not establish a cross-domain superiority claim"
+    }
+  },
+  "dataset_roles": {
+    "primary_quality_domain": {
+      "dataset": "GovReport",
+      "task_profile": "single long document, multi-sentence extractive summary",
+      "purpose": "confirm the frozen GovReport candidate against locally rerun no-task-training baselines"
+    },
+    "boundary_condition": {
+      "dataset": "Multi-News",
+      "task_profile": "multi-document, multi-sentence extractive summary",
+      "purpose": "report the already-observed failure boundary; no new protected-split promotion attempt is authorized"
+    },
+    "optional_or_excluded": {
+      "CNN_DailyMail": "not added by this decision",
+      "SciTLDR": "not added by this decision",
+      "PubMed": "not added by this decision"
+    }
+  },
+  "frozen_candidate": {
+    "id": "C01_combined_salience_route_weight",
+    "task_profile": "single_document + multi_sentence",
+    "selector": "TF-IDF MMR lambda 0.7",
+    "config_path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "config_sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481",
+    "candidate_hash": "35a9a22431e36c196e6166b324496a7ce0cc6532974c23ae15e692f31443e637",
+    "selected_indices_sha256": "96d588a9798e0a14ae0843257ecf87adb7044d5f49a51416b47471fd2a9b7517",
+    "allowed_changes_before_final_evaluation": "implementation-only fixes that preserve per-row selected indices, or separately preregistered evidence-only instrumentation; no quality-directed config change"
+  },
+  "claim_matrix": [
+    {
+      "claim_id": "C-GOV-QUALITY",
+      "manuscript_role": "primary conditional quality claim",
+      "claim": "The frozen training-free framework outperforms the preregistered full-source SBERT+MMR comparator on GovReport.",
+      "current_status": "supported_on_frozen_dev_only",
+      "required_before_submission": "published-evaluator parity and one-shot signed final evaluation"
+    },
+    {
+      "claim_id": "C-PROVENANCE",
+      "manuscript_role": "primary system contribution",
+      "claim": "The pipeline preserves route-level evidence through candidate fusion and final sentence selection.",
+      "current_status": "implemented_and_schema_tested",
+      "required_before_submission": "final matched full-provenance versus rank-only and index-only ablation"
+    },
+    {
+      "claim_id": "C-ROUTES",
+      "manuscript_role": "conditional component contribution",
+      "claim": "Semantic and graph routes provide measurable incremental evidence on long single documents.",
+      "current_status": "preliminary_dev_support_not_final",
+      "required_before_submission": "preregistered capacity-aware route ablation with quality, unique contribution, cost, and memory"
+    },
+    {
+      "claim_id": "C-NSGA",
+      "manuscript_role": "negative comparator result",
+      "claim": "NSGA-II is a matched-input comparator and is not the quality-leading selector under the evaluated protocols.",
+      "current_status": "supported_on_pilot_and_full_dev",
+      "required_before_submission": "report without promoting NSGA-II to the title or core method"
+    },
+    {
+      "claim_id": "C-BOUNDARY",
+      "manuscript_role": "scope limitation",
+      "claim": "The GovReport result does not generalize to Multi-News; Multi-News shows a significant ROUGE-2 failure.",
+      "current_status": "supported_on_frozen_dev",
+      "required_before_submission": "retain in abstract, limitations, and conclusion; do not hide the negative dataset"
+    }
+  ],
+  "prohibited_claims": [
+    "cross-dataset or general extractive-summarization superiority",
+    "state of the art based on non-local literature numbers",
+    "NSGA-II is the best selector or guarantees a global optimum",
+    "test-set success before the locked one-shot evaluation",
+    "published-evaluator parity before the conformance study is completed"
+  ],
+  "required_evidence_before_human_freeze_signature": [
+    "GovReport official ROUGE-1.5.5/Stanza evaluator conformance and ranking check",
+    "cold and warm end-to-end runtime, peak memory, and document-length scaling",
+    "route-removal and provenance-removal ablations on frozen GovReport dev",
+    "ICACT-to-IEEE-Access extension matrix with camera-ready page/table verification",
+    "immutable final test policy, command, commit, environment, and output locations"
+  ],
+  "protected_split_policy": {
+    "further_dev_test_access": "forbidden",
+    "test_access": "forbidden until teacher/full-author signature and all evidence-completion gates pass",
+    "test_policy_materialized": false,
+    "test_split_accessed": false,
+    "failure_action": "report No-Go or downgrade the claim; never reopen dev search or alter the frozen candidate after protected results"
+  }
+}

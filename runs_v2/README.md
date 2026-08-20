@@ -1,5 +1,16 @@
 # Governed experiment registry
 
+## Current checkpoint（2026-08-15）
+
+A1～D3b、兩個歷史 profile 的 Gate 2 baseline matrix、greedy reference 與 paired
+analyses 已完成。Frozen GovReport C01 internal-evaluator macro `0.457404`，對 strongest
+local SBERT+MMR `+0.004636`；Multi-News C01 macro `0.330417`，對 PacSum
+`−0.001323` 且 R-2 顯著較差。配置搜尋已停止。
+
+下一批合法 artifact 只能來自已預註冊的 E1 official evaluator、E2 cost/scaling 與
+E3 route/provenance ablation，全部只讀 GovReport frozen dev。此 registry 目前沒有任何
+test run；final-test protocol 仍鎖定。
+
 `search_log.jsonl` 是 freeze 前所有候選配置的 append-only 索引，包括失敗 run。
 每個 `run` record 至少要保存：config hash、dataset／partition manifest identity、dev
 分數、若有則唯一一次 dev-test 分數、晉級決策與原因、evidence 路徑、實際量測時間。
@@ -109,8 +120,8 @@ family winner 是非退化 `pacsum_tfidf_P08_previous_-0.8`，macro `0.331740`�
 在 3,935/3,935 rows 全部 score-degenerate，只能視為 canonical-order skip-tolerant control。
 P07 第一次外層中斷保留於 `attempt_01_interrupted/`，失敗與 final retry 都已寫入
 `search_log.jsonl`。`analysis_summary.json` 固定驗證 partition guards、ranking、退化率與
-相對 frozen Lead 的逐篇選句重疊。兩 primary PLM 現已完成；greedy reference 與
-paired inference尚未完成；dev-test/test 未讀。
+相對 frozen Lead 的逐篇選句重疊。兩個歷史 profile 的 PLM、greedy reference 與
+paired inference 隨後均已完成；dev-test/test 未讀。
 
 `gate2_baseline_matrix_v1/govreport/dev/plm/` 已完成 27/27。winner 是 full-source
 SBERT-MMR λ=0.9，R1/R2/Lsum `0.575010/0.241576/0.541718`、macro `0.452768`；
@@ -121,11 +132,11 @@ SBERT-MMR λ=0.9，R1/R2/Lsum `0.575010/0.241576/0.541718`、macro `0.452768`；
 `gate2-greedy-reference-v1` 已在任何正式分數前預註冊兩 primary × 三個 ROUGE target
 共 6 configurations。它只作 headroom／candidate-recall diagnostic，不是 baseline 或
 exact upper bound；只讀 frozen dev，max_words 採 A1 的 250／650 上限，但不強迫填
-requested floor。runner 與正式 artifacts 尚未完成。
+requested floor。runner 與六份正式 development artifacts 均已完成。
 
 `gate2_baseline_matrix_v1/govreport/dev/non_plm/` 亦完成 23/23，無 failed attempt。
 winner 是 LexRank，R1/R2/Lsum `0.572517/0.241004/0.541340`、macro `0.451620`，比
 frozen Lead 高 `0.052388`、比 proposed S02b 高 `0.033758`；TextRank 亦比 S02b 高
 `0.013104`。LexRank 與 Lead 的 exact selected-indices match 為 0/681、mean Jaccard
-`0.059722`。GovReport beta=1 也在 681/681 rows 退化。PLM／greedy reference／paired
-inference 尚未完成，dev-test/test 未讀。
+`0.059722`。GovReport beta=1 也在 681/681 rows 退化。PLM、greedy reference 與 paired
+inference 隨後均已完成，dev-test/test 未讀。

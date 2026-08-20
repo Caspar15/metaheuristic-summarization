@@ -1,0 +1,22 @@
+{
+  "authorization_schema_version": "1.0",
+  "dataset": "Multi-News",
+  "official_split": "test",
+  "authorized_at_utc": "2026-08-16T14:09:36.8774421Z",
+  "authorization_source": "The requesting author reported teacher approval for final data preparation and final-score execution, and then explicitly requested the frozen Multi-News final evaluation.",
+  "authorized_actions": [
+    "materialize and validate the pinned official test split without computing scores",
+    "freeze the revised-system configuration, baseline matrix, evaluators, and paired analysis",
+    "execute the frozen Multi-News test evaluation once and report every result"
+  ],
+  "forbidden_actions": [
+    "change the method, length contract, baseline parameters, evaluator, exclusions, or inference after observing test scores",
+    "use Multi-News test scores for model selection",
+    "hide a component or baseline because its test result is unfavorable"
+  ],
+  "protected_state_at_authorization": {
+    "revised_pipeline_test_predictions_generated": false,
+    "revised_pipeline_test_scores_observed": false
+  },
+  "authorized": true
+}

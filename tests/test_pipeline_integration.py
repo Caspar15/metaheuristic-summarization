@@ -66,6 +66,34 @@ class TestPipelineGreedy:
             sample_doc["sentences"][i] for i in result["selected_indices"]
         ]
 
+    def test_preregistered_audit_can_reuse_exact_candidate_membership(self, sample_doc):
+        config = {
+            "optimizer": {"method": "mmr", "lambda_relevance": 0.7},
+            "length_control": {"unit": "words", "max_words": 50, "min_words": 0},
+            "representations": {"use": True, "method": "tfidf"},
+            "compute_budget": {
+                "mode": "fixed",
+                "enabled_routes": ["lexical", "graph"],
+            },
+            "candidate_budget": {"route_top_k": 2, "min_per_route": 0, "total": 3},
+            "candidates": {"use": True, "mode": "hard", "rrf_constant": 60},
+            "selector": {
+                "salience_source": "rrf_fusion",
+                "similarity_source": "pipeline_similarity",
+            },
+        }
+        result = summarize_one(
+            sample_doc,
+            config,
+            fixed_candidate_original_indices=[1, 3],
+            audit_route_weights={"lexical": 1.0, "graph": 1.0},
+        )
+
+        assert [row["original_index"] for row in result["candidate_records"]] == [1, 3]
+        assert result["candidate_pool"]["actual_size"] == 2
+        assert result["candidate_pool"]["allocation"]["audit_fixed_candidate_pool"]
+        assert result["candidate_pool"]["allocation"]["route_scores_recomputed_over_full_eligible_source"]
+
 
 class TestPipelineGrasp:
     def test_grasp(self, sample_doc, base_config):
