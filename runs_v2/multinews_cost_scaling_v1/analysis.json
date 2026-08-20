@@ -1,0 +1,1492 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-20T14:07:24.364072+00:00",
+  "status": "completed",
+  "study_id": "multinews-cost-scaling-v1",
+  "systems": {
+    "frozen_C01_proposed": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "0cbea0ff031dec02726ff069ced44bfd20519a42c5ca9c1fa53103837dbe06a1",
+        "total_run": {
+          "wall_seconds": {
+            "median": 47.85492010007147,
+            "q25": 47.72072179999668,
+            "q75": 48.3648392999894
+          },
+          "cpu_process_tree_seconds": {
+            "median": 44.234375,
+            "q25": 44.109375,
+            "q75": 44.7734375
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 623493120.0,
+            "q25": 622897152.0,
+            "q75": 625254400.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.3420850000111386,
+              "q25": 0.26297192502534017,
+              "q75": 0.38605847497819923
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 1.0415466999984346,
+              "q25": 0.8651194249978289,
+              "q75": 1.1901927999570034
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 2.5879168499959633,
+              "q25": 2.2001938249741215,
+              "q75": 2.758587724965764
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.9416506941959949,
+          "wall_vs_source_words": 0.9762789717380239
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "0cbea0ff031dec02726ff069ced44bfd20519a42c5ca9c1fa53103837dbe06a1",
+        "total_run": {
+          "wall_seconds": {
+            "median": 9.226922000059858,
+            "q25": 9.002262750058435,
+            "q75": 9.28421925008297
+          },
+          "cpu_process_tree_seconds": {
+            "median": 8.578125,
+            "q25": 8.3671875,
+            "q75": 8.6171875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 418299904.0,
+            "q25": 418193408.0,
+            "q75": 418478080.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.023292899946682155,
+              "q25": 0.0214585249486845,
+              "q75": 0.024898525065509602
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.052491199981886894,
+              "q25": 0.047022599988849834,
+              "q75": 0.05876610000268556
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.06569645000854507,
+              "q25": 0.06199147502775304,
+              "q75": 0.08372139997663908
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.3699884626840352,
+          "wall_vs_source_words": 0.3538202715723455
+        }
+      }
+    },
+    "pacsum_tfidf_P08": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "c5cac33944590cbccac5bbaad5dd957bc9dc221ba43d82517faf65d1325b7228",
+        "total_run": {
+          "wall_seconds": {
+            "median": 4.8429972000885755,
+            "q25": 4.835896300035529,
+            "q75": 4.8508936000289395
+          },
+          "cpu_process_tree_seconds": {
+            "median": 4.390625,
+            "q25": 4.3828125,
+            "q75": 4.421875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 340611072.0,
+            "q25": 339961856.0,
+            "q75": 340627456.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.002105599967762828,
+              "q25": 0.0019088749832008034,
+              "q75": 0.002484225027728826
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.0038592999917455018,
+              "q25": 0.0037343750009313226,
+              "q75": 0.004056650010170415
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.008408299996517599,
+              "q25": 0.008040349930524826,
+              "q75": 0.008731150039238855
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.7141956084895198,
+          "wall_vs_source_words": 0.7138005330027848
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "c5cac33944590cbccac5bbaad5dd957bc9dc221ba43d82517faf65d1325b7228",
+        "total_run": {
+          "wall_seconds": {
+            "median": 4.837792999926023,
+            "q25": 4.8113902999321,
+            "q75": 4.8532062999438494
+          },
+          "cpu_process_tree_seconds": {
+            "median": 4.390625,
+            "q25": 4.3671875,
+            "q75": 4.40625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 343408640.0,
+            "q25": 342325248.0,
+            "q75": 343435264.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.0019761499715968966,
+              "q25": 0.0018720999360084534,
+              "q75": 0.002164024976082146
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.004034650046378374,
+              "q25": 0.003852149995509535,
+              "q75": 0.004248599958373234
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.008859800000209361,
+              "q25": 0.008208724990254268,
+              "q75": 0.009220250009093434
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.784455681118867,
+          "wall_vs_source_words": 0.7835265769275167
+        }
+      }
+    },
+    "pacsum_sbert_P03": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "7444874cb010634d6f45b7b904f408c472ca0f2d427088ef6f331ea331a232c3",
+        "total_run": {
+          "wall_seconds": {
+            "median": 46.05157709994819,
+            "q25": 45.82535364996875,
+            "q75": 46.756141699966975
+          },
+          "cpu_process_tree_seconds": {
+            "median": 42.578125,
+            "q25": 42.578125,
+            "q75": 43.3671875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 612638720.0,
+            "q25": 611143680.0,
+            "q75": 613097472.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.3371783000184223,
+              "q25": 0.2400324499758426,
+              "q75": 0.3816181749571115
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.9725828500231728,
+              "q25": 0.8150949999981094,
+              "q75": 1.1425240499957
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 2.4932371000177227,
+              "q25": 2.027357374987332,
+              "q75": 2.657217624975601
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.9340720854788745,
+          "wall_vs_source_words": 0.9722767804317511
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "7444874cb010634d6f45b7b904f408c472ca0f2d427088ef6f331ea331a232c3",
+        "total_run": {
+          "wall_seconds": {
+            "median": 7.266443399945274,
+            "q25": 7.172185499977786,
+            "q75": 7.293454899976496
+          },
+          "cpu_process_tree_seconds": {
+            "median": 6.5,
+            "q25": 6.4765625,
+            "q75": 6.5546875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 415252480.0,
+            "q25": 415184896.0,
+            "q75": 415332352.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.004535500018391758,
+              "q25": 0.004279525077436119,
+              "q75": 0.005422000016551465
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.005669649981427938,
+              "q25": 0.005535174976103008,
+              "q75": 0.0060362250078469515
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.009242799947969615,
+              "q25": 0.009017375065013766,
+              "q75": 0.009465700044529513
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.032518085346397795,
+          "wall_vs_source_words": 0.08256813085463942
+        }
+      }
+    },
+    "full_source_sbert_mmr_lambda_0.7": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "897fe00bde39e6f8436972a3975eff231d1aa3a8a9b0ed7246f7a3144ab22e01",
+        "total_run": {
+          "wall_seconds": {
+            "median": 47.19336099992506,
+            "q25": 47.10041694995016,
+            "q75": 47.847157149983104
+          },
+          "cpu_process_tree_seconds": {
+            "median": 43.671875,
+            "q25": 43.6015625,
+            "q75": 44.2890625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 624136192.0,
+            "q25": 621336576.0,
+            "q75": 624277504.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.32558314997004345,
+              "q25": 0.2574040499457624,
+              "q75": 0.371332100010477
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.9844531999551691,
+              "q25": 0.8172564250126015,
+              "q75": 1.1285609499318525
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 2.565242299984675,
+              "q25": 2.4106447500234935,
+              "q75": 2.6764729749411345
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.9605443162803774,
+          "wall_vs_source_words": 0.9979036298942648
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "897fe00bde39e6f8436972a3975eff231d1aa3a8a9b0ed7246f7a3144ab22e01",
+        "total_run": {
+          "wall_seconds": {
+            "median": 7.895648700068705,
+            "q25": 7.892728450067807,
+            "q75": 7.994978500064462
+          },
+          "cpu_process_tree_seconds": {
+            "median": 7.21875,
+            "q25": 7.2109375,
+            "q75": 7.328125
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 416243712.0,
+            "q25": 416024576.0,
+            "q75": 416272384.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.008584199997130781,
+              "q25": 0.008126975037157536,
+              "q75": 0.01066320005338639
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.01744784996844828,
+              "q25": 0.01640892494469881,
+              "q75": 0.01962207493488677
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.03868310002144426,
+              "q25": 0.032821725006215274,
+              "q75": 0.048341324989451095
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.4945104576655277,
+          "wall_vs_source_words": 0.48595165639304577
+        }
+      }
+    },
+    "sbert_centroid": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "ec0e0fcb82aa7200df3717efb229e7762420746254d41a27a2593b65bebcad75",
+        "total_run": {
+          "wall_seconds": {
+            "median": 47.467316500027664,
+            "q25": 47.1363720499794,
+            "q75": 47.92118850001134
+          },
+          "cpu_process_tree_seconds": {
+            "median": 43.8125,
+            "q25": 43.6875,
+            "q75": 44.40625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 624304128.0,
+            "q25": 623063040.0,
+            "q75": 624500736.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.3137298000510782,
+              "q25": 0.24564867495791987,
+              "q75": 0.36311785006546415
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.9669347999733873,
+              "q25": 0.8129034499870613,
+              "q75": 1.147440575005021
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 2.5618100000428967,
+              "q25": 2.314085649966728,
+              "q75": 2.714620124985231
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.9795800327339844,
+          "wall_vs_source_words": 1.0190484937795299
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "ec0e0fcb82aa7200df3717efb229e7762420746254d41a27a2593b65bebcad75",
+        "total_run": {
+          "wall_seconds": {
+            "median": 7.405458900029771,
+            "q25": 7.385699949983973,
+            "q75": 7.406949350028299
+          },
+          "cpu_process_tree_seconds": {
+            "median": 6.921875,
+            "q25": 6.84375,
+            "q75": 6.9453125
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 415690752.0,
+            "q25": 415649792.0,
+            "q75": 415748096.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.004499699978623539,
+              "q25": 0.004118550074053928,
+              "q75": 0.0049369749904144555
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.005639899987727404,
+              "q25": 0.005434949998743832,
+              "q75": 0.005894400033866987
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.008889150049071759,
+              "q25": 0.00869185000192374,
+              "q75": 0.009452049940591678
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.045934228641189054,
+          "wall_vs_source_words": 0.0918519822999766
+        }
+      }
+    },
+    "matched_nsga2_tfidf": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "785da9e15d61f1f8ebe4bb6e2648d9b47c48b6d8a4323575a0c472520fde1380",
+        "total_run": {
+          "wall_seconds": {
+            "median": 91.69006619998254,
+            "q25": 89.7243881499744,
+            "q75": 92.41652279999107
+          },
+          "cpu_process_tree_seconds": {
+            "median": 87.671875,
+            "q25": 85.6171875,
+            "q75": 88.140625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 628740096.0,
+            "q25": 628533248.0,
+            "q75": 631345152.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 1.7437468999414705,
+              "q25": 1.612676775053842,
+              "q75": 2.039415100007318
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 2.4137106999987736,
+              "q25": 2.27059925001231,
+              "q75": 2.5623115249618422
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 3.9655960999662057,
+              "q25": 3.636458099936135,
+              "q75": 4.112236624991056
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.34122351725242955,
+          "wall_vs_source_words": 0.3562733940638206
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": true,
+        "selected_indices_sha256": "785da9e15d61f1f8ebe4bb6e2648d9b47c48b6d8a4323575a0c472520fde1380",
+        "total_run": {
+          "wall_seconds": {
+            "median": 50.07220990001224,
+            "q25": 49.93042729998706,
+            "q75": 50.21274725004332
+          },
+          "cpu_process_tree_seconds": {
+            "median": 48.65625,
+            "q25": 48.5546875,
+            "q75": 48.828125
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 420122624.0,
+            "q25": 419909632.0,
+            "q75": 420780032.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 1.3294633999466896,
+              "q25": 1.2979474249877967,
+              "q75": 1.4050150249968283
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 1.4397414500126615,
+              "q25": 1.3953463250072673,
+              "q75": 1.4772027249564417
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 1.4751522499718703,
+              "q25": 1.4488463000161573,
+              "q75": 1.5278683999786153
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.005977851296142906,
+          "wall_vs_source_words": 0.007722751759927724
+        }
+      }
+    },
+    "lead": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "ba3c602be44f0db0146f91610b2b669d2b900738df7416bfdec535809c4a561b",
+        "total_run": {
+          "wall_seconds": {
+            "median": 4.8715515999356285,
+            "q25": 4.837711800006218,
+            "q75": 4.932910299976356
+          },
+          "cpu_process_tree_seconds": {
+            "median": 4.515625,
+            "q25": 4.4296875,
+            "q75": 4.5390625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 339804160.0,
+            "q25": 339568640.0,
+            "q75": 340062208.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.0005689000245183706,
+              "q25": 0.0005368499259930104,
+              "q75": 0.0006385500018950552
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.0009658000199124217,
+              "q25": 0.0008894999918993562,
+              "q75": 0.0011152000515721738
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.0016473499708808959,
+              "q25": 0.0015377250092569739,
+              "q75": 0.0017964749713428319
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.5271448071994604,
+          "wall_vs_source_words": 0.5282395980913184
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "ba3c602be44f0db0146f91610b2b669d2b900738df7416bfdec535809c4a561b",
+        "total_run": {
+          "wall_seconds": {
+            "median": 4.80588010000065,
+            "q25": 4.804708549985662,
+            "q75": 5.05534840002656
+          },
+          "cpu_process_tree_seconds": {
+            "median": 4.453125,
+            "q25": 4.3984375,
+            "q75": 4.6875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 341262336.0,
+            "q25": 340314112.0,
+            "q75": 342634496.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.0005824000691063702,
+              "q25": 0.0005470749747473747,
+              "q75": 0.0006568249955307692
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.00092149997362867,
+              "q25": 0.0008452500333078206,
+              "q75": 0.0009992999257519841
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.0017075000796467066,
+              "q25": 0.0016431000549346209,
+              "q75": 0.001881749980384484
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 0.5559844892740079,
+          "wall_vs_source_words": 0.5480368943429661
+        }
+      }
+    },
+    "textrank": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "a60d591a80c9dbb73867ffe5b92314c8f1f20e6fd677aa16aadd24d032abfbde",
+        "total_run": {
+          "wall_seconds": {
+            "median": 6.386944700032473,
+            "q25": 6.288745750032831,
+            "q75": 6.397328499995638
+          },
+          "cpu_process_tree_seconds": {
+            "median": 5.921875,
+            "q25": 5.84375,
+            "q75": 5.9453125
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 343789568.0,
+            "q25": 343429120.0,
+            "q75": 343881728.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.009003450046293437,
+              "q25": 0.006955724966246635,
+              "q75": 0.011925124999834225
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.026623299985658377,
+              "q25": 0.02303792507154867,
+              "q75": 0.028975100023671985
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.10482920001959428,
+              "q25": 0.08995827499893494,
+              "q75": 0.11664529991685413
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 1.2171613111154838,
+          "wall_vs_source_words": 1.2508611898433195
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "a60d591a80c9dbb73867ffe5b92314c8f1f20e6fd677aa16aadd24d032abfbde",
+        "total_run": {
+          "wall_seconds": {
+            "median": 6.258975000004284,
+            "q25": 6.241737350006588,
+            "q75": 6.260266750003211
+          },
+          "cpu_process_tree_seconds": {
+            "median": 5.84375,
+            "q25": 5.7734375,
+            "q75": 5.84375
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 344645632.0,
+            "q25": 344283136.0,
+            "q75": 344770560.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.007198050036095083,
+              "q25": 0.006626749993301928,
+              "q75": 0.00884467497235164
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.024543150037061423,
+              "q25": 0.022672850056551397,
+              "q75": 0.027828974940348417
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.10234039992792532,
+              "q25": 0.08826289998251013,
+              "q75": 0.11211335001280531
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 1.2955530853105182,
+          "wall_vs_source_words": 1.335131045013333
+        }
+      }
+    },
+    "lexrank": {
+      "cold": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "a158c5f92c7fb797d4d1fec98c59e8b26b1a51e08f745d24091524d1c51baf0d",
+        "total_run": {
+          "wall_seconds": {
+            "median": 6.906662699999288,
+            "q25": 6.891016900015529,
+            "q75": 7.051280899962876
+          },
+          "cpu_process_tree_seconds": {
+            "median": 6.5625,
+            "q25": 6.5,
+            "q75": 6.5625
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 343588864.0,
+            "q25": 343287808.0,
+            "q75": 343711744.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.008676249999552965,
+              "q25": 0.007897300034528598,
+              "q75": 0.010468774999026209
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.03669969999464229,
+              "q25": 0.03079970000544563,
+              "q75": 0.03965754999080673
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.16939960001036525,
+              "q25": 0.15504959999816492,
+              "q75": 0.18464277498424053
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 1.4845356436562753,
+          "wall_vs_source_words": 1.515148821271183
+        }
+      },
+      "warm_cache": {
+        "measured_repetitions": 3,
+        "cache_applicable": false,
+        "selected_indices_sha256": "a158c5f92c7fb797d4d1fec98c59e8b26b1a51e08f745d24091524d1c51baf0d",
+        "total_run": {
+          "wall_seconds": {
+            "median": 6.855406100046821,
+            "q25": 6.84570565004833,
+            "q75": 6.9029202000238
+          },
+          "cpu_process_tree_seconds": {
+            "median": 6.421875,
+            "q25": 6.3671875,
+            "q75": 6.4921875
+          },
+          "peak_process_tree_rss_bytes": {
+            "median": 343654400.0,
+            "q25": 343521280.0,
+            "q75": 343861248.0
+          }
+        },
+        "strata": {
+          "q10": {
+            "document_wall_seconds": {
+              "median": 0.008426299958955497,
+              "q25": 0.007322400022530928,
+              "q75": 0.0101160749909468
+            },
+            "source_sentences": {
+              "median": 23.0,
+              "q25": 23.0,
+              "q75": 23.0
+            },
+            "source_words": {
+              "median": 518.0,
+              "q25": 423.0,
+              "q75": 541.0
+            }
+          },
+          "q50": {
+            "document_wall_seconds": {
+              "median": 0.03409344999818131,
+              "q25": 0.030311699956655502,
+              "q75": 0.03736309998203069
+            },
+            "source_sentences": {
+              "median": 61.0,
+              "q25": 61.0,
+              "q75": 61.0
+            },
+            "source_words": {
+              "median": 1252.0,
+              "q25": 1107.0,
+              "q75": 1371.0
+            }
+          },
+          "q90": {
+            "document_wall_seconds": {
+              "median": 0.17018004995770752,
+              "q25": 0.15605662504094653,
+              "q75": 0.18424387494451366
+            },
+            "source_sentences": {
+              "median": 150.0,
+              "q25": 150.0,
+              "q75": 151.0
+            },
+            "source_words": {
+              "median": 3192.5,
+              "q25": 2995.0,
+              "q75": 3449.0
+            }
+          }
+        },
+        "descriptive_log_log_slopes": {
+          "wall_vs_source_sentences": 1.5060840520204772,
+          "wall_vs_source_words": 1.5344569188729043
+        }
+      }
+    }
+  },
+  "cross_state_selected_indices_identity": {
+    "frozen_C01_proposed": {
+      "identical": true,
+      "selected_indices_sha256": "0cbea0ff031dec02726ff069ced44bfd20519a42c5ca9c1fa53103837dbe06a1"
+    },
+    "pacsum_tfidf_P08": {
+      "identical": true,
+      "selected_indices_sha256": "c5cac33944590cbccac5bbaad5dd957bc9dc221ba43d82517faf65d1325b7228"
+    },
+    "pacsum_sbert_P03": {
+      "identical": true,
+      "selected_indices_sha256": "7444874cb010634d6f45b7b904f408c472ca0f2d427088ef6f331ea331a232c3"
+    },
+    "full_source_sbert_mmr_lambda_0.7": {
+      "identical": true,
+      "selected_indices_sha256": "897fe00bde39e6f8436972a3975eff231d1aa3a8a9b0ed7246f7a3144ab22e01"
+    },
+    "sbert_centroid": {
+      "identical": true,
+      "selected_indices_sha256": "ec0e0fcb82aa7200df3717efb229e7762420746254d41a27a2593b65bebcad75"
+    },
+    "matched_nsga2_tfidf": {
+      "identical": true,
+      "selected_indices_sha256": "785da9e15d61f1f8ebe4bb6e2648d9b47c48b6d8a4323575a0c472520fde1380"
+    },
+    "lead": {
+      "identical": true,
+      "selected_indices_sha256": "ba3c602be44f0db0146f91610b2b669d2b900738df7416bfdec535809c4a561b"
+    },
+    "textrank": {
+      "identical": true,
+      "selected_indices_sha256": "a60d591a80c9dbb73867ffe5b92314c8f1f20e6fd677aa16aadd24d032abfbde"
+    },
+    "lexrank": {
+      "identical": true,
+      "selected_indices_sha256": "a158c5f92c7fb797d4d1fec98c59e8b26b1a51e08f745d24091524d1c51baf0d"
+    }
+  },
+  "sample_manifest_sha256": "f1a9355a1910f78d9b87c596698acedee3a97f0d15feb884b865561e1c5d2c81",
+  "cost_addendum_sha256": "33fdf2f2130c565146f95e32086ee514ec399fd742604c5e05b1d421932f40a1",
+  "cache_classification_erratum_sha256": "358fbfe757e7206458966d334b6cebb5e48dcad7bbc15bbf923d4e6b4b0962c6",
+  "interpretation": "Cost evidence only; no timing outcome can promote or tune a method.",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
