@@ -149,6 +149,19 @@ def _selected_digest(rows: Iterable[Mapping[str, Any]]) -> str:
     return digest.hexdigest()
 
 
+def _protected_test_guard_is_frozen(parent: Mapping[str, Any]) -> bool:
+    """Accept both legacy root-level and newer explicit protected-split contracts."""
+    if parent.get("test_split_accessed") is False:
+        return True
+    protected = parent.get("protected_split_rules")
+    return bool(
+        isinstance(protected, Mapping)
+        and protected.get("E2_and_E3_use_test") is False
+        and protected.get("test_can_change_E2_or_E3_design") is False
+        and protected.get("post_test_tuning") is False
+    )
+
+
 def _resolve_variants(base: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
     variants = {name: copy.deepcopy(dict(base)) for name in VARIANT_ORDER}
     variants["A01_no_semantic"]["compute_budget"]["enabled_routes"] = ["lexical", "graph"]
@@ -392,7 +405,7 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
         raise ValueError("workers must be in [1, 16]")
     parent = json.loads(PARENT.read_text(encoding="utf-8"))
     addendum = json.loads(ADDENDUM.read_text(encoding="utf-8"))
-    if parent.get("test_split_accessed") is not False or addendum.get("test_split_accessed") is not False:
+    if not _protected_test_guard_is_frozen(parent) or addendum.get("test_split_accessed") is not False:
         raise ValueError("E3 protected-test guard is missing")
     if addendum.get("scores_observed_before_registration") is not False:
         raise ValueError("E3 execution addendum is not score-blind")

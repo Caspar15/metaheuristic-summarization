@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "erratum_id": "multinews-e3-guard-compatibility-erratum-v1",
+  "status": "frozen_before_any_multinews_e3_score",
+  "registered_at_utc": "2026-08-20T12:51:51.0138416Z",
+  "failed_launch": {
+    "stage": "preregistration guard validation",
+    "data_rows_loaded": 0,
+    "predictions_generated": 0,
+    "scores_observed": false,
+    "failure": "The shared runner required root test_split_accessed=false, while the Multi-News preregistration expresses the stronger guard under protected_split_rules."
+  },
+  "correction": "Accept either the legacy root-level false flag or all three explicit protected_split_rules flags being false.",
+  "scientific_configuration_changed": false,
+  "partition_changed": false,
+  "inference_changed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
