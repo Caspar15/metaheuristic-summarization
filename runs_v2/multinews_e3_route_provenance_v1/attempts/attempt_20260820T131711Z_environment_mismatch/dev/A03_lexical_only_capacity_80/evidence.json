@@ -1,0 +1,59 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-08-20T13:12:10.114013+00:00",
+  "started_at_utc": "2026-08-20T13:10:23.393878+00:00",
+  "status": "completed",
+  "study_id": "multinews-e3-route-provenance-v1",
+  "variant": "A03_lexical_only_capacity_80",
+  "partition": "Multi-News frozen dev",
+  "rows": 3935,
+  "config_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/resolved_config.yaml",
+  "config_sha256": "490b9e620a356cac557c9e54e54448436f75067d0e885207cd7ad352afb71e76",
+  "candidate_hash": "7be0db3c2bda51dadc6c42768b52077d1283fb34ac749e92068ffcfd9338ff6e",
+  "implementation_commit": "731f6844b714fc19b7a1fabca1c6daa8eef4585e",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.5.1",
+    "nltk": "3.9.1",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.1",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 106.77753759990446,
+    "cpu_process_tree_seconds": 329.234375,
+    "peak_process_tree_rss_bytes": 2630193152,
+    "rss_sample_interval_ms": 50,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.4322646692543018,
+      "rouge2": 0.13490942711555617,
+      "rougeLsum": 0.39264300106581157
+    },
+    "macro_rouge": 0.31993903247855654,
+    "feasible_rows": 3931,
+    "infeasible_rows": 4,
+    "summary_words": {
+      "mean": 244.90597204574334,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/predictions.jsonl",
+  "predictions_sha256": "4316f4c1cac46f09ef025759eea69032826205879e0b4116b5eba39e48712351",
+  "selected_indices_sha256": "6dddd14f5f1ffcf029b2c077176cc8e11d80bc722958bdec4a04cb5423cd0fd0",
+  "per_example_path": "runs_v2/multinews_e3_route_provenance_v1/dev/A03_lexical_only_capacity_80/per_example.jsonl",
+  "per_example_sha256": "f6e3db0e94773591d7b26d58bd1fbcd8281c9123fc326c092152ca316eb5d219",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
