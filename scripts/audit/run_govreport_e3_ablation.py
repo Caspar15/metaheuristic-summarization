@@ -162,6 +162,33 @@ def _protected_test_guard_is_frozen(parent: Mapping[str, Any]) -> bool:
     )
 
 
+def _validate_anchor_dependency_parity(anchor_summary: Mapping[str, Any]) -> None:
+    """Fail before scoring when the ablation environment differs from its anchor."""
+    expected = anchor_summary.get("dependency_versions")
+    if not isinstance(expected, Mapping):
+        raise ValueError("E3 anchor summary has no dependency_versions mapping")
+    actual = _dependency_versions()
+    compared = (
+        "python",
+        "numpy",
+        "scikit-learn",
+        "nltk",
+        "rouge-score",
+        "PyYAML",
+        "torch",
+        "transformers",
+        "tokenizers",
+        "sentence-transformers",
+    )
+    drift = {
+        name: {"expected": expected.get(name), "actual": actual.get(name)}
+        for name in compared
+        if expected.get(name) != actual.get(name)
+    }
+    if drift:
+        raise ValueError(f"E3 dependency drift from frozen anchor: {drift}")
+
+
 def _resolve_variants(base: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
     variants = {name: copy.deepcopy(dict(base)) for name in VARIANT_ORDER}
     variants["A01_no_semantic"]["compute_budget"]["enabled_routes"] = ["lexical", "graph"]
@@ -414,6 +441,8 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
         raise ValueError("E3 anchor config SHA drifted")
     if sha256_file(str(ANCHOR_PREDICTIONS)) != anchor["prediction_sha256"]:
         raise ValueError("E3 anchor predictions SHA drifted")
+    anchor_summary = json.loads(ANCHOR_SUMMARY.read_text(encoding="utf-8"))
+    _validate_anchor_dependency_parity(anchor_summary)
 
     study = _load_study(DATASET_KEY)
     input_path = REPO_ROOT / study["input"]

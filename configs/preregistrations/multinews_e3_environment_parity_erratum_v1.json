@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "erratum_id": "multinews-e3-environment-parity-erratum-v1",
+  "status": "frozen_after_excluded_environment-mismatched_run_before_parity_rerun",
+  "registered_at_utc": "2026-08-20T13:18:07.4335977Z",
+  "excluded_attempt": {
+    "path": "runs_v2/multinews_e3_route_provenance_v1/attempts/attempt_20260820T131711Z_environment_mismatch",
+    "analysis_sha256": "cd5a8db2640b1ddefbd64c4ff1447dfe0cad3e19a53d1425060a1bf44ae6e1ef",
+    "scores_observed": true,
+    "actual_dependencies": {
+      "scikit-learn": "1.5.1",
+      "nltk": "3.9.1",
+      "PyYAML": "6.0.1",
+      "torch": "2.5.1+cu121"
+    },
+    "used_for_claims": false
+  },
+  "frozen_anchor_dependencies": {
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu"
+  },
+  "correction": "Require exact parity for all recorded anchor dependencies and rerun the unchanged preregistered variants with .venv/Scripts/python.exe.",
+  "reason_non_discretionary": "The E3 comparisons reuse a frozen full-system anchor. Different library versions could alter route scores, selected indices, or ROUGE and therefore cannot be mixed with that anchor.",
+  "scientific_configuration_changed": false,
+  "partition_changed": false,
+  "inference_changed": false,
+  "observed_scores_used_to_change_design": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
