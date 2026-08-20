@@ -1,5 +1,8 @@
 from copy import deepcopy
+import json
 from pathlib import Path
+
+import pytest
 
 from scripts.audit.run_govreport_final_test import (
     FAMILY_LABELS,
@@ -80,18 +83,30 @@ def test_final_baseline_labels_resolve_without_changing_proposed_selector():
     assert config["optimizer"] == original
 
 
-def test_committed_execution_freeze_is_score_blind_and_fully_pinned():
+def test_committed_execution_freeze_is_score_blind():
     relative = Path(
         "configs/preregistrations/govreport_final_execution_freeze_v1.json"
     )
-    digest = sha256_file(str(ROOT / relative))
-    freeze = _load_freeze(relative, digest)
+    freeze = json.loads((ROOT / relative).read_text(encoding="utf-8"))
     assert freeze["scientific_code_commit"] == (
         "36919f222a697fd84d25600b23ba1633ff908ae9"
     )
     assert freeze["test_predictions_generated_at_freeze"] is False
     assert freeze["test_scores_observed_at_freeze"] is False
     assert freeze["execution"]["workers"] == 16
+
+
+def test_committed_execution_freeze_verifies_all_local_pins():
+    relative = Path(
+        "configs/preregistrations/govreport_final_execution_freeze_v1.json"
+    )
+    manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+    canonical = ROOT / manifest["pins"]["canonical_test"]["path"]
+    if not canonical.is_file():
+        pytest.skip("full GovReport test canonical is intentionally not distributed in Git")
+    digest = sha256_file(str(ROOT / relative))
+    freeze = _load_freeze(relative, digest)
+    assert freeze == manifest
 
 
 def test_committed_activation_pins_the_score_free_dry_run():

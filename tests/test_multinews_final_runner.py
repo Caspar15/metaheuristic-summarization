@@ -2,6 +2,8 @@ from copy import deepcopy
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts.audit.run_multinews_final_test import (
     DETERMINISTIC_BASELINES,
     FAMILY_LABELS,
@@ -83,11 +85,11 @@ def test_multinews_test_policy_was_frozen_before_revised_scores():
     assert policy["final_use_rule"].endswith("Never tune after test execution.")
 
 
-def test_multinews_execution_freeze_is_score_blind_and_fully_pinned():
+def test_multinews_execution_freeze_is_score_blind():
     relative = Path(
         "configs/preregistrations/multinews_final_execution_freeze_v1.json"
     )
-    freeze = _load_freeze(relative, sha256_file(str(ROOT / relative)))
+    freeze = json.loads((ROOT / relative).read_text(encoding="utf-8"))
     assert freeze["scientific_code_commit"] == (
         "dba612f4252b7552824737817db58e8fd0414cd9"
     )
@@ -95,3 +97,15 @@ def test_multinews_execution_freeze_is_score_blind_and_fully_pinned():
     assert freeze["test_predictions_generated_at_freeze"] is False
     assert freeze["test_scores_observed_at_freeze"] is False
     assert freeze["execution"]["workers"] == 16
+
+
+def test_multinews_execution_freeze_verifies_all_local_pins():
+    relative = Path(
+        "configs/preregistrations/multinews_final_execution_freeze_v1.json"
+    )
+    manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+    canonical = ROOT / manifest["pins"]["canonical_test"]["path"]
+    if not canonical.is_file():
+        pytest.skip("full Multi-News test canonical is intentionally not distributed in Git")
+    freeze = _load_freeze(relative, sha256_file(str(ROOT / relative)))
+    assert freeze == manifest
