@@ -48,6 +48,12 @@ OUTPUT_ROOT = REPO_ROOT / "runs_v2/govreport_e3_route_provenance_v1/dev"
 ANCHOR_CONFIG = REPO_ROOT / "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml"
 ANCHOR_PREDICTIONS = REPO_ROOT / "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl"
 ANCHOR_SUMMARY = REPO_ROOT / "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/candidate_summary.json"
+DATASET_KEY = "govreport"
+DATASET_LABEL = "GovReport"
+STUDY_ID = "govreport-e3-route-provenance-v1"
+PARTITION_LABEL = "GovReport frozen dev"
+BASE_SEED = 20260820
+CACHE_ROOT = REPO_ROOT / "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
 VARIANT_ORDER = (
     "A01_no_semantic",
     "A02_no_graph",
@@ -160,7 +166,7 @@ def _resolve_variants(base: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
     variants["A05_index_only_lexical"]["selector"]["salience_source"] = "lexical_percentile"
     for name, config in variants.items():
         config["study"] = {
-            "study_id": "govreport-e3-route-provenance-v1",
+            "study_id": STUDY_ID,
             "variant": name,
             "partition": "dev",
             "preregistration_path": _relative(PARENT),
@@ -179,7 +185,7 @@ def _load_anchor_pools(ordered_ids: Sequence[str]) -> dict[str, list[int]]:
             raise ValueError(f"anchor candidate pool repeats an index for {row_id}")
         pools[row_id] = indices
     if set(pools) != set(ordered_ids):
-        raise ValueError("anchor prediction pools do not match frozen GovReport dev")
+        raise ValueError(f"anchor prediction pools do not match frozen {DATASET_LABEL} dev")
     return pools
 
 
@@ -339,7 +345,7 @@ def _analyze(results: Mapping[str, Mapping[str, Any]], ordered_ids: Sequence[str
                 anchor[metric],
                 scores[metric],
                 n_resamples=100_000,
-                seed=20260820 + endpoint,
+                seed=BASE_SEED + endpoint,
             )
             key = f"C01-{name}:{metric}"
             raw_p[key] = float(value["p_value_two_sided"])
@@ -366,12 +372,12 @@ def _analyze(results: Mapping[str, Mapping[str, Any]], ordered_ids: Sequence[str
         "evidence_schema_version": "1.0",
         "measured_at_utc": _utc_now(),
         "status": "completed",
-        "study_id": "govreport-e3-route-provenance-v1",
-        "partition": "GovReport frozen dev",
+        "study_id": STUDY_ID,
+        "partition": PARTITION_LABEL,
         "rows": len(ordered_ids),
         "holm_family_size": 20,
         "bootstrap_resamples": 100_000,
-        "base_seed": 20260820,
+        "base_seed": BASE_SEED,
         "anchor_metrics": anchor_summary["metrics"],
         "comparisons_full_minus_ablation": comparisons,
         "claim_decisions": decisions,
@@ -396,14 +402,14 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
     if sha256_file(str(ANCHOR_PREDICTIONS)) != anchor["prediction_sha256"]:
         raise ValueError("E3 anchor predictions SHA drifted")
 
-    study = _load_study("govreport")
+    study = _load_study(DATASET_KEY)
     input_path = REPO_ROOT / study["input"]
     _partition, ordered_ids = _validated_dev_partition(study)
     gold = _load_gold(input_path, ordered_ids)
     base = load_yaml(str(ANCHOR_CONFIG))
     variants = _resolve_variants(base)
     pools = _load_anchor_pools(ordered_ids)
-    cache_root = REPO_ROOT / "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+    cache_root = CACHE_ROOT
     if not cache_root.is_dir():
         raise ValueError("E3 embedding cache is missing")
     os.environ["META_SUM_EMBEDDING_CACHE_DIR"] = str(cache_root)
@@ -465,9 +471,9 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
                 "measured_at_utc": _utc_now(),
                 "started_at_utc": started_at,
                 "status": "completed",
-                "study_id": "govreport-e3-route-provenance-v1",
+                "study_id": STUDY_ID,
                 "variant": name,
-                "partition": "GovReport frozen dev",
+                "partition": PARTITION_LABEL,
                 "rows": len(ordered_ids),
                 "config_path": _relative(config_path),
                 "config_sha256": sha256_file(str(config_path)),
@@ -499,7 +505,7 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
                 "measured_at_utc": _utc_now(),
                 "started_at_utc": started_at,
                 "status": "failed",
-                "study_id": "govreport-e3-route-provenance-v1",
+                "study_id": STUDY_ID,
                 "variant": name,
                 "failure": f"{type(error).__name__}: {error}",
                 "dev_test_accessed": False,
@@ -510,8 +516,8 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
         _write_json(evidence_path, evidence)
         _append_search_log({
             "logged_at_utc": _utc_now(),
-            "study_id": "govreport-e3-route-provenance-v1",
-            "dataset": "GovReport",
+            "study_id": STUDY_ID,
+            "dataset": DATASET_LABEL,
             "partition": "dev",
             "family": "confirmatory_ablation_not_search",
             "candidate": name,
@@ -536,8 +542,8 @@ def run(*, workers: int, resume: bool = False) -> dict[str, Any]:
             "evidence_schema_version": "1.0",
             "measured_at_utc": _utc_now(),
             "status": "completed",
-            "study_id": "govreport-e3-route-provenance-v1",
-            "partition": "GovReport frozen dev",
+            "study_id": STUDY_ID,
+            "partition": PARTITION_LABEL,
             "rows": len(ordered_ids),
             "variants": results,
             "analysis_path": _relative(OUTPUT_ROOT.parent / "analysis.json"),

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "multinews-e3-execution-addendum-v1",
+  "status": "frozen_before_any_multinews_e3_ablation_score",
+  "registered_at_utc": "2026-08-20T12:49:09.7874125Z",
+  "parent_preregistration": {
+    "path": "configs/preregistrations/multinews_secondary_evidence_completion_v1.json",
+    "sha256": "9bf4c08a062a95ec054a923587d14ffa8d5cf54d7aa63bf6a865b2824734afed"
+  },
+  "anchor": {
+    "prediction_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/predictions.jsonl",
+    "prediction_sha256": "1403a48396712b4db837af21ced66c97b79a1254863d4b9afaebd38576643e5d",
+    "selected_indices_sha256": "ba2dc982ddc3a6ba6dfe85741caaa8a2e50678e2eaaa605011af3758f57e1f62",
+    "config_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+    "config_sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f"
+  },
+  "variant_resolution": {
+    "A01_no_semantic": "remove semantic; preserve graph x2 and total capacity 80",
+    "A02_no_graph": "remove graph; preserve lexical plus semantic and total capacity 80",
+    "A03_lexical_only_capacity_80": "lexical-only route with route_top_k and total both 80",
+    "A04_equal_rank_rrf": "same exact C01 candidate membership; change graph x2 to equal route weights",
+    "A05_index_only_lexical": "same exact C01 candidate membership; replace fusion salience with lexical percentile"
+  },
+  "execution": {
+    "partition": "all 3935 frozen Multi-News dev rows",
+    "workers_max": 16,
+    "threads_per_worker": 1,
+    "embedding_cache": "reuse the frozen Multi-News dev cache; scientific embeddings unchanged",
+    "predictions_written_atomically": true,
+    "failed_attempts_preserved": true,
+    "no_dev_test_or_test_code_path": true
+  },
+  "inference": {
+    "comparisons": ["C01-A01", "C01-A02", "C01-A03", "C01-A04", "C01-A05"],
+    "endpoints": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+    "holm_family_size": 20,
+    "paired_bootstrap_resamples": 100000,
+    "base_seed": 20260920
+  },
+  "scores_observed_before_registration": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}
