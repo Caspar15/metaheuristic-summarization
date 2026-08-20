@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "random_seed_20260810",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.41812782632533346,
+    "rouge2": 0.12248384362326324,
+    "rougeLsum": 0.3805088796993629,
+    "macro_rouge": 0.30704018321598653
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/random_seed_20260810/per_example.jsonl",
+  "per_example_sha256": "7be5a1524860b03c1acc66aefb1234a1b92f5651d12360316818a33b2af39177",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

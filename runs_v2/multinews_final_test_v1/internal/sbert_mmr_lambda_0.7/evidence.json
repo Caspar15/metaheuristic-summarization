@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "sbert_mmr_lambda_0.7",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.43662035500023966,
+    "rouge2": 0.1386194855902161,
+    "rougeLsum": 0.39281864124646926,
+    "macro_rouge": 0.3226861606123083
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/sbert_mmr_lambda_0.7/per_example.jsonl",
+  "per_example_sha256": "f68be8178b39d2bb2228e701f6062e8fcb9c2bac8ba6c5f734f2e3c25b048b16",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

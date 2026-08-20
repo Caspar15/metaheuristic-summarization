@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "study_id": "multinews-secondary-final-evaluation-v1",
+  "completed_at_utc": "2026-08-16T23:46:09.165170Z",
+  "freeze_manifest_path": "configs/preregistrations/multinews_final_execution_freeze_v1.json",
+  "freeze_manifest_sha256": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+  "activation_path": "configs/preregistrations/multinews_final_execution_activation_v1.json",
+  "activation_sha256": "924c6e11437ae9db443eada8839d7b31ef8f7316e3162b2eb45602a795d828d7",
+  "implementation_commit": "8d75aad7a0b297c969cb3466e702aa68d68afefa",
+  "scientific_code_commit": "dba612f4252b7552824737817db58e8fd0414cd9",
+  "workers": 16,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+  "dependencies": {
+    "numpy": "1.26.4",
+    "scipy": "1.12.0",
+    "scikit-learn": "1.7.1",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "sentence-transformers": "5.1.0",
+    "stanza": "1.10.1",
+    "pyrouge": "0.1.3",
+    "rouge-score": "0.1.2"
+  },
+  "analysis_path": "runs_v2/multinews_final_test_v1/analysis.json",
+  "analysis_sha256": "fd2410f28c9c27dd8c7087fa7346fda20886b8e9e435b8558721a203219b45c7",
+  "internal_analysis_path": "runs_v2/multinews_final_test_v1/internal_analysis.json",
+  "internal_analysis_sha256": "edb394cd3d99773667ff654019f7bffd29c7a6bc389d01fdf4e49be4332d6906",
+  "decision": "report the frozen Multi-News secondary result without tuning",
+  "test_split_accessed": true,
+  "test_scores_observed": true,
+  "post_score_tuning_permitted": false
+}

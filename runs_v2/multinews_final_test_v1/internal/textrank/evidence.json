@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "textrank",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.41495044412866017,
+    "rouge2": 0.128912030174102,
+    "rougeLsum": 0.369169395513126,
+    "macro_rouge": 0.30434395660529606
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/textrank/per_example.jsonl",
+  "per_example_sha256": "c914cdea9f3bf036842b5c0439b2319e8987e3825c980b0a9b6ae1b611a11254",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

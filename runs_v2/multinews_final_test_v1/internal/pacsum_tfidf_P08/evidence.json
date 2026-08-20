@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "pacsum_tfidf_P08",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.4429375241044194,
+    "rouge2": 0.14879628211422666,
+    "rougeLsum": 0.402502827914722,
+    "macro_rouge": 0.33141221137778937
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/pacsum_tfidf_P08/per_example.jsonl",
+  "per_example_sha256": "17a8894352252d32e84f142a468d83050d96ae8c32b73094cc713be5c55a94b4",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "proposed",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.4453000779408968,
+    "rouge2": 0.14203055691856917,
+    "rougeLsum": 0.4078721260404743,
+    "macro_rouge": 0.33173425363331344
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/proposed/per_example.jsonl",
+  "per_example_sha256": "dd7207d30864a7ba4c07334c7b3e948a39be671dd3c439d5258b832efc0c7029",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}

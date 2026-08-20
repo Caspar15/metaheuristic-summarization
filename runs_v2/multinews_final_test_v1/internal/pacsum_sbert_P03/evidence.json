@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "system": "pacsum_sbert_P03",
+  "protocol": "internal_multisentence_lsum_secondary",
+  "rows": 5621,
+  "metrics": {
+    "rouge1": 0.4412008358353309,
+    "rouge2": 0.14886714376722487,
+    "rougeLsum": 0.4006652942268467,
+    "macro_rouge": 0.3302444246098008
+  },
+  "per_example_path": "runs_v2/multinews_final_test_v1/internal/pacsum_sbert_P03/per_example.jsonl",
+  "per_example_sha256": "685792ebbbac3371e39b60964b15fddcc791261343f87fdc0441c9025d672cce",
+  "test_split_accessed": true,
+  "test_scores_observed": true
+}
