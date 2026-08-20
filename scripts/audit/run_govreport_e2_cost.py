@@ -36,6 +36,12 @@ SAMPLE = REPO_ROOT / "configs/pilot_manifests/govreport_cost_scaling_sample_v1.j
 CANONICAL = REPO_ROOT / "data/processed/govreport_validation_canonical.jsonl"
 OUTPUT_ROOT = REPO_ROOT / "runs_v2/govreport_cost_scaling_v1"
 SEARCH_LOG = REPO_ROOT / "runs_v2/search_log.jsonl"
+DATASET_LABEL = "GovReport"
+STUDY_ID = "govreport-cost-scaling-v1"
+WORKER_MODULE = "scripts.audit.run_govreport_e2_cost"
+EXCLUDED_FAILED_ATTEMPTS = [
+    "runs_v2/govreport_cost_scaling_v1/D2_matched_greedy_tfidf_anchor/attempts/attempt_01_interrupted_wrong_cache_classification/evidence.json"
+]
 PLM_SYSTEMS = {
     "frozen_C01_proposed",
     "full_source_sbert_mmr_lambda_0.9",
@@ -107,8 +113,8 @@ def _append_search_log(evidence: Mapping[str, Any]) -> None:
     """Record every newly executed E2 attempt without treating timing as quality search."""
     entry = {
         "logged_at_utc": _utc_now(),
-        "study_id": "govreport-cost-scaling-v1",
-        "dataset": "GovReport",
+        "study_id": STUDY_ID,
+        "dataset": DATASET_LABEL,
         "partition": "dev_reference_blind_30_document_cost_sample",
         "family": "cost_scaling_evidence_only",
         "candidate": (
@@ -182,7 +188,7 @@ def _selected_rows() -> tuple[list[dict[str, Any]], dict[str, str]]:
         if row.get("id") in wanted:
             by_id[str(row["id"])] = row
     if set(by_id) != wanted:
-        raise ValueError("E2 sample IDs are missing from canonical GovReport")
+        raise ValueError(f"E2 sample IDs are missing from canonical {DATASET_LABEL}")
     return [by_id[row_id] for row_id in ordered_ids], strata
 
 
@@ -371,7 +377,7 @@ def _run_once(
     command = [
         sys.executable,
         "-m",
-        "scripts.audit.run_govreport_e2_cost",
+        WORKER_MODULE,
         "--worker",
         "--system",
         system,
@@ -398,7 +404,7 @@ def _run_once(
         "evidence_schema_version": "1.0",
         "measured_at_utc": _utc_now(),
         "status": status if cache_valid else "failed",
-        "study_id": "govreport-cost-scaling-v1",
+        "study_id": STUDY_ID,
         "system": system,
         "state": state,
         "role": role,
@@ -513,7 +519,7 @@ def analyze(evidence: Mapping[str, Mapping[str, Sequence[Mapping[str, Any]]]]) -
         "evidence_schema_version": "1.0",
         "measured_at_utc": _utc_now(),
         "status": "completed",
-        "study_id": "govreport-cost-scaling-v1",
+        "study_id": STUDY_ID,
         "systems": systems,
         "cross_state_selected_indices_identity": cross_state_identity,
         "sample_manifest_sha256": _sha256(SAMPLE),
@@ -587,9 +593,7 @@ def run(selected_systems: Sequence[str], *, resume: bool) -> dict[str, Any] | No
             "completed_timing_attempts": sum(
                 len(runs) for states in collected.values() for runs in states.values()
             ) + sum(1 for system in selected_systems if system in PLM_SYSTEMS),
-            "excluded_failed_attempts": [
-                "runs_v2/govreport_cost_scaling_v1/D2_matched_greedy_tfidf_anchor/attempts/attempt_01_interrupted_wrong_cache_classification/evidence.json"
-            ],
+            "excluded_failed_attempts": EXCLUDED_FAILED_ATTEMPTS,
             "quality_scores_used_for_timing_selection": False,
             "dev_test_accessed": False,
             "test_split_accessed": False,
