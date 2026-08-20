@@ -1,5 +1,23 @@
 # ACTION PLAN —— 到底要做什麼
 
+## 2026-08-20 final-run closeout
+
+> **目前執行點：正式自動實驗已完成，不再跑品質搜尋。** GovReport／Multi-News
+> official test、E2、E3 都有 frozen evidence。最終狀態見
+> `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。本文件下方尚未勾選的舊 test/freeze
+> 排程若與該狀態衝突，視為已被 one-shot execution 取代，而不是要求再跑一次。
+
+- [x] GovReport official test：973/973 rows，主要 paired confirmatory gate 通過。
+- [x] Multi-News official test：5,621/5,621 rows；macro 排名第一但不顯著勝 PacSum，
+      component trade-off 已完整揭露。
+- [x] GovReport 與 Multi-News E2 cold/warm runtime、CPU、RSS、q10/q50/q90 scaling 完成。
+- [x] GovReport 與 Multi-News E3 五組 route/provenance ablation 完成 Holm-20。
+- [ ] 依 frozen tables 撰寫 IEEE Access 主文、reviewer response 與 limitations。
+- [ ] 補質性案例；若做人評，另立不改方法／主結果的預註冊。
+- [ ] clean-clone 重製、lockfile/container、表圖一鍵生成與 code/data availability。
+- [ ] ICACT DOI／Outstanding Paper Award 證明／similarity／ORCID／biography／AI disclosure。
+- [ ] equation-code-config-result、主文／supplement／repo 數字與英文終審。
+
 ## 2026-08-15 freeze 前自治執行狀態
 
 > **目前執行點**：A1～D3b、baseline matrix、GovReport-centered 定位與 E1 官方
@@ -425,7 +443,10 @@
 
 > 「不用 train」只表示 proposed method 不做 task-specific training；若日後納入需要訓練的比較系統，必須另列 training regime，不能混入 no-task-training 主表。
 
-### 2.1 GovReport-centered 執行資料集矩陣 v2（2026-08-10 作者端定案）
+### 2.1 GovReport-centered pre-test 資料集矩陣 v2（2026-08-10 作者端定案）
+
+> **歷史 pre-test 規格。** 它凍結了 GovReport confirmatory role 與停止搜尋規則；
+> 其後作者另行核准的 one-shot final execution 結果見 §2.2，不可用本節要求重跑。
 
 | 資料集／分析 | v2 角色 | freeze 前工作 | protected split |
 |---|---|---|---|
@@ -436,6 +457,17 @@
 機器可讀權威為
 `configs/data_policies/govreport_centered_repositioning_v2.json`。v2 是對既有 policy 的
 addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
+
+### 2.2 Final execution addendum（2026-08-20 現況）
+
+| 資料集 | 最終角色 | 已完成 | 現在的限制 |
+|---|---|---|---|
+| **GovReport** | 唯一 confirmatory primary | frozen official test 973 rows、E1/E2/E3 | 不得依 test 調參；superiority claim 只限此設定 |
+| **Multi-News** | secondary benchmark | frozen official test 5,621 rows、E2/E3 | 不宣稱顯著勝 PacSum；保留 R-2 負向 trade-off |
+| CNN/DailyMail、SciTLDR-AIC、其他 reserve | 不納入本修訂 | 未執行 | 若新增即改變 frozen dataset matrix，需另立研究決策 |
+
+兩個 official test 都已完成，並不把 test 重新變成可搜尋資料；完整權威結論見
+`FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
 
 - [~] **兩個 primary 的 Lead frozen-dev point estimate 已由 A1 同 pipeline 產生**；
       Multi-News `0.326291`、GovReport `0.399232`。仍須收斂進 Gate 2 governed matrix、
@@ -683,13 +715,13 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 
 | Phase | 狀態 | Gate 通過 | 備註 |
 |---|---|---|---|
-| −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag 與 invalid-run 標記均已版本化；final execution freeze 仍屬 Phase 3d |
+| −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag、invalid-run 標記與兩資料集 final execution freeze 均已版本化 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[~]` | 核心內部 Gate 1 tests 已滿足 | Stage A policy 後完整回歸 473 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3 與 F-51～F-77 guards 已完成；final-output runner 仍待 Stage B freeze |
+| 1 正確性重構 | `[x]` | ✅ | 2026-08-20 完整回歸 486 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-81 guards 已完成 |
 | 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
-| 3 方法開發 | `[~]` | ❌ v1 雙-primary gate；✅ v2 dev evidence／🟡 freeze 未簽 | D3b 後停止配置搜尋；E1 official evaluator、E2 cost/scaling、E3 ablation 均完成。尚待 freeze audit、test policy 與完整作者群簽字，不進 dev-test/test |
-| 4 正式 test | `[ ]` | | |
-| 5 分析寫作 | `[ ]` | | |
+| 3 方法開發 | `[x]` | ❌ v1 雙-primary gate；✅ GovReport-centered final package | D3b 後已停止配置搜尋；兩資料集 official-evaluator、E2 cost/scaling 與 E3 ablation 均完成，不再依 test 建新配置 |
+| 4 正式 test | `[x]` | ✅ GovReport confirmatory；Multi-News secondary tie/trade-off | GovReport 973 rows、Multi-News 5,621 rows 的 frozen one-shot official test 均完成 |
+| 5 分析寫作 | `[~]` | | 自動量化實驗已齊；開始論文主文、表圖與 claim-by-claim 數字稽核，質性／人評若新增須另行預註冊 |
 | 6 投稿稽核 | `[ ]` | | |
 ## 2026-08-09 Gate 2 PLM execution checkpoint
 

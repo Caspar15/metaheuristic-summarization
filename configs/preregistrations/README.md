@@ -1,5 +1,11 @@
 # Experiment preregistrations
 
+**2026-08-20 final state:** GovReport and Multi-News one-shot final evaluations and
+their E2/E3 evidence packages are complete. Existing registrations, activations,
+errata and failed attempts are immutable provenance. Do not create a new registration
+to tune against observed test scores. Current results are indexed in
+`docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
 **2026-08-15 execution status:** all method-search registrations through D3b are closed,
 and the frozen-dev E1-E3 evidence-completion study is complete. Its post-evidence inventory
 is `govreport_pretest_evidence_index_v1.json`. `govreport_centered_final_evaluation_v1.json`

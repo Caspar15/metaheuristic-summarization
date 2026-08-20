@@ -3,7 +3,7 @@
 
 > 稽核日期：2026-07-26
 > 稽核對象：repo 根目錄（commit `1b9fe6f`）
-> 新 pipeline 狀態覆核：2026-08-15（A1～D3b 與 PR #17 CI evidence 已納入）
+> 新 pipeline 狀態覆核：2026-08-20（兩資料集 official test／E2／E3 與 F-81 已納入）
 > 與 `paper_revision_plan_IEEE_Access.md` 的關係：**本文件是 evidence ledger，不取代研究主計畫**。
 > 研究主計畫定義「論文該怎麼改」；本文件記錄「legacy 程式碼與 artifact 實際上做了什麼」。
 > 本文件是 legacy snapshot 的 evidence ledger，不是目前 working tree 的驗收證書。
@@ -48,7 +48,7 @@
 
 | # | 發現 | legacy | 新 pipeline | 修在哪 / 為何未修 |
 |---|---|---|---|---|
-| **F-0** | 系統未贏 Lead | 🔴 成立 | 🔴 **Gate 2 dev 失敗** | route matched evidence 有正訊號，但正式 paired finalists 顯示 S02b 對 Multi-News P08 與 GovReport SBERT+MMR 的 macro CI 均全負；selection-aware wins 0。不得進 dev-test，見 F-62 |
+| **F-0** | 系統未贏 Lead | 🔴 成立 | ✅ **final 結論已取代舊診斷** | GovReport official test 顯著勝 SBERT+MMR；Multi-News official macro 排名第一但與 PacSum 統計同級，且 R-2 顯著較低。不得寫 universal superiority；見 F-80～F-81 |
 | F-1 | 論文 "oracle" 不是 oracle | 🔴 成立 | ✅ 已可正確計算 | `src/eval/oracle.py`；canonical 與三個 metric target 已修，詳見 F-21。舊稿 0.136 須撤回 |
 | F-2 | ROUGE-L 應為 Lsum | 🔴 成立 | ✅ 已修與驗證 | `src/eval/rouge.py`；E1 已完成 GovReport 官方 Stanza + Perl ROUGE parity，內部與官方尺度分表 |
 | F-3 | Stage 2 沒有 PLM | 🔴 成立 | ✅ **已修** | 新增 semantic route + `selector.salience_source: rrf_fusion`。`fast_fused.py` 保持原狀 |
@@ -65,14 +65,14 @@
 
 ### 目前真正還開著的（不要被上面的 ✅ 誤導）
 
-1. 🟡 **v1 Gate 2／D3b 雙-primary gate 失敗；v2 freeze governance 待完成** —— 後續 D3b GovReport
-   已對 strongest baseline 顯著勝出，但 Multi-News 仍低且 R-2 顯著較差；作者端已核准
-   GovReport-centered 縮窄，E1～E3 已完成；test-policy ordering 與作者簽核仍未完成，
-   不得再搜尋或進 protected split
+1. ✅ **v1 Gate 2／D3b 雙-primary gate 的失敗已由 GovReport-centered v2 正式收束** ——
+   GovReport official confirmatory test 顯著勝 SBERT+MMR；Multi-News secondary test 的
+   macro 與 PacSum 統計同級且 R-2 顯著較差。兩資料集 E2/E3 均完成，配置搜尋關閉；
+   不得用 test 結果再調參或重開 protected split
 2. ✅ **F-9 baseline 工程矩陣已完整** —— non-PLM、PLM、greedy reference 與 paired finalists 均完成；完成矩陣不等於方法有效，反而提供 redesign 的否證基準
 3. 🔴 **F-11 centrality/novelty 退化** —— 若日後啟用這兩個特徵會出問題
 4. 🟡 **F-12 legacy 分句與條件式 CNN-DM 分句規則**
-5. ✅ **F-72 GovReport official evaluator parity**與 **F-4 正式 cold/warm timing、memory、scaling** 均已由 E1／E2 完成
+5. ✅ **F-72 official evaluator parity**與 **F-4 正式 cold/warm timing、memory、scaling** 已完成；GovReport 與 Multi-News 的 final evidence 都已版本化
 6. 🟡 **F-14 的 legacy_unprofiled raw-sum 例外**與 **F-15 的 legacy unmatched ablation**；兩者不得被誤當成新 canonical pipeline 的 matched evidence
 
 ---
@@ -2551,3 +2551,47 @@ Recovery 已成功完成原預註冊分析。Proposed official macro `0.459943`�
 SBERT+MMR 為 `+0.003700`、95% CI `[+0.002008,+0.005420]`、`p=0.000040`；
 macro pass 與 component guard 均通過，最終決策為
 `retain GovReport-scoped superiority claim`。R-L 單項 CI 跨 0，不宣稱三分項全顯著。
+
+## F-80 — Multi-News frozen final test 完成；macro 第一但不得宣稱勝過 PacSum
+
+**嚴重度：研究結論已定案（secondary benchmark）**
+
+2026-08-16 至 17，Multi-News 依 score-blind policy、execution freeze 與 activation，
+完成 5,621/5,621 official test rows、九個 system families 與 10-seed Random。Proposed
+官方 R-1/R-2/R-L/macro 為 `0.45011/0.14314/0.41351/0.335587`，macro 排名第一。
+
+主要預註冊比較 Proposed−PacSum-TFIDF P08 macro 為 `+0.000091`，95% CI
+`[-0.001542,+0.001730]`、`p=0.907111`，不支持 macro superiority。分項則為 R-1
+`+0.002389`、Holm-3 `p=0.003520`；R-2 `-0.006758`、Holm-3 `p=0.000060`；
+R-L `+0.004641`、Holm-3 `p=0.000060`。相對 PacSum-SBERT macro 亦不顯著；相對
+Lead、Random、TextRank、LexRank、SBERT centroid 與 SBERT+MMR 的 macro 在 Holm-32
+後顯著為正。
+
+因此舊文件把 Multi-News 寫成「只會輸／不跑 test」已過時，但也不能反向改成「全面
+勝過 baseline」。正確寫法是 macro 排名第一、與最強 PacSum 統計同級、R-1/R-L 與
+R-2 有顯著 trade-off。Canonical analysis SHA-256 為
+`fd2410f28c9c27dd8c7087fa7346fda20886b8e9e435b8558721a203219b45c7`；
+`post_score_tuning_permitted=false`。
+
+## F-81 — Multi-News E3 首次完整 run 混用依賴；parity guard 修正後正式 E2/E3 完成
+
+**嚴重度：P1 已關閉（ablation provenance）／E2-E3 evidence complete**
+
+Multi-News E3 第一次 sandbox 外完整 run 誤用使用者 Anaconda 環境：scikit-learn
+1.5.1、NLTK 3.9.1、PyYAML 6.0.1、Torch 2.5.1+cu121；frozen C01 anchor 則是
+1.7.1、3.10.0、6.0.2、2.8.0+cpu。雖聚合差距很小，A02/A04 的逐篇 selected-index
+digests 確實改變，因此不能與 frozen anchor 配對。該完整 attempt、analysis SHA
+`cd5a8db2...6e1ef` 與五個 search-log rows 均保留並標記 excluded。
+
+runner 新增 dependency-parity fail-loud guard；專案 `.venv` 的 exact-parity rerun 才是
+權威 E3。Full macro `0.330417`；full−no-semantic `+0.001917`、no-graph
+`+0.004385`、capacity-80 lexical-only `+0.010478`、exact-pool equal-RRF
+`+0.000742`、exact-pool lexical-salience `+0.007139`。五項 macro 95% CI 均全正且
+Holm-20 通過；A04 `p=0.049440` 位於門檻邊緣，必須保守描述。
+
+同日完成 Multi-News E2：九系統、77 completed attempts、30 篇 reference-blind dev
+sample，所有 repetition 與 cold/warm selected indices 一致。Proposed median cold/warm
+為 `47.85/9.23s`、peak RSS `594.6/398.9 MiB`；PacSum-SBERT `46.05/7.27s`、
+SBERT+MMR `47.19/7.90s`；matched NSGA-II `91.69/50.07s`。這支持 Greedy 作 final
+selector、NSGA-II 作 ICACT 延伸的 matched comparator。E2/E3 均未存取 dev-test/test，
+也不能依結果回頭改方法。

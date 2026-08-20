@@ -1,4 +1,31 @@
-# E2 GovReport cost, memory, and scaling status
+# E2 cost, memory, and scaling status
+
+## Multi-News final completion（2026-08-20）
+
+Multi-News E2 已依事前凍結的 reference-blind 30-document dev sample 完成。九個系統
+各做 cold／warm-cache 一次 discarded smoke 與三次 measured fresh subprocess；五個
+PLM systems 另有 warm-prime，共 77/77 completed attempts。九個系統的三次 repetition
+以及 cold/warm `selected_indices` digest 全部一致，dev-test/test 均未存取。
+
+| System | Cold wall (s) | Warm/control wall (s) | Cold peak RSS (MiB) | Warm/control peak RSS (MiB) |
+|---|---:|---:|---:|---:|
+| **Frozen C01 Proposed** | **47.85** | **9.23** | **594.6** | **398.9** |
+| PacSum-TFIDF P08 | 4.84 | 4.84 | 324.8 | 327.5 |
+| PacSum-SBERT P03 | 46.05 | 7.27 | 584.3 | 396.0 |
+| Full-source SBERT+MMR λ=0.7 | 47.19 | 7.90 | 595.2 | 397.0 |
+| SBERT centroid | 47.47 | 7.41 | 595.4 | 396.4 |
+| Matched NSGA-II-TFIDF | 91.69 | 50.07 | 599.6 | 400.7 |
+| Lead | 4.87 | 4.81 | 324.1 | 325.5 |
+| TextRank | 6.39 | 6.26 | 327.9 | 328.7 |
+| LexRank | 6.91 | 6.86 | 327.7 | 327.7 |
+
+Proposed cold 與三個 full-source SBERT baselines 同級；warm 比它們約慢 17%–27%，
+但遠快於 matched NSGA-II。相對 PacSum-TFIDF 等 non-PLM 方法，PLM 路徑付出明顯
+cold/RAM 成本；必須與 Multi-News 品質的 R-1/R-L 增益、R-2 劣勢一起報告，不能只報
+warm 或只挑一個 comparator。q10/q50/q90 與 CPU/slopes 詳見
+`runs_v2/multinews_cost_scaling_v1/analysis.json`；環境見同目錄 `environment.json`。
+
+以下 GovReport 2026-08-15 結果仍有效，兩資料集不得跨硬體／長度 profile 直接比較秒數。
 
 ## 結論（2026-08-15）
 
@@ -58,10 +85,11 @@ cache，cold 使用獨立空 cache，warm 使用 byte-verified shared cache。�
 - Cost addendum：`configs/preregistrations/govreport_centered_cost_addendum_v1.json`
 - 78 completed attempts + 1 failed attempt 均已進 `runs_v2/search_log.jsonl`。
 
-## 尚未完成
+## 2026-08-15 當時尚未完成（歷史）
 
 - ICACT camera-ready extension audit、test data policy、freeze audit 與完整簽字。
 
 E3 已於同日完成；見 `E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`。
 
-E2 只補成本證據，不能依 timing 重新調參、promote 方法或解鎖 test。
+E2 只補成本證據，不能依 timing 重新調參或 promote 方法。兩資料集 final test 其後已依
+獨立 frozen protocol 完成；E2 仍不得用來回頭改方法。

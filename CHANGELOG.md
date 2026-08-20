@@ -8,6 +8,21 @@ All notable changes to the `metaheuristic-summarization` project will be documen
 
 ## [Unreleased] - GovReport-centered pre-test evidence freeze
 
+- **Final frozen experiments completed (2026-08-20).** GovReport official test
+  retains the scoped superiority claim (`+0.003700` macro vs SBERT+MMR,
+  `p=0.000040`). Multi-News official test ranks Proposed first by macro but ties
+  PacSum-TFIDF statistically (`+0.000091`, `p=0.907111`) with positive R-1/R-L
+  and negative R-2 trade-offs.
+- Multi-News E3 completed five preregistered route/provenance ablations; all
+  macro endpoints pass Holm-20. A dependency-mismatched attempt is preserved
+  and excluded; the authoritative rerun has exact frozen-anchor parity.
+- Multi-News E2 completed 77 non-overlapping attempts across nine systems.
+  Proposed cold/warm medians are `47.85/9.23s`; matched NSGA-II is
+  `91.69/50.07s`. Scientific search is closed; remaining work is manuscript,
+  artifact reproduction and submission compliance.
+
+The older pre-test bullets immediately below are a historical checkpoint.
+
 - **Documentation and execution status aligned (2026-08-15).** A1 through D3b,
   the two historical task profiles' Gate 2 matrices, six greedy-reference runs,
   and paired analyses are complete. Configuration search is closed.

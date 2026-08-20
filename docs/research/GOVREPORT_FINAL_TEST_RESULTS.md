@@ -8,8 +8,10 @@ LongDocSum-compatible Stanza + Perl ROUGE-1.5.5 尺度下完成。Proposed 排�
 
 > **retain GovReport-scoped superiority claim**
 
-此結論只限 GovReport 長篇單文件、no-task-training 設定；不宣稱跨資料集 SOTA，
-Multi-News 仍是 negative boundary condition。
+此結論只限 GovReport 長篇單文件、no-task-training 設定；不宣稱跨資料集 SOTA。
+Multi-News 其後以獨立 frozen secondary protocol 完成 official test：macro 排名第一但
+與 PacSum 統計同級，並呈現 R-1/R-L 正向、R-2 負向 trade-off；見
+`MULTINEWS_FINAL_TEST_RESULTS.md`。
 
 ## Official results
 

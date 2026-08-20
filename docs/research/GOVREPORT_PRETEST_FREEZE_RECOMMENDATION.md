@@ -1,5 +1,9 @@
 # GovReport pre-test freeze recommendation
 
+> **Historical governance artifact:** 本建議的 Stage A/B 已完成並產生 GovReport final
+> result；Multi-News 也另依 frozen secondary protocol 完成。不得把下方未勾欄位解讀成
+> 要重跑 test。現行科學狀態見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+
 ## 決議摘要（2026-08-15）
 
 **2026-08-16 更新：Stage A 已核准並完成；Stage B 已獲原則核准，但只在 exact runner

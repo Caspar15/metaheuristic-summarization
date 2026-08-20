@@ -1,5 +1,18 @@
 # 總體可行性評估 —— 設計是否有救、主場在哪、文件如何分工
 
+## 2026-08-20 evidence-based final assessment
+
+目前已不是「有沒有分數可投」的未知狀態。GovReport official test 對強 SBERT+MMR
+顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，R-2 明顯較弱。
+兩資料集 E3 都支持三路與 provenance，E2 則支持 Greedy 取代 NSGA-II 作最終 selector。
+
+投稿判斷：**有合理 IEEE Access 機會，但不是穩收，也不能寫跨資料集 SOTA。** 可辯護的
+貢獻是嚴格 split/evaluator 下的 no-task-training provenance-aware multi-route framework、
+task-specific selector policy、component evidence 與完整 quality-cost trade-off。最大的
+剩餘風險是 Multi-News R-2、方法組合式 novelty、缺人評／質性案例，以及 ICACT extension
+與 reproducibility 包裝。權威數字見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`；下方早期
+「現在投不出去／尚未跑 final」是診斷沿革，不是現況評分。
+
 > 初稿日期：2026-07-26 ｜ 最新策略狀態覆核：2026-08-15
 > 對象問題：「是不是設計本身就有問題？分數這麼低還投得出去嗎？我們的優勢在哪？架構還有救嗎？」
 > 本文件是策略 memo，不是數字權威來源。Legacy Multi-News 的 ROUGE/Lead 已重現。

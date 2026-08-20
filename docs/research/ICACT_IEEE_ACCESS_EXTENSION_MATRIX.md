@@ -1,5 +1,13 @@
 # ICACT → IEEE Access Extension Matrix
 
+> **2026-08-20 evidence completion:** IEEE Access extension 現已新增兩資料集 frozen
+> official test、強 baseline、paired bootstrap/multiplicity、兩資料集 route/provenance
+> ablation、cold/warm runtime-memory-scaling、data/split policy 與可稽核 artifacts。
+> GovReport 有顯著主要結果；Multi-News 提供統計同級的 secondary 結果與 R-2 限制。
+> 這些是相對 ICACT 的實質新增內容；NSGA-II 改為 matched comparator 而非刪除歷史。
+> 剩餘 extension 工作是主文實際改寫、逐條 reviewer response、質性／人評（若做）、
+> DOI／獎項／similarity 與 reproducibility package。
+
 > **2026-08-15 狀態**：已逐頁核對作者提供的 6-page ICACT PDF（raw SHA-256
 > `fa4c0c18...a4577`），並與 GovReport-centered v2、E1 official evaluator、E2
 > cost/scaling、E3 ablation 對齊。技術內容 audit 已完成；正式 DOI／書目、Outstanding

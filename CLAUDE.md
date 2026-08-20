@@ -1,5 +1,11 @@
 # CLAUDE.md — AI 協作規則
 
+> **2026-08-20 final-state override:** GovReport 與 Multi-News official test、兩資料集
+> E2/E3 均已完成。現在禁止任何 post-test tuning 或新配置搜尋；協作工作只允許論文、
+> 質性／另行預註冊的人評、clean-clone reproduction、artifact 與投稿合規。權威摘要：
+> `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`。下方較早的「尚未完成／test
+> 鎖定」為歷史規則紀錄，不得用來否定已完成的 frozen one-shot execution。
+
 > 這個檔案會被 Claude Code 自動讀取。其他 agent（GPT 等）請在開始工作前先讀這份。
 > 目的：多個 AI 同時工作時不要互相破壞、不要重複推導、不要重犯已知錯誤。
 

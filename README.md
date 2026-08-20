@@ -1,5 +1,26 @@
 # Metaheuristic Extractive Summarization
 
+## 2026-08-20 final experiment checkpoint
+
+> GovReport 與 Multi-News 的 frozen official test、兩資料集 E2 成本／記憶體／scaling、
+> 以及兩資料集 E3 route/provenance ablation 均已完成。完整現況與可寫主張見
+> [`FINAL_EXPERIMENT_STATUS_2026_08_20.md`](docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md)。
+
+- GovReport Proposed official macro `0.459943`，對 SBERT+MMR `+0.003700`，
+  95% CI `[+0.002008,+0.005420]`，`p=0.000040`：主要 confirmatory claim 通過。
+- Multi-News Proposed official macro `0.335587` 排名第一，但對 PacSum-TFIDF 只有
+  `+0.000091`，95% CI 跨 0、`p=0.907111`：不可宣稱整體顯著勝出；R-1/R-L
+  顯著較高、R-2 顯著較低。
+- Multi-News 五項 E3 macro ablation 全部通過 Holm-20；E2 Proposed cold/warm
+  `47.85/9.23s`，matched NSGA-II `91.69/50.07s`。最終 selector 採 Greedy，
+  NSGA-II 保留為 ICACT 延伸中的 matched comparator。
+- **品質搜尋與正式自動實驗已結束。** 現在只做論文撰寫、質性／人評（若另行預註冊）、
+  clean-clone reproduction、artifact、ICACT/IEEE 投稿合規與數字一致性稽核；不得依
+  test 結果調整方法或再建立新配置。
+
+下方 2026-08-15 以前的「尚未跑 test／Multi-News 只作負面 boundary」敘述保留為
+歷史 checkpoint，已由本節取代為現況。
+
 ## 2026-08-15 pre-test evidence checkpoint
 
 > **2026-08-16 final outcome:** GovReport official test 973/973 rows 已完成。Proposed
@@ -156,21 +177,23 @@
 
 ---
 
-## ⚠️ 專案狀態：重構中，既有結果不可引用
+## ⚠️ 專案狀態：正式實驗已凍結，legacy 結果仍不可引用
 
-這個 repo 目前正在依 IEEE Access 投稿標準做**正確性重構**。開始使用前請先知道：
+這個 repo 已完成 IEEE Access 修訂所需的正確性重構與 frozen automatic experiments，
+目前進入論文／artifact 階段。開始使用前請先知道：
 
 | 項目 | 狀態 |
 |---|---|
 | `runs/` 底下的既有結果 | 🔴 **無效** —— 超參數是在 test set 上選的（test-set overfitting） |
 | Stage 2 的 `w_bert` 參數 | 🔴 **命名誤導** —— 它加權的是 TF-IDF 分數，不是 BERT。Stage 2 目前沒有 PLM |
 | ROUGE-L | ✅ 舊碼的單序列 `rougeL` 已由多句 `rougeLsum` 與手算 golden 修正；GovReport E1 也已完成 published Stanza + Perl ROUGE parity。內部與官方尺度仍須分表 |
-| Baseline／最終方法 gate | 🟡 **v1 雙-primary gate 失敗；v2 E1～E3 已完成、freeze 尚未簽字** —— GovReport 官方尺度對 SBERT+MMR macro `+0.004569` 且預註冊檢定通過；E3 五項 component claims 亦通過。Multi-News 負結果保留為 boundary；protected splits 仍鎖定。見 `docs/research/GOVREPORT_CLAIM_MATRIX_V2.md` |
+| Baseline／最終方法 gate | ✅ **frozen final experiments complete** —— GovReport official test 對 SBERT+MMR macro 顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，呈現 R-1/R-L 優勢與 R-2 劣勢。兩資料集 E2/E3 均完成。見 `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **473 local tests passed / 5 subtests passed**（2026-08-16）；PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）。CI 已明確安裝 pinned CPU torch/transformers；CRLF-era pins 與 v2 protected-split lock 均採 fail-loud guard（F-70～F-77） |
+| 測試 | ✅ **486 local tests passed / 5 subtests passed**（2026-08-20）；`compileall -f src tests scripts` 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）是較早 checkpoint；CI 已明確安裝 pinned CPU torch/transformers，CRLF-era pins 與 protected-split lock 均採 fail-loud guard（F-70～F-81） |
 
-**簡言之：程式可以跑，但目前的輸出不能當研究結論。**
+**簡言之：`runs/` legacy 輸出仍不可引用；只有 `runs_v2/` 中受預註冊、evidence、
+split policy 與本文索引明確列出的 frozen artifacts 可作研究結論。**
 
 ---
 
@@ -181,6 +204,7 @@
 | 文件 | 用途 |
 |---|---|
 | [`INDEX.md`](docs/research/INDEX.md) | **總索引 + 關鍵數字速查** ← 先看這個 |
+| [`FINAL_EXPERIMENT_STATUS_2026_08_20.md`](docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md) | **最終兩資料集 test／E2／E3 結論與寫作邊界** |
 | [`ACTION_PLAN.md`](docs/research/ACTION_PLAN.md) | 要做什麼、什麼順序、完成定義 ← 日常執行看這份 |
 | [`ARCHITECTURE.md`](docs/research/ARCHITECTURE.md) | Target Architecture v2、schema、模組介面、freeze gate |
 | [`paper_revision_plan_IEEE_Access.md`](docs/research/paper_revision_plan_IEEE_Access.md) | 研究流程治理、10 個 P0、投稿合規 |

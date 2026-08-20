@@ -1,5 +1,22 @@
 # IEEE Access 全面修訂計畫
 
+## 2026-08-20 最終實驗完成增補（取代所有 pre-test 現況敘述）
+
+GovReport 與 Multi-News official test 已依各自 frozen one-shot protocol 完成；兩資料集
+的 final E2/E3 也已完成。GovReport 保留 scoped superiority claim；Multi-News 是
+secondary benchmark，Proposed macro 排名第一但與最強 PacSum 統計同級，並呈現
+R-1/R-L 正向、R-2 負向的明確 trade-off。權威數字見
+`FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+
+因此後文 E1「只允許 GovReport test」、Multi-News「不跑 protected split」、等待 Stage
+A/B、以及 Phase 4 尚未執行等文字，現在只代表歷史治理版本，不再是執行指令。這仍是
+ICACT／ICT Express 被拒稿後的實質修訂，不是另寫無關方法：保留三路抽取、provenance、
+graph/semantic 與 metaheuristic 對照脈絡；主 selector 依證據改為 Greedy，NSGA-II
+保留為 matched negative comparator。
+
+現在唯一允許的後續工作是寫作、質性／另行預註冊的人評、重製 artifact 與投稿合規；
+不得因 test 結果新增配置、改長度、換 evaluator、改排除規則或補跑「更好看」的 test。
+
 ## 2026-08-15 GovReport-centered v2 執行狀態（取代後文的現行雙-primary 排程）
 
 作者端已核准 `REPOSITIONING_RECOMMENDATION.md` 的選項 A：**GovReport 是唯一 primary

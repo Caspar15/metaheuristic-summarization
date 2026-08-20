@@ -1,5 +1,16 @@
 # 最終候選架構規格 —— Provenance-Aware Multi-Route Extractive Summarization
 
+> **2026-08-20 architecture freeze outcome:** 最終架構仍是 lexical + pinned semantic +
+> sparse graph 的三路候選、route reservation、weighted RRF、provenance-aware selector
+> salience、coverage guard 與 task-specific deterministic selector；沒有改成 LLM+graph，
+> 也沒有刪除 ICACT 的 metaheuristic 脈絡。GovReport profile 使用 TF-IDF MMR，
+> Multi-News profile 使用 Greedy；NSGA-II 只保留 matched comparator。兩資料集 E3
+> 支持 semantic、graph 與 provenance 的增量，E2 顯示 NSGA-II 品質／成本皆不適合作主
+> selector。完整 final evidence 見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+>
+> 下方「freeze 尚未簽字／Multi-News 不跑 test」為先前 checkpoint，科學規格仍有效，
+> 執行狀態已由本增補取代。
+
 > **2026-08-15 文件同步**：架構與品質導向配置已凍結在 GovReport D3b candidate
 > `C01_combined_salience_route_weight`。預註冊的 E1 official-evaluator re-scoring、
 > E2 cost/scaling instrumentation 與 E3 五個 route/provenance ablations 已全部完成；

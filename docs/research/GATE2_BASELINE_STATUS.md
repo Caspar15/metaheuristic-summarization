@@ -1,5 +1,10 @@
 # Gate 2 baseline 狀態報告
 
+> **2026-08-20 historical-stage note:** 本文件是 dev-time Gate 2 診斷，不是 final table。
+> GovReport／Multi-News official test 與 final E2/E3 其後均完成；權威結果見
+> `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。Gate 2 的失敗仍保留，不能以 final result
+> 回寫成當時 promotion 成功。
+
 > **2026-08-15 狀態覆核**：Gate 2 的工程矩陣與 paired diagnosis 已全部完成；
 > quality gate 失敗是結果，不是待補 baseline。其後 D2/D3a/D3b 已完成並停止搜尋。
 > GovReport v2 的 E1～E3 亦已完成；目前只處理 pre-test freeze governance。

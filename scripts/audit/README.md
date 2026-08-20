@@ -1,5 +1,11 @@
 # scripts/audit — 稽核診斷腳本
 
+> **2026-08-20 final state:** official tests and both datasets' E2/E3 studies are
+> complete. `run_multinews_final_test.py`, `run_multinews_e3_ablation.py` and
+> `run_multinews_e2_cost.py` are frozen reproduction/audit entry points, not permission
+> to rerun test or tune configurations. See
+> `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
 > **2026-08-15 現行入口狀態**：A1～D3b、Gate 2、greedy reference 與 paired analyses
 > 已完成；下方多數命令是重現已封存 development evidence，不是下一個待跑 grid。
 > 下一步是依 `govreport_centered_evidence_completion_v1.json` 實作／執行 E1～E3；目前

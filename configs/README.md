@@ -1,5 +1,10 @@
 # configs — 實驗設定
 
+> **2026-08-20:** final quality configs and both official-test protocols have executed.
+> Configs under `configs/final/` are frozen evidence inputs, not templates for further
+> tuning. Multi-News E2/E3 addenda and environment errata are indexed by
+> `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
 ## 2026-08-15 現行設定入口
 
 品質導向搜尋已在 D3b 結束。現行 frozen 方法是 GovReport

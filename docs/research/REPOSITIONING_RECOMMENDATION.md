@@ -1,5 +1,10 @@
 # IEEE Access 重新定位建議書
 
+> **2026-08-20 outcome:** 選項 A 已執行完成。GovReport final official test 通過主要
+> confirmatory gate；Multi-News 其後升為獨立 frozen secondary benchmark，official
+> macro 排名第一但與 PacSum 統計同級。這不是重開 A/B/C，也不授權 post-test tuning。
+> 現行結果見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`；下方是重新定位形成過程。
+
 > **2026-08-15 執行狀態**：選項 A 已定案，無須再選 A/B/C。配置搜尋已停止；
 > E1～E3 與 ICACT 六頁技術 audit 已完成。Pre-test freeze 建議另見
 > `GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`。2026-08-16 兩階段順序已由提出請求的

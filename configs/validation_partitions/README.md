@@ -1,5 +1,9 @@
 # Validation development partitions
 
+> **Final-state note (2026-08-20):** these manifests remain the immutable development
+> audit trail. Final official tests were executed from separate test policies; do not
+> reinterpret validation dev/dev-test as official test or reopen configuration search.
+
 這裡的 manifest 只在 canonical upstream `validation` 內定義 dev／dev-test membership；
 不改 row 的 `split`，也不取代 `configs/data_policies/` 的完整資料驗證。
 

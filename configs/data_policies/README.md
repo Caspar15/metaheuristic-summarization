@@ -1,7 +1,13 @@
 # Frozen data policies
 
+**2026-08-20 final state:** GovReport remains the primary confirmatory domain and
+Multi-News is a frozen secondary benchmark. Both official-test policies were materialized
+score-blind and both one-shot executions are complete. These policies are immutable;
+they do not authorize test reruns or post-test method changes. See
+`docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
+
 Current role decision (checked 2026-08-15): GovReport is the sole primary
-quality domain, Multi-News is frozen boundary evidence, and no new dataset is
+quality domain, Multi-News was then frozen boundary evidence, and no new dataset was
 authorized. The validation policies below remain immutable historical data
 contracts. E1-E3 are complete. The frozen contracts originally disagreed on whether
 policy materialization or full-author signature came first (F-76); the requesting
