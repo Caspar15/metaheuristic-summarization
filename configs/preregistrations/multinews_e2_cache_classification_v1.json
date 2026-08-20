@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "classification_id": "multinews-e2-cache-classification-v1",
+  "status": "frozen_before_any_multinews_e2_timing",
+  "registered_at_utc": "2026-08-20T13:33:19.5347163Z",
+  "parent_cost_addendum": {
+    "path": "configs/preregistrations/multinews_cost_addendum_v1.json"
+  },
+  "static_config_finding": {
+    "affected_systems": ["frozen_C01_proposed", "matched_nsga2_tfidf"],
+    "selector_labels": "Greedy or NSGA-II with TF-IDF selector similarity",
+    "candidate_generator": "frozen lexical + semantic + graph routes",
+    "semantic_route_enabled_by": "compute_budget.enabled_routes contains semantic and routes.semantic is configured",
+    "correction": "Treat both systems as embedding-cache users for cold/warm measurement. Prime and byte-verify warm caches; use an empty isolated cache for every cold attempt."
+  },
+  "direct_plm_systems": [
+    "pacsum_sbert_P03",
+    "full_source_sbert_mmr_lambda_0.7",
+    "sbert_centroid"
+  ],
+  "corrected_runner_sha256": "71a520d9fbc2a7d870f29bc0d43df878bb0830204293ef607a060b5c369b1f0e",
+  "quality_scores_observed": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

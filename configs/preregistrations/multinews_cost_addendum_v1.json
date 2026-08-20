@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "addendum_id": "multinews-cost-addendum-v1",
+  "status": "frozen_before_any_multinews_e2_timing",
+  "registered_at_utc": "2026-08-20T13:33:19.5347163Z",
+  "parent_preregistration": {
+    "path": "configs/preregistrations/multinews_secondary_evidence_completion_v1.json",
+    "sha256": "9bf4c08a062a95ec054a923587d14ffa8d5cf54d7aa63bf6a865b2824734afed"
+  },
+  "sample_manifest": {
+    "path": "configs/pilot_manifests/multinews_cost_scaling_sample_v1.json",
+    "sha256": "f1a9355a1910f78d9b87c596698acedee3a97f0d15feb884b865561e1c5d2c81",
+    "rows": 30,
+    "selected_ids_sha256": "faf5026de1662865822f7db33f727fdb38229842228a939536dac9c865c2c4ca",
+    "references_or_predictions_read_for_sampling": false
+  },
+  "core_systems": {
+    "frozen_C01_proposed": {
+      "config_path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+      "config_sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f"
+    },
+    "pacsum_tfidf_P08": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/pacsum_tfidf_P08_previous_-0.8/pacsum_tfidf/run/config_used.json",
+      "config_sha256": "7850b2d6988e44c9dac0e9528a4fbf1ed6489989bbaa448e0c661b0ec795b520"
+    },
+    "pacsum_sbert_P03": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/pacsum_sbert_P03_previous_-0.3/pacsum_sbert/run/config_used.json",
+      "config_sha256": "140da827242567bc72618fc847c172d7c37d65078b17aa66a3302a7d380592cb"
+    },
+    "full_source_sbert_mmr_lambda_0.7": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_mmr_lambda_0.7/sbert_mmr/run/config_used.json",
+      "config_sha256": "43431682bd5785a45c5f981da647453fc4a96eae170efbdb7093a677956aab74"
+    },
+    "sbert_centroid": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/sbert_centroid/sbert_centroid/run/config_used.json",
+      "config_sha256": "ec83db0eea14307efb4cc3154c59610a0bf13f0fc51aca6bd371e1458125557f"
+    },
+    "matched_nsga2_tfidf": {
+      "config_path": "runs_v2/d2_selector_full_dev_v1/multinews/dev/S12_nsga2_tfidf_seed3407/resolved_config.yaml",
+      "config_sha256": "0b433bf3ce704e1dcf4c04eb3b4e9b206c56737580a00fb17136684c50106e93"
+    }
+  },
+  "descriptive_baseline_systems": {
+    "lead": {
+      "config_path": "runs_v2/a1_length_contract/multinews/dev/legacy_floor_200_cap_250/lead/run/config_used.json",
+      "config_sha256": "226f160fef457529f5c4c885f6f24e3c9c59dd73b79511a99abf980739c0ee6a"
+    },
+    "textrank": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/textrank/textrank/run/config_used.json",
+      "config_sha256": "4c68a33228f6c76d6c1f5c66a000fedbaf87580c6590d95290f3a9bca36a4a72"
+    },
+    "lexrank": {
+      "config_path": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/non_plm/lexrank/lexrank/run/config_used.json",
+      "config_sha256": "1b4d1992d744cf60ae6c71e9a3c3855f2f04703440039f03110e02a5264dce4d"
+    }
+  },
+  "measurement_contract": {
+    "states": ["cold", "warm_cache"],
+    "discarded_instrumentation_smokes_per_system_state": 1,
+    "measured_repetitions_per_system_state": 3,
+    "no_overlapping_timed_jobs": true,
+    "peak_process_tree_rss_sample_interval_ms_max": 50,
+    "selected_indices_must_match_across_repetitions": true,
+    "quality_scores_used_for_timing_selection": false,
+    "descriptive_baselines_can_change_method_selection": false
+  },
+  "dev_test_accessed": false,
+  "test_split_accessed": false,
+  "timings_observed_before_registration": false
+}
