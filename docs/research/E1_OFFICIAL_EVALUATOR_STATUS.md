@@ -1,5 +1,9 @@
 # E1 GovReport official-evaluator status
 
+> **Historical-stage note (2026-08-25):** E1 是 681-row frozen-dev evaluator-parity
+> evidence，不是 final test。GovReport 973-row official test 已另行完成；現行數字見
+> `GOVREPORT_FINAL_TEST_RESULTS.md` 與 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+
 ## 結論（2026-08-15）
 
 E1 已完成。九個 immutable systems 均在同一份 GovReport frozen dev（681 rows）上，

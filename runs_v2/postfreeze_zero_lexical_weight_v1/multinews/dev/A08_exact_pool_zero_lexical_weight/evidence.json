@@ -1,0 +1,62 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-04T13:05:36.700145+00:00",
+  "started_at_utc": "2026-09-04T13:03:17.317781+00:00",
+  "status": "completed",
+  "study_id": "postfreeze-zero-lexical-weight-exact-pool-v1",
+  "variant": "A08_exact_pool_zero_lexical_weight",
+  "dataset": "Multi-News",
+  "partition": "frozen development",
+  "rows": 3935,
+  "config_path": "runs_v2/postfreeze_zero_lexical_weight_v1/multinews/dev/A08_exact_pool_zero_lexical_weight/resolved_config.yaml",
+  "config_sha256": "2e21b0a8545ae79862e043d5fbc77af3bc8a3799769d71486004fd0c659349c4",
+  "candidate_hash": "3c445197d334a91d5f721abfc55518c1e7ef44944bddf9fafc7c67b1ab9ea481",
+  "implementation_commit": "4dda9f880020fb4cc8ff716f4995fb7a618fa0c0",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 8,
+    "threads_per_worker": 1,
+    "wall_seconds": 139.4392517999513,
+    "cpu_process_tree_seconds": 405.1875,
+    "peak_process_tree_rss_bytes": 3932307456,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.44475088352215125,
+      "rouge2": 0.14263316034939866,
+      "rougeLsum": 0.40895624599795605
+    },
+    "macro_rouge": 0.332113429956502,
+    "feasible_rows": 3929,
+    "infeasible_rows": 6,
+    "summary_words": {
+      "mean": 244.06632782719186,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/postfreeze_zero_lexical_weight_v1/multinews/dev/A08_exact_pool_zero_lexical_weight/predictions.jsonl",
+  "predictions_sha256": "03c0147d16b51230ddb93fc96ea3269cedc0182fe5c984bedaeaee5499179048",
+  "selected_indices_sha256": "2bdacc24ab8a8cfffaa084af5dae41d4d617ffbab45abdcc24da6f5c41fe4f83",
+  "per_example_path": "runs_v2/postfreeze_zero_lexical_weight_v1/multinews/dev/A08_exact_pool_zero_lexical_weight/per_example.jsonl",
+  "per_example_sha256": "0329b6f7b9717ee64da6135acb454adbf04cb7353bcfb225c265690b0df89efe",
+  "postfreeze_supplemental": true,
+  "method_selection_permitted": false,
+  "fixed_candidate_pool": true,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

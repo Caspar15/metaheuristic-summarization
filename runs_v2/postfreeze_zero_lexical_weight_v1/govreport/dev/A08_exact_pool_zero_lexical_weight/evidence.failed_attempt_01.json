@@ -1,0 +1,12 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-04T12:58:31.426936+00:00",
+  "started_at_utc": "2026-09-04T12:58:30.035385+00:00",
+  "status": "failed",
+  "study_id": "postfreeze-zero-lexical-weight-exact-pool-v1",
+  "variant": "A08_exact_pool_zero_lexical_weight",
+  "dataset": "GovReport",
+  "failure": "PermissionError: [WinError 5] 存取被拒。",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

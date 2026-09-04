@@ -1,10 +1,24 @@
 # CLAUDE.md — AI 協作規則
 
+> **2026-09-04 manuscript-evidence override:** 為回應主文稽核，新增兩個在分數前登記、
+> 只讀 frozen development 的 post-freeze mechanism checks。No-reservation 不支持品質
+> 增益；no-lexical-candidate-route 在兩資料集反而較好。兩者不得觸發 post-test tuning
+> 或新 final system。現行主張必須區分：semantic／graph／provenance-aware ranking 有
+> prespecified E3 支持；reservation 只作來源平衡與稽核；lexical candidate route 不得
+> 宣稱獨立正貢獻。權威補充證據：
+> `docs/research/MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`。
+
 > **2026-08-20 final-state override:** GovReport 與 Multi-News official test、兩資料集
 > E2/E3 均已完成。現在禁止任何 post-test tuning 或新配置搜尋；協作工作只允許論文、
 > 質性／另行預註冊的人評、clean-clone reproduction、artifact 與投稿合規。權威摘要：
 > `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`。下方較早的「尚未完成／test
 > 鎖定」為歷史規則紀錄，不得用來否定已完成的 frozen one-shot execution。
+
+> **2026-09-02 manuscript-positioning override:** 依指導教授決議，IEEE Access 稿件
+> 以獨立 Research Article 撰寫，不在正文敘述 ICACT extension 或 ICT Express 拒稿。
+> ICACT 只在技術直接相關處作一般 Related Work 引用；ICT Express 審稿意見只作內部
+> 品質檢查。依 IEEE policy，cover letter／投稿表單仍須誠實揭露相似 prior publication
+> 與本稿差異。詳見 `docs/research/IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`。
 
 > 這個檔案會被 Claude Code 自動讀取。其他 agent（GPT 等）請在開始工作前先讀這份。
 > 目的：多個 AI 同時工作時不要互相破壞、不要重複推導、不要重犯已知錯誤。

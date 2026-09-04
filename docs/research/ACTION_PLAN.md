@@ -1,5 +1,63 @@
 # ACTION PLAN —— 到底要做什麼
 
+> **閱讀規則：** 最上方 2026-08-25／2026-08-24 區段是現行待辦；後續 Phase −1～6
+> 是不可刪除的完整執行 ledger，其中「test 尚未解鎖」等文字只代表當時狀態。文件分類與
+> 現行閱讀順序見 [`README.md`](README.md)。
+
+## 2026-09-04 主文證據補完
+
+- [x] 補全兩資料集九系統輸出 words／sentences 與不可行列數，排除只靠填滿長度提高 recall 的簡單解釋。
+- [x] 用相同 12 IDs 完成 Multi-News 5,609-row matched sensitivity；結論仍為 Mean tie、R-1/R-L 正、R-2 負。
+- [x] 公開各 baseline 與 PAMR-ES 的 development configuration counts，明列配置搜尋彈性不對稱。
+- [x] 依 frozen prediction order 第一列建立不看 ROUGE 的 provenance walkthrough。
+- [x] 預先登記並完成 development-only no-reservation：不支持品質增益，降級為來源平衡／稽核機制。
+- [x] 預先登記並完成 development-only no-lexical-candidate-route：兩資料集皆顯示移除後較好；不重跑 test、不改 final system，縮小逐元件主張。
+- [x] 預先登記並完成 exact-pool zero-lexical-weight 診斷：GovReport 的 lexical 負面差異主要來自 ranking vote；Multi-News 同時包含 ranking-vote 與 candidate-membership 影響。16 endpoints 採全域 Holm-16，未讀 dev-test/test。
+- [x] 主文消融表只保留五個事前指定 variants；三個 post-freeze 診斷移至補充證據，主文僅保留一段 claim-boundary 摘要。
+- [x] Related Work 補入直接相關的 RankSum，明確區分其 learned rank-fusion 與本文 capacity-controlled two-stage selection/provenance 設定；不新增不對等的 test baseline。
+- [x] 中文主文納入上述負結果、限制、Code and Data Availability 與 AI-assistance disclosure。
+- [x] 中文 IEEE Access 工作稿完成 LaTeX/BibTeX 編譯與 12 頁逐頁版面檢查；abstract 以保守 tokenizer 計 233 words、5 keywords、PDF 5.39 MB，無 undefined citation/reference。
+- [x] 補充證據 helper 與 zero-weight audit regression tests 完成後，專案完整回歸在 Windows 沙箱外通過：496 tests + 5 subtests；沙箱內第一次失敗為 pytest 暫存目錄／pipe 的 WinError 5，不是程式測試失敗。
+- [x] 主文敘事精簡：NSGA-II 不是 final system 元件，已移出主文 selector／cost table、RQ、Discussion 與 Conclusion；其 matched quality、runtime 與 Pareto 負結果完整保留於 `MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md` 與原始 evidence。
+- [x] 主文明列 configuration selection 不只包含 selector，也包含 route weights：GovReport `(0.5,1,1)+MMR`、Multi-News `(1,1,2)+Greedy`，均由 development 選定並於 final test 前凍結；只主張 no task-specific fine-tuning，不使用 `no tuning`。
+- [x] 成本表重排為 baselines／`PAMR-ES (Ours)`，cold/warm 明列為 30-document totals，並新增 warm per-document 衍生欄；11 個主章節合併為 9 個。
+- [ ] 完成英文正式稿、作者群內容簽核、funding／ORCID、cover letter 與 similarity audit。
+- [ ] 乾淨 clone 重製、固定 environment/container、release tag／DOI 與投稿檔案終檢。
+
+## 2026-09-02 standalone manuscript 定位
+
+依指導教授決議，IEEE Access 稿件以獨立 Research Article 撰寫，不在正文敘述 ICACT
+extension 或 ICT Express 拒稿。ICACT 僅在技術直接相關處作一般 Related Work 引用；
+依 IEEE policy，cover letter 仍須誠實揭露相似 prior publication 與本稿差異。中文稿及
+現行主指南已依此更新。
+
+- [x] 移除 manuscript 的 extension footnote、Introduction／Discussion／Conclusion 沿革敘事。
+- [x] 保留 ICACT 的一般 Related Work citation；ICT Express 僅作內部品質檢查。
+- [x] 重新核對 IEEE Access 篇幅：無硬性全文頁數／字數上限，建議 20 頁以下；摘要最多 250 words。
+- [ ] 投稿前完成 similarity audit 與 standalone cover letter 的 prior-work disclosure。
+
+## 2026-08-25 主文架構定案
+
+IEEE Access 的逐節／逐段內容、prior-work 引用邊界、Research Questions、
+圖表、公式、reviewer-concern mapping、cover letter 及 17–19 頁預算已定義於
+`IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`。這代表**寫作規格完成**，不代表英文
+manuscript、bibliography、clean-clone 或 similarity gate 已完成。
+
+- [x] 定義主文架構、claim scope 與頁數預算。
+- [x] 定義 ICACT 僅作 Related Work、ICT Express 不進 References 的現行政策。
+- [x] 將四位 ICT Express reviewer concerns 映射到主文章節／limitation。
+- [x] 中文工作稿已由 frozen evidence 完成 Tables I–X 並逐頁核對；Fig. 1 為必要架構圖，
+      paired-difference 與 quality-cost 圖改列英文稿可選視覺化，不再假裝是缺少的必要證據。
+- [ ] 將 frozen JSON → tables 的產生流程完全自動化，作為 release／clean-clone engineering；
+      這不影響目前已核對的主文數值，但完成後可降低英文改稿時的人工抄錄風險。
+- [ ] 依藍圖完成英文 manuscript、Supplementary Material 與 cover letter。
+
+## 2026-08-24 投稿前稽核
+
+科學實驗、誠信例外、IEEE Access要求、論文頁數配置與必放表圖已逐項核對；現行唯一
+主指南是 `IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`。8/24 readiness文件保留為
+詳細稽核快照。目前不是再跑品質實驗，而是依主指南完成 manuscript、artifact與compliance gates。
+
 ## 2026-08-20 final-run closeout
 
 > **目前執行點：正式自動實驗已完成，不再跑品質搜尋。** GovReport／Multi-News
@@ -15,7 +73,7 @@
 - [ ] 依 frozen tables 撰寫 IEEE Access 主文、reviewer response 與 limitations。
 - [ ] 補質性案例；若做人評，另立不改方法／主結果的預註冊。
 - [ ] clean-clone 重製、lockfile/container、表圖一鍵生成與 code/data availability。
-- [ ] ICACT DOI／Outstanding Paper Award 證明／similarity／ORCID／biography／AI disclosure。
+- [ ] similarity／prior-work disclosure／ORCID／biography／AI disclosure。
 - [ ] equation-code-config-result、主文／supplement／repo 數字與英文終審。
 
 ## 2026-08-15 freeze 前自治執行狀態
@@ -717,7 +775,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag、invalid-run 標記與兩資料集 final execution freeze 均已版本化 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[x]` | ✅ | 2026-08-20 完整回歸 486 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-81 guards 已完成 |
+| 1 正確性重構 | `[x]` | ✅ | 2026-08-24 完整回歸 488 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-81 guards 已完成 |
 | 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
 | 3 方法開發 | `[x]` | ❌ v1 雙-primary gate；✅ GovReport-centered final package | D3b 後已停止配置搜尋；兩資料集 official-evaluator、E2 cost/scaling 與 E3 ablation 均完成，不再依 test 建新配置 |
 | 4 正式 test | `[x]` | ✅ GovReport confirmatory；Multi-News secondary tie/trade-off | GovReport 973 rows、Multi-News 5,621 rows 的 frozen one-shot official test 均完成 |

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "preregistration_id": "postfreeze-zero-lexical-weight-exact-pool-v1",
+  "status": "registered_postfreeze_before_new_variant_execution",
+  "registered_at": "2026-09-04T20:52:17.3960081+08:00",
+  "purpose": "Development-only mechanism diagnostic that separates the lexical route's fusion-vote effect from its candidate-membership effect. It cannot change either frozen final system or any official-test claim.",
+  "postfreeze_disclosure": {
+    "full_anchor_scores_previously_observed": true,
+    "no_lexical_route_scores_previously_observed": true,
+    "zero_lexical_weight_scores_observed_before_registration": false,
+    "confirmatory_status": "post_hoc_supplemental",
+    "method_selection_permitted": false,
+    "dev_test_accessed": false,
+    "test_split_accessed": false
+  },
+  "variant": {
+    "id": "A08_exact_pool_zero_lexical_weight",
+    "change": {
+      "fixed_candidate_pool": "exact per-document candidate membership from the frozen full anchor",
+      "candidates.route_weights.govreport": {"lexical": 0.0, "semantic": 1.0, "graph": 1.0},
+      "candidates.route_weights.multinews": {"lexical": 0.0, "semantic": 1.0, "graph": 2.0}
+    },
+    "held_constant": [
+      "per-document candidate indices and capacity",
+      "lexical, semantic, and graph route scores and ranks",
+      "dataset-specific selector and objective",
+      "selector TF-IDF similarity",
+      "length contract",
+      "frozen development membership"
+    ],
+    "scope_note": "Because candidate membership is fixed exactly, Full versus A08 isolates the lexical contribution to weighted-RRF relevance. A08 versus the previously executed no-lexical-route diagnostic estimates the effect of retaining lexical-proposed/reserved candidate membership under the same nonlexical fusion weights. Neither comparison is eligible for method selection."
+  },
+  "datasets": {
+    "govreport": {
+      "label": "GovReport",
+      "partition": "all 681 frozen development rows",
+      "anchor_config": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+        "sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481"
+      },
+      "anchor_predictions": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+        "sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2"
+      },
+      "anchor_summary": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/candidate_summary.json",
+      "no_lexical_route": {
+        "predictions_path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/predictions.jsonl",
+        "predictions_sha256": "3c40c5d78375dfc949456338908ef31c10c852362764a2dcea332f44411f08d7",
+        "per_example_path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/per_example.jsonl",
+        "per_example_sha256": "939da13b39ff96774ceee21ebc16d5d5a5d836fe5aad26f8fa7db907c1195389"
+      },
+      "embedding_cache": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+      "bootstrap_seed": 20261340
+    },
+    "multinews": {
+      "label": "Multi-News",
+      "partition": "all 3935 frozen development rows",
+      "anchor_config": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+        "sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f"
+      },
+      "anchor_predictions": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/predictions.jsonl",
+        "sha256": "1403a48396712b4db837af21ced66c97b79a1254863d4b9afaebd38576643e5d"
+      },
+      "anchor_summary": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/candidate_summary.json",
+      "no_lexical_route": {
+        "predictions_path": "runs_v2/postfreeze_no_lexical_route_v1/multinews/dev/A07_no_lexical_route/predictions.jsonl",
+        "predictions_sha256": "aae898c617b02e955e9ab123b5d9108febdee1644102444675c696091546519f",
+        "per_example_path": "runs_v2/postfreeze_no_lexical_route_v1/multinews/dev/A07_no_lexical_route/per_example.jsonl",
+        "per_example_sha256": "6b3c0cfb3bf726ad9119b7d3ea8feb00e2b59bfc8951412e1d06a78b0e410ede"
+      },
+      "embedding_cache": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "bootstrap_seed": 20261440
+    }
+  },
+  "inference": {
+    "endpoints": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+    "comparisons": [
+      "full_anchor_minus_exact_pool_zero_lexical_weight",
+      "exact_pool_zero_lexical_weight_minus_no_lexical_route"
+    ],
+    "paired_bootstrap_resamples": 100000,
+    "global_holm_family_size": 16,
+    "interpretation": "Negative Full-minus-A08 differences indicate harmful lexical rank evidence. Negative A08-minus-no-lexical differences indicate that removing lexical-proposed/reserved membership improves the outcome. Report all endpoints and do not promote or retune any configuration."
+  },
+  "execution": {
+    "output_root": "runs_v2/postfreeze_zero_lexical_weight_v1",
+    "workers_max": 16,
+    "threads_per_worker": 1,
+    "predictions_written_atomically": true,
+    "failed_attempts_preserved": true,
+    "dev_test_accessed": false,
+    "test_split_accessed": false
+  }
+}

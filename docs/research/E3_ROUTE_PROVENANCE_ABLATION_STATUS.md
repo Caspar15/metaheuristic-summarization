@@ -1,5 +1,26 @@
 # E3 route/provenance ablation status
 
+## 2026-09-04 post-freeze supplemental checks
+
+為補主文機制缺口，另做三個**不屬於原 E3 Holm-20 family**的 development-only
+checks。每案均在其新 variant 分數產生前登記，固定原 C01 anchor、資料 membership、
+selector、長度與 evaluator，不讀 dev-test/test，也不得改 final system。A08 進一步
+固定每篇 exact C01 candidate pool，只把 lexical 的 RRF 權重設為 0。
+
+| Variant | GovReport macro (Variant − Full) | Multi-News macro (Variant − Full) | 結論 |
+|---|---:|---:|---|
+| No route reservation | 0.457404 (+0.000001) | 0.330643 (+0.000226) | 無 Holm-4 品質增益；只支持來源平衡／稽核用途 |
+| No lexical candidate route | 0.461872 (+0.004468) | 0.334800 (+0.004383) | 兩資料集移除後皆顯著較好；lexical candidate route 不得宣稱正貢獻 |
+| Exact pool, zero lexical RRF weight | 0.461865 (+0.004462) | 0.332113 (+0.001696) | Holm-16 顯著；兩資料集的 lexical ranking vote 都造成負面干擾 |
+
+No-lexical-route 只移除 lexical 的**候選生成資格**，selector 仍使用 TF-IDF，故不能
+外推為所有詞彙資訊無用。A08 與 no-lexical-route 幾乎相同於 GovReport，表示主要問題
+在 lexical 排名投票；Multi-News 的 no-lexical-route 又比 A08 高 `0.002687`，表示候選
+membership 也有影響。完整 CI、adjusted p、配置與 provenance 見
+`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`。原 E3 對 semantic、graph、
+exact-pool weighting 與 provenance-aware selector evidence 的結論維持；「三路各自正向」
+則被新證據否定。
+
 ## Multi-News final completion（2026-08-20）
 
 Multi-News final E3 使用 frozen dev 3,935 rows、100,000 paired bootstrap、固定

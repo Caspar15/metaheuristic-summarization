@@ -1,5 +1,10 @@
 # ICACT → IEEE Access Extension Matrix
 
+> **2026-09-02 role change:** 本檔改為內部 historical/similarity audit，不再是 IEEE Access
+> 正文或 cover letter 的 extension blueprint。新稿以獨立 Research Article 撰寫；ICACT
+> 只在 Related Work 正常引用，cover letter 只依 IEEE prior-publication policy 簡要揭露
+> 相似既有出版品與差異。下方逐頁 mapping 保留供查重、避免重用及誠信稽核。
+
 > **2026-08-20 evidence completion:** IEEE Access extension 現已新增兩資料集 frozen
 > official test、強 baseline、paired bootstrap/multiplicity、兩資料集 route/provenance
 > ablation、cold/warm runtime-memory-scaling、data/split policy 與可稽核 artifacts。
@@ -51,11 +56,12 @@ extension 的法規比較基準只應是 ICACT。不能把「程式已做」直�
 ## 建議 cover-letter 核心句（草案）
 
 > This manuscript substantially extends our ICACT conference paper by replacing the
-> test-tuned evaluation with frozen data governance, introducing provenance-preserving
-> multi-route fusion and matched selector isolation, adding locally reproduced strong
-> baselines and multiplicity-aware paired inference, and reporting a GovReport-centered
-> result together with a negative Multi-News boundary condition. NSGA-II is retained as
-> a controlled comparator rather than being presented as the quality-leading method.
+> earlier candidate-union architecture with provenance-preserving multi-route fusion and
+> matched selector isolation, adding frozen GovReport and Multi-News evaluations with
+> locally reproduced strong baselines and multiplicity-aware paired inference, and
+> reporting route/provenance ablations together with end-to-end cost evidence. NSGA-II is
+> retained as a controlled comparator rather than being presented as the quality-leading
+> method.
 
 技術內容與 E1～E3 已核對；此句仍須在 DOI／正式書目、獎項證明與 similarity report
 完成後再定稿。

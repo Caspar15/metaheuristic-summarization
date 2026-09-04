@@ -1,5 +1,9 @@
 # D1 Greedy 敏感度研究狀態
 
+> **Final-status note (2026-08-25):** D1 是已完成的 development evidence；兩資料集
+> official test、E2、E3 其後均完成。不得從本文件重開 tuning，現行論文數字見
+> `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+
 初始更新日期：2026-08-08 ｜ 後續狀態覆核：2026-08-15
 
 > D1 是已完成的 frozen-dev sensitivity evidence，不是目前待跑工作。其後 Gate 2、

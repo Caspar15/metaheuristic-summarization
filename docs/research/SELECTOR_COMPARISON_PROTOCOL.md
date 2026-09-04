@@ -1,5 +1,9 @@
 # Selector comparison protocol（completed development evidence）
 
+> **Final-status note (2026-08-25):** 本文件保留 pilot／D2 matched-input 沿革；final
+> experiments 已完成。GovReport 使用 TF-IDF MMR λ=0.7、Multi-News 使用
+> Greedy-TFIDF、NSGA-II 僅 comparator；不得把下方「test 尚未解鎖」當成現行狀態。
+
 初始凍結：2026-08-06 ｜ 狀態覆核：2026-08-15
 狀態：**pilot、full-dev D2 與 paired analysis 已完成；正式 test 尚未解鎖**
 

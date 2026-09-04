@@ -1,0 +1,367 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at": "2026-09-03T16:57:46.918655+00:00",
+  "status": "completed",
+  "study_id": "manuscript-supplemental-analysis-v1",
+  "output_length": {
+    "govreport": {
+      "dataset_rows": 973,
+      "systems": {
+        "Proposed": {
+          "observations": 973,
+          "mean_words": 647.0832476875643,
+          "sd_words_population": 8.612131846453952,
+          "mean_sentences": 16.734840698869476,
+          "sd_sentences_population": 3.6624800930478183,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "Lead": {
+          "observations": 973,
+          "mean_words": 633.7687564234327,
+          "sd_words_population": 16.614886098838028,
+          "mean_sentences": 25.815005138746145,
+          "sd_sentences_population": 4.447096923065548,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "Random (10 seeds)": {
+          "observations": 9730,
+          "mean_words": 649.3034943473792,
+          "sd_words_population": 8.207038197207337,
+          "mean_sentences": 28.36988694758479,
+          "sd_sentences_population": 5.087858882050792,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 9730,
+          "infeasible_observations": 0,
+          "aggregation": "pooled document-seed observations"
+        },
+        "TextRank": {
+          "observations": 973,
+          "mean_words": 649.4295991778006,
+          "sd_words_population": 8.183558802870571,
+          "mean_sentences": 16.035971223021583,
+          "sd_sentences_population": 3.415360533183606,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "LexRank": {
+          "observations": 973,
+          "mean_words": 649.3648509763618,
+          "sd_words_population": 8.190780036025414,
+          "mean_sentences": 21.80267214799589,
+          "sd_sentences_population": 4.395890944589826,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "PacSum-TFIDF": {
+          "observations": 973,
+          "mean_words": 649.2394655704009,
+          "sd_words_population": 8.264338160017466,
+          "mean_sentences": 20.928057553956833,
+          "sd_sentences_population": 4.896352652727698,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "PacSum-SBERT": {
+          "observations": 973,
+          "mean_words": 649.3525179856115,
+          "sd_words_population": 8.198594014458262,
+          "mean_sentences": 25.69578622816033,
+          "sd_sentences_population": 10.918456644695345,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "SBERT centroid": {
+          "observations": 973,
+          "mean_words": 649.4378211716341,
+          "sd_words_population": 8.179228710768923,
+          "mean_sentences": 21.788283658787257,
+          "sd_sentences_population": 6.037429197873226,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "SBERT+MMR": {
+          "observations": 973,
+          "mean_words": 649.4326824254882,
+          "sd_words_population": 8.17390885186969,
+          "mean_sentences": 21.621788283658788,
+          "sd_sentences_population": 5.41028084640576,
+          "min_words": 396,
+          "max_words": 650,
+          "feasible_observations": 973,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        }
+      }
+    },
+    "multinews": {
+      "dataset_rows": 5621,
+      "systems": {
+        "Proposed": {
+          "observations": 5621,
+          "mean_words": 244.0958904109589,
+          "sd_words_population": 15.346773291667573,
+          "mean_sentences": 15.052659669098025,
+          "sd_sentences_population": 4.206771270459299,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5609,
+          "infeasible_observations": 12,
+          "aggregation": "documents"
+        },
+        "Lead": {
+          "observations": 5621,
+          "mean_words": 233.61003380181464,
+          "sd_words_population": 19.344723391427284,
+          "mean_sentences": 10.695249955523929,
+          "sd_sentences_population": 3.237911520522557,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "Random (10 seeds)": {
+          "observations": 56210,
+          "mean_words": 246.74831880448318,
+          "sd_words_population": 14.89007486843981,
+          "mean_sentences": 13.14243017256716,
+          "sd_sentences_population": 3.2299570246433627,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 56210,
+          "infeasible_observations": 0,
+          "aggregation": "pooled document-seed observations"
+        },
+        "TextRank": {
+          "observations": 5621,
+          "mean_words": 247.25244618395303,
+          "sd_words_population": 14.739321674599577,
+          "mean_sentences": 8.017434620174345,
+          "sd_sentences_population": 2.602268364665801,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "LexRank": {
+          "observations": 5621,
+          "mean_words": 246.92937199786516,
+          "sd_words_population": 14.972541793944679,
+          "mean_sentences": 10.97224693115104,
+          "sd_sentences_population": 3.013214994126532,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "PacSum-TFIDF": {
+          "observations": 5621,
+          "mean_words": 245.919943070628,
+          "sd_words_population": 15.123673136074023,
+          "mean_sentences": 12.041273794698451,
+          "sd_sentences_population": 3.9448345152062543,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "PacSum-SBERT": {
+          "observations": 5621,
+          "mean_words": 246.90304216331614,
+          "sd_words_population": 14.928675579551934,
+          "mean_sentences": 11.356164383561644,
+          "sd_sentences_population": 3.152218402685604,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "SBERT centroid": {
+          "observations": 5621,
+          "mean_words": 247.16260451876892,
+          "sd_words_population": 14.91827573756445,
+          "mean_sentences": 9.944671766589575,
+          "sd_sentences_population": 3.888999647265721,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5621,
+          "infeasible_observations": 0,
+          "aggregation": "documents"
+        },
+        "SBERT+MMR": {
+          "observations": 5621,
+          "mean_words": 247.15797900729407,
+          "sd_words_population": 14.919577532395351,
+          "mean_sentences": 10.106208859633517,
+          "sd_sentences_population": 3.0546115495587203,
+          "min_words": 33,
+          "max_words": 250,
+          "feasible_observations": 5614,
+          "infeasible_observations": 7,
+          "aggregation": "documents"
+        }
+      }
+    }
+  },
+  "multinews_feasible_row_sensitivity": {
+    "status": "post_hoc_fixed_output_sensitivity",
+    "all_rows": 5621,
+    "excluded_rows": 12,
+    "matched_rows": 5609,
+    "exclusion_rule": "exclude the same Proposed-infeasible IDs from both systems; no output regeneration or method change",
+    "infeasible_ids": [
+      "test_62",
+      "test_1329",
+      "test_2382",
+      "test_2498",
+      "test_2546",
+      "test_2727",
+      "test_2732",
+      "test_3411",
+      "test_4331",
+      "test_4386",
+      "test_4514",
+      "test_5144"
+    ],
+    "per_example_means": {
+      "rouge1": {
+        "proposed_per_example_mean": 0.4499948243893742,
+        "pacsum_tfidf_per_example_mean": 0.44767603850953824
+      },
+      "rouge2": {
+        "proposed_per_example_mean": 0.1429326118737743,
+        "pacsum_tfidf_per_example_mean": 0.14974786771260473
+      },
+      "rougeL": {
+        "proposed_per_example_mean": 0.41339134070244254,
+        "pacsum_tfidf_per_example_mean": 0.40879880549117487
+      },
+      "macro_rouge": {
+        "proposed_per_example_mean": 0.33543959232186366,
+        "pacsum_tfidf_per_example_mean": 0.335407570571106
+      }
+    },
+    "proposed_minus_pacsum_tfidf": {
+      "rouge1": {
+        "n_pairs": 5609,
+        "n_resamples": 100000,
+        "seed": 20260904,
+        "confidence": 0.95,
+        "mean_difference": 0.0023187858798359787,
+        "ci_lower": 0.0007132982260652538,
+        "ci_upper": 0.00392394624710287,
+        "p_value_two_sided": 0.004979950200497995,
+        "p_value_holm_3": 0.004979950200497995
+      },
+      "rouge2": {
+        "n_pairs": 5609,
+        "n_resamples": 100000,
+        "seed": 20260905,
+        "confidence": 0.95,
+        "mean_difference": -0.006815255838830451,
+        "ci_lower": -0.00872542405063291,
+        "ci_upper": -0.004920892048493493,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_3": 5.999940000599994e-05
+      },
+      "rougeL": {
+        "n_pairs": 5609,
+        "n_resamples": 100000,
+        "seed": 20260906,
+        "confidence": 0.95,
+        "mean_difference": 0.004592535211267606,
+        "ci_lower": 0.0029990989035478706,
+        "ci_upper": 0.006194421465501873,
+        "p_value_two_sided": 1.999980000199998e-05,
+        "p_value_holm_3": 5.999940000599994e-05
+      },
+      "macro_rouge": {
+        "n_pairs": 5609,
+        "n_resamples": 100000,
+        "seed": 20260907,
+        "confidence": 0.95,
+        "mean_difference": 3.202175075771174e-05,
+        "ci_lower": -0.0016040261633089668,
+        "ci_upper": 0.0016664475396683906,
+        "p_value_two_sided": 0.970830291697083
+      }
+    },
+    "replaces_primary_all_row_result": false
+  },
+  "configuration_budget": {
+    "baseline_validation_candidates": {
+      "GovReport": {
+        "Lead": 1,
+        "Random": "10 fixed seeds; not selected by score",
+        "TextRank": 1,
+        "LexRank": 1,
+        "PacSum-TFIDF": 21,
+        "PacSum-SBERT": 21,
+        "SBERT centroid": 1,
+        "SBERT+MMR": 5
+      },
+      "Multi-News": {
+        "Lead": 1,
+        "Random": "10 fixed seeds; not selected by score",
+        "TextRank": 1,
+        "LexRank": 1,
+        "PacSum-TFIDF": 21,
+        "PacSum-SBERT": 21,
+        "SBERT centroid": 1,
+        "SBERT+MMR": 5
+      }
+    },
+    "proposed_development_program": {
+      "GovReport": {
+        "scored_development_records": 69,
+        "unique_config_hashes": 69,
+        "held_out_dev_test_score_observations": 4,
+        "scope_note": "Includes prespecified length, capacity, route, selector, and combination studies that could inform the final profile; excludes E3, cost, oracle, and engineering checks."
+      },
+      "Multi-News": {
+        "scored_development_records": 68,
+        "unique_config_hashes": 68,
+        "held_out_dev_test_score_observations": 4,
+        "scope_note": "Includes prespecified length, capacity, route, selector, and combination studies that could inform the final profile; excludes E3, cost, oracle, and engineering checks."
+      }
+    },
+    "interpretation": "Counts document configuration selection, not model fine-tuning. No listed study accessed an official test split."
+  },
+  "provenance_case": {
+    "path": "runs_v2/manuscript_supplemental_analysis_v1/provenance_case.json",
+    "selection_rule": "first row in the frozen GovReport development prediction order; chosen without inspecting ROUGE or qualitative favorability",
+    "example_id": "validation_crs_R44729"
+  },
+  "new_test_inference": false,
+  "post_score_tuning": false,
+  "test_split_accessed": true,
+  "test_access_reason": "read already frozen predictions and per-example scores only"
+}

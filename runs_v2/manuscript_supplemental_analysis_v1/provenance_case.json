@@ -1,0 +1,426 @@
+{
+  "selection_rule": "first row in the frozen GovReport development prediction order; chosen without inspecting ROUGE or qualitative favorability",
+  "source_artifact": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+  "example_id": "validation_crs_R44729",
+  "summary_words": 647,
+  "selected_sentence_count": 13,
+  "selected_sentences": [
+    {
+      "selection_order": 1,
+      "sentence_id": "validation_crs_R44729:d000:s000000",
+      "original_index": 0,
+      "text": "On January 5, 2011, the House of Representatives adopted an amendment to House Rule XII to require that Members of the House state the constitutional basis for Congress's power to enact the proposed legislation when introducing a bill or joint resolution.",
+      "route_ranks": {
+        "lexical": 9,
+        "semantic": 86,
+        "graph": 6
+      },
+      "selected_by_routes": [
+        "lexical",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 11,
+      "fusion_score": 0.029247207031602506,
+      "retention_reasons": [
+        "route:lexical",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 2,
+      "sentence_id": "validation_crs_R44729:d000:s000030",
+      "original_index": 30,
+      "text": "The Supreme Court has interpreted the scope of Congress's power under the Necessary and Proper Clause as \"broad,\" in that the clause leaves to \"Congress a large discretion as to the means that may be employed in executing a given power.\"",
+      "route_ranks": {
+        "lexical": 137,
+        "semantic": 24,
+        "graph": 14
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 16,
+      "fusion_score": 0.027956346484265267,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 3,
+      "sentence_id": "validation_crs_R44729:d000:s000036",
+      "original_index": 36,
+      "text": "As the Supreme Court has noted, the clause is \"not itself a grant of power, but a caveat that the Congress possesses all the means necessary to carry out the specifically granted 'foregoing' powers of § 8 'and all other Powers vested by this Constitution....'\" Instead, in legislating, Congress \"must rely upon its independent (though quite robust) Article I, § 8, powers\" or in other powers implicitly or explicitly vested elsewhere in the Constitution to Congress.",
+      "route_ranks": {
+        "lexical": 7,
+        "semantic": 40,
+        "graph": 24
+      },
+      "selected_by_routes": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 3,
+      "fusion_rank": 9,
+      "fusion_score": 0.029367448471926082,
+      "retention_reasons": [
+        "route:lexical",
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 4,
+      "sentence_id": "validation_crs_R44729:d000:s000067",
+      "original_index": 67,
+      "text": "In its 1803 decision in Marbury v. Madison, the Supreme Court held that the logic of having a written Constitution that enumerates the legal limits imposed on the federal government, coupled with the tenure protections provided to the federal judiciary under the Constitution, confirmed the Supreme Court's role in interpreting the Constitution and invalidating acts of other branches of government that contravene this document in the context of a live case or controversy.",
+      "route_ranks": {
+        "lexical": 3,
+        "semantic": 85,
+        "graph": 9
+      },
+      "selected_by_routes": [
+        "lexical",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 10,
+      "fusion_score": 0.029325813283834275,
+      "retention_reasons": [
+        "route:lexical",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 5,
+      "sentence_id": "validation_crs_R44729:d000:s000094",
+      "original_index": 94,
+      "text": "While the rule, on its face, requires Members to provide as \"specific[] as practicable\" \"a statement citing ... the power or powers to Congress in the Constitution to enact the bill or joint resolution,\" the CAS rule itself is silent on various issues.",
+      "route_ranks": {
+        "lexical": 127,
+        "semantic": 12,
+        "graph": 11
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 6,
+      "fusion_score": 0.03064719272258626,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 6,
+      "sentence_id": "validation_crs_R44729:d000:s000098",
+      "original_index": 98,
+      "text": "\"The constitutional authority on which this bill rests is the power of Congress to make rules for the government and regulation of the land and naval forces, as enumerated in Article I, Section 8, Clause 14 of the United States Constitution.\"",
+      "route_ranks": {
+        "lexical": 148,
+        "semantic": 30,
+        "graph": 3
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 8,
+      "fusion_score": 0.029387973137973138,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 7,
+      "sentence_id": "validation_crs_R44729:d000:s000109",
+      "original_index": 109,
+      "text": "Nonetheless, the last example provided by the Rules Committee suggests that a citation to a provision of the Constitution that does not explicitly grant power to the Congress—such as the Tenth Amendment, which preserves the powers of the states —may suffice to comply with the rule.",
+      "route_ranks": {
+        "lexical": 85,
+        "semantic": 10,
+        "graph": 5
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 1,
+      "fusion_score": 0.033118605532398634,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "guard:document"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 8,
+      "sentence_id": "validation_crs_R44729:d000:s000208",
+      "original_index": 208,
+      "text": "Viewing this limitation on the use of a CAS as a shortcoming that prevents more robust constitutional debate, several proponents of the CAS rule have argued that the rule should apply during all stages of the legislative process, including during committee deliberations, so that the constitutionality of a bill or resolution is subject to broader consideration.",
+      "route_ranks": {
+        "lexical": 24,
+        "semantic": 13,
+        "graph": 54
+      },
+      "selected_by_routes": [
+        "lexical",
+        "semantic"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 12,
+      "fusion_score": 0.028422940913928656,
+      "retention_reasons": [
+        "route:lexical",
+        "route:semantic",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 9,
+      "sentence_id": "validation_crs_R44729:d000:s000211",
+      "original_index": 211,
+      "text": "In what may be the broadest means to allow more Members to weigh in on the constitutional implications of a bill, at least one commentator has suggested (but ultimately rejects) changing the House rule so that the CAS is part of the text of a bill, as opposed to a statement attached to the bill.",
+      "route_ranks": {
+        "lexical": 49,
+        "semantic": 29,
+        "graph": 20
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 15,
+      "fusion_score": 0.028323111019482528,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 10,
+      "sentence_id": "validation_crs_R44729:d000:s000236",
+      "original_index": 236,
+      "text": "Does the CAS cite to a specific clause of the Constitution?",
+      "route_ranks": {
+        "lexical": 253,
+        "semantic": 4,
+        "graph": 12
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 4,
+      "fusion_score": 0.031111332978345757,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 11,
+      "sentence_id": "validation_crs_R44729:d000:s000243",
+      "original_index": 243,
+      "text": "Citations in CASs to clauses in Article I, Section 9 of the Constitution, which contains a list of limitations on the powers of the federal government, or the Bill of Rights, which consists of a number of rights retained vis-á-vis the federal government, may suggest a broader interpretation of such clauses.",
+      "route_ranks": {
+        "lexical": 71,
+        "semantic": 3,
+        "graph": 30
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 5,
+      "fusion_score": 0.030800920877256756,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 12,
+      "sentence_id": "validation_crs_R44729:d000:s000244",
+      "original_index": 244,
+      "text": "To the extent a Member prefers to cite to a clause that is more generally recognized to grant an affirmative power to Congress, Article I, Section 8 contains the vast majority of commonly cited clauses that provide Congress the power to legislate with respect to various subjects.",
+      "route_ranks": {
+        "lexical": 53,
+        "semantic": 9,
+        "graph": 35
+      },
+      "selected_by_routes": [
+        "semantic",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 7,
+      "fusion_score": 0.029443848173724037,
+      "retention_reasons": [
+        "route:semantic",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    },
+    {
+      "selection_order": 13,
+      "sentence_id": "validation_crs_R44729:d000:s000252",
+      "original_index": 252,
+      "text": "While the customary practice with regard to CASs, to date, has been to provide a short citation to the provision in the Constitution that affirmatively grants Congress the authority to enact the underlying legislation, it is not unprecedented for Members to cite sources beyond the text of the Constitution, such as Supreme Court case law, primary source materials on the Constitution, or a constitutional law treatise.",
+      "route_ranks": {
+        "lexical": 13,
+        "semantic": 47,
+        "graph": 2
+      },
+      "selected_by_routes": [
+        "lexical",
+        "graph"
+      ],
+      "route_agreement": 2,
+      "fusion_rank": 2,
+      "fusion_score": 0.03232414171908103,
+      "retention_reasons": [
+        "route:lexical",
+        "route:graph",
+        "rrf_fill"
+      ],
+      "selected_in_summary": true
+    }
+  ],
+  "first_five_reserved_not_selected": [
+    {
+      "sentence_id": "validation_crs_R44729:d000:s000008",
+      "original_index": 8,
+      "text": "The report contains two tables: Table 1 identifies the constitutional provisions most commonly cited in CASs during the last six months of the 114 th and 115 th Congresses, and Table 2 lists suggested constitutional authorities for various types of legislation.",
+      "route_ranks": {
+        "lexical": 19,
+        "semantic": 88,
+        "graph": 166
+      },
+      "selected_by_routes": [
+        "lexical"
+      ],
+      "route_agreement": 1,
+      "fusion_rank": 85,
+      "retention_reasons": [
+        "route:lexical",
+        "reserve:lexical"
+      ],
+      "selected_in_summary": false
+    },
+    {
+      "sentence_id": "validation_crs_R44729:d000:s000009",
+      "original_index": 9,
+      "text": "Understanding the purpose and logic of the CAS rule first requires an understanding of both the powers provided to the Congress under the Constitution and Congress's role in interpreting the Constitution.",
+      "route_ranks": {
+        "lexical": 183,
+        "semantic": 99,
+        "graph": 19
+      },
+      "selected_by_routes": [
+        "graph"
+      ],
+      "route_agreement": 1,
+      "fusion_rank": 52,
+      "retention_reasons": [
+        "route:graph",
+        "reserve:graph"
+      ],
+      "selected_in_summary": false
+    },
+    {
+      "sentence_id": "validation_crs_R44729:d000:s000013",
+      "original_index": 13,
+      "text": "While only Congress may exercise the legislative power, this power, like those belonging to the other branches of the federal government, is cabined by the terms of the Constitution.",
+      "route_ranks": {
+        "lexical": 210,
+        "semantic": 75,
+        "graph": 34
+      },
+      "selected_by_routes": [
+        "graph"
+      ],
+      "route_agreement": 1,
+      "fusion_rank": 63,
+      "retention_reasons": [
+        "route:graph",
+        "reserve:graph"
+      ],
+      "selected_in_summary": false
+    },
+    {
+      "sentence_id": "validation_crs_R44729:d000:s000015",
+      "original_index": 15,
+      "text": "As a result, the Supreme Court has interpreted Article I's Vesting Clause as creating a Congress of specified or \"enumerated powers.\"",
+      "route_ranks": {
+        "lexical": 204,
+        "semantic": 22,
+        "graph": 85
+      },
+      "selected_by_routes": [
+        "semantic"
+      ],
+      "route_agreement": 1,
+      "fusion_rank": 53,
+      "retention_reasons": [
+        "route:semantic",
+        "reserve:semantic"
+      ],
+      "selected_in_summary": false
+    },
+    {
+      "sentence_id": "validation_crs_R44729:d000:s000016",
+      "original_index": 16,
+      "text": "As the Court noted in United States v. Morrison , \"[e]very law enacted by Congress must be based on one or more of its powers enumerated in the Constitution.\"",
+      "route_ranks": {
+        "lexical": 207,
+        "semantic": 11,
+        "graph": 45
+      },
+      "selected_by_routes": [
+        "semantic"
+      ],
+      "route_agreement": 1,
+      "fusion_rank": 24,
+      "retention_reasons": [
+        "route:semantic",
+        "reserve:semantic"
+      ],
+      "selected_in_summary": false
+    }
+  ],
+  "test_split_accessed": false
+}

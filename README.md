@@ -1,7 +1,34 @@
 # Metaheuristic Extractive Summarization
 
+> **Research documentation starts here:**
+> [`docs/research/README.md`](docs/research/README.md). It separates current manuscript
+> truth, final results, evidence, governance, and historical checkpoints. The dated
+> sections below are retained as a chronological project ledger.
+
+## 2026-09-04 manuscript evidence closeout
+
+中文版 IEEE Access 稿件已補入所有系統輸出長度、Multi-News 5,609-row matched
+sensitivity、configuration-budget disclosure、固定規則 provenance walkthrough，以及
+兩個事後 development-only mechanism checks。完整證據見
+[`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`](docs/research/MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md)。
+
+- Route reservation 沒有可辨識的品質增益，只保留為候選來源平衡與稽核機制。
+- 移除 lexical candidate-generation route 在兩個 development set 都約提升
+  `+0.0044` Mean ROUGE；這不等於 TF-IDF 無用，但禁止再宣稱三條候選路徑各自皆有正貢獻。
+- 兩項結果均在新 variant 分數產生前登記、只讀 frozen development，不碰 test，也不
+  用來改 final system。Official test 與 final claims 維持 2026-08-20 freeze。
+- 中文主文已再聚焦：NSGA-II 不屬 final PAMR-ES，已移出主文 selector／runtime 表與
+  結論；其負結果保留於 supplemental evidence 與原始 artifacts。主文明列 route weights
+  與 selector 都是 development-selected configuration，而不是只調 selector。
+- 成本表的 cold/warm 均明列為 30-document totals，另提供 warm per-document；主章節由
+  11 個合併為 9 個，Discussion／Limitations 與 Reproducibility／Availability 各自整合。
+
 ## 2026-08-20 final experiment checkpoint
 
+> 現行 IEEE Access 論文與投稿主指南見
+> [`IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`](docs/research/IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md)；
+> 2026-08-24 readiness 文件只保留為詳細稽核快照。
+>
 > GovReport 與 Multi-News 的 frozen official test、兩資料集 E2 成本／記憶體／scaling、
 > 以及兩資料集 E3 route/provenance ablation 均已完成。完整現況與可寫主張見
 > [`FINAL_EXPERIMENT_STATUS_2026_08_20.md`](docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md)。
@@ -12,8 +39,8 @@
   `+0.000091`，95% CI 跨 0、`p=0.907111`：不可宣稱整體顯著勝出；R-1/R-L
   顯著較高、R-2 顯著較低。
 - Multi-News 五項 E3 macro ablation 全部通過 Holm-20；E2 Proposed cold/warm
-  `47.85/9.23s`，matched NSGA-II `91.69/50.07s`。最終 selector 採 Greedy，
-  NSGA-II 保留為 ICACT 延伸中的 matched comparator。
+  `47.85/9.23s`，當次也量測 matched NSGA-II `91.69/50.07s`。最終 selector 採 Greedy；
+  NSGA-II 現已移出 IEEE Access 主文，負結果只保留於 Supplement／repository。
 - **品質搜尋與正式自動實驗已結束。** 現在只做論文撰寫、質性／人評（若另行預註冊）、
   clean-clone reproduction、artifact、ICACT/IEEE 投稿合規與數字一致性稽核；不得依
   test 結果調整方法或再建立新配置。
@@ -190,7 +217,7 @@
 | Baseline／最終方法 gate | ✅ **frozen final experiments complete** —— GovReport official test 對 SBERT+MMR macro 顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，呈現 R-1/R-L 優勢與 R-2 劣勢。兩資料集 E2/E3 均完成。見 `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **486 local tests passed / 5 subtests passed**（2026-08-20）；`compileall -f src tests scripts` 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）是較早 checkpoint；CI 已明確安裝 pinned CPU torch/transformers，CRLF-era pins 與 protected-split lock 均採 fail-loud guard（F-70～F-81） |
+| 測試 | ✅ **496 local tests passed / 5 subtests passed**（2026-09-04）；`compileall -f src tests scripts` 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）是較早 checkpoint；CI 已明確安裝 pinned CPU torch/transformers，CRLF-era pins 與 protected-split lock 均採 fail-loud guard（F-70～F-83） |
 
 **簡言之：`runs/` legacy 輸出仍不可引用；只有 `runs_v2/` 中受預註冊、evidence、
 split policy 與本文索引明確列出的 frozen artifacts 可作研究結論。**
@@ -216,7 +243,7 @@ split policy 與本文索引明確列出的 frozen artifacts 可作研究結論�
 | [`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`](docs/research/E3_ROUTE_PROVENANCE_ABLATION_STATUS.md) | 五個 frozen-dev route/provenance 消融與 Holm-20 結果 |
 | [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md) | Pre-test freeze 建議、剩餘 blockers 與 Stage A 簽核欄 |
 | [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md) | Official-test Stage A policy、canonical identity 與零分數健康檢查 |
-| [`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`](docs/research/ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md) | ICACT→IEEE Access 六頁逐項差異；DOI／獎項證明待補 |
+| [`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`](docs/research/ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md) | ICACT 與現稿六頁逐項差異；僅供 historical／similarity audit，不是主文 extension 敘事 |
 | [`REPO_CLEANUP.md`](docs/research/REPO_CLEANUP.md) | 專案整理計畫 |
 
 AI 協作規則見 repo 根目錄的 [`CLAUDE.md`](CLAUDE.md)。

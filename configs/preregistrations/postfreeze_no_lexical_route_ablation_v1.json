@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "preregistration_id": "postfreeze-no-lexical-route-ablation-v1",
+  "status": "registered_postfreeze_before_new_variant_execution",
+  "registered_at": "2026-09-04T01:05:39.6209888+08:00",
+  "purpose": "Supplemental development-only route-contribution check requested during manuscript audit. It cannot change either final system, comparator, endpoint, or test result.",
+  "postfreeze_disclosure": {
+    "anchor_scores_previously_observed": true,
+    "new_variant_scores_observed_before_registration": false,
+    "confirmatory_status": "post_hoc_supplemental",
+    "method_selection_permitted": false,
+    "test_split_accessed": false
+  },
+  "variant": {
+    "id": "A07_no_lexical_route",
+    "change": {
+      "compute_budget.enabled_routes": ["semantic", "graph"],
+      "candidates.route_weights.govreport": {"semantic": 1.0, "graph": 1.0},
+      "candidates.route_weights.multinews": {"semantic": 1.0, "graph": 2.0}
+    },
+    "held_constant": [
+      "semantic and graph route implementations",
+      "weighted RRF constant and total candidate cap",
+      "route reservation and coverage guard",
+      "dataset-specific selector and objective",
+      "lexical features used by the selector",
+      "length contract",
+      "frozen development membership"
+    ],
+    "scope_note": "This removes the lexical candidate-generation route only. It does not remove TF-IDF features or TF-IDF selector similarity, so the result isolates route membership rather than all lexical information in the pipeline."
+  },
+  "datasets": {
+    "govreport": {
+      "label": "GovReport",
+      "partition": "all 681 frozen development rows",
+      "anchor_config": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+        "sha256": "c2088ca4dd794ba08c4c9544d4d75f323c4c3fd749dbac7cdf4b611da60bd481"
+      },
+      "anchor_predictions": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/predictions.jsonl",
+        "sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2"
+      },
+      "anchor_summary": "runs_v2/d3b_cross_profile_combination_v1/govreport/dev/C01_combined_salience_route_weight/candidate_summary.json",
+      "embedding_cache": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache",
+      "bootstrap_seed": 20261140
+    },
+    "multinews": {
+      "label": "Multi-News",
+      "partition": "all 3935 frozen development rows",
+      "anchor_config": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/resolved_config.yaml",
+        "sha256": "a7adc739041e5f16ae322fd9ee55ae1ecb18b07a023d5c0a35e81342aff3911f"
+      },
+      "anchor_predictions": {
+        "path": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/predictions.jsonl",
+        "sha256": "1403a48396712b4db837af21ced66c97b79a1254863d4b9afaebd38576643e5d"
+      },
+      "anchor_summary": "runs_v2/d3b_cross_profile_combination_v1/multinews/dev/C01_combined_salience_route_weight/candidate_summary.json",
+      "embedding_cache": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache",
+      "bootstrap_seed": 20261240
+    }
+  },
+  "inference": {
+    "endpoints": ["rouge1", "rouge2", "rougeLsum", "macro_rouge"],
+    "comparison": "full anchor minus no-lexical-candidate-route",
+    "paired_bootstrap_resamples": 100000,
+    "within_dataset_holm_family_size": 4,
+    "interpretation": "Report effect size, interval, and multiplicity-adjusted p-value descriptively. Do not promote or retune any configuration."
+  },
+  "execution": {
+    "output_root": "runs_v2/postfreeze_no_lexical_route_v1",
+    "workers_max": 16,
+    "threads_per_worker": 1,
+    "predictions_written_atomically": true,
+    "failed_attempts_preserved": true,
+    "dev_test_accessed": false,
+    "test_split_accessed": false
+  }
+}

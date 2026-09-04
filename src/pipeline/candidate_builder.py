@@ -270,9 +270,17 @@ def _resolve_min_per_route(
 
 
 def _resolve_route_weights(
-    value: Optional[Mapping[str, float]], routes: List[str]
+    value: Optional[Mapping[str, float]],
+    routes: List[str],
+    *,
+    allow_zero: bool = False,
 ) -> Dict[str, float]:
-    """Resolve positive RRF weights without accepting hidden/disabled routes."""
+    """Resolve RRF weights without accepting hidden or disabled routes.
+
+    Production inference requires every enabled route to have positive weight.
+    A preregistered exact-pool audit may set a route to zero to isolate its
+    ranking vote while retaining its scores and provenance.
+    """
 
     resolved = {route: 1.0 for route in routes}
     if value is None:
@@ -286,8 +294,12 @@ def _resolve_route_weights(
                 f"fusion weight configured for disabled route {raw_route!r}"
             )
         weight = float(raw_weight)
-        if not math.isfinite(weight) or weight <= 0.0:
-            raise ValueError("candidate route fusion weights must be finite and positive")
+        invalid = weight < 0.0 if allow_zero else weight <= 0.0
+        if not math.isfinite(weight) or invalid:
+            requirement = "non-negative" if allow_zero else "positive"
+            raise ValueError(
+                f"candidate route fusion weights must be finite and {requirement}"
+            )
         resolved[route] = weight
     return resolved
 
@@ -307,6 +319,7 @@ def build_candidate_pool(
     rrf_constant: int = 60,
     route_weights: Optional[Mapping[str, float]] = None,
     precomputed_route_data: Optional[Mapping[str, Mapping[str, Any]]] = None,
+    allow_zero_route_weights: bool = False,
 ) -> Dict[str, Any]:
     """Build route proposals, reservations, guards, and one capped final pool.
 
@@ -395,7 +408,9 @@ def build_candidate_pool(
         min_per_route, list(route_values), configured_quota
     )
     resolved_route_weights = _resolve_route_weights(
-        route_weights, list(route_values)
+        route_weights,
+        list(route_values),
+        allow_zero=allow_zero_route_weights,
     )
     # A reservation is a guarantee over evidence that actually exists, not a
     # requirement that every document contain at least the configured number
