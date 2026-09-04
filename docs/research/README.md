@@ -129,7 +129,9 @@ Experimental Design 與 Results，再完成 clean-clone/release/compliance。不
 | [x] frozen evidence → 中文稿 Tables I–X | 主文數值已逐項對 frozen artifacts，並完成 PDF 逐頁檢查；Fig. 1 是必要架構圖，其他 paired／cost 圖列為英文稿可選 | 中文工作稿表格、補充證據與 frozen artifacts 一致 |
 | [ ] frozen JSON → tables 自動生成 | 把目前已核對的人工排版改為可重建數值區塊，降低英文改稿時的抄錄風險 | 同一指令可重建 Tables I–X 的數值區塊；可選圖僅在實際納入時生成 |
 | [ ] 撰寫 Experimental Design、Results、Method | 中文完整工作稿已建立並編譯；下一步將它改寫成正式學術英文，而不是逐句直譯 | 三章英文初稿完成，每個數字、公式與config都有來源 |
-| [ ] Related Work bibliography／retraction／ICACT資料 | 已建立 15 筆 primary-source 初始書目，ICACT DOI 與官方 Outstanding Paper 頁面已確認；仍須逐筆做 retraction 與 metadata 終審 | 引用可逐筆驗證，沒有錯作者／錯年份／已撤稿文獻 |
+| [ ] Related Work bibliography／retraction／ICACT資料 | 中文稿目前引用 34 筆來源（含 AI-system citation），ICACT DOI 與近期 ACL primary sources 已抽查；仍須逐筆做 DOI、metadata 與 retraction 終審 | 引用可逐筆驗證，沒有錯作者／錯年份／已撤稿文獻 |
 | [ ] clean-clone／environment lock／release tag | 模擬審稿人從全新資料夾下載repo，照說明能安裝、測試與重現；把環境與投稿版本固定 | 乾淨clone驗證通過，有lock/container、確切release tag與reproduction commands |
-| [ ] qualitative fixed-rule cases | 按事先固定規則挑成功／失敗摘要，讓人看懂ROUGE數字背後好在哪、錯在哪 | 規則先固定、正反案例都報；若不做，Limitations明寫沒有質性／人評 |
-| [ ] 投稿行政與終審 | 做similarity、作者／ORCID／bios／funding／AI揭露、英文、PDF/source一致性 | IEEE Access submission package逐項通過且作者群簽認 |
+| [x] fixed-rule provenance walkthrough | 已依 GovReport frozen development prediction order 第一列完成，不看 ROUGE 挑案例；用來說明決策鏈，不冒充人評 | 主文 Table 10 與 machine-readable artifact 一致 |
+| [ ] 可選的 error cases／人評 | 若新增成功／失敗案例、BERTScore 或人評，須另行預註冊且不得改 final system；不列為現行 frozen automatic claim 的 blocker | 若執行則正反案例均報；若不做則維持 Limitations 的範圍聲明 |
+| [ ] 投稿行政與終審 | 做 similarity、作者／ORCID／bios／funding、ICACT first-footnote、AI 揭露、英文與 PDF/source 一致性 | IEEE Access submission package 逐項通過且作者群簽認 |
+| [ ] 公開授權與 artifact | repo 尚無程式 LICENSE；需決定授權並提供精簡 selected-indices／metrics package、release tag 與 archival DOI | reviewer 可在 clean clone 依法安裝、重製並驗證主表 |

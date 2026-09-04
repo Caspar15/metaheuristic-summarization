@@ -33,10 +33,10 @@
 - **ICACT**：已投稿，獲 outstanding paper award
 - **ICT Express**：已被拒（ICTE-D-26-00238），四位審稿人
 - **現在目標**：修正後改投 **IEEE Access**
-- **目前定案（2026-08-15 文件覆核）**：GovReport 是唯一 primary quality domain；Multi-News
-  只保留既有負結果作 boundary evidence。作者端已核准方向，但 official evaluator、
-  cost/scaling、route/provenance ablation 與老師／完整作者群 final freeze 尚未完成。
-  dev-test/test 仍禁止存取。
+- **目前定案（2026-09-04 final-state 覆核）**：GovReport 是 primary confirmatory domain；
+  Multi-News 是 secondary cross-domain benchmark。兩資料集 official test、cost/scaling、
+  route/provenance ablation 與 final freeze 均已完成。現在禁止 post-test tuning 或建立
+  新 final system；只允許 manuscript、artifact、clean-clone 與投稿合規工作。
 
 這個檔案位於研究 repo 根目錄；程式碼在 `src/`。
 

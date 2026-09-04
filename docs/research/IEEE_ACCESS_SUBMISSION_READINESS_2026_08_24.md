@@ -35,7 +35,8 @@ Research Article 政策取代。ICT Express 稿件未出版，只作內部品質
 
 ### 2.1 程式與 repository
 
-- 完整 pytest：`488 passed, 5 subtests passed`。
+- 最新完整 pytest：`496 passed, 5 subtests passed`（2026-09-05）；原 2026-08-24
+  checkpoint 為 `488 passed, 5 subtests passed`。
 - `python -m compileall -q -f src tests scripts`：通過。
 - 稽核開始時工作樹乾淨，HEAD 與 origin branch 對齊；本報告其後形成預期的文件變更。
 - GovReport freeze-package verifier：`status=pass`，11/11 本機必要 evidence 完成。
@@ -180,7 +181,8 @@ universal SOTA、隱藏 Multi-News R-2、或重新引用 legacy test-tuned 結�
 
 ## 7. 主文架構與頁數預算
 
-目標：**16–19 頁，含 references 與 biographies，盡量不超過 20 頁。**
+IEEE Access 沒有硬性頁數上限，但官方強烈建議主文低於 20 頁。現行中文工作稿為
+12 頁；英文正式稿應以完整且精簡為原則，不把 16–19 頁誤寫成期刊要求。
 
 | 區段 | 建議頁數 | 必須回答的問題 |
 |---|---:|---|
@@ -254,7 +256,7 @@ universal SOTA、隱藏 Multi-News R-2、或重新引用 legacy test-tuned 結�
 
 ### Gate C — manuscript/compliance（尚未通過）
 
-- [ ] IEEE Access template 內完成 16–19 頁英文稿。
+- [ ] IEEE Access template 內完成英文正式稿，並盡量維持低於 20 頁。
 - [ ] ICACT citation/DOI、first-footnote、cover-letter extension table。
 - [ ] 正式 similarity <35%。
 - [ ] 正式獎項證明；無證明就不寫 award claim。

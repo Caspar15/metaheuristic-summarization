@@ -1,4 +1,4 @@
-# Metaheuristic Extractive Summarization
+# PAMR-ES: Provenance-Aware Multi-Route Extractive Summarization
 
 > **Research documentation starts here:**
 > [`docs/research/README.md`](docs/research/README.md). It separates current manuscript
@@ -9,7 +9,7 @@
 
 中文版 IEEE Access 稿件已補入所有系統輸出長度、Multi-News 5,609-row matched
 sensitivity、configuration-budget disclosure、固定規則 provenance walkthrough，以及
-兩個事後 development-only mechanism checks。完整證據見
+三個事後 development-only mechanism checks。完整證據見
 [`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`](docs/research/MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md)。
 
 - Route reservation 沒有可辨識的品質增益，只保留為候選來源平衡與稽核機制。
@@ -48,6 +48,10 @@ sensitivity、configuration-budget disclosure、固定規則 provenance walkthro
 下方 2026-08-15 以前的「尚未跑 test／Multi-News 只作負面 boundary」敘述保留為
 歷史 checkpoint，已由本節取代為現況。
 
+<details>
+<summary><strong>展開歷史開發紀錄（已被上方 final state 取代，不是目前待辦）</strong></summary>
+
+
 ## 2026-08-15 pre-test evidence checkpoint
 
 > **2026-08-16 final outcome:** GovReport official test 973/973 rows 已完成。Proposed
@@ -63,9 +67,9 @@ sensitivity、configuration-budget disclosure、固定規則 provenance walkthro
 - dev 可反覆搜尋；每個候選配置只能看一次 dev-test。GovReport 已由作者官方 archive
   重建為 973 筆可評估 canonical validation rows，並在任何方法分數前凍結為
   dev 681／dev-test 292；唯一排除的是官方 reference 為空的 CRS `98-228`。
-- freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗，現在**尚未到可以跑 test**
-  的狀態。作者端已於 2026-08-10 批准 GovReport-centered 重新定位：GovReport 是唯一
-  primary quality domain，Multi-News 只保留為 boundary-condition evidence。
+- 當時 freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗。作者端其後於
+  2026-08-10 批准 GovReport-centered 重新定位。此段是 pre-test 歷史狀態；兩資料集
+  final test 後來均依核准的 one-shot policy 完成，現況以上方 final-state 摘要為準。
 - 配置搜尋與 baseline matrix 已結束。E1 官方 evaluator 已完成：Proposed 官方
   macro `0.458257`，相對 full-source SBERT+MMR `+0.004569`，95% CI
   `[+0.002467,+0.006680]`、`p=0.000020`；R-L 單項未顯著。完整表見
@@ -199,8 +203,11 @@ sensitivity、configuration-budget disclosure、固定規則 provenance walkthro
   錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 
-抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
-目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
+</details>
+
+本 repository 的現行研究主線是 PAMR-ES：在不做任務特定微調的條件下，以 lexical、
+fixed MiniLM semantic 與 sparse-graph ranking 建立可追蹤的候選融合，再由資料集特定的
+Greedy 或 MMR selector 產生摘要。NSGA-II 只保留為歷史 comparator，不是 final method。
 
 ---
 
@@ -315,7 +322,7 @@ GitHub Actions 會在每次 push 到 `master` 或針對 `master` 的 pull reques
 | `src/data/` | 前處理（分句、濾短句、CSV/HF → JSONL） |
 | `src/features/` | TF-ISF、句長、句位置、TextRank 中心性 |
 | `src/representations/` | TF-IDF 向量與相似度矩陣 |
-| `src/models/extractive/` | Greedy(MMR)、GRASP、NSGA-II、encoder 排序 |
+| `src/models/extractive/` | Greedy、MMR、encoder 排序，以及歷史 GRASP／NSGA-II comparator |
 | `src/pipeline/` | 特徵組合、候選池、optimizer dispatch、選句、評估 |
 | `src/eval/` | ROUGE（Lsum + multi-reference）、metric-specific greedy reference |
 | `src/selection/` | 長度控制與候選池工具 |
@@ -442,9 +449,9 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 - `src/data/preprocess_scitldr.py` 已保留 SciTLDR 多個替代 reference；`scitldr_official` 評估在官方 wrapper 通過一致性測試前會拒絕執行
 - `src/features/semantic.py` 的 `centrality` 與 `novelty` 數學上完全反相關，同時加權是退化的
 - graph candidate route 已使用有界 sparse kNN，但 selector／coverage objective 目前仍可能建立 dense `N×N` similarity；完成 sparse selector/objective 後才能宣稱整條長文件 pipeline 都是 sparse
-- canonical task-profile objective 已禁止 raw-sum salience；Greedy／GRASP／NSGA-II 已共用 objective 與 feasibility contract。legacy config 仍保留歷史 sum 行為，因此舊 run 依然有被長度上限支配的問題
-- NSGA-II 已保存完整可行 Pareto front，但目前 final selection 仍是 provisional weighted sum；knee／reference-point policy 必須只用 validation 凍結
-- `src/features/graph.py` 的 `compute_textrank_scores`（自製 PageRank power iteration）缺少已知答案的單元測試（星形圖、路徑圖、完全圖、不連通分量）；開啟 graph 候選路線之前必做，目前尚未排程
+- canonical task-profile objective 已禁止 raw-sum salience；legacy config 仍保留歷史 sum 行為，因此舊 run 依然有被長度上限支配的問題。Greedy／GRASP／NSGA-II 的 shared-objective 比較只供歷史 selector evidence；final PAMR-ES 使用已凍結的 Greedy 或 MMR
+- NSGA-II 已保存完整可行 Pareto front，但只保留為歷史 comparator；其 Pareto 選解規則不是 final PAMR-ES 元件，也不支撐主文品質主張
+- graph helper 已有 empty／single／normalization／dangling-mass、dense non-mutation 與 sparse edge-bound regression；更完整的已知拓樸測試仍可作工程強化，但不改變已凍結的 final system 或結果
 
 ---
 

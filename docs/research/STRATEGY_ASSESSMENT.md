@@ -4,13 +4,16 @@
 
 目前已不是「有沒有分數可投」的未知狀態。GovReport official test 對強 SBERT+MMR
 顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，R-2 明顯較弱。
-兩資料集 E3 都支持三路與 provenance，E2 則支持 Greedy 取代 NSGA-II 作最終 selector。
+兩資料集 E3 支持 semantic route、graph route 與融合排名證據；2026-09-04 的
+post-freeze development-only 診斷則顯示 reservation 沒有獨立品質增益，lexical route
+也不得宣稱為獨立正貢獻。E2 支持 Greedy/MMR 取代 NSGA-II 作最終 selectors。
 
 投稿判斷：**有合理 IEEE Access 機會，但不是穩收，也不能寫跨資料集 SOTA。** 可辯護的
 貢獻是嚴格 split/evaluator 下的 no-task-training provenance-aware multi-route framework、
 task-specific selector policy、component evidence 與完整 quality-cost trade-off。最大的
-剩餘風險是 Multi-News R-2、方法組合式 novelty、缺人評／質性案例，以及 ICACT extension
-與 reproducibility 包裝。權威數字見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`；下方早期
+剩餘風險是 Multi-News R-2、方法組合式 novelty、尚無人評，以及 ICACT disclosure
+與 reproducibility 包裝。固定規則 provenance walkthrough 已完成，但不等於人類品質評估。
+權威數字見 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`；下方早期
 「現在投不出去／尚未跑 final」是診斷沿革，不是現況評分。
 
 > 初稿日期：2026-07-26 ｜ 最新策略狀態覆核：2026-08-15
@@ -33,11 +36,11 @@ task-specific selector policy、component evidence 與完整 quality-cost trade-
 > SBERT+MMR `0.006614`。沒有共同近最優 selector；下一輪採 task-profile policy，
 > 但兩 primary 都不具 dev-test promotion 資格。
 
-> **現行決策（取代本文早期的雙-primary 推薦）**：D3b 後已停止搜尋，作者端已核准
-> GovReport-centered 選項 A。GovReport 是唯一 primary；Multi-News 只保留既有負面
-> boundary evidence。E1～E3 evidence completion 已完成；下一步是 freeze audit、test
-> policy 與 final freeze 簽字，不是
-> 重新選資料集、重新調參或跑 test。本文較早的三資料集／雙-primary討論保留作決策沿革。
+> **現行決策（2026-09-04 final-state override）**：D3b 後已停止搜尋；GovReport 是
+> primary confirmatory benchmark，Multi-News 是 secondary cross-domain benchmark。
+> 兩資料集 official test、E1～E3 與 final freeze 均已完成。下一步只做 manuscript、
+> artifact、clean-clone、release 與投稿合規，不重新選資料集、調參或跑新的 test。
+> 本文較早的三資料集／雙-primary討論只保留作決策沿革。
 
 ---
 

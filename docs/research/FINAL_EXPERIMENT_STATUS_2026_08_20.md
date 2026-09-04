@@ -106,7 +106,8 @@ not be used for any post-hoc method change.
 
 ## Repository verification
 
-- Full unit suite: **488 passed + 5 subtests passed** on 2026-08-24.
+- Latest full unit suite: **496 passed + 5 subtests passed** on 2026-09-05. The earlier
+  2026-08-24 checkpoint was 488 passed + 5 subtests passed.
 - `python -m compileall -q -f src tests scripts`: passed.
 - `git diff --check`: passed before the documentation closeout commit.
 - The first sandboxed pytest attempt was excluded because Windows denied pytest temp

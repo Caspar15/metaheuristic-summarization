@@ -6,12 +6,10 @@
 > to rerun test or tune configurations. See
 > `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`.
 
-> **2026-08-15 現行入口狀態**：A1～D3b、Gate 2、greedy reference 與 paired analyses
-> 已完成；下方多數命令是重現已封存 development evidence，不是下一個待跑 grid。
-> 下一步是依 `govreport_centered_evidence_completion_v1.json` 實作／執行 E1～E3；目前
-> 本目錄尚無完成版 E1 official Perl evaluator、E2 controlled profiler 或 E3 final-ablation
-> runner。新增這三支工具時只能讀 frozen GovReport dev，且必須先保留 instrumentation
-> smoke 的失敗紀錄；不得提供 dev-test/test 入口。
+> **2026-09-04 current state:** A1～E3、兩資料集 official test、cost/scaling 與三項
+> post-freeze development-only diagnostics 均已完成。下方命令只用於重現或稽核已封存
+> evidence，不代表允許重新執行 protected test、調參或建立新 final system。現在的待辦是
+> clean-clone、environment lock、submission artifact 與 manuscript/release 整理。
 
 這些腳本把先前只存在暫存目錄的稽核分析**版本化**，讓 `CODE_AUDIT_IEEE_Access.md`
 與 `STRATEGY_ASSESSMENT.md` 引用的數字可以被獨立重現。

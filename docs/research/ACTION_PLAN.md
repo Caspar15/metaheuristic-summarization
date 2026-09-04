@@ -350,9 +350,9 @@ manuscript、bibliography、clean-clone 或 similarity gate 已完成。
 
 > 目標：讓每個數字都可被獨立驗證。這階段不追求分數。
 
-### 1a. Patch 與核心 regression 已完成，多資料集／外部協定驗收仍待補
+### 1a. Patch、核心 regression 與正式協定驗收已完成
 
-- [~] `src/eval/rouge.py` → 已改 ROUGE-Lsum、同一 reference 由最高 R1 選定、長度 mismatch fail，內部 golden/regression 已通過；published-protocol parity 仍待驗證
+- [x] `src/eval/rouge.py` → 已改 ROUGE-Lsum、同一 reference 由最高 R1 選定、長度 mismatch fail，內部 golden/regression 已通過；GovReport published-protocol parity 與兩資料集 final evaluation 均已完成
 - [x] `src/eval/oracle.py` → canonical `documents` 已正確展平，舊 schema 不符會
       fail loud；ROUGE-1／ROUGE-2／ROUGE-Lsum 各自獨立最佳化並保存 selections。
       搜尋每一步與最終輸出都採 source order。名稱固定為 greedy reference，明記
@@ -697,28 +697,34 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 
 ---
 
-## Phase 4：正式 test ⏱️ 約 1 週計算
+## Phase 4：正式 test（歷史計畫；已由 final-state override 完成）
 
-- [ ] 只在 v2 final freeze 簽字後，一次性執行 GovReport official test；Multi-News 與 optional datasets 不執行
-- [ ] Paired bootstrap（≥10,000 resamples）、95% CI、Holm correction
-- [ ] Runtime / memory：模型只載入一次，分開報 cold-start 與 warmed inference
-- [ ] Quality–latency Pareto 圖（**用完整 pipeline 成本**，不是單一元件）
-- [ ] 產生 immutable artifacts（config hash、commit、data fingerprint）
+- [x] GovReport 973 rows 與 Multi-News 5,621 rows 均依各自 one-shot freeze 完成 official test。
+- [x] 100,000 次 paired bootstrap、95% CI 與 Holm correction 已完成。
+- [x] 兩資料集 cold/warm runtime、memory 與 scaling evidence 已完成。
+- [x] 每次 governed run 已保存 config hash、commit、data fingerprint 與 evidence。
+- [ ] 投稿用 immutable release tag、外部 artifact package 與 archival DOI 尚待 Phase 6 完成。
 
-**Gate 4**：Go / No-Go 決策（研究主計畫 §9）。
+Quality–latency Pareto 圖未選入現行主文；Table 11 直接呈現完整 pipeline 的品質相近
+比較對象與 cold/warm 成本。這是排版選擇，不是尚未執行的科學實驗。
+
+**Gate 4**：✅ 已完成；禁止依 test 結果重新調參。
 
 ---
 
 ## Phase 5：分析與寫作 ⏱️ 1–2 週
 
-- [ ] Candidate analysis：各 route 的 recall@K、overlap、unique contribution
-      → 這組實驗直接回答「三軌到底互不互補」
-- [ ] Qualitative error analysis（成功/失敗各 ≥3 例，選例規則預先定義）
-- [ ] BERTScore
-- [ ] （加分）Human evaluation 50–100 篇 × 3 人
-- [ ] 依研究主計畫 §11 的骨架重寫論文
-- [ ] Reviewer response matrix：四位審稿人每一條意見逐項對應
-- [x] Conference extension 的六頁技術內容已逐項核對；正式引用、獎項證明與 similarity report 留在 Phase 6
+- [x] 兩資料集 route/provenance ablation、exact-pool ranking evidence、no-reservation、
+      no-lexical-route 與 zero-lexical-weight diagnostics 已完成；不得再宣稱三 route
+      各自皆有正貢獻。
+- [x] 固定規則 provenance walkthrough 已完成；它證明決策可追蹤，不等同人評。
+- [ ] 可選的成功／失敗質性案例、BERTScore 或 human evaluation 必須另行預註冊；
+      不得改 final system，且不是目前 frozen automatic claims 的投稿 blocker。
+- [ ] 中文完整工作稿已完成；仍須改寫成正式學術英文並做語法終審。
+- [ ] ICT Express reviewer matrix 僅作內部品質檢查；IEEE Access 作為獨立 Research
+      Article 投稿，不提交舊期刊的逐點 response。
+- [x] ICACT 六頁技術內容、DOI 與差異矩陣已核對；prior-work disclosure 與 final
+      similarity report 留在 Phase 6。
 
 ---
 
@@ -726,7 +732,10 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 
 - [ ] Equation ↔ code ↔ config ↔ result 全鏈可追溯
 - [ ] 從乾淨環境一鍵重現
-- [ ] IEEE Access 合規：引用 ICACT、similarity < 35%、AI 揭露、ORCID、biography
+- [ ] IEEE Access 合規：ICACT citation／first-footnote disclosure、similarity < 35%、
+      AI 揭露、ORCID、biography、funding 與作者群簽認
+- [ ] 公開 artifact：程式授權、第三方 notice、精確 release tag、selected-indices／metrics
+      package 與 archival DOI
 - [ ] 文法校對
 - [ ] 對照研究主計畫 §16 的最終檢查表逐項打勾
 
@@ -775,7 +784,7 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
 |---|---|---|---|
 | −1 決策與凍結 | `[x]` | ✅ | v1 歷史決策與失敗、GovReport-centered v2 role/claim addendum、Target Architecture v2、legacy tag、invalid-run 標記與兩資料集 final execution freeze 均已版本化 |
 | 0 專案整理 | `[~]` | | archive 已隔離、requirements/CI 已整理；死碼、非論文模組與 lockfile 仍待處理 |
-| 1 正確性重構 | `[x]` | ✅ | 2026-08-24 完整回歸 488 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-81 guards 已完成 |
+| 1 正確性重構 | `[x]` | ✅ | 2026-09-05 完整回歸 496 passed／5 subtests passed、compileall 通過。snapshot、shared objectives、資料 policies/partitions、A1～E3、final-output runners 與 F-51～F-83 guards 已完成 |
 | 2 Baseline | `[x]` | ❌ Gate 2 quality gate | 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6 與 paired finalists 已完成；S02b 對兩 adversarial winners 均顯著落後。baseline 工作包已完成，後續 D2/D3a/D3b redesign 亦已結束；Multi-News 不再新增 clean sensitivity 或 protected-split run |
 | 3 方法開發 | `[x]` | ❌ v1 雙-primary gate；✅ GovReport-centered final package | D3b 後已停止配置搜尋；兩資料集 official-evaluator、E2 cost/scaling 與 E3 ablation 均完成，不再依 test 建新配置 |
 | 4 正式 test | `[x]` | ✅ GovReport confirmatory；Multi-News secondary tie/trade-off | GovReport 973 rows、Multi-News 5,621 rows 的 frozen one-shot official test 均完成 |
@@ -803,4 +812,5 @@ addendum，不刪除或改寫 v1 manifest、既有數字與失敗判定。
       27×681 cache row accesses 全數通過 F-53。
 - [x] 兩 primary greedy reference 6/6 與 paired matrix 已完成；Gate 2 quality gate 未過，
       dev-test/test 未讀；其後 D2/D3a/D3b redesign 已完成並依停止條件關閉搜尋。
-      E1/E2/E3 已完成；下一步固定為 pre-test freeze audit、test policy 與簽字。
+      E1/E2/E3 及兩資料集 one-shot test 均已完成；此段只保留為 Gate 2 歷史紀錄，
+      目前下一步是 manuscript、artifact、clean-clone 與 release。

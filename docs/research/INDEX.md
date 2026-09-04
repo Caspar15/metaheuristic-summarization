@@ -137,7 +137,7 @@ GovReport SBERT+MMR `−0.034906`，兩者 Holm 校正後仍顯著；Gate 2 qual
 | | 狀態 |
 |---|---|
 | Phase 1 程式契約 | ✅ **正式實驗所需契約完成** —— route/provenance/shared objectives、兩資料集 policy/partition、official evaluator、one-shot final-output、E2/E3 與 fail-closed guards 均完成；一般 repo 清理另列，不影響 frozen 結果 |
-| 測試 | ✅ 2026-09-04 新增補充證據與 zero-weight audit tests 後完整回歸 **496 passed／5 subtests passed**；`compileall -f src tests scripts` 通過。PR #17 Linux **454 passed / 5 skipped** 是較早 clean-clone checkpoint |
+| 測試 | ✅ 2026-09-05 以專案 `.venv` 完整回歸 **496 passed／5 subtests passed**；`compileall -f src tests scripts` 通過。PR #17 Linux **454 passed / 5 skipped** 是較早 clean-clone checkpoint |
 | **baseline** | ✅ **矩陣與 diagnosis 完成；quality gate 失敗** —— 兩 primary non-PLM 各 23/23、PLM 各 27/27、greedy reference 6/6、paired finalists 均完成。Multi-News S02b 平均 headroom `1.41%`，對 P08 macro `−0.003663`；GovReport headroom `8.64%`，對 SBERT+MMR `−0.034906`。兩個 paired loss 均 Holm-significant，selection-aware wins 0；其後已完成 D2/D3a/D3b，不再重開 baseline grid。見 `GATE2_BASELINE_STATUS.md` |
 | Gate 2 prereg | ✅ `gate2-baseline-matrix-v1` 已在正式 baseline scores 前凍結：每資料集 non-PLM 23／PLM 27 candidates，runner 只允許 frozen dev；dev-test/test 禁止 |
 | 新 matched-selector pilot | 🟡 **200-row reference-blind diagnostic 完成** —— MMR vs Greedy：R-1 +0.01488、R-2 +0.01472（兩者 Holm-significant），R-Lsum +0.00770（校正後不顯著）。NSGA-II 五 seed mean 均低於 Greedy，selection Jaccard 0.639；已降為 comparator。完整 evidence：`evidence/selector_comparison_pilot_v1_summary.json`、`evidence/selector_comparison_nsga5_stability.json` |
