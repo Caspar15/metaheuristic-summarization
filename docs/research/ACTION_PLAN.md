@@ -1,8 +1,29 @@
 # ACTION PLAN —— 到底要做什麼
 
-> **閱讀規則：** 最上方 2026-08-25／2026-08-24 區段是現行待辦；後續 Phase −1～6
+> **閱讀規則：** 以最上方最新日期增補為現況；2026-08-25／2026-08-24 是較早投稿規劃；後續 Phase −1～6
 > 是不可刪除的完整執行 ledger，其中「test 尚未解鎖」等文字只代表當時狀態。文件分類與
 > 現行閱讀順序見 [`README.md`](README.md)。
+
+## 2026-09-09 投稿版本發布整理
+
+- [x] 依作者授權採 MIT License，補第三方材料範圍說明與 CITATION.cff。
+- [x] 既有 frozen JSON 產生英文 Supplementary Material：19 張表、完整 fixed-rule provenance 案例；未新增實驗。
+- [x] 建立數值 artifact：兩資料集共 36 個系統／seed runs 的索引與 official/internal 逐例分數，116 個 manifest 檔案；不散布完整來源／reference／summary 文字。
+- [x] 固定投稿版本命名 `v1.0.0-ieee-access`，主稿 availability 與附件均指向相同版本。
+- [ ] Similarity 與投稿表單由實際投稿流程完成；不另增作者簽署表單。
+
+下方為較早同日稽核快照；授權、英文補充材料與 artifact 的待辦已由本節取代。
+
+## 2026-09-09 repository 與英文稿狀態
+
+- [x] 英文 manuscript、13 頁 PDF 與 matching LaTeX source ZIP 完成；英文狀態取代下方歷史未完成項目。
+- [x] 新增英文 reproduction guide、兩資料集結果 CSV/JSON 匯出與 source/evidence snapshot 檢查。
+- [x] 補記原始 frozen core constraints 與本次 Windows regression environment snapshot；兩者不混稱歷史完整 lock。
+- [x] 既有完整單元測試 496 tests + 5 subtests 通過；新檢查與乾淨 source snapshot 驗證見本次 audit report。
+- [ ] 公開 immutable release／bulk artifact；軟體 license 仍待權利人選定。
+- [ ] 完成投稿表單／similarity／cover letter 與英文 Supplementary Material；funding 依實際情況，bios 保留老師指定文字，不增設作者簽署表單。
+
+細節與驗證界線：[REPOSITORY_AUDIT_2026_09_09.md](REPOSITORY_AUDIT_2026_09_09.md)。
 
 ## 2026-09-04 主文證據補完
 

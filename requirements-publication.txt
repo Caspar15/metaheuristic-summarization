@@ -1,0 +1,2 @@
+# Optional publication formatting only; not used by the frozen scientific runner.
+reportlab>=4.0,<5

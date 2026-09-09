@@ -6,6 +6,9 @@ configs/phase1_mvp_multinews_length_normalized.yaml text eol=lf
 configs/preregistrations/*.json text eol=lf
 configs/length_policies/*.json text eol=lf
 configs/studies/**/*.yaml text eol=lf
+configs/final/*.yaml text eol=lf
+docs/research/evidence/submission_snapshot_2026_09_09.json text eol=lf
+submission/*.json text eol=lf
 
 # Test fixtures are integrity-checked by raw-file SHA-256 for the same reason.
 tests/fixtures/*.jsonl text eol=lf

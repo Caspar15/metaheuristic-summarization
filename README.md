@@ -5,6 +5,40 @@
 > truth, final results, evidence, governance, and historical checkpoints. The dated
 > sections below are retained as a chronological project ledger.
 
+
+## Review and reproduction
+
+PAMR-ES builds a capacity-controlled candidate pool from lexical, pinned semantic
+and sparse graph routes, then uses fusion-informed sentence selection. The final
+selectors are TF-IDF MMR for GovReport and Greedy-TFIDF for Multi-News. No
+task-specific fine-tuning is used; configuration selection uses development data.
+
+Start with the **[English reproduction guide](docs/REPRODUCIBILITY.md)** for setup,
+evidence locations, evaluator contracts and the distinction between source-only
+verification and full benchmark reproduction.
+
+```sh
+# From the repository root; Python standard library only, no models/data needed.
+python -m scripts.audit.verify_submission_snapshot
+python -m scripts.audit.verify_submission_snapshot --export-dir review_tables
+```
+
+The export contains all nine systems for each official test set. The frozen
+results support a GovReport-scoped Mean ROUGE advantage; the Multi-News overall
+comparison with PacSum-TFIDF is not significant. See the source analyses for
+paired inference and the research hub for component evidence.
+
+**2026-09-09 status:** the English IEEE Access manuscript and matching LaTeX
+source package are complete in the separate manuscript workspace. Repository
+verification and documentation are covered by the
+[September audit](docs/research/REPOSITORY_AUDIT_2026_09_09.md). The submission version is
+[`v1.0.0-ieee-access`](https://github.com/Caspar15/metaheuristic-summarization/releases/tag/v1.0.0-ieee-access),
+with [English Supplementary Material](submission/README.md), a selected-index /
+per-document-score artifact, and [MIT-licensed software](LICENSE).
+
+The repository retains its existing GitHub name for stable links. Historical
+metaheuristic implementations and the optional demo are not final PAMR-ES components.
+
 ## 2026-09-04 manuscript evidence closeout
 
 中文版 IEEE Access 稿件已補入所有系統輸出長度、Multi-News 5,609-row matched
@@ -293,10 +327,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-腳本從 repo root 執行，並設定 `PYTHONPATH`：
+腳本從 repo root 以模組方式執行（Windows／Unix 相同）：
 
 ```bash
-PYTHONPATH=. python scripts/audit/verify_provenance.py
+python -m scripts.audit.verify_provenance
 ```
 
 只想跑展示用的 web app 才需要：
@@ -329,7 +363,10 @@ GitHub Actions 會在每次 push 到 `master` 或針對 `master` 的 pull reques
 
 ---
 
-## 快速開始
+## 歷史 Phase 1 操作範例
+
+以下用於查閱既有開發流程；目前 PAMR-ES 的驗證入口見上方英文 reproduction guide。
+這些命令包含資料前處理與新輸出，不是正式結果的唯讀檢查指令。
 
 Multi-News canonical 前處理（固定作者資料集 revision、保留 `|||||` 多文件邊界）：
 
@@ -428,7 +465,7 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 
 ## 稽核診斷腳本
 
-`scripts/audit/` 底下的腳本用來檢查系統行為，不是產生論文結果：
+`scripts/audit/` 同時包含正式 frozen runners、證據驗證工具與歷史診斷。下表只列歷史診斷；正式結果與唯讀驗證入口見英文 reproduction guide：
 
 | 腳本 | 用途 |
 |---|---|
@@ -443,7 +480,7 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 
 ## 已知的實作限制
 
-投稿前必須處理，詳見團隊內部重構計畫：
+以下區分 final 系統的已知計算限制與歷史／其他任務支線。它們不全是本稿待修缺陷；任何修改 final 方法的工作都需要獨立研究協定，不能在觀察 test 後回改本稿配置：
 
 - 舊的 flat `multi_news_*.jsonl` 已遺失 source-document boundary，只能重現 legacy artifact；正式實驗必須使用 `*_canonical.jsonl`
 - `src/data/preprocess_scitldr.py` 已保留 SciTLDR 多個替代 reference；`scitldr_official` 評估在官方 wrapper 通過一致性測試前會拒絕執行
@@ -457,7 +494,7 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 
 ## 授權
 
-尚未指定。在加入 LICENSE 之前，預設保留所有權利。
+原創程式與程式文件採用 [MIT License](LICENSE)。第三方套件、模型、資料、來源引文與論文出版權不因本授權而變更，詳見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。軟體引用資訊見 [CITATION.cff](CITATION.cff)。
 
 ### 第三方依賴授權
 

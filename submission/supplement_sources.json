@@ -1,0 +1,25 @@
+{
+  "release_tag": "v1.0.0-ieee-access",
+  "new_experiments": false,
+  "table_count": 19,
+  "sources": {
+    "configs/final/govreport_final_v1.yaml": "7ea28c5ef36ec487fa400df3f40e8fda3d8fe231a9d1357bce41f923f3228218",
+    "configs/preregistrations/govreport_final_execution_freeze_v1.json": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+    "configs/final/multinews_final_v1.yaml": "b628d348ba078d8e58cbdaf1d6f53c26e293862beb777dc8cb51bdcf8b71f818",
+    "configs/preregistrations/multinews_final_execution_freeze_v1.json": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37",
+    "runs_v2/govreport_final_test_v1/analysis.json": "a6a0bbec2393d0c050ab6fd2d8521915c4d66fe7caebbb23f5c65307567a976d",
+    "runs_v2/multinews_final_test_v1/analysis.json": "fd2410f28c9c27dd8c7087fa7346fda20886b8e9e435b8558721a203219b45c7",
+    "runs_v2/manuscript_supplemental_analysis_v1/analysis.json": "ecef912f5a856a130f10300e452f9a9a436fe0adff9388b50d79c55bf7f2991e",
+    "runs_v2/govreport_e3_route_provenance_v1/analysis.json": "3ed32a547f1f7f343f1e5845f08fbd11b2cdee50112174f4aa43af47b3fff71a",
+    "runs_v2/govreport_e3_route_provenance_v1/study_summary.json": "a312265f3a605380d85158dee5c7b94d7c33ebafbb36595d9521c49e9a316c06",
+    "runs_v2/multinews_e3_route_provenance_v1/analysis.json": "1dbcf78c0b54c9064d5d4ac3af9440def5263e4577eb9427decb6a3f3d5f1c1d",
+    "runs_v2/multinews_e3_route_provenance_v1/study_summary.json": "09db86531df8f02bc759899c3bad17b47e6809ed6848a6674648c075d4e65daa",
+    "runs_v2/postfreeze_no_reservation_v1/analysis.json": "d837b6c1b8dcf56faf7ef115275ab17c7a4fc6d969b8fa2a5753ad971e1fa9db",
+    "runs_v2/postfreeze_no_lexical_route_v1/analysis.json": "192bd8ee71dcc53bf148771e0a73800bd9e9ccfe083409eb12649d3c6a4a7ba9",
+    "runs_v2/postfreeze_zero_lexical_weight_v1/analysis.json": "ace5337d91844855eb378f38966a54e15399c7942a9f4978e600193e2755d45c",
+    "runs_v2/manuscript_supplemental_analysis_v1/provenance_case.json": "4a0a0c0b829d5b1426aa746b7cc738a04cea9b37adb21532e362e445b35262a6",
+    "runs_v2/d2_selector_full_dev_v1/analysis/paired_summary.json": "53d04fab42855a697a41fe672732a12d881c6d386aadb18cdced31a0b3b24512",
+    "runs_v2/govreport_cost_scaling_v1/analysis.json": "5b6c539681e96387107c4e6215159f2fa57d1ecb1fe698a0d1c74598b0a340e0",
+    "runs_v2/multinews_cost_scaling_v1/analysis.json": "2d026b7685932f5aed3c7e3d6e9d2108e368da47630c5d2aa1fcb9b4c44b9e8d"
+  }
+}

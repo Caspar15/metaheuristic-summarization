@@ -14,9 +14,10 @@
 這些腳本把先前只存在暫存目錄的稽核分析**版本化**，讓 `CODE_AUDIT_IEEE_Access.md`
 與 `STRATEGY_ASSESSMENT.md` 引用的數字可以被獨立重現。
 
-> ⚠️ **這些是 diagnostic，不是論文結果。**
-> 全部使用 `src.eval.rouge` 的**內部多句 Lsum 協定**，與 published Perl ROUGE 數字
-> 不保證可比。greedy reference **不是** exact upper bound，也不是任何資料集的官方 oracle 協定。
+> **工具分流（2026-09-09）：** 此目錄包含正式 frozen runners、唯讀驗證器，以及歷史診斷。
+> 正式與唯讀入口見 [`../../docs/REPRODUCIBILITY.md`](../../docs/REPRODUCIBILITY.md)。
+> 下方 legacy diagnostic 的 Python ROUGE-Lsum 不得與正式 Stanza／Perl ROUGE 主表混用；
+> greedy reference **不是** exact upper bound，也不是任何資料集的官方 oracle 協定。
 
 `run_gate2_baseline_matrix.py` 執行預註冊的兩-primary Gate 2 baseline 搜尋。它沒有 split
 參數，只能讀 frozen dev manifest；`non_plm` 展開 23 個 candidates，`plm` 展開 27 個。
@@ -26,7 +27,7 @@
 完整性、partition guards、排名與 PacSum 退化端點，輸出 `analysis_summary.json`；它同樣沒有
 partition CLI，不得用來讀 dev-test/test。
 
-> 投稿級結果必須走 `ACTION_PLAN.md` Phase 3d～4 的鎖定流程；目前停在 Phase 3d E1～E3。
+> 歷史進度：當時停在 Phase 3d E1～E3；目前兩資料集 final test、E2/E3 均已完成，勿按舊文字重啟實驗。
 
 > 2026-08-02 狀態：PR #10 已把 production Lead 移到 `src.baselines.cli`；
 > 本目錄的 `lead_vs_system.py` 仍只用來重現 test-tuned legacy F-0，不是 Phase 2

@@ -1,7 +1,9 @@
 # Research documentation hub
 
-最後整理：2026-09-04（Asia/Taipei）  
-目前階段：**正式 test 已 freeze；IEEE Access 中文獨立 Research Article 已補齊主文證據與負結果，下一步是英文稿、clean-clone/release 與作者行政簽核。**
+最後整理：2026-09-09（Asia/Taipei）
+目前階段：**正式 test 已 freeze；IEEE Access 英文稿與一致的 PDF／LaTeX source package 已完成。MIT 授權、英文補充材料及數值重現資料包已整理為 `v1.0.0-ieee-access` 投稿版本。**
+
+英文操作入口：[Reproducibility guide](../REPRODUCIBILITY.md)；本次 repo 修正與驗證範圍：[2026-09-09 audit](REPOSITORY_AUDIT_2026_09_09.md)。
 
 這是 `docs/research/` 的唯一入口。此目錄刻意保留研究決策與失敗歷史，不能只看檔名或
 文件內較早日期判斷現況；請依本頁的狀態與權威順序閱讀。
@@ -12,13 +14,12 @@
    最終實驗結論與可寫／不可寫的主張。
 2. [IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md](IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md)  
    唯一現行論文／投稿主指南：章節、引用、表圖、頁數、readiness與合規。
-3. [ACTION_PLAN.md](ACTION_PLAN.md) 的最上方 2026-08-25 區段  
+3. [ACTION_PLAN.md](ACTION_PLAN.md) 的最上方 2026-09-09 區段
    當前待辦；後續數十頁是完整 phase ledger，不是全部都要重做。
 4. [MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md](MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md)  
    輸出長度、不可行列敏感度、配置量、provenance 案例及三個 post-freeze 機制診斷。
 
-若只想知道「現在下一步是什麼」：**從 frozen JSON 自動產生主文表圖，先寫
-Experimental Design 與 Results，再完成 clean-clone/release/compliance。不要重開品質搜尋。**
+若只想知道「現在下一步是什麼」：**依英文 reproduction guide 與固定 release 核對投稿附件，完成投稿表單與 similarity。不要重開品質搜尋。**
 
 ## 現行事實
 
@@ -29,9 +30,9 @@ Experimental Design 與 Results，再完成 clean-clone/release/compliance。不
 | Primary | GovReport official test 973 rows；主要 paired Mean ROUGE 優勢顯著 |
 | Secondary | Multi-News official test 5,621 rows；Mean 與 PacSum-TFIDF 統計同級，R-2 顯著較差 |
 | 自動實驗 | 兩資料集九系統 official test、selector isolation、E2、E3 均完成 |
-| 主文草稿 | 官方 IEEE Access class 中文版已補齊結果、限制與 availability；主文 selector 僅保留 Greedy／MMR，route weights 與 selector 的 development selection 已明列；正式英文、funding／ORCID 與最終作者簽核仍待完成 |
+| 主文草稿 | 英文 IEEE Access PDF 13 頁與一致的 LaTeX source package 已完成並逐頁檢查；稿件位於 repo 外的 manuscript workspace。教授簡歷依教授指定保留，照片依作者決議暫不處理；經費只按實際支持情況填寫 |
 | 禁止事項 | 不再依 test 調方法／配置；不宣稱 universal SOTA；legacy `runs/` 不進新稿 |
-| 投稿狀態 | 可以正式寫稿；尚未通過 clean-clone、release、similarity、作者行政與完整 manuscript gates |
+| 投稿狀態 | 英文稿及 source 已完成；repo audit 與公開發布須區分，固定投稿版本與數值資料包見 [submission/README.md](../../submission/README.md)；similarity、投稿表單依實際投稿流程確認 |
 
 ## 文件狀態圖例
 
@@ -128,10 +129,10 @@ Experimental Design 與 Results，再完成 clean-clone/release/compliance。不
 |---|---|---|
 | [x] frozen evidence → 中文稿 Tables I–X | 主文數值已逐項對 frozen artifacts，並完成 PDF 逐頁檢查；Fig. 1 是必要架構圖，其他 paired／cost 圖列為英文稿可選 | 中文工作稿表格、補充證據與 frozen artifacts 一致 |
 | [ ] frozen JSON → tables 自動生成 | 把目前已核對的人工排版改為可重建數值區塊，降低英文改稿時的抄錄風險 | 同一指令可重建 Tables I–X 的數值區塊；可選圖僅在實際納入時生成 |
-| [ ] 撰寫 Experimental Design、Results、Method | 中文完整工作稿已建立並編譯；下一步將它改寫成正式學術英文，而不是逐句直譯 | 三章英文初稿完成，每個數字、公式與config都有來源 |
+| [x] 撰寫 Experimental Design、Results、Method | 2026-09-06 英文完整稿已建立並編譯，2026-09-09 確認 PDF/source 身份一致 | 英文稿、數字與來源已核對 |
 | [ ] Related Work bibliography／retraction／ICACT資料 | 中文稿目前引用 34 筆來源（含 AI-system citation），ICACT DOI 與近期 ACL primary sources 已抽查；仍須逐筆做 DOI、metadata 與 retraction 終審 | 引用可逐筆驗證，沒有錯作者／錯年份／已撤稿文獻 |
-| [ ] clean-clone／environment lock／release tag | 模擬審稿人從全新資料夾下載repo，照說明能安裝、測試與重現；把環境與投稿版本固定 | 乾淨clone驗證通過，有lock/container、確切release tag與reproduction commands |
+| [ ] clean-clone／environment lock／release tag | 乾淨 source snapshot 已通過 502 tests（2 項本機資料檢查按原規則跳過）與證據驗證；89 套件固定清單已建立。全新環境安裝、完整 benchmark 重現與公開 release 尚未完成 | 區分 source 驗證、環境安裝、完整輸出重現與公開 tag，不混稱已完成 |
 | [x] fixed-rule provenance walkthrough | 已依 GovReport frozen development prediction order 第一列完成，不看 ROUGE 挑案例；用來說明決策鏈，不冒充人評 | 主文 Table 10 與 machine-readable artifact 一致 |
 | [ ] 可選的 error cases／人評 | 若新增成功／失敗案例、BERTScore 或人評，須另行預註冊且不得改 final system；不列為現行 frozen automatic claim 的 blocker | 若執行則正反案例均報；若不做則維持 Limitations 的範圍聲明 |
-| [ ] 投稿行政與終審 | 做 similarity、作者／ORCID／bios／funding、ICACT first-footnote、AI 揭露、英文與 PDF/source 一致性 | IEEE Access submission package 逐項通過且作者群簽認 |
-| [ ] 公開授權與 artifact | repo 尚無程式 LICENSE；需決定授權並提供精簡 selected-indices／metrics package、release tag 與 archival DOI | reviewer 可在 clean clone 依法安裝、重製並驗證主表 |
+| [ ] 投稿行政與終審 | 完成 similarity、投稿表單／ORCID、prior-work disclosure 與 AI 揭露；funding 依實際支持填寫，老師指定 bios 保留；英文 PDF/source 一致性已核對 | IEEE Access submission package 與投稿表單一致；作者同意依老師與共同作者既有協調確認，不另增簽署表單 |
+| [x] 公開授權與 artifact 準備 | MIT LICENSE、固定投稿 tag、英文 Supplementary Material 與 116-file selected-indices／scores package 已備妥 | 使用 submission/README.md 的固定版本與附件；不宣稱已完成全新環境完整 benchmark 重跑 |

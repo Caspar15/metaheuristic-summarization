@@ -43,3 +43,9 @@ jobs:
 
       - name: Run unit tests
         run: python -m pytest -q
+
+      - name: Verify submission evidence without datasets or models
+        run: |
+          python -m scripts.audit.verify_submission_snapshot
+          python -m scripts.audit.verify_govreport_freeze_package
+          python -m scripts.audit.verify_provenance --root runs_v2
