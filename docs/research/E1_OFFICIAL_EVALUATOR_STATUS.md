@@ -1,5 +1,9 @@
 # E1 GovReport official-evaluator status
 
+> **Historical-stage note (2026-08-25):** E1 是 681-row frozen-dev evaluator-parity
+> evidence，不是 final test。GovReport 973-row official test 已另行完成；現行數字見
+> `GOVREPORT_FINAL_TEST_RESULTS.md` 與 `FINAL_EXPERIMENT_STATUS_2026_08_20.md`。
+
 ## 結論（2026-08-15）
 
 E1 已完成。九個 immutable systems 均在同一份 GovReport frozen dev（681 rows）上，
@@ -52,9 +56,11 @@ test 結果，也不解鎖 protected split。
 - 本階段完整回歸：`464 passed`；freeze verifier 回報
   `protected_splits_unlocked=false`、`test_split_accessed=false`。
 
-## 尚未完成
+## 當時尚未完成（歷史）
 
-- ICACT camera-ready extension audit、test data policy 與老師／完整作者群簽字。
+- 在 E1 checkpoint 當時，ICACT camera-ready extension audit、test data policy 與
+  老師／完整作者群簽字尚未完成；這些 test authorization 項目其後已完成。
 
 E2 與 E3 已於同日完成；見 `E2_COST_SCALING_STATUS.md` 與
-`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`。上述剩餘 freeze 項目完成前仍不得跑 test。
+`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`。本段保留當時的治理順序，不是現行禁跑狀態；
+973-row GovReport final test 已按後續核准的 freeze 執行。

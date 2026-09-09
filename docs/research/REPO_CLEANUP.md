@@ -2,7 +2,8 @@
 
 > 對應 `ACTION_PLAN.md` 的 Phase 0。以下是提案，不是已授權的刪除清單；任何 move/delete/tag 前都要先核對 dirty worktree、legacy 重現需求與精確目標。
 > 初始盤點數字保留為 2026-07-26 snapshot；整理狀態覆核至 2026-08-15，應以 §7 為準。
-> 本文件不是研究實驗排程；目前 E1～E3 比剩餘低優先度 cleanup 更重要。
+> 本文件不是研究實驗排程。E1～E3 與 final tests 現已完成；剩餘 cleanup 是投稿 artifact
+> backlog，現行優先序見 `README.md` 與 `ACTION_PLAN.md` 最上方。
 
 ---
 

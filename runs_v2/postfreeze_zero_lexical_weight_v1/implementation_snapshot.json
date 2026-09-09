@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-09-04T21:19:03.7962202+08:00",
+  "purpose": "Exact source-file identity for the completed A08 development-only run. The git commit identifies the dirty-tree base; these hashes identify the uncommitted scientific code that executed.",
+  "implementation_commit_base": "4dda9f880020fb4cc8ff716f4995fb7a618fa0c0",
+  "working_tree_clean_at_execution": false,
+  "code_changed_between_completion_and_snapshot": false,
+  "files": {
+    "src/pipeline/candidate_builder.py": "45a4f38abe5c3be10155e1de004d4c3247c9b9b3bcad252a6b09d38f948cb940",
+    "src/pipeline/select_sentences.py": "09497da0e1a3184c52f7c8a72dd6c6bc66bfeedd6b6a48d451db16de892843ef",
+    "scripts/audit/run_postfreeze_no_reservation_ablation.py": "3f2e9b940563b474306458cc0e6c6863ac33aee8727b1a869ba8d7c27236b70d",
+    "scripts/audit/run_govreport_e3_ablation.py": "1f509296c0b729418678a9d00f5f4a06ec39d639292e165377cbeb5a63980b7a",
+    "src/eval/paired.py": "aad43be8e1be9a285f0c64e5571b4812e8a60be69e26cdb1bee292e33464b9c3"
+  },
+  "scope": {
+    "partition": "frozen development only",
+    "method_selection_permitted": false,
+    "dev_test_accessed": false,
+    "test_split_accessed": false
+  }
+}

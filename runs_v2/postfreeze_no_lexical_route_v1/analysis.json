@@ -1,0 +1,156 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-03T17:11:00.258406+00:00",
+  "status": "completed",
+  "study_id": "postfreeze-no-lexical-route-ablation-v1",
+  "preregistration_path": "configs/preregistrations/postfreeze_no_lexical_route_ablation_v1.json",
+  "preregistration_sha256": "32da5a1ec491743b3bc30c721db92cfc03878f20149911914d8cb19b3525d312",
+  "datasets": {
+    "govreport": {
+      "comparison": "full_anchor_minus_no_lexical_candidate_route",
+      "comparisons": {
+        "rouge1": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20261140,
+          "confidence": 0.95,
+          "mean_difference": -0.0025668571919102686,
+          "ci_lower": -0.0040540543250104704,
+          "ci_upper": -0.0010923603616411629,
+          "p_value_two_sided": 0.0010399896001039989,
+          "p_value_holm_4": 0.0010399896001039989
+        },
+        "rouge2": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20261141,
+          "confidence": 0.95,
+          "mean_difference": -0.006137780015937469,
+          "ci_lower": -0.008038198200906168,
+          "ci_upper": -0.004230950313658551,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        },
+        "rougeLsum": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20261142,
+          "confidence": 0.95,
+          "mean_difference": -0.004700011523930632,
+          "ci_lower": -0.006279805687375242,
+          "ci_upper": -0.0031290007554253397,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        },
+        "macro_rouge": {
+          "n_pairs": 681,
+          "n_resamples": 100000,
+          "seed": 20261143,
+          "confidence": 0.95,
+          "mean_difference": -0.004468216243926124,
+          "ci_lower": -0.006043135372717688,
+          "ci_upper": -0.0029024234576338773,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        }
+      },
+      "mechanism": {
+        "full_anchor": {
+          "rows": 681,
+          "mean_candidate_count": 78.41997063142438,
+          "exclusive_candidate_fraction": 0.7115384615384616,
+          "selected_exclusive_fraction": 0.20415446559297218,
+          "reserved_candidate_records": 39903
+        },
+        "no_lexical_route": {
+          "rows": 681,
+          "mean_candidate_count": 64.81350954478708,
+          "exclusive_candidate_fraction": 0.7656894286102678,
+          "selected_exclusive_fraction": 0.37081585819419166,
+          "reserved_candidate_records": 26951
+        }
+      },
+      "interpretation_status": "post_hoc_supplemental_not_for_method_selection"
+    },
+    "multinews": {
+      "comparison": "full_anchor_minus_no_lexical_candidate_route",
+      "comparisons": {
+        "rouge1": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20261240,
+          "confidence": 0.95,
+          "mean_difference": -0.004597561211380032,
+          "ci_lower": -0.005396716729608011,
+          "ci_upper": -0.0037981277827449224,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        },
+        "rouge2": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20261241,
+          "confidence": 0.95,
+          "mean_difference": -0.003271442651001131,
+          "ci_lower": -0.004215971369833364,
+          "ci_upper": -0.0023325605747229355,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        },
+        "rougeLsum": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20261242,
+          "confidence": 0.95,
+          "mean_difference": -0.005280651672672279,
+          "ci_lower": -0.00609042726379631,
+          "ci_upper": -0.004468516823316523,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        },
+        "macro_rouge": {
+          "n_pairs": 3935,
+          "n_resamples": 100000,
+          "seed": 20261243,
+          "confidence": 0.95,
+          "mean_difference": -0.004383218511684482,
+          "ci_lower": -0.00517138441791502,
+          "ci_upper": -0.003595358974500433,
+          "p_value_two_sided": 1.999980000199998e-05,
+          "p_value_holm_4": 7.999920000799993e-05
+        }
+      },
+      "mechanism": {
+        "full_anchor": {
+          "rows": 3935,
+          "mean_candidate_count": 51.523506988564165,
+          "exclusive_candidate_fraction": 0.34340674245974007,
+          "selected_exclusive_fraction": 0.35810674384170144,
+          "reserved_candidate_records": 156485
+        },
+        "no_lexical_route": {
+          "rows": 3935,
+          "mean_candidate_count": 45.47369758576874,
+          "exclusive_candidate_fraction": 0.4173377519713422,
+          "selected_exclusive_fraction": 0.4133669364610091,
+          "reserved_candidate_records": 124682
+        }
+      },
+      "interpretation_status": "post_hoc_supplemental_not_for_method_selection"
+    }
+  },
+  "variant_evidence": {
+    "govreport": {
+      "path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/evidence.json",
+      "sha256": "bbcd6f058e10372dbd374baa92a4f3caa4f28cb09fda75b046a20cef8af554ac"
+    },
+    "multinews": {
+      "path": "runs_v2/postfreeze_no_lexical_route_v1/multinews/dev/A07_no_lexical_route/evidence.json",
+      "sha256": "0b99c3d4d211a3df1d434baae902d17180d4e61ef7c4853424a983c507cd9bf8"
+    }
+  },
+  "postfreeze_supplemental": true,
+  "method_selection_permitted": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

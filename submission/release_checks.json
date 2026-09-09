@@ -1,0 +1,34 @@
+{
+  "release_tag": "v1.0.0-ieee-access",
+  "local_unit_tests": {
+    "passed": 507,
+    "subtests_passed": 5
+  },
+  "frozen_source_evidence_files_verified": 217,
+  "provenance": {
+    "documented_legacy_pins": 468,
+    "unexplained_failures": 0
+  },
+  "supplement": {
+    "pages": 14,
+    "tables": 19,
+    "sha256": "f623caa14df05a2443034256afac2da2a384684dd06b5963dd0ade5d08eb8b65",
+    "visual_review": "all pages reviewed; case metadata kept with its sentence"
+  },
+  "numerical_artifact": {
+    "file": "PAMR_ES_Numerical_Artifacts_v1.0.0.zip",
+    "sha256": "222cedb495504214772377a983de3e1b7e453bce07aaa98520f46b4f3a79f01f",
+    "manifested_files": 116,
+    "selection_runs": 36,
+    "standalone_verifier": "pass"
+  },
+  "main_manuscript": {
+    "pages": 13,
+    "sha256": "c9a6a2920ca6a2f21f3db6201d2974ac4bf5d7e7d22020caa8b1b87106676f0c",
+    "source_zip_sha256": "b2a8c24a4dfd5b402f41698073dfd5b12cf560082c101d8f5127cd9122ba2c80",
+    "fresh_source_build_identical": true,
+    "visual_review": "all pages reviewed"
+  },
+  "experimental_predictions_regenerated": false,
+  "frozen_scientific_configurations_changed": false
+}

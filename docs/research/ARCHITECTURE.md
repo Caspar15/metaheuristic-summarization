@@ -1,5 +1,12 @@
 # 最終候選架構規格 —— Provenance-Aware Multi-Route Extractive Summarization
 
+> **2026-09-04 post-freeze component correction:** 兩個在新 variant 分數前登記的
+> development-only checks 顯示：route reservation 沒有品質增益證據；移除 lexical
+> candidate-generation route 在兩資料集反而約提升 `+0.0044` Mean ROUGE。依 final
+> freeze 不得用此結果重建 test system。架構仍須如實描述 frozen 三路系統，但論文不得
+> 宣稱三路各自正向或 reservation 提高品質；前者是已知簡化方向，後者只作來源平衡與稽核。
+> Selector 的 TF-IDF 並未被移除，不能把結果解讀成「lexical information 無用」。
+
 > **2026-08-20 architecture freeze outcome:** 最終架構仍是 lexical + pinned semantic +
 > sparse graph 的三路候選、route reservation、weighted RRF、provenance-aware selector
 > salience、coverage guard 與 task-specific deterministic selector；沒有改成 LLM+graph，
@@ -75,7 +82,8 @@
    Multi-News 未通過，故 v1 雙-primary system 沒有取得 freeze 資格；v2 已縮窄為
    GovReport-centered；E1～E3 evidence 已完成，仍須 freeze audit 與 final signature。
 
-這不是承諾「三路一定互補」；每一路都有明確刪除條件。
+這不是承諾「三路一定互補」。事後證據已顯示 lexical candidate route 的刪除條件會成立；
+因 final test 已先完成，只能把它記為 limitation／future simplification，不能回頭改 final system。
 
 ---
 

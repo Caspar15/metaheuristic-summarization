@@ -1,0 +1,12 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-04T12:59:53.252528+00:00",
+  "started_at_utc": "2026-09-04T12:59:30.716799+00:00",
+  "status": "failed",
+  "study_id": "postfreeze-zero-lexical-weight-exact-pool-v1",
+  "variant": "A08_exact_pool_zero_lexical_weight",
+  "dataset": "GovReport",
+  "failure": "ValueError: candidate route fusion weights must be finite and positive",
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

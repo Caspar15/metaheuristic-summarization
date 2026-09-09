@@ -1,7 +1,68 @@
-# Metaheuristic Extractive Summarization
+# PAMR-ES: Provenance-Aware Multi-Route Extractive Summarization
+
+> **Research documentation starts here:**
+> [`docs/research/README.md`](docs/research/README.md). It separates current manuscript
+> truth, final results, evidence, governance, and historical checkpoints. The dated
+> sections below are retained as a chronological project ledger.
+
+
+## Review and reproduction
+
+PAMR-ES builds a capacity-controlled candidate pool from lexical, pinned semantic
+and sparse graph routes, then uses fusion-informed sentence selection. The final
+selectors are TF-IDF MMR for GovReport and Greedy-TFIDF for Multi-News. No
+task-specific fine-tuning is used; configuration selection uses development data.
+
+Start with the **[English reproduction guide](docs/REPRODUCIBILITY.md)** for setup,
+evidence locations, evaluator contracts and the distinction between source-only
+verification and full benchmark reproduction.
+
+```sh
+# From the repository root; Python standard library only, no models/data needed.
+python -m scripts.audit.verify_submission_snapshot
+python -m scripts.audit.verify_submission_snapshot --export-dir review_tables
+```
+
+The export contains all nine systems for each official test set. The frozen
+results support a GovReport-scoped Mean ROUGE advantage; the Multi-News overall
+comparison with PacSum-TFIDF is not significant. See the source analyses for
+paired inference and the research hub for component evidence.
+
+**2026-09-09 status:** the English IEEE Access manuscript and matching LaTeX
+source package are complete in the separate manuscript workspace. Repository
+verification and documentation are covered by the
+[September audit](docs/research/REPOSITORY_AUDIT_2026_09_09.md). The submission version is
+[`v1.0.0-ieee-access`](https://github.com/Caspar15/metaheuristic-summarization/releases/tag/v1.0.0-ieee-access),
+with [English Supplementary Material](submission/README.md), a selected-index /
+per-document-score artifact, and [MIT-licensed software](LICENSE).
+
+The repository retains its existing GitHub name for stable links. Historical
+metaheuristic implementations and the optional demo are not final PAMR-ES components.
+
+## 2026-09-04 manuscript evidence closeout
+
+中文版 IEEE Access 稿件已補入所有系統輸出長度、Multi-News 5,609-row matched
+sensitivity、configuration-budget disclosure、固定規則 provenance walkthrough，以及
+三個事後 development-only mechanism checks。完整證據見
+[`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`](docs/research/MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md)。
+
+- Route reservation 沒有可辨識的品質增益，只保留為候選來源平衡與稽核機制。
+- 移除 lexical candidate-generation route 在兩個 development set 都約提升
+  `+0.0044` Mean ROUGE；這不等於 TF-IDF 無用，但禁止再宣稱三條候選路徑各自皆有正貢獻。
+- 兩項結果均在新 variant 分數產生前登記、只讀 frozen development，不碰 test，也不
+  用來改 final system。Official test 與 final claims 維持 2026-08-20 freeze。
+- 中文主文已再聚焦：NSGA-II 不屬 final PAMR-ES，已移出主文 selector／runtime 表與
+  結論；其負結果保留於 supplemental evidence 與原始 artifacts。主文明列 route weights
+  與 selector 都是 development-selected configuration，而不是只調 selector。
+- 成本表的 cold/warm 均明列為 30-document totals，另提供 warm per-document；主章節由
+  11 個合併為 9 個，Discussion／Limitations 與 Reproducibility／Availability 各自整合。
 
 ## 2026-08-20 final experiment checkpoint
 
+> 現行 IEEE Access 論文與投稿主指南見
+> [`IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`](docs/research/IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md)；
+> 2026-08-24 readiness 文件只保留為詳細稽核快照。
+>
 > GovReport 與 Multi-News 的 frozen official test、兩資料集 E2 成本／記憶體／scaling、
 > 以及兩資料集 E3 route/provenance ablation 均已完成。完整現況與可寫主張見
 > [`FINAL_EXPERIMENT_STATUS_2026_08_20.md`](docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md)。
@@ -12,14 +73,18 @@
   `+0.000091`，95% CI 跨 0、`p=0.907111`：不可宣稱整體顯著勝出；R-1/R-L
   顯著較高、R-2 顯著較低。
 - Multi-News 五項 E3 macro ablation 全部通過 Holm-20；E2 Proposed cold/warm
-  `47.85/9.23s`，matched NSGA-II `91.69/50.07s`。最終 selector 採 Greedy，
-  NSGA-II 保留為 ICACT 延伸中的 matched comparator。
+  `47.85/9.23s`，當次也量測 matched NSGA-II `91.69/50.07s`。最終 selector 採 Greedy；
+  NSGA-II 現已移出 IEEE Access 主文，負結果只保留於 Supplement／repository。
 - **品質搜尋與正式自動實驗已結束。** 現在只做論文撰寫、質性／人評（若另行預註冊）、
   clean-clone reproduction、artifact、ICACT/IEEE 投稿合規與數字一致性稽核；不得依
   test 結果調整方法或再建立新配置。
 
 下方 2026-08-15 以前的「尚未跑 test／Multi-News 只作負面 boundary」敘述保留為
 歷史 checkpoint，已由本節取代為現況。
+
+<details>
+<summary><strong>展開歷史開發紀錄（已被上方 final state 取代，不是目前待辦）</strong></summary>
+
 
 ## 2026-08-15 pre-test evidence checkpoint
 
@@ -36,9 +101,9 @@
 - dev 可反覆搜尋；每個候選配置只能看一次 dev-test。GovReport 已由作者官方 archive
   重建為 973 筆可評估 canonical validation rows，並在任何方法分數前凍結為
   dev 681／dev-test 292；唯一排除的是官方 reference 為空的 CRS `98-228`。
-- freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗，現在**尚未到可以跑 test**
-  的狀態。作者端已於 2026-08-10 批准 GovReport-centered 重新定位：GovReport 是唯一
-  primary quality domain，Multi-News 只保留為 boundary-condition evidence。
+- 當時 freeze 簽字前禁止 test split；D3b 雙 primary gate 已失敗。作者端其後於
+  2026-08-10 批准 GovReport-centered 重新定位。此段是 pre-test 歷史狀態；兩資料集
+  final test 後來均依核准的 one-shot policy 完成，現況以上方 final-state 摘要為準。
 - 配置搜尋與 baseline matrix 已結束。E1 官方 evaluator 已完成：Proposed 官方
   macro `0.458257`，相對 full-source SBERT+MMR `+0.004569`，95% CI
   `[+0.002467,+0.006680]`、`p=0.000020`；R-L 單項未顯著。完整表見
@@ -172,8 +237,11 @@
   錯誤 runtime 外推更正見
   [`D1_SENSITIVITY_STATUS.md`](docs/research/D1_SENSITIVITY_STATUS.md)。
 
-抽取式摘要研究程式碼。多目標最佳化（NSGA-II）、圖中心性與句向量語意訊號的組合，
-目標是在 **zero-training（不做任務微調）** 的條件下研究 quality–cost trade-off。
+</details>
+
+本 repository 的現行研究主線是 PAMR-ES：在不做任務特定微調的條件下，以 lexical、
+fixed MiniLM semantic 與 sparse-graph ranking 建立可追蹤的候選融合，再由資料集特定的
+Greedy 或 MMR selector 產生摘要。NSGA-II 只保留為歷史 comparator，不是 final method。
 
 ---
 
@@ -190,7 +258,7 @@
 | Baseline／最終方法 gate | ✅ **frozen final experiments complete** —— GovReport official test 對 SBERT+MMR macro 顯著為正；Multi-News official macro 排名第一但與 PacSum 統計同級，呈現 R-1/R-L 優勢與 R-2 劣勢。兩資料集 E2/E3 均完成。見 `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md` |
 | Gate 2 搜尋 | 🟡 `gate2-baseline-matrix-v1` 已在正式分數前預註冊：每資料集 non-PLM 23、PLM 27，目前 100/100 新 candidates 全完成。F-51 exact cache audit 與 F-53 family provenance verifier 通過；runner 只讀 frozen dev，dev-test/test 皆未讀 |
 | 三軌候選生成 | 🟡 correctness contract 與 D3a/D3b 實驗均完成；GovReport 有正證據，Multi-News 的跨 profile generalization 失敗 |
-| 測試 | ✅ **486 local tests passed / 5 subtests passed**（2026-08-20）；`compileall -f src tests scripts` 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）是較早 checkpoint；CI 已明確安裝 pinned CPU torch/transformers，CRLF-era pins 與 protected-split lock 均採 fail-loud guard（F-70～F-81） |
+| 測試 | ✅ **496 local tests passed / 5 subtests passed**（2026-09-04）；`compileall -f src tests scripts` 通過。PR #17 clean-clone Linux CI **454 passed / 5 skipped**（2026-08-11）是較早 checkpoint；CI 已明確安裝 pinned CPU torch/transformers，CRLF-era pins 與 protected-split lock 均採 fail-loud guard（F-70～F-83） |
 
 **簡言之：`runs/` legacy 輸出仍不可引用；只有 `runs_v2/` 中受預註冊、evidence、
 split policy 與本文索引明確列出的 frozen artifacts 可作研究結論。**
@@ -216,7 +284,7 @@ split policy 與本文索引明確列出的 frozen artifacts 可作研究結論�
 | [`E3_ROUTE_PROVENANCE_ABLATION_STATUS.md`](docs/research/E3_ROUTE_PROVENANCE_ABLATION_STATUS.md) | 五個 frozen-dev route/provenance 消融與 Holm-20 結果 |
 | [`GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md`](docs/research/GOVREPORT_PRETEST_FREEZE_RECOMMENDATION.md) | Pre-test freeze 建議、剩餘 blockers 與 Stage A 簽核欄 |
 | [`GOVREPORT_TEST_POLICY_STATUS.md`](docs/research/GOVREPORT_TEST_POLICY_STATUS.md) | Official-test Stage A policy、canonical identity 與零分數健康檢查 |
-| [`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`](docs/research/ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md) | ICACT→IEEE Access 六頁逐項差異；DOI／獎項證明待補 |
+| [`ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md`](docs/research/ICACT_IEEE_ACCESS_EXTENSION_MATRIX.md) | ICACT 與現稿六頁逐項差異；僅供 historical／similarity audit，不是主文 extension 敘事 |
 | [`REPO_CLEANUP.md`](docs/research/REPO_CLEANUP.md) | 專案整理計畫 |
 
 AI 協作規則見 repo 根目錄的 [`CLAUDE.md`](CLAUDE.md)。
@@ -259,10 +327,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-腳本從 repo root 執行，並設定 `PYTHONPATH`：
+腳本從 repo root 以模組方式執行（Windows／Unix 相同）：
 
 ```bash
-PYTHONPATH=. python scripts/audit/verify_provenance.py
+python -m scripts.audit.verify_provenance
 ```
 
 只想跑展示用的 web app 才需要：
@@ -288,14 +356,17 @@ GitHub Actions 會在每次 push 到 `master` 或針對 `master` 的 pull reques
 | `src/data/` | 前處理（分句、濾短句、CSV/HF → JSONL） |
 | `src/features/` | TF-ISF、句長、句位置、TextRank 中心性 |
 | `src/representations/` | TF-IDF 向量與相似度矩陣 |
-| `src/models/extractive/` | Greedy(MMR)、GRASP、NSGA-II、encoder 排序 |
+| `src/models/extractive/` | Greedy、MMR、encoder 排序，以及歷史 GRASP／NSGA-II comparator |
 | `src/pipeline/` | 特徵組合、候選池、optimizer dispatch、選句、評估 |
 | `src/eval/` | ROUGE（Lsum + multi-reference）、metric-specific greedy reference |
 | `src/selection/` | 長度控制與候選池工具 |
 
 ---
 
-## 快速開始
+## 歷史 Phase 1 操作範例
+
+以下用於查閱既有開發流程；目前 PAMR-ES 的驗證入口見上方英文 reproduction guide。
+這些命令包含資料前處理與新輸出，不是正式結果的唯讀檢查指令。
 
 Multi-News canonical 前處理（固定作者資料集 revision、保留 `|||||` 多文件邊界）：
 
@@ -394,7 +465,7 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 
 ## 稽核診斷腳本
 
-`scripts/audit/` 底下的腳本用來檢查系統行為，不是產生論文結果：
+`scripts/audit/` 同時包含正式 frozen runners、證據驗證工具與歷史診斷。下表只列歷史診斷；正式結果與唯讀驗證入口見英文 reproduction guide：
 
 | 腳本 | 用途 |
 |---|---|
@@ -409,21 +480,21 @@ python -m src.eval.oracle --input tests/fixtures/multi_news_validation_diagnosti
 
 ## 已知的實作限制
 
-投稿前必須處理，詳見團隊內部重構計畫：
+以下區分 final 系統的已知計算限制與歷史／其他任務支線。它們不全是本稿待修缺陷；任何修改 final 方法的工作都需要獨立研究協定，不能在觀察 test 後回改本稿配置：
 
 - 舊的 flat `multi_news_*.jsonl` 已遺失 source-document boundary，只能重現 legacy artifact；正式實驗必須使用 `*_canonical.jsonl`
 - `src/data/preprocess_scitldr.py` 已保留 SciTLDR 多個替代 reference；`scitldr_official` 評估在官方 wrapper 通過一致性測試前會拒絕執行
 - `src/features/semantic.py` 的 `centrality` 與 `novelty` 數學上完全反相關，同時加權是退化的
 - graph candidate route 已使用有界 sparse kNN，但 selector／coverage objective 目前仍可能建立 dense `N×N` similarity；完成 sparse selector/objective 後才能宣稱整條長文件 pipeline 都是 sparse
-- canonical task-profile objective 已禁止 raw-sum salience；Greedy／GRASP／NSGA-II 已共用 objective 與 feasibility contract。legacy config 仍保留歷史 sum 行為，因此舊 run 依然有被長度上限支配的問題
-- NSGA-II 已保存完整可行 Pareto front，但目前 final selection 仍是 provisional weighted sum；knee／reference-point policy 必須只用 validation 凍結
-- `src/features/graph.py` 的 `compute_textrank_scores`（自製 PageRank power iteration）缺少已知答案的單元測試（星形圖、路徑圖、完全圖、不連通分量）；開啟 graph 候選路線之前必做，目前尚未排程
+- canonical task-profile objective 已禁止 raw-sum salience；legacy config 仍保留歷史 sum 行為，因此舊 run 依然有被長度上限支配的問題。Greedy／GRASP／NSGA-II 的 shared-objective 比較只供歷史 selector evidence；final PAMR-ES 使用已凍結的 Greedy 或 MMR
+- NSGA-II 已保存完整可行 Pareto front，但只保留為歷史 comparator；其 Pareto 選解規則不是 final PAMR-ES 元件，也不支撐主文品質主張
+- graph helper 已有 empty／single／normalization／dangling-mass、dense non-mutation 與 sparse edge-bound regression；更完整的已知拓樸測試仍可作工程強化，但不改變已凍結的 final system 或結果
 
 ---
 
 ## 授權
 
-尚未指定。在加入 LICENSE 之前，預設保留所有權利。
+原創程式與程式文件採用 [MIT License](LICENSE)。第三方套件、模型、資料、來源引文與論文出版權不因本授權而變更，詳見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。軟體引用資訊見 [CITATION.cff](CITATION.cff)。
 
 ### 第三方依賴授權
 

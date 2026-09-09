@@ -1,0 +1,61 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-03T16:52:46.108595+00:00",
+  "started_at_utc": "2026-09-03T16:50:48.750079+00:00",
+  "status": "completed",
+  "study_id": "postfreeze-no-reservation-ablation-v1",
+  "variant": "A06_no_route_reservation",
+  "dataset": "Multi-News",
+  "partition": "frozen development",
+  "rows": 3935,
+  "config_path": "runs_v2/postfreeze_no_reservation_v1/multinews/dev/A06_no_route_reservation/resolved_config.yaml",
+  "config_sha256": "cd3b324ad8b483eba2fbfc34f6ba32a56bfe956484ab0e587173c7ac2d5870e8",
+  "candidate_hash": "4d4ab161cab6fcd97b211babac248f086f03c3bb2fc1613f54869724baa16b36",
+  "implementation_commit": "4dda9f880020fb4cc8ff716f4995fb7a618fa0c0",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 117.41379389999202,
+    "cpu_process_tree_seconds": 485.015625,
+    "peak_process_tree_rss_bytes": 7277084672,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/multinews/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 3935,
+    "rouge": {
+      "rouge1": 0.44353872274115586,
+      "rouge2": 0.14165684383747515,
+      "rougeLsum": 0.4067346263206274
+    },
+    "macro_rouge": 0.33064339763308614,
+    "feasible_rows": 3930,
+    "infeasible_rows": 5,
+    "summary_words": {
+      "mean": 244.4277001270648,
+      "min": 36,
+      "max": 250
+    }
+  },
+  "predictions_path": "runs_v2/postfreeze_no_reservation_v1/multinews/dev/A06_no_route_reservation/predictions.jsonl",
+  "predictions_sha256": "d645daaa6d20fd9643e1ea805183ed32efc2e55b436aa8b93857bda2975beb04",
+  "selected_indices_sha256": "f3cdb5cd1e0453c8ce044a5731fd6c840e987da940f4210398cab24081b10fc4",
+  "per_example_path": "runs_v2/postfreeze_no_reservation_v1/multinews/dev/A06_no_route_reservation/per_example.jsonl",
+  "per_example_sha256": "39c0ac34c3c48fb9492df1eecc2395d41ce515670bba5f6cf5cae66d93e84226",
+  "postfreeze_supplemental": true,
+  "method_selection_permitted": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -1,0 +1,62 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-04T13:03:08.940152+00:00",
+  "started_at_utc": "2026-09-04T13:01:16.638820+00:00",
+  "status": "completed",
+  "study_id": "postfreeze-zero-lexical-weight-exact-pool-v1",
+  "variant": "A08_exact_pool_zero_lexical_weight",
+  "dataset": "GovReport",
+  "partition": "frozen development",
+  "rows": 681,
+  "config_path": "runs_v2/postfreeze_zero_lexical_weight_v1/govreport/dev/A08_exact_pool_zero_lexical_weight/resolved_config.yaml",
+  "config_sha256": "01abcd1b3c10a35b07fef5e985c84c855ee40e67074cb1185eb4e684daf88839",
+  "candidate_hash": "753d7f40f6704bf00b8bfc9e0a62ff2163a70fd479a2155fb79d668adbb4d48e",
+  "implementation_commit": "4dda9f880020fb4cc8ff716f4995fb7a618fa0c0",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 8,
+    "threads_per_worker": 1,
+    "wall_seconds": 112.37111840001307,
+    "cpu_process_tree_seconds": 290.125,
+    "peak_process_tree_rss_bytes": 3808305152,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5816998309943514,
+      "rouge2": 0.25549034885094224,
+      "rougeLsum": 0.5484062022277292
+    },
+    "macro_rouge": 0.4618654606910076,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 647.1189427312776,
+      "min": 629,
+      "max": 650
+    }
+  },
+  "predictions_path": "runs_v2/postfreeze_zero_lexical_weight_v1/govreport/dev/A08_exact_pool_zero_lexical_weight/predictions.jsonl",
+  "predictions_sha256": "5c773d9ee71da9d1a20171b5c684bcfba1753d7bffa2c0cba8c9ac26f49a9004",
+  "selected_indices_sha256": "1d1848bc210fafdf2567a2e5fa7f1f7151ee7c36845e1a30a56dbd321d58b665",
+  "per_example_path": "runs_v2/postfreeze_zero_lexical_weight_v1/govreport/dev/A08_exact_pool_zero_lexical_weight/per_example.jsonl",
+  "per_example_sha256": "4ac808bb9ac6f744bae6aa6094cf17fa9236afda5e6b6c8779f5c83b9422cb3e",
+  "postfreeze_supplemental": true,
+  "method_selection_permitted": false,
+  "fixed_candidate_pool": true,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

@@ -1,5 +1,19 @@
 # Final experiment status — 2026-08-20
 
+## 2026-09-04 manuscript-evidence addendum
+
+Official test 結果與 final systems 均未改動。投稿稽核額外補出：所有系統輸出長度、
+Multi-News 5,609-row matched sensitivity、development configuration counts、固定規則
+provenance case，以及三個只跑 frozen development 的 post-freeze mechanism checks。
+
+No-reservation 沒有 multiplicity-corrected 品質增益；移除 lexical candidate route 則在
+GovReport／Multi-News development 各提升 `+0.004468/+0.004383` Mean ROUGE。後者仍
+保留 selector 的 TF-IDF，因此只否定 lexical candidate-generation route 的獨立正向主張。
+固定 exact pool 再把 lexical RRF 權重設為 0 後，GovReport／Multi-News development
+分別提升 `+0.004462/+0.001696`；GovReport 的傷害主要來自 ranking vote，Multi-News
+則另有 candidate-membership 影響。依 freeze 規則不建立新 final system、不重跑 test。完整資料與主文寫法見
+[`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`](MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md)。
+
 ## Paper-level decision
 
 The frozen experimental program is complete for both reported datasets. No further
@@ -82,8 +96,9 @@ paper and artifact work, not more configuration search:
    neither may alter the method or primary automatic results.
 3. Complete clean-clone reproduction, lockfile/container, table-generation scripts and
    code/data availability instructions.
-4. Verify ICACT citation/DOI, Outstanding Paper Award evidence, similarity report,
-   biographies, ORCIDs and IEEE AI-use disclosure.
+4. Complete the standalone manuscript's related-work citation audit, disclose any
+   similar prior publication in the cover letter as required, and finalize the
+   similarity report, biographies, ORCIDs, and IEEE AI-use disclosure.
 5. Run final equation-code-config-table consistency and English-language review.
 
 CNN/DailyMail and SciTLDR are not part of this frozen revision matrix. Test scores may
@@ -91,7 +106,8 @@ not be used for any post-hoc method change.
 
 ## Repository verification
 
-- Full unit suite: **486 passed + 5 subtests passed** on 2026-08-20.
+- Latest full unit suite: **496 passed + 5 subtests passed** on 2026-09-05. The earlier
+  2026-08-24 checkpoint was 488 passed + 5 subtests passed.
 - `python -m compileall -q -f src tests scripts`: passed.
 - `git diff --check`: passed before the documentation closeout commit.
 - The first sandboxed pytest attempt was excluded because Windows denied pytest temp

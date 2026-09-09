@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Please cite this version when using the PAMR-ES implementation."
+type: software
+title: "PAMR-ES: Provenance-Aware Multi-Route Extractive Summarization"
+version: "1.0.0-ieee-access"
+date-released: 2026-09-09
+license: MIT
+repository-code: "https://github.com/Caspar15/metaheuristic-summarization"
+url: "https://github.com/Caspar15/metaheuristic-summarization/releases/tag/v1.0.0-ieee-access"
+authors:
+  - family-names: Yang
+    given-names: Shih-Wei
+  - family-names: Chen
+    given-names: Bo-Yu
+  - family-names: Kuan
+    given-names: Shao-Chi
+  - family-names: Kuo
+    given-names: Sy-Yen
+  - family-names: Chen
+    given-names: Jiann-Liang

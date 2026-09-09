@@ -438,6 +438,9 @@ def summarize_one(
             rrf_constant=int(cand_cfg.get("rrf_constant", 60)),
             route_weights=build_route_weights,
             precomputed_route_data=precomputed_route_data,
+            allow_zero_route_weights=(
+                audit_fixed_pool and audit_route_weights is not None
+            ),
         )
         if use_cand
         else {

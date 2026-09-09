@@ -1,0 +1,61 @@
+{
+  "evidence_schema_version": "1.0",
+  "measured_at_utc": "2026-09-03T17:08:46.615784+00:00",
+  "started_at_utc": "2026-09-03T17:07:21.218201+00:00",
+  "status": "completed",
+  "study_id": "postfreeze-no-lexical-route-ablation-v1",
+  "variant": "A07_no_lexical_route",
+  "dataset": "GovReport",
+  "partition": "frozen development",
+  "rows": 681,
+  "config_path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/resolved_config.yaml",
+  "config_sha256": "f08574a4830c4c29b31ee7170c82930c4eb24364dc40d15594cf8cc221d5eb2f",
+  "candidate_hash": "a20577d048166938362b342f81f62927a414e0d2f452eadb8462c3b3247d8ceb",
+  "implementation_commit": "4dda9f880020fb4cc8ff716f4995fb7a618fa0c0",
+  "dependency_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.7.1",
+    "nltk": "3.10.0",
+    "rouge-score": "0.1.2",
+    "PyYAML": "6.0.2",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.56.0",
+    "tokenizers": "0.22.0",
+    "sentence-transformers": "5.1.0"
+  },
+  "execution": {
+    "workers": 16,
+    "threads_per_worker": 1,
+    "wall_seconds": 85.45611799997278,
+    "cpu_process_tree_seconds": 303.984375,
+    "peak_process_tree_rss_bytes": 7186591744,
+    "embedding_cache_root": "runs_v2/gate2_baseline_matrix_v1/govreport/dev/plm/_embedding_cache"
+  },
+  "metrics": {
+    "evaluation_protocol": "multisentence_lsum",
+    "rows": 681,
+    "rouge": {
+      "rouge1": 0.5816731741526487,
+      "rouge2": 0.2555177897515948,
+      "rougeLsum": 0.54842486807515
+    },
+    "macro_rouge": 0.46187194399313114,
+    "feasible_rows": 681,
+    "infeasible_rows": 0,
+    "summary_words": {
+      "mean": 647.1497797356828,
+      "min": 535,
+      "max": 650
+    }
+  },
+  "predictions_path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/predictions.jsonl",
+  "predictions_sha256": "3c40c5d78375dfc949456338908ef31c10c852362764a2dcea332f44411f08d7",
+  "selected_indices_sha256": "7ad05713c489ce44869c0277b841ac7b499a2dc5300978e0ad5dfba6de218467",
+  "per_example_path": "runs_v2/postfreeze_no_lexical_route_v1/govreport/dev/A07_no_lexical_route/per_example.jsonl",
+  "per_example_sha256": "939da13b39ff96774ceee21ebc16d5d5a5d836fe5aad26f8fa7db907c1195389",
+  "postfreeze_supplemental": true,
+  "method_selection_permitted": false,
+  "dev_test_accessed": false,
+  "test_split_accessed": false
+}

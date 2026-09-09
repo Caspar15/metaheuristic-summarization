@@ -1,5 +1,9 @@
 # GovReport official-test policy status
 
+> **Historical governance note (2026-08-25):** 本文件記錄 score-free policy
+> materialization 與 dry-run 階段；Stage B 與 973-row final execution 其後已完成。不得按
+> 下方舊指示再次執行 test；結果見 `GOVREPORT_FINAL_TEST_RESULTS.md`。
+
 ## Stage A result（2026-08-16 Asia/Taipei）
 
 Stage A 已由提出請求的作者轉述老師與作者端核准，並在任何 test prediction 或 ROUGE

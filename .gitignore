@@ -44,6 +44,7 @@ desktop.ini
 # ---------------------------------------------------------------------------
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 
@@ -115,6 +116,7 @@ frontend/dist/
 runs_v2/**/predictions.jsonl
 runs_v2/**/per_example.jsonl
 runs_v2/**/*.partial
+runs_v2/**/*.tmp
 runs_v2/**/_embedding_cache/
 runs_v2/**/.locks/
 runs_v2/**/tokenized_plain/

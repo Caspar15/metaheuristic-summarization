@@ -94,6 +94,36 @@ class TestPipelineGreedy:
         assert result["candidate_pool"]["allocation"]["audit_fixed_candidate_pool"]
         assert result["candidate_pool"]["allocation"]["route_scores_recomputed_over_full_eligible_source"]
 
+    def test_exact_pool_audit_can_zero_one_route_vote(self, sample_doc):
+        config = {
+            "optimizer": {"method": "mmr", "lambda_relevance": 0.7},
+            "length_control": {"unit": "words", "max_words": 50, "min_words": 0},
+            "representations": {"use": True, "method": "tfidf"},
+            "compute_budget": {
+                "mode": "fixed",
+                "enabled_routes": ["lexical", "graph"],
+            },
+            "candidate_budget": {"route_top_k": 2, "min_per_route": 0, "total": 3},
+            "candidates": {"use": True, "mode": "hard", "rrf_constant": 60},
+            "selector": {
+                "salience_source": "rrf_fusion",
+                "similarity_source": "pipeline_similarity",
+            },
+        }
+
+        audited = summarize_one(
+            sample_doc,
+            config,
+            fixed_candidate_original_indices=[1, 3],
+            audit_route_weights={"lexical": 0.0, "graph": 1.0},
+        )
+        assert [row["original_index"] for row in audited["candidate_records"]] == [1, 3]
+        assert audited["candidate_pool"]["allocation"]["audit_fixed_candidate_pool"]
+
+        config["candidates"]["route_weights"] = {"lexical": 0.0, "graph": 1.0}
+        with pytest.raises(ValueError, match="finite and positive"):
+            summarize_one(sample_doc, config)
+
 
 class TestPipelineGrasp:
     def test_grasp(self, sample_doc, base_config):

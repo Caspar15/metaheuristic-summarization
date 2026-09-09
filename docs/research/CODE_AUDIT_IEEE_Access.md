@@ -2595,3 +2595,71 @@ sample，所有 repetition 與 cold/warm selected indices 一致。Proposed medi
 SBERT+MMR `47.19/7.90s`；matched NSGA-II `91.69/50.07s`。這支持 Greedy 作 final
 selector、NSGA-II 作 ICACT 延伸的 matched comparator。E2/E3 均未存取 dev-test/test，
 也不能依結果回頭改方法。
+
+## F-82 — 主文稽核補出 reservation 無品質增益與 lexical candidate route 負貢獻
+
+**嚴重度：P1 claim correction／post-freeze supplemental evidence**
+
+2026-09-04，主文逐元件檢查發現原 E3 沒有單獨測到 route reservation，也沒有移除
+lexical candidate-generation route；因此「三路各自正向」與「reservation 提升品質」都
+超過既有證據。兩個 follow-up 均在新 variant 分數前建立獨立 preregistration，只跑
+GovReport 681 與 Multi-News 3,935 frozen development rows，100,000 次 paired bootstrap、
+資料集內 Holm-4；`dev_test_accessed=false`、`test_split_accessed=false`、
+`method_selection_permitted=false`。
+
+No-reservation 的 Full−Variant macro：GovReport `-0.000001`，95% CI
+`[-0.000029,+0.000028]`、Holm `1.0000`；Multi-News `-0.000226`，95% CI
+`[-0.000432,-0.000019]`、Holm `0.0995`。它略提高 route-exclusive candidate 比例，
+但沒有品質增益證據。
+
+No-lexical-candidate-route 的 Full−Variant macro：GovReport `-0.004468`，95% CI
+`[-0.006043,-0.002902]`；Multi-News `-0.004383`，95% CI
+`[-0.005171,-0.003595]`；兩者 Holm `0.000080`。也就是移除後反而較好。此 variant
+仍保留 selector TF-IDF，不能外推為所有 lexical signal 無用。因分析發生於 final test
+之後，不得依此重選 final method 或補跑 test；正確處置是縮小主文 component claims。
+
+No-reservation 首次在 Windows sandbox 內啟動時因 multiprocessing pipe permission
+失敗，尚未產生 prediction/score；failed attempt 已保存於
+`runs_v2/postfreeze_no_reservation_v1/attempts/attempt_20260904T004500_local_sandbox_pipe_denied_govreport/`，
+其後 exact command 在允許多程序的環境成功。權威證據：
+`runs_v2/postfreeze_no_reservation_v1/analysis.json`、
+`runs_v2/postfreeze_no_lexical_route_v1/analysis.json` 與
+`MANUSCRIPT_SUPPLEMENTAL_EVIDENCE_2026_09_04.md`。
+
+## F-83 — Fixed-pool zero-lexical-weight 診斷定位 lexical route 負面來源
+
+**嚴重度：P1 claim refinement／post-freeze supplemental evidence**
+
+2026-09-04，在未看見 A08 分數前登記
+`postfreeze_zero_lexical_weight_exact_pool_v1.json`。A08 逐篇固定 frozen Full 的 exact
+candidate indices，仍重算 lexical／semantic／graph 全來源分數與 rank，只將 RRF 的
+lexical 權重設為 0；因此 Full−A08 隔離 lexical ranking vote，A08−A07 no-lexical-route
+則診斷 lexical 所帶入 candidate membership 的額外影響。只使用 GovReport 681 與
+Multi-News 3,935 frozen development rows，16 endpoints 共用 Holm-16；dev-test/test
+均未存取，且 `method_selection_permitted=false`。
+
+GovReport macro 為 Full `0.457404`、A08 `0.461865`、A07 `0.461872`。Full−A08
+`-0.004462`，95% CI `[-0.006049,-0.002903]`、Holm-16 `p=0.000320`；A08−A07
+`-0.000006`，CI `[-0.000103,+0.000090]`、`p=1.000000`。因此 GovReport 的負面差異
+主要來自 lexical ranking vote，沒有 candidate membership 額外傷害的證據。
+
+Multi-News macro 為 Full `0.330417`、A08 `0.332113`、A07 `0.334801`。Full−A08
+`-0.001696`，CI `[-0.002369,-0.001025]`；A08−A07 `-0.002687`，CI
+`[-0.003211,-0.002164]`；兩者 Holm-16 `p=0.000320`。也就是 Multi-News 同時受到
+lexical ranking vote 與 lexical candidate membership 影響。
+
+第一次啟動因 Windows sandbox 禁止 multiprocessing pipe、第二次因 production 正權重
+guard，在任何分數前失敗；兩份 failed evidence 均保留。程式沒有放寬正式設定：只有
+`fixed_candidate_original_indices` 與 `audit_route_weights` 同時存在的 audit-only path
+可接受零權重，production path 仍 fail loud 拒絕。因執行當下 working tree 尚未 commit，
+另以逐檔 SHA-256 固定實際執行碼；snapshot SHA-256 為
+`67e616d3e6c765ca70a5c2fddd209a6d77df9db4d158cdbf085bd48dbe2bc3b2`。權威
+analysis SHA-256 為
+`ace5337d91844855eb378f38966a54e15399c7942a9f4978e600193e2755d45c`；重現指令：
+
+```powershell
+.venv\Scripts\python.exe -m scripts.audit.run_postfreeze_no_reservation_ablation `
+  --study zero_lexical_weight_exact_pool --dataset both --workers 8
+```
+
+此結果只用來縮小元件主張；不得以 final test 後資訊建立新的 final system。
