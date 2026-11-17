@@ -1,0 +1,111 @@
+{
+  "created_at_utc": "2026-11-11T16:17:48.044928+00:00",
+  "files": [
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/LOCAL_EVIDENCE_EN.md",
+      "sha256": "7732c2efa90552255d599c11dca3359cb8b34ac7f548fc565ab1ab6486ee2b18",
+      "bytes": 16920
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/execution_status.json",
+      "sha256": "ee2a14740bc1e2ccf1fc4325a9d1978be05a271b14cf457557eec21bb30c513b",
+      "bytes": 1102
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/validation_checks.json",
+      "sha256": "659dcce442c4e56950c5928a3cd489ab1515b4210b3e56d03a006c74ccbac5dc",
+      "bytes": 577
+    },
+    {
+      "path": "docs/research/ACCESS_RESUBMISSION_EXECUTION_2026_11_12.md",
+      "sha256": "502ea2693bd711d341b5cdd74afadec8c976c040556c876181bf202a1174f7b6",
+      "bytes": 7590
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/paired_denominators.tsv",
+      "sha256": "72bde3ace6190fe73b89fb1a4584ef29d1e1b674116509de8d15e729fe52462f",
+      "bytes": 95700
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/pool_set_relations.tsv",
+      "sha256": "f97c69969a83280307092a4a270a92fe426913b013d5439268faa57b73bacca0",
+      "bytes": 1889
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/pool_size_strata.tsv",
+      "sha256": "c9a277889844e76178bb977fc0c993a191e5a156125822c5a6140049f3d75dfd",
+      "bytes": 2567
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/recall_conditions.tsv",
+      "sha256": "a250feafa79525bdfff5387b25c887cae49dbaac65223bad505113e2ddb08275",
+      "bytes": 22630
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/recall_contrasts_all.tsv",
+      "sha256": "547a8062bc62110921718664f1dce298b04052f93618910d144c738be084d055",
+      "bytes": 27644
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/coverage/recall_contrasts_by_size.tsv",
+      "sha256": "31f4a89a46c738564d488d9fd37c81f3ebafcefa2de5feed06d26d0fa447258b",
+      "bytes": 99884
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/fixed_pool_summary.tsv",
+      "sha256": "7c69b9203e2bbb7fb1c601fe8f8d4c28dcc74ce3bf2751b2060b36531ee2a153",
+      "bytes": 325
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/L0_L1_summary.tsv",
+      "sha256": "d431a0e6120e3dd521a4427f1fdbb2a33946aa8857f2aefb0b328a929f7d4462",
+      "bytes": 1225
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/dev40_gate.json",
+      "sha256": "d9b8ab9b50fbc3101a509235d66952ffe10aa108b603b2805cdc7da2cf643be0",
+      "bytes": 251
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/formal200_gate.json",
+      "sha256": "8e9ab9d6961650097ee29626d5abc0d81e70d651c30cb323c04ec1fab9c78659",
+      "bytes": 256
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/fixed_pool_complete.json",
+      "sha256": "afd1610b234270c55efd47318c03691ebee6dfb92ba628d526e354f1855308fd",
+      "bytes": 230
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/L0_L1_complete.json",
+      "sha256": "c9606377a484ec04de7d15cb969dbe4c7114845cb34c166569abadc20e957c65",
+      "bytes": 230
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/audit/table10_order_verification.json",
+      "sha256": "248b6233a079a43e22ed8c82972f8c3afddf56189740f50a24da4035addaf91a",
+      "bytes": 593
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/manifests/formal_sampling_summary.json",
+      "sha256": "8686bffcc8cc783f3f2a257684bda232b430e123e04d97b62ff144534450c631",
+      "bytes": 5713
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/historical/development_conditions.tsv",
+      "sha256": "2c777150df73dff6588fb1eb9fcd347fe00c91ec6c349c6a86b5b84e7fda76b4",
+      "bytes": 8435
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/historical/RRF_numeric_examples.json",
+      "sha256": "76a8507d787ef1948776f3bed12e94cae3258a19adb547c9a9aea006f09b98d0",
+      "bytes": 2207
+    },
+    {
+      "path": "runs_v2/access_resubmission_20261110_v4_1/protocol/execution_freeze.json",
+      "sha256": "09100705f70eb54d00839257984d39e56c1c5a32a1dab6d2930f18a402219f96",
+      "bytes": 9131
+    }
+  ],
+  "scope": "Aggregate evidence review pack; excludes raw source texts, original/replayed predictions, numerical caches and final submission documents."
+}

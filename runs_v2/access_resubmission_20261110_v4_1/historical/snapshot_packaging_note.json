@@ -1,0 +1,7 @@
+{
+  "at_utc": "2026-11-11T16:09:33.012890+00:00",
+  "reason": "Metadata snapshots are historical copies, not self-contained new execution roots. Archive avoids provenance scanner interpreting them as original runs.",
+  "archive_sha256": "b650fb795dae36394f2ded231141425b319d059be65664cc05662f019a79054c",
+  "entries_byte_verified": 111,
+  "original_sources_modified": false
+}

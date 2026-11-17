@@ -1,0 +1,14 @@
+{
+  "started_at_utc": "2026-11-11T16:00:54.771279+00:00",
+  "protocol": "4.1",
+  "preparation_sha256": "5660845356c03e287020deeac5b91a2dbf391cdddea09a4867175f3cc0b9bb3f",
+  "membership_sha256": "6aeb6d75b4f7e91d0627ed94f8fe09b31528f2443f77cd72c6dcbd30cb1eba84",
+  "dev40_gate_sha256": "d9b8ab9b50fbc3101a509235d66952ffe10aa108b603b2805cdc7da2cf643be0",
+  "code_sha256": {
+    "access_revision_common.py": "dea40a6717778c04f03307d278028d4a140ec455044cafed1db1b0e933e6e188",
+    "access_revision_coverage.py": "d6c0d29c7c49c3b375127b3377d7a73f95870194467777c6a1a7f61e4f19049d",
+    "access_revision_math.py": "4ba109fab14a2a0f56d1ad7cd67f3e3f36e847ef30fad9e88ad2e115335fa618",
+    "access_revision_prepare.py": "c20271e1c917710acefd27d1eab7f1ae7adabef5dee34996a59814a46ac21558",
+    "access_revision_replay.py": "89d540b1aad0ec19a21f0b86e1405d05b8f84d8d6315660c7f998014f349015e"
+  }
+}

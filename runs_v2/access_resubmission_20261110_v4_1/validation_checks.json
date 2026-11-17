@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-11-11T16:17:47.958931+00:00",
+  "compileall_src_tests_scripts": "pass",
+  "pytest": {
+    "passed": 517,
+    "subtests_passed": 5,
+    "seconds": 22.51
+  },
+  "submission_snapshot": {
+    "status": "pass",
+    "files_verified": 217
+  },
+  "govreport_freeze_package": "pass",
+  "legacy_provenance": {
+    "classified": 468,
+    "pass": 0,
+    "legacy": 468,
+    "fail": 0
+  },
+  "git_diff_check": "pass",
+  "note": "Historical metadata packaging corrected without changing original artifacts; later report/historical modules compile successfully."
+}

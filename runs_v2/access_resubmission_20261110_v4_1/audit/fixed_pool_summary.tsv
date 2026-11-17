@@ -1,0 +1,7 @@
+dataset	condition	N	passed	mismatches
+govreport	A04_equal_rank_rrf	681	681	0
+govreport	A05_index_only_lexical	681	681	0
+govreport	A08_exact_pool_zero_lexical_weight	681	681	0
+multinews	A04_equal_rank_rrf	3935	3935	0
+multinews	A05_index_only_lexical	3935	3935	0
+multinews	A08_exact_pool_zero_lexical_weight	3935	3935	0

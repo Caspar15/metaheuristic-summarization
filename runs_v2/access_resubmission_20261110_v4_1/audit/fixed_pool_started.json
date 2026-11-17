@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-11-11T16:03:48.314294+00:00",
+  "inputs": {
+    "runs_v2\\govreport_e3_route_provenance_v1\\dev\\A04_equal_rank_rrf\\predictions.jsonl": "c66509c52376a579681376e0773df44ca608e79969199a2ba14630e11fe65d03",
+    "runs_v2\\govreport_e3_route_provenance_v1\\dev\\A04_equal_rank_rrf\\resolved_config.yaml": "9534cd954968ab5bab19789c78a170ada2301938dc457c07da8fab8f91b9de8a",
+    "runs_v2\\govreport_e3_route_provenance_v1\\dev\\A05_index_only_lexical\\predictions.jsonl": "dcc1e519bfb284bff4508c2c2291cdafad8fe6d92cdbdf45343005275b0206dc",
+    "runs_v2\\govreport_e3_route_provenance_v1\\dev\\A05_index_only_lexical\\resolved_config.yaml": "a427e3d18503e5ba795a6854d26956ce17416faf1f6bbff3009b70d543e254a0",
+    "runs_v2\\postfreeze_zero_lexical_weight_v1\\govreport\\dev\\A08_exact_pool_zero_lexical_weight\\predictions.jsonl": "5c773d9ee71da9d1a20171b5c684bcfba1753d7bffa2c0cba8c9ac26f49a9004",
+    "runs_v2\\postfreeze_zero_lexical_weight_v1\\govreport\\dev\\A08_exact_pool_zero_lexical_weight\\resolved_config.yaml": "01abcd1b3c10a35b07fef5e985c84c855ee40e67074cb1185eb4e684daf88839",
+    "runs_v2\\multinews_e3_route_provenance_v1\\dev\\A04_equal_rank_rrf\\predictions.jsonl": "4b89561e7de654149307a54302ef4f5d6eff8e100dddd6e481122d3762877d95",
+    "runs_v2\\multinews_e3_route_provenance_v1\\dev\\A04_equal_rank_rrf\\resolved_config.yaml": "02b7759627bda7a56fd2c954a4005ea418511b35e2fcca48fb3cb68600187b04",
+    "runs_v2\\multinews_e3_route_provenance_v1\\dev\\A05_index_only_lexical\\predictions.jsonl": "b758a4ffe7adfb7696cc3014f0e281176073da766a8ebe3b169ce2dc7cf65ec4",
+    "runs_v2\\multinews_e3_route_provenance_v1\\dev\\A05_index_only_lexical\\resolved_config.yaml": "04dbea58d3e5414e33750c6f53094c5d95ab2947e37f012ab502fc9d3d77933b",
+    "runs_v2\\postfreeze_zero_lexical_weight_v1\\multinews\\dev\\A08_exact_pool_zero_lexical_weight\\predictions.jsonl": "03c0147d16b51230ddb93fc96ea3269cedc0182fe5c984bedaeaee5499179048",
+    "runs_v2\\postfreeze_zero_lexical_weight_v1\\multinews\\dev\\A08_exact_pool_zero_lexical_weight\\resolved_config.yaml": "2e21b0a8545ae79862e043d5fbc77af3bc8a3799769d71486004fd0c659349c4"
+  },
+  "code_sha256": "8b232bde5bc9a507c3fc18d3854a501c162046dd20be98f4690106be59434196"
+}

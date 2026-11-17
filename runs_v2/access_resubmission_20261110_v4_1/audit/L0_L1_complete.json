@@ -1,0 +1,7 @@
+{
+  "at_utc": "2026-11-11T16:04:22.246063+00:00",
+  "N": 6594,
+  "all_checkable_passed": true,
+  "source_inputs_unchanged": true,
+  "scope": "stored arithmetic and mapping only; L2 fields deliberately marked not_checkable here"
+}

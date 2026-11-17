@@ -1,0 +1,50 @@
+[
+  {
+    "dataset": "govreport",
+    "target": "rouge1",
+    "N": 681,
+    "empty_reference_N": 0,
+    "evidence_sha256": "2351b2d1e2f070f92175bbd18b9dff43eb679f4a57f7326639251d207b7753db",
+    "config_sha256": "ba01a35f6a33e9e63f3881d1b698ef3404f546045a3485ca15dbe20a727a48a1"
+  },
+  {
+    "dataset": "govreport",
+    "target": "rouge2",
+    "N": 681,
+    "empty_reference_N": 0,
+    "evidence_sha256": "bc3a43c1a7569c735234c065c2c3fc68da2da600d6ff8222938b3cc17226da1b",
+    "config_sha256": "06158ef42c7123d83d2262059793584bab9ec8fa0446ede72be05b66a7e7fb92"
+  },
+  {
+    "dataset": "govreport",
+    "target": "rougeLsum",
+    "N": 681,
+    "empty_reference_N": 0,
+    "evidence_sha256": "ac1952f0c7c474b9508b3f593b0fab21b271fe860342c63479af442686b13671",
+    "config_sha256": "b2f18a67f4a8b62ead5334e9fbc2f9f0a57357caa358d1ac2288cf7cf1205a13"
+  },
+  {
+    "dataset": "multinews",
+    "target": "rouge1",
+    "N": 3935,
+    "empty_reference_N": 0,
+    "evidence_sha256": "30a993c774f3b2096de5a60a708d770cb2cede1ef2b5ecaddc96af8b60400c00",
+    "config_sha256": "f62aeec3cf3b5b6f2053a347d225f0e6f2c0600f2806e14d39c87a2fef97cdef"
+  },
+  {
+    "dataset": "multinews",
+    "target": "rouge2",
+    "N": 3935,
+    "empty_reference_N": 6,
+    "evidence_sha256": "48adfff105c3c3dcd47f7ae713d40b4246efeedfedafd39468e856d9056ff383",
+    "config_sha256": "36b394690654f74fb5f4b0316286e542fb59751f9032a533260732dfc1684c44"
+  },
+  {
+    "dataset": "multinews",
+    "target": "rougeLsum",
+    "N": 3935,
+    "empty_reference_N": 0,
+    "evidence_sha256": "24a7e020f9e188e039a9255444e50d3a65f53c3e67907ce8de550855eecccb8b",
+    "config_sha256": "5974dd0aeed988c485b87def73aeadfc47b5545f5bdc134721299900e64c9ed0"
+  }
+]
