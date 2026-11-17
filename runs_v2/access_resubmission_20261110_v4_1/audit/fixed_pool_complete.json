@@ -1,0 +1,7 @@
+{
+  "at_utc": "2026-11-11T16:04:29.583231+00:00",
+  "N": 13848,
+  "all_passed": true,
+  "input_hashes_rechecked": true,
+  "scope": "stored membership, flags, ranks/features and salience arithmetic; not replay of every ablation"
+}

@@ -1,0 +1,728 @@
+{
+  "at_utc": "2026-11-11T16:08:18.251111+00:00",
+  "sources": [
+    {
+      "path": "configs\\preregistrations\\d1_capacity_matched_route_ablation_v1.json",
+      "sha256": "b614dfe7f2eb66ca6496adf427ffc6f3f56dce7db06cb874ce20cfd3353a642f",
+      "bytes": 2392,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d1_govreport_section_guard_followup_v1.json",
+      "sha256": "3dea29ab1f446c4cf08cf9583b236a00032e04f5737f37638d6056416594a65a",
+      "bytes": 1723,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d1_greedy_sensitivity_v1.json",
+      "sha256": "c608f847d77ff51224dffba529e3856e8b6832ae35ad8ddf03260cc1c4703c8f",
+      "bytes": 7737,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d1_paired_analysis_v1.json",
+      "sha256": "54f12bdd5fafaff7cce40c3884f819ead70825dcbd4b26683e32d99bee83bf14",
+      "bytes": 2264,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d1_three_route_capacity_followup_v1.json",
+      "sha256": "2cac40b58c2d669ab0a2e5088f25afafbaaaa5c332460dad62e7bb9564e92743",
+      "bytes": 1323,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d3a_router_fusion_full_dev_v1.json",
+      "sha256": "083b3a615dc10169bf14557878853abf0c8ebc82ca345308df9e57d58f7fc5c5",
+      "bytes": 5077,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\preregistrations\\d3a_router_fusion_screen_v1.json",
+      "sha256": "07de205a39b781389573b0c44fa526474f2226ca329b52a027e0288c770de58a",
+      "bytes": 6633,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\studies\\a1\\govreport_base.yaml",
+      "sha256": "74dcd664af94bf520fa6b546f44044b5f6dea57a1a1e8ed29b3e0a1c469cf77c",
+      "bytes": 1332,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\studies\\a1\\multinews_base.yaml",
+      "sha256": "e0e12fc980a94078c7b1bd6e15b954066b3879877010c1b022c5943e4f6775c9",
+      "bytes": 1333,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\studies\\d1\\govreport_base.yaml",
+      "sha256": "258188634b18ede0d881eb8645ad0f743a91095eca3c1f8cae478222bd5b2ab4",
+      "bytes": 1769,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "configs\\studies\\d1\\multinews_base.yaml",
+      "sha256": "9aa9fb075b9534c2f3919d550c5ee7a8ed2ffc1e88462b81ff5dab24bdd284c1",
+      "bytes": 1770,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "docs\\research\\D1_SENSITIVITY_STATUS.md",
+      "sha256": "9ff7ad7ec17498791484b6652fb8a989607057b2756b520c504e50858b09aa78",
+      "bytes": 22771,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "docs\\research\\GATE2_BASELINE_STATUS.md",
+      "sha256": "f1484be60a2595b19fb6301b2d7ffe264e31e4be15bac8b7db6cc381a4f8247e",
+      "bytes": 15963,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G00_lexical_graph\\candidate_summary.json",
+      "sha256": "ca2b593b03280d0f8c1100a3afe0ede7addd003e84b3880dcfbfa52f7f5b1448",
+      "bytes": 2269,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G00_lexical_graph\\greedy\\run\\evidence.json",
+      "sha256": "803673267524c76bd58b5c38f05997b19fa63873b889d443e47978d297c37542",
+      "bytes": 4586,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G00_lexical_graph\\resolved_config.yaml",
+      "sha256": "898f543ec2b84f151890ae04a85a1b4dee44a2d058b0d5a884d3ece5df7a1a9e",
+      "bytes": 2343,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\candidate_summary.json",
+      "sha256": "98fb9ca02c4f17a6708cf5e9611822d5d1c769675a9426b6909bf0207b2fcb84",
+      "bytes": 2311,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\greedy\\run\\evidence.json",
+      "sha256": "4e5ebeed5b2a5ea03284110077d75caf3444c2fb6416ef5c82216a1a3299fa61",
+      "bytes": 4649,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\resolved_config.yaml",
+      "sha256": "8ef7d6d8cec1bda2dbbace10addb404f1efbe6a7fa219c8e5e5502960fba9683",
+      "bytes": 2359,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G02_route_top_k_80\\candidate_summary.json",
+      "sha256": "d82ba547afefe86b1e1c856a87fbb810083ba66bc510e3a41aa2eaf82ed1f3c7",
+      "bytes": 2229,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G02_route_top_k_80\\greedy\\run\\evidence.json",
+      "sha256": "b144c50cab7c5735de695f49fa525d357d3a63a0bbe70435e74d3d9f40bfbc49",
+      "bytes": 4549,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G02_route_top_k_80\\resolved_config.yaml",
+      "sha256": "fdd750b60e83d907c1e64a778bea2fe346bec99ffa34de6cc4ce32169c250164",
+      "bytes": 2344,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G03_min_per_route_10\\candidate_summary.json",
+      "sha256": "e799d7fc576480ab4446fd0441673597a1849ce6c5342a30873c7cefbffb8aeb",
+      "bytes": 2242,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G03_min_per_route_10\\greedy\\run\\evidence.json",
+      "sha256": "606d68d2d03fc30bf479582a0e546b7d9356fa126cc6f2a40d67484eb270f7c5",
+      "bytes": 4568,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G03_min_per_route_10\\resolved_config.yaml",
+      "sha256": "d5a0fe1826d226a96943533fc48915a288988a5c229977f099974c23003d62e5",
+      "bytes": 2346,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G04_total_80\\candidate_summary.json",
+      "sha256": "71396fd781507dbcebd06484973233ccbb115692b5dd16d7a6788ab06b0ef240",
+      "bytes": 2214,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G04_total_80\\greedy\\run\\evidence.json",
+      "sha256": "526b622b4b008efaf1a49744705c30a4c420a48ae7da2da83c9190744aa5fbba",
+      "bytes": 4516,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G04_total_80\\resolved_config.yaml",
+      "sha256": "0f5943d23952e6f22a5d0e9167c6d17cafc6e34a33fe1cc31847e53bc6d10757",
+      "bytes": 2338,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G05_rrf_constant_30\\candidate_summary.json",
+      "sha256": "93172ef408cbdfc8f9d6350a560f29785df42c01b1a54e7c30570c6f3ad8dbca",
+      "bytes": 2229,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G05_rrf_constant_30\\greedy\\run\\evidence.json",
+      "sha256": "c9133096d4783c8959cd0d75dd2c8c6f27e800fd52da1410d21ba84ca7cef9bc",
+      "bytes": 4552,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G05_rrf_constant_30\\resolved_config.yaml",
+      "sha256": "01e5c74657c6c2b78e1f53441824087eea81567b8f8c5f9be828401b93e657e4",
+      "bytes": 2345,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G06_membership_only\\candidate_summary.json",
+      "sha256": "d17be6ad2c403caaeaabaf7d344ad0ae6e6b33a2d6400c67aaa76e0ef0fa1b58",
+      "bytes": 2248,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G06_membership_only\\greedy\\run\\evidence.json",
+      "sha256": "db4a3ef9f396583eb54668dab78274474149ec6567613eff52e8696c0ea9974a",
+      "bytes": 4571,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G06_membership_only\\resolved_config.yaml",
+      "sha256": "7c09c801391f1ffaad07c86f9ab6243b32a178be860bd58d5040dff911605b03",
+      "bytes": 2350,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G07_soft_pool\\candidate_summary.json",
+      "sha256": "e7042bf163611ed388b7caec119cad3da53a689992fbc7384054cf2bb01186d7",
+      "bytes": 2269,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G07_soft_pool\\greedy\\run\\evidence.json",
+      "sha256": "dd4b8564debefa910d2867fc0a9977989d36ef5e78c888c0eb3ac2ccf19285dd",
+      "bytes": 4574,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G07_soft_pool\\resolved_config.yaml",
+      "sha256": "1b0f19f070e7fe3881b552df9db242af716cd0599ab95fa977ee01ad8bda964a",
+      "bytes": 2344,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\candidate_summary.json",
+      "sha256": "9260ffd837fc79c105d2518b0c98732df8aa68ec311d37c6fd5fbafd006f20c1",
+      "bytes": 2236,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\greedy\\run\\evidence.json",
+      "sha256": "6987596c1e2fe0c5d9e4cc4710764b6a1613b06a5a0a1ff46c4f75475d50bee7",
+      "bytes": 4568,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\resolved_config.yaml",
+      "sha256": "1c3babaccf7d5dad645f3e3b3925d31599520f8705e66564d2fc90ae852cac69",
+      "bytes": 2349,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\candidate_summary.json",
+      "sha256": "ff540a9bda85547170621fb4233184f987716f9567792f7c93ebe9ea0e19642a",
+      "bytes": 2249,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\greedy\\run\\evidence.json",
+      "sha256": "fbd5e0a5dce0b03d91de8ac24d19e3aa675f7670f3dd9a03ab8e9cedab2f5507",
+      "bytes": 4602,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\resolved_config.yaml",
+      "sha256": "4a2fd68915504a8601f2ba4202247003c20db825c3284d75a9aaca744a50ccff",
+      "bytes": 2354,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\candidate_summary.json",
+      "sha256": "b400931ce8da1881d0d71a4a4748b203caf45f3cb2b70f847ecedc901abe438d",
+      "bytes": 2226,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\greedy\\run\\evidence.json",
+      "sha256": "03b391990eb34c4169eb7a87edde975246c7a49a6b2b354ab1fae78e2c2f95c2",
+      "bytes": 4552,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\resolved_config.yaml",
+      "sha256": "dd4d94409632facf4b2c5f62c2c0b1b1dedd438362c59185c3dca03358772262",
+      "bytes": 2345,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\candidate_summary.json",
+      "sha256": "ea6f81efaa31b32d601b8c5a74daae5541978faa2254f6c5d1e17da9de22b697",
+      "bytes": 1496,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\greedy\\run\\evidence.json",
+      "sha256": "6af7e59f675debbbf1f1c78c5d1850110c6103e5da19dabf5bf17df9f431f11c",
+      "bytes": 2561,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\resolved_config.yaml",
+      "sha256": "16101ab9c2c2e7f1e3fb423908ace84a854890be3a909cde803e9ba3e38fb1f3",
+      "bytes": 2352,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\govreport\\dev\\cheap_multiroute\\study_summary.json",
+      "sha256": "fa648f0d839f801283bd23a805f836a006fa8e3ef3de986b42b4abe418d8604a",
+      "bytes": 29923,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G00_lexical_graph\\candidate_summary.json",
+      "sha256": "caef768c109dc4f370c4e2d12d171da85ddd79c925051a23cffdee2f369d1639",
+      "bytes": 2270,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G00_lexical_graph\\greedy\\run\\evidence.json",
+      "sha256": "c4525f1216baf138aab4343bb3aca28f9e5508609f9133bd3d581df5440b0e95",
+      "bytes": 4682,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G00_lexical_graph\\resolved_config.yaml",
+      "sha256": "658369ff5ea75f626fc66c772d9e45c79bdf528373ccfb32b415fcb581009c61",
+      "bytes": 2344,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\candidate_summary.json",
+      "sha256": "220448f63352ba93608de9fe80c6b1e3d164b458d6aa680934f30a267063f94d",
+      "bytes": 2317,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\greedy\\run\\evidence.json",
+      "sha256": "5efe977113103c268da942c0ffee6041c43a9b910d05e6aa7737be0779ed310e",
+      "bytes": 4657,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G01_tfidf_centroid_route\\resolved_config.yaml",
+      "sha256": "3506d9376698ac4bc0bc22d5d637616a9b4b7cfc7e14290617e4bfd872ac189d",
+      "bytes": 2360,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G02_route_top_k_80\\candidate_summary.json",
+      "sha256": "cd16ece0e8ae5a2651febb163e4359b9890dfb73e322bc0fb54567b2c17628f6",
+      "bytes": 2239,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G02_route_top_k_80\\greedy\\run\\evidence.json",
+      "sha256": "e787522a07125d1fb93b31ef9d6ece7f4dd1f1156e209b8ea30f71714538fea0",
+      "bytes": 4561,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G02_route_top_k_80\\resolved_config.yaml",
+      "sha256": "8177b7734aa033f545aee4a43e77df92e6cc7ddc0a15ea43fafbd0648929addf",
+      "bytes": 2345,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G03_min_per_route_10\\candidate_summary.json",
+      "sha256": "c6e093f42f2eafd377fbf00ef2e8595452ea90a6d10f05ce8c13449088b27029",
+      "bytes": 2241,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G03_min_per_route_10\\greedy\\run\\evidence.json",
+      "sha256": "efb86d13eb684935457299bb38c16068f0fd9c91f62db3c949693279f5297504",
+      "bytes": 4569,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G03_min_per_route_10\\resolved_config.yaml",
+      "sha256": "8c50e8be93dbcc7bf323e549098dea979ff94d60877122f1337beec3418c4f6c",
+      "bytes": 2347,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G04_total_80\\candidate_summary.json",
+      "sha256": "6b2e5f40eb803708f12872560e6a13deb12f8b934d3c2c83ce75464ae227700d",
+      "bytes": 2222,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G04_total_80\\greedy\\run\\evidence.json",
+      "sha256": "50efde48f958be96482eaf9d5b67726b1c3c13bbba7864ca1813457281ce8d07",
+      "bytes": 4526,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G04_total_80\\resolved_config.yaml",
+      "sha256": "6f694fa4176f2a079689e0f22e0e1110569d1774389beb70240fd0cbb17e3ea1",
+      "bytes": 2339,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G05_rrf_constant_30\\candidate_summary.json",
+      "sha256": "800d646efc3d8111745de0e406f8dffa129b18fc0c0c683ec8a0230e44f72df0",
+      "bytes": 2235,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G05_rrf_constant_30\\greedy\\run\\evidence.json",
+      "sha256": "d695dd0d63d354e1e6607d073d35a8d54c3e9b2438894a7a8fb1926b27ba4ee2",
+      "bytes": 4560,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G05_rrf_constant_30\\resolved_config.yaml",
+      "sha256": "94ad0bbb7ced8616e550d48b9054160864660ad568dc33b024e2c89068de8888",
+      "bytes": 2346,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G06_membership_only\\candidate_summary.json",
+      "sha256": "f1f313c401ff181e1ef7a453ec39853261cad5a412749edb409173c9e1ed79e6",
+      "bytes": 2250,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G06_membership_only\\greedy\\run\\evidence.json",
+      "sha256": "cdf50b34e905ab24d8a32908079ffc8b40864f594a156eb8bcc7df9adfaf9510",
+      "bytes": 4575,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G06_membership_only\\resolved_config.yaml",
+      "sha256": "a60124ced444577e02a30a3f58aa2ad27b19343f82098be2d52a799e3b77bbec",
+      "bytes": 2351,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G07_soft_pool\\candidate_summary.json",
+      "sha256": "89c119abc24316987e628cf973bb0b0339d08c32254bb825e9706a07ebf700a1",
+      "bytes": 2287,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G07_soft_pool\\greedy\\run\\evidence.json",
+      "sha256": "11cdc043bab2331c6b5cbb5bf55fcef313c26cee2c1dec034c0b61c8f426a77b",
+      "bytes": 4594,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G07_soft_pool\\resolved_config.yaml",
+      "sha256": "4b8dfc1f2cda6415d68d3b31158fe3031cbde37a7b68a6801f48b949dc503f62",
+      "bytes": 2345,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\candidate_summary.json",
+      "sha256": "32acfc7abb25cc859d8ec347ac1e2895ce3979a0f5d837e9e6be68c5d6fa1531",
+      "bytes": 2240,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\greedy\\run\\evidence.json",
+      "sha256": "6c5f3f1f22002840ac230d485563dfb988a210c0bc3bb41824b393990f022d14",
+      "bytes": 4574,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G08_graph_neighbors_16\\resolved_config.yaml",
+      "sha256": "1f859c1257434e6ed88b487a36d3d24456c45cc7b3e217f5dacc5f2ab8c2c9ce",
+      "bytes": 2350,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\candidate_summary.json",
+      "sha256": "7809b4652bca3f065538dd304bd5c91b64d0ee88b37436c199dce661bac2de38",
+      "bytes": 2259,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\greedy\\run\\evidence.json",
+      "sha256": "9229f91299c9439fa57914121f5a972b20c44ec3d3763d52f5b865dc9bd8e724",
+      "bytes": 4614,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G09_graph_min_similarity_0_10\\resolved_config.yaml",
+      "sha256": "2f5b88dcf8ee370064d9994dbbfc53590d3f51cc43862921234fc2d33930f456",
+      "bytes": 2355,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\candidate_summary.json",
+      "sha256": "0e51135c3a119e921012a35615cebaa380049e9b97805e42c8a3ff3d14b99fad",
+      "bytes": 2234,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\greedy\\run\\evidence.json",
+      "sha256": "a1d4260eb09d668c3523d1ad66e5cfee1d1ede57458f3b843979c25f0feb6dec",
+      "bytes": 4562,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G10_graph_alpha_0_90\\resolved_config.yaml",
+      "sha256": "f9e0f071024bfea88c3921236bc0d47ced37501844c968fa3eac5a179d9892a2",
+      "bytes": 2346,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\candidate_summary.json",
+      "sha256": "361eac5cb18bfe4379526ef4aa2c598a4e3a2f6cad1f4209f5dd847522645aa6",
+      "bytes": 2344,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\greedy\\run\\evidence.json",
+      "sha256": "a6dcf0474310f352b2545e1438fb1da091d85ad94b2c542216160f5971581051",
+      "bytes": 4693,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\G11_dataset_structure_guard\\resolved_config.yaml",
+      "sha256": "d00e9bce0d6eeee6240c3d908fb4d2f254d9351b440bdc98d06533230dfeef39",
+      "bytes": 2355,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_greedy_sensitivity\\multinews\\dev\\cheap_multiroute\\study_summary.json",
+      "sha256": "8d0f0a9f38f5620b2dd6679a41ee9a79207cf6624be4aedf61f1e6acf1dfe983",
+      "bytes": 31010,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_three_route_followup\\multinews\\dev\\S02b_three_route_capacity_80\\greedy\\run\\evidence.json",
+      "sha256": "39d348677ff586358d17ceae7952eed7fc547f9bd4a5872c0ece0816605f47e1",
+      "bytes": 4803,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d1_three_route_followup\\multinews\\dev\\S02b_three_route_capacity_80\\greedy\\run\\per_example.jsonl",
+      "sha256": "1e52be52eab75ef2d7520a1a40f2e5bc346ecfd9dc7ef4e4293881c89b2bd831",
+      "bytes": 470291,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d2_selector_full_dev_v1\\govreport\\dev\\S05_mmr_tfidf_l07\\mmr\\run\\evidence.json",
+      "sha256": "64c6d06b8fd4646d932cb4da58ce96c1969da121834ed90d055bf0022d502e1f",
+      "bytes": 4481,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d2_selector_full_dev_v1\\govreport\\dev\\S05_mmr_tfidf_l07\\mmr\\run\\per_example.jsonl",
+      "sha256": "836c682979b075d76aa07b9ef6be8929b0f2ad1f2a3be6e89a89b3c302322ce9",
+      "bytes": 87010,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R01_total120\\candidate_summary.json",
+      "sha256": "0b2bcf9be93890af0285613cc8403a878e80b8c48ae364642a577b50c1d208ad",
+      "bytes": 2231,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R01_total120\\per_example.jsonl",
+      "sha256": "47a4258e6075b83be3704ea2ed5a479c1cbbedcbe0ca3f38c4722449882f77a7",
+      "bytes": 86973,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R01_total120\\resolved_config.yaml",
+      "sha256": "0d00846fb8757fcb7ae72633b880332fbe019d0ff37a472ad70a73aa398715f2",
+      "bytes": 2391,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R07_bigrams_position02\\candidate_summary.json",
+      "sha256": "5199e189d8afbd4e6bfc6e735b2b2656872b17a3937ba6822edf7ccf53e7913e",
+      "bytes": 2314,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R07_bigrams_position02\\per_example.jsonl",
+      "sha256": "aa25a961529bc379cd2a8c3dfb50bc285565b2ab7efe3fa4c6af11bfb37d4b15",
+      "bytes": 86839,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R07_bigrams_position02\\resolved_config.yaml",
+      "sha256": "42a8756357cca4a2837f9addb1e358cc982be99ce81012b07790a9b02654079a",
+      "bytes": 2407,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R09_semantic_x2\\candidate_summary.json",
+      "sha256": "2d9c188026c38177b8ffc41a613165fe71d894728e20ace17817ec986b06eb90",
+      "bytes": 2270,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R09_semantic_x2\\per_example.jsonl",
+      "sha256": "70d4d5fcb1ae5a5689b657300ca2bd357d2535e8e1bd5f34e1040ae61b838430",
+      "bytes": 86984,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R09_semantic_x2\\resolved_config.yaml",
+      "sha256": "b696a3ced420f51539f0c4102e8e9f61e3415f0d4c5ae1d20bd05b97c33f45a9",
+      "bytes": 2432,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R11_lexical_x05\\candidate_summary.json",
+      "sha256": "183e237f72ead0f02e05b59575a25ddae9da445320c54ff90c1bc2d7deef2ed4",
+      "bytes": 2269,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R11_lexical_x05\\per_example.jsonl",
+      "sha256": "51bc7878e6e3417a3c957502e55d266a3c2e58f0e6ea82d3a595e13675f6ff29",
+      "bytes": 86855,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\R11_lexical_x05\\resolved_config.yaml",
+      "sha256": "45ef40a94299acb400c46ab69912584d49e0732f217b0cb7b76ceb7a0af06c5c",
+      "bytes": 2431,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\govreport\\dev\\study_summary.json",
+      "sha256": "7a5a99e9537caa5cf353756bc37069ec6ba392dfbb5a870d0a1c76a48f67d59e",
+      "bytes": 11870,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R01_total120\\candidate_summary.json",
+      "sha256": "daebfdc77868b590fa90a07e9a53159f506c83f75d429a908c9d0cb383869e3d",
+      "bytes": 2234,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R01_total120\\per_example.jsonl",
+      "sha256": "497188f33a9b5e8d8dc3ca8c813f3d4d88cf5f3d3ff01d8ccceb7addac56e7c5",
+      "bytes": 470403,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R01_total120\\resolved_config.yaml",
+      "sha256": "9c1a6b02d2c880218ccc8529a4f72daf37d33c6b882060243c8d24ea60538dae",
+      "bytes": 2371,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R07_bigrams_position02\\candidate_summary.json",
+      "sha256": "45a79a9063311471343f9e8a6f953d0d59f864d2434d1f345e37355c2dbf4ecd",
+      "bytes": 2318,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R07_bigrams_position02\\per_example.jsonl",
+      "sha256": "64409ff5197c5aad01c8359b89aa9c07750951e2f5d63c68672ecaf1e543e3d0",
+      "bytes": 470406,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R07_bigrams_position02\\resolved_config.yaml",
+      "sha256": "4317e4ab0cc92e454157981250053c47ac048916dd44794ea14c91b08f25959d",
+      "bytes": 2387,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R10_graph_x2\\candidate_summary.json",
+      "sha256": "a60ebfbb68c5cfe6ef013713b2fc84d1353c57ce2f418fd36eeefe244eba7110",
+      "bytes": 2261,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R10_graph_x2\\per_example.jsonl",
+      "sha256": "1bdfffbd18a488182dc45432f4bb0b6d556c3c8fe51c635801eeb350c506e654",
+      "bytes": 470473,
+      "copied_to_snapshot": false
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\R10_graph_x2\\resolved_config.yaml",
+      "sha256": "e770db4f6c01af2dd70b8c459f6e7e6da4532e95681934c656ff38c72ee38790",
+      "bytes": 2406,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\d3a_router_fusion_full_dev_v1\\multinews\\dev\\study_summary.json",
+      "sha256": "aa0b3ca2c22a86e972aaa57a268bc7d462e9cba5ca1d56bc20f5b64005bdf37f",
+      "bytes": 9347,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\gate2_greedy_reference_v1\\govreport\\dev\\analysis\\analysis.json",
+      "sha256": "18e3c90168f526eaaf9c6dc4dcfc5f1a894bd4334846ec9962ea1a98d4e5a240",
+      "bytes": 8658,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "runs_v2\\gate2_greedy_reference_v1\\multinews\\dev\\analysis\\analysis.json",
+      "sha256": "921363becc71c3f1c643d0910a8faf5a6e210044500a146619713c77d82bb027",
+      "bytes": 8675,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "scripts\\audit\\run_govreport_e3_ablation.py",
+      "sha256": "35fd54e1db0b5720efe73e7d7be5cc352d4cb2bde72070c34d550aaa2b1b41e2",
+      "bytes": 25944,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "scripts\\audit\\run_multinews_e3_ablation.py",
+      "sha256": "551e38e87e7e87663a9e664f5859929a3c0d954cb4c3a9beaf01b7c3fca32bcc",
+      "bytes": 1416,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "scripts\\audit\\run_postfreeze_no_reservation_ablation.py",
+      "sha256": "5bbc7070468cf7d08552ab237299c727841dd305972bae4f349e0bc842374b2b",
+      "bytes": 23371,
+      "copied_to_snapshot": true
+    },
+    {
+      "path": "src\\pipeline\\select_sentences.py",
+      "sha256": "667e0c0a9c9d0425023c170109b618ad5fb4d0f44055b5af718551f58bb37387",
+      "bytes": 41550,
+      "copied_to_snapshot": true
+    }
+  ],
+  "prior_ledger_hashes_all_verified": true,
+  "condition_rows": 33,
+  "scope": "D1 cheap-multiroute complete matrix and D3a full-dev finalists; historical development, not final-config exhaustive sensitivity"
+}

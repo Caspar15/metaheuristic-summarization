@@ -1,0 +1,8 @@
+{
+  "finished_at_utc": "2026-11-11T16:07:37.952196+00:00",
+  "n": 200,
+  "passed_n": 200,
+  "all_passed": true,
+  "scope": "formal200 sample only; no all-test replay or human-interpretability certification",
+  "source_input_hashes_rechecked_after": true
+}

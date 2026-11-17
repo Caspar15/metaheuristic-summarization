@@ -1,5 +1,13 @@
 # scripts/audit — 稽核診斷腳本
 
+> **2026-11-12 reviewer-requested evidence (IEEE Access resubmission):** candidate coverage,
+> saved-record verification and frozen-code replay are implemented by `access_revision_*.py`.
+> The compact results, their definitions and scope are in
+> [LOCAL_EVIDENCE_EN.md](../../runs_v2/access_resubmission_20261110_v4_1/LOCAL_EVIDENCE_EN.md);
+> [RELEASE_CONTENTS.md](../../runs_v2/access_resubmission_20261110_v4_1/RELEASE_CONTENTS.md) lists what is
+> published and what is kept locally. No final model was changed; these entry points must not be
+> used for post-test tuning.
+
 > **2026-08-20 final state:** official tests and both datasets' E2/E3 studies are
 > complete. `run_multinews_final_test.py`, `run_multinews_e3_ablation.py` and
 > `run_multinews_e2_cost.py` are frozen reproduction/audit entry points, not permission

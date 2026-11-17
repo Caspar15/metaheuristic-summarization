@@ -1,0 +1,11 @@
+dataset	condition	expected_rows	verified_rows	mapping_pass
+govreport	C01	681	681	True
+govreport	A01_no_semantic	681	681	True
+govreport	A02_no_graph	681	681	True
+govreport	A03_lexical_only_capacity_80	681	681	True
+govreport	A06_no_route_reservation	681	681	True
+multinews	C01	3935	3935	True
+multinews	A01_no_semantic	3935	3935	True
+multinews	A02_no_graph	3935	3935	True
+multinews	A03_lexical_only_capacity_80	3935	3935	True
+multinews	A06_no_route_reservation	3935	3935	True

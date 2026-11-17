@@ -1,0 +1,42 @@
+{
+  "id": "validation_crs_R44729",
+  "source_prediction_sha256": "cf027a0e4eb981437995567bbc580480167855c8209f5449e41a3728ab12afe2",
+  "true_MMR_decision_order": [
+    109,
+    252,
+    243,
+    236,
+    94,
+    244,
+    36,
+    67,
+    98,
+    208,
+    0,
+    211,
+    30
+  ],
+  "summary_source_order": [
+    0,
+    30,
+    36,
+    67,
+    94,
+    98,
+    109,
+    208,
+    211,
+    236,
+    243,
+    244,
+    252
+  ],
+  "table10_first_five_output_indices": [
+    0,
+    30,
+    36,
+    67,
+    94
+  ],
+  "table10_correct_label": "Output 1–5 (source order), not MMR decision steps 1–5"
+}
