@@ -23,5 +23,7 @@ runs_v2/**/*.json text eol=lf
 runs_v2/**/*.jsonl text eol=lf
 runs_v2/**/*.yaml text eol=lf
 runs_v2/**/*.txt text eol=lf
-# Reviewer-requested resubmission evidence: keep LF so the listed SHA-256 values match on every checkout.
+# Most revision evidence was written with LF. The TSV writer used CRLF and
+# the archived manifests identify those exact bytes on every platform.
 runs_v2/access_resubmission_20261110_v4_1/** text eol=lf
+runs_v2/access_resubmission_20261110_v4_1/**/*.tsv -text !eol

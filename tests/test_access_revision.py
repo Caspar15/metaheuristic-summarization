@@ -1,6 +1,22 @@
 """Guard against outcome-driven strata, wrong mappings and implicit ID joins."""
+import hashlib
+from pathlib import Path
+
 import pytest
 from scripts.audit.access_revision_common import structural_group, unique_map, sample_manifest, config_diff
+
+
+def test_published_evidence_matches_release_inventory():
+    root = Path(__file__).resolve().parents[1] / 'runs_v2/access_resubmission_20261110_v4_1'
+    manifest = (root / 'RELEASE_CONTENTS.md').read_text(encoding='utf-8')
+    included = manifest.split('## Included files\n', 1)[1].split('\n## ', 1)[0]
+    entries = [line for line in included.splitlines() if line.startswith('| `')]
+    assert entries, 'No published files found in release inventory'
+    for line in entries:
+        name, size, digest = (cell.strip().strip('`') for cell in line.strip('|').split('|'))
+        data = (root / name).read_bytes()
+        assert len(data) == int(size.replace(',', '')), name
+        assert hashlib.sha256(data).hexdigest() == digest, name
 
 
 def test_size_does_not_imply_containment():
