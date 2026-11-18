@@ -1,0 +1,14 @@
+{
+  "at_utc": "2026-11-11T16:03:44.585061+00:00",
+  "inputs": {
+    "data\\processed\\govreport_test_canonical.jsonl": "3ff10e66ec902b20f0aee0ca1a36a66a2827d24d353473f54c9f7a8df7026dfc",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\predictions.jsonl": "8399d3e4dfbbf8c4f0309d6a51cdd90015981e02f7cd4210ed7634b56ea35863",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\resolved_config.yaml": "bdf651a3e4514bcce249258479f3e7e04b23c2a548895eab6359e5f5926dfc36",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\prediction_evidence.json": "d83338c84eaacaaf0c0cd39b128dd8596dc511c8574cee1e52f7e1fd49ca62d8",
+    "data\\processed\\multi_news_test_canonical.jsonl": "b1efdf91c71438d5ce4513e490e5e9a0e8737cbc7eba79e727cfe0793824e2ac",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\predictions.jsonl": "42b2cacdd06f84ebc5a1651a1228fbb2561c41d28e8e50541e3a80750b0ae20a",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\resolved_config.yaml": "1b210fb83d2ccbdc39ced7105406f6e57540df97f02690d44b1204b21d5860df",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\prediction_evidence.json": "c641c9eba2a0d936cded7121086cb8831db1f09b98b25b047fdcec4bb5c2f8cc"
+  },
+  "code_sha256": "8b232bde5bc9a507c3fc18d3854a501c162046dd20be98f4690106be59434196"
+}

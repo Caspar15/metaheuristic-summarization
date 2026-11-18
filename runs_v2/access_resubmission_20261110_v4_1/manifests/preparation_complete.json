@@ -1,0 +1,28 @@
+{
+  "completed_at_utc": "2026-11-11T09:22:50.771363+00:00",
+  "new_recall_scores_observed": false,
+  "greedy_reference_rows_parsed": false,
+  "dev40_n": 40,
+  "prediction_rows_verified": 23080,
+  "pool_pair_memberships": 18464,
+  "A06_config_parity_pass": true,
+  "snapshots": {
+    "govreport": {
+      "implementation_commit": "b0e0d28551d788ff78dd3c2a2c00727975554f5e",
+      "root": "runs_v2/access_resubmission_20261110_v4_1/protocol/frozen_src_b0e0d28551d788ff78dd3c2a2c00727975554f5e",
+      "archive_sha256": "623877e8fa320e7ccc722945d5e765406682951d732fa69dc293152a46da2c16"
+    },
+    "multinews": {
+      "implementation_commit": "ebd6306d958b136fd008d0ec3f355dd3ec8e26e2",
+      "root": "runs_v2/access_resubmission_20261110_v4_1/protocol/frozen_src_ebd6306d958b136fd008d0ec3f355dd3ec8e26e2",
+      "archive_sha256": "6fa27ef3fa204f678ac209f566be16d34f37a02eff60fdb7d0039a98ef34dd9f"
+    }
+  },
+  "dev40_sha256": "1a6dff2358a3812ef34684144441dc67302430564372841121a232ec22bc2735",
+  "membership_sha256": "6aeb6d75b4f7e91d0627ed94f8fe09b31528f2443f77cd72c6dcbd30cb1eba84",
+  "pool_records_sha256": "eeee8724bcd6a8fde73c4f7d52717da08679061cda4e29cc5d5239ce51c46c87",
+  "code_sha256": {
+    "access_revision_common.py": "dea40a6717778c04f03307d278028d4a140ec455044cafed1db1b0e933e6e188",
+    "access_revision_prepare.py": "c20271e1c917710acefd27d1eab7f1ae7adabef5dee34996a59814a46ac21558"
+  }
+}

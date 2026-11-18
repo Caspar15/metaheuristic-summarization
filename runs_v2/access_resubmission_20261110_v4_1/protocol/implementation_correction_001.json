@@ -1,0 +1,9 @@
+{
+  "at_utc": "2026-11-11T09:22:05.455202+00:00",
+  "stage": "prepare",
+  "observed": "first-row validation stopped before any output manifests or recall",
+  "cause": "new verifier initially assumed space-joined summaries; frozen pipeline uses newline joins",
+  "action": "match the documented frozen newline serialization; no source or prediction changed",
+  "scientific_protocol_changed": false,
+  "source_code_sha256": "dea40a6717778c04f03307d278028d4a140ec455044cafed1db1b0e933e6e188"
+}

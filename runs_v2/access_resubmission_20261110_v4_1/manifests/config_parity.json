@@ -1,0 +1,148 @@
+{
+  "govreport/C01": {},
+  "govreport/A01_no_semantic": {
+    "candidates.route_weights.graph": {
+      "C01": null,
+      "control": 1.0
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical",
+        "graph"
+      ]
+    }
+  },
+  "govreport/A02_no_graph": {
+    "candidates.route_weights.semantic": {
+      "C01": null,
+      "control": 1.0
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical",
+        "semantic"
+      ]
+    }
+  },
+  "govreport/A03_lexical_only_capacity_80": {
+    "candidate_budget.min_per_route": {
+      "C01": 20,
+      "control": 0
+    },
+    "candidate_budget.route_top_k": {
+      "C01": 40,
+      "control": 80
+    },
+    "candidates.route_weights.lexical": {
+      "C01": 0.5,
+      "control": 1.0
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical"
+      ]
+    }
+  },
+  "govreport/A06_no_route_reservation": {
+    "candidate_budget.min_per_route": {
+      "C01": 20,
+      "control": 0
+    }
+  },
+  "multinews/C01": {},
+  "multinews/A01_no_semantic": {
+    "candidates.route_weights.graph": {
+      "C01": 2.0,
+      "control": 1.0
+    },
+    "candidates.route_weights.lexical": {
+      "C01": null,
+      "control": 0.5
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical",
+        "graph"
+      ]
+    }
+  },
+  "multinews/A02_no_graph": {
+    "candidates.route_weights.graph": {
+      "C01": 2.0,
+      "control": null
+    },
+    "candidates.route_weights.lexical": {
+      "C01": null,
+      "control": 0.5
+    },
+    "candidates.route_weights.semantic": {
+      "C01": null,
+      "control": 1.0
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical",
+        "semantic"
+      ]
+    }
+  },
+  "multinews/A03_lexical_only_capacity_80": {
+    "candidate_budget.min_per_route": {
+      "C01": 20,
+      "control": 0
+    },
+    "candidate_budget.route_top_k": {
+      "C01": 40,
+      "control": 80
+    },
+    "candidates.route_weights.graph": {
+      "C01": 2.0,
+      "control": null
+    },
+    "candidates.route_weights.lexical": {
+      "C01": null,
+      "control": 1.0
+    },
+    "compute_budget.enabled_routes": {
+      "C01": [
+        "lexical",
+        "semantic",
+        "graph"
+      ],
+      "control": [
+        "lexical"
+      ]
+    }
+  },
+  "multinews/A06_no_route_reservation": {
+    "candidate_budget.min_per_route": {
+      "C01": 20,
+      "control": 0
+    }
+  }
+}

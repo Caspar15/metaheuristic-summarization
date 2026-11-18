@@ -1,0 +1,16 @@
+{
+  "finished_at_utc": "2026-11-11T16:01:06.862545+00:00",
+  "new_recall_scores_observed": true,
+  "condition_rows": 30,
+  "full_contrasts": 24,
+  "size_subset_rows": 144,
+  "per_document_rows": 69240,
+  "source_inputs_unchanged": true,
+  "code_sha256": {
+    "access_revision_common.py": "dea40a6717778c04f03307d278028d4a140ec455044cafed1db1b0e933e6e188",
+    "access_revision_coverage.py": "d6c0d29c7c49c3b375127b3377d7a73f95870194467777c6a1a7f61e4f19049d",
+    "access_revision_math.py": "4ba109fab14a2a0f56d1ad7cd67f3e3f36e847ef30fad9e88ad2e115335fa618",
+    "access_revision_prepare.py": "c20271e1c917710acefd27d1eab7f1ae7adabef5dee34996a59814a46ac21558",
+    "access_revision_replay.py": "89d540b1aad0ec19a21f0b86e1405d05b8f84d8d6315660c7f998014f349015e"
+  }
+}

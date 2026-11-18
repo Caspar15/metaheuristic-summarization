@@ -1,0 +1,35 @@
+{
+  "at_utc": "2026-11-11T16:05:55.039881+00:00",
+  "N": 200,
+  "formal200_sha256": "a27d7fc779d7e3eea17eda92000cafa02574dee6e0c64412240820de04d0b5f5",
+  "inputs": {
+    "data\\processed\\govreport_test_canonical.jsonl": "3ff10e66ec902b20f0aee0ca1a36a66a2827d24d353473f54c9f7a8df7026dfc",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\predictions.jsonl": "8399d3e4dfbbf8c4f0309d6a51cdd90015981e02f7cd4210ed7634b56ea35863",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\resolved_config.yaml": "bdf651a3e4514bcce249258479f3e7e04b23c2a548895eab6359e5f5926dfc36",
+    "runs_v2\\govreport_final_test_v1\\predictions\\proposed\\prediction_evidence.json": "d83338c84eaacaaf0c0cd39b128dd8596dc511c8574cee1e52f7e1fd49ca62d8",
+    "configs\\preregistrations\\govreport_final_execution_freeze_v1.json": "5dbd5490d9d3616314cf32bf69efcbe0dfdb38dfb91a4d082a67c1a9166d7d92",
+    "data\\processed\\multi_news_test_canonical.jsonl": "b1efdf91c71438d5ce4513e490e5e9a0e8737cbc7eba79e727cfe0793824e2ac",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\predictions.jsonl": "42b2cacdd06f84ebc5a1651a1228fbb2561c41d28e8e50541e3a80750b0ae20a",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\resolved_config.yaml": "1b210fb83d2ccbdc39ced7105406f6e57540df97f02690d44b1204b21d5860df",
+    "runs_v2\\multinews_final_test_v1\\predictions\\proposed\\prediction_evidence.json": "c641c9eba2a0d936cded7121086cb8831db1f09b98b25b047fdcec4bb5c2f8cc",
+    "configs\\preregistrations\\multinews_final_execution_freeze_v1.json": "674580d7f55c1ed65629b796a131deb992b72659574fa1796b1ad646dcbfcc37"
+  },
+  "snapshots": {
+    "govreport": {
+      "implementation_commit": "faab8fb32009b13c990e089506e8869b83f446a0",
+      "root": "runs_v2\\access_resubmission_20261110_v4_1\\protocol\\frozen_src_faab8fb32009b13c990e089506e8869b83f446a0",
+      "archive_sha256": "21a222dac120b699fd4b3a2a4b004e1ed6eab3c912fe9a4c1d3675c1c3a9ef7c"
+    },
+    "multinews": {
+      "implementation_commit": "8d75aad7a0b297c969cb3466e702aa68d68afefa",
+      "root": "runs_v2\\access_resubmission_20261110_v4_1\\protocol\\frozen_src_8d75aad7a0b297c969cb3466e702aa68d68afefa",
+      "archive_sha256": "8dc98621f258eedeb3c8a572d595aec1f31a70ecd2689de031d7e34fa3c1e04f"
+    }
+  },
+  "cluster_sha256": "41b8df3a765d7ab2e8dfd6850ef7a261507eb03e95928dd86006bd57a37b5eba",
+  "subset_sha256": "60cf6815e33e0af59af5dcdcf40ce70925b6c0fd354d4dbc250e6d77ae36a283",
+  "code_sha256": "f3b0fe92f4417203c06bb68aab814042a4a215a6019747e1a827e5d961aaac4b",
+  "new_quality_judgments_observed": false,
+  "paid_api_calls": 0,
+  "purpose": "fixed v4.1 formal L2 and future LLM sample; no summary regeneration for outcome evaluation or final tuning"
+}
