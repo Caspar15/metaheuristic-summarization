@@ -14,11 +14,15 @@
 > `docs/research/FINAL_EXPERIMENT_STATUS_2026_08_20.md`。下方較早的「尚未完成／test
 > 鎖定」為歷史規則紀錄，不得用來否定已完成的 frozen one-shot execution。
 
-> **2026-09-02 manuscript-positioning override:** 依指導教授決議，IEEE Access 稿件
-> 以獨立 Research Article 撰寫，不在正文敘述 ICACT extension 或 ICT Express 拒稿。
-> ICACT 只在技術直接相關處作一般 Related Work 引用；ICT Express 審稿意見只作內部
-> 品質檢查。依 IEEE policy，cover letter／投稿表單仍須誠實揭露相似 prior publication
-> 與本稿差異。詳見 `docs/research/IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`。
+> **2026-09-02 manuscript-positioning override（2026-11-19 更新）：** 依指導教授決議，
+> IEEE Access 稿件以獨立 Research Article 撰寫，不在正文敘述 ICACT extension 或
+> ICT Express 拒稿。ICACT 只在技術直接相關處作一般 Related Work 引用（重投版在
+> Table 1 與 Section II-F）；ICT Express 審稿意見只作內部品質檢查。
+> 2026-11-19 作者決定：重投的回覆信與 cover letter 不另寫 ICACT 揭露段落。理由是
+> 2026-09-15 原稿送件時沒有揭露；兩篇的資料集、任務、方法與實驗不同；以連續 8 字
+> 比對，兩版正文都沒有重用 ICACT 文字，重疊只在作者簡介、參考文獻與引用標題。
+> 投稿表單若問到作者相關的已發表論文，仍照實填寫。舊規則「cover letter 須揭露」
+> 已由此取代。背景見 `docs/research/IEEE_ACCESS_MANUSCRIPT_BLUEPRINT_2026_08_25.md`。
 
 > 這個檔案會被 Claude Code 自動讀取。其他 agent（GPT 等）請在開始工作前先讀這份。
 > 目的：多個 AI 同時工作時不要互相破壞、不要重複推導、不要重犯已知錯誤。
