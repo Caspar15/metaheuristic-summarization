@@ -1,0 +1,1386 @@
+{
+  "purpose": "Exploratory post-pilot sensitivity of existing development ROUGE to the complete approved fixed control pack; no independent or held-out validation, no system comparison.",
+  "metrics": [
+    "rouge1",
+    "rouge2",
+    "rougeLsum",
+    "mean"
+  ],
+  "delta": "original minus modified",
+  "equality_tolerance": 1e-12,
+  "control_pack_sha256": "91fa28a4cdd693d0438faf548c5cc6f98a7fda16fd28c3133676b52572028093",
+  "scorer_sha256": "d02b293aabdceb1147eea04fa6ac1d1cc6f379ec11f7d0bfcfecef96162cf3e7",
+  "sentence_split_sha256": "b7527d9677ea514bf3da023b5cf0cb06c1d4459780fd9885b36e00e80b4dad29",
+  "rouge_score_version": "0.1.2",
+  "builder_sha256": "c7fc9c620ce042096c47ac95da4ee90f85a46eebfe917fe570ba39d462405cf7",
+  "references_per_case": 1,
+  "table": [
+    {
+      "dimension": "all_four",
+      "dataset": "govreport",
+      "n": 8,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        }
+      }
+    },
+    {
+      "dimension": "all_four",
+      "dataset": "multinews",
+      "n": 8,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 0,
+          "equal": 8,
+          "lower": 0
+        }
+      }
+    },
+    {
+      "dimension": "all_four",
+      "dataset": "both",
+      "n": 16,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 0,
+          "equal": 16,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 0,
+          "equal": 16,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 0,
+          "equal": 16,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 0,
+          "equal": 16,
+          "lower": 0
+        }
+      }
+    },
+    {
+      "dimension": "semantic_coverage",
+      "dataset": "govreport",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rouge2": {
+          "higher": 0,
+          "equal": 0,
+          "lower": 3
+        },
+        "rougeLsum": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "mean": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        }
+      }
+    },
+    {
+      "dimension": "semantic_coverage",
+      "dataset": "multinews",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rouge2": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rougeLsum": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "mean": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        }
+      }
+    },
+    {
+      "dimension": "semantic_coverage",
+      "dataset": "both",
+      "n": 6,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 4,
+          "equal": 0,
+          "lower": 2
+        },
+        "rouge2": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 4
+        },
+        "rougeLsum": {
+          "higher": 4,
+          "equal": 0,
+          "lower": 2
+        },
+        "mean": {
+          "higher": 4,
+          "equal": 0,
+          "lower": 2
+        }
+      }
+    },
+    {
+      "dimension": "factual_completeness",
+      "dataset": "govreport",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 1,
+          "equal": 0,
+          "lower": 2
+        },
+        "rouge2": {
+          "higher": 1,
+          "equal": 0,
+          "lower": 2
+        },
+        "rougeLsum": {
+          "higher": 1,
+          "equal": 0,
+          "lower": 2
+        },
+        "mean": {
+          "higher": 1,
+          "equal": 0,
+          "lower": 2
+        }
+      }
+    },
+    {
+      "dimension": "factual_completeness",
+      "dataset": "multinews",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rouge2": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rougeLsum": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "mean": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        }
+      }
+    },
+    {
+      "dimension": "factual_completeness",
+      "dataset": "both",
+      "n": 6,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 3
+        },
+        "rouge2": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 3
+        },
+        "rougeLsum": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 3
+        },
+        "mean": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 3
+        }
+      }
+    },
+    {
+      "dimension": "redundancy",
+      "dataset": "govreport",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rouge2": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rougeLsum": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        }
+      }
+    },
+    {
+      "dimension": "redundancy",
+      "dataset": "multinews",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "rouge2": {
+          "higher": 3,
+          "equal": 0,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        },
+        "mean": {
+          "higher": 2,
+          "equal": 0,
+          "lower": 1
+        }
+      }
+    },
+    {
+      "dimension": "redundancy",
+      "dataset": "both",
+      "n": 6,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 4,
+          "equal": 0,
+          "lower": 2
+        },
+        "rouge2": {
+          "higher": 5,
+          "equal": 0,
+          "lower": 1
+        },
+        "rougeLsum": {
+          "higher": 5,
+          "equal": 0,
+          "lower": 1
+        },
+        "mean": {
+          "higher": 4,
+          "equal": 0,
+          "lower": 2
+        }
+      }
+    },
+    {
+      "dimension": "coherence",
+      "dataset": "govreport",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 1,
+          "equal": 2,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 1,
+          "equal": 2,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 1,
+          "equal": 2,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 1,
+          "equal": 2,
+          "lower": 0
+        }
+      }
+    },
+    {
+      "dimension": "coherence",
+      "dataset": "multinews",
+      "n": 3,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 0,
+          "equal": 3,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 0,
+          "equal": 3,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 0,
+          "equal": 3,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 0,
+          "equal": 3,
+          "lower": 0
+        }
+      }
+    },
+    {
+      "dimension": "coherence",
+      "dataset": "both",
+      "n": 6,
+      "original_vs_modified": {
+        "rouge1": {
+          "higher": 1,
+          "equal": 5,
+          "lower": 0
+        },
+        "rouge2": {
+          "higher": 1,
+          "equal": 5,
+          "lower": 0
+        },
+        "rougeLsum": {
+          "higher": 1,
+          "equal": 5,
+          "lower": 0
+        },
+        "mean": {
+          "higher": 1,
+          "equal": 5,
+          "lower": 0
+        }
+      }
+    }
+  ],
+  "records": [
+    {
+      "id": "govreport-C01",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.5208333333333334,
+        "rouge2": 0.1445603576751118,
+        "rougeLsum": 0.49702380952380953,
+        "mean": 0.38747250017741824
+      },
+      "modified": {
+        "rouge1": 0.5208333333333334,
+        "rouge2": 0.1445603576751118,
+        "rougeLsum": 0.49702380952380953,
+        "mean": 0.38747250017741824
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C02",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.5513439007580978,
+        "rouge2": 0.15596963423050378,
+        "rougeLsum": 0.512749827705031,
+        "mean": 0.40668778756454416
+      },
+      "modified": {
+        "rouge1": 0.5513439007580978,
+        "rouge2": 0.15596963423050378,
+        "rougeLsum": 0.512749827705031,
+        "mean": 0.40668778756454416
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C03",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.5183098591549296,
+        "rouge2": 0.16933207902163688,
+        "rougeLsum": 0.49014084507042266,
+        "mean": 0.3925942610823297
+      },
+      "modified": {
+        "rouge1": 0.5183098591549296,
+        "rouge2": 0.16933207902163688,
+        "rougeLsum": 0.49014084507042266,
+        "mean": 0.3925942610823297
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C04",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.562446898895497,
+        "rouge2": 0.17021276595744683,
+        "rougeLsum": 0.5352591333899746,
+        "mean": 0.4226395994143061
+      },
+      "modified": {
+        "rouge1": 0.562446898895497,
+        "rouge2": 0.17021276595744683,
+        "rougeLsum": 0.5352591333899746,
+        "mean": 0.4226395994143061
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C05",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.6,
+        "rouge2": 0.2355769230769231,
+        "rougeLsum": 0.5632,
+        "mean": 0.46625897435897434
+      },
+      "modified": {
+        "rouge1": 0.6,
+        "rouge2": 0.2355769230769231,
+        "rougeLsum": 0.5632,
+        "mean": 0.46625897435897434
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C06",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.6424710424710425,
+        "rouge2": 0.2567672080433101,
+        "rougeLsum": 0.5945945945945945,
+        "mean": 0.4979442817029824
+      },
+      "modified": {
+        "rouge1": 0.6424710424710425,
+        "rouge2": 0.2567672080433101,
+        "rougeLsum": 0.5945945945945945,
+        "mean": 0.4979442817029824
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C07",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.6109375,
+        "rouge2": 0.3302034428794992,
+        "rougeLsum": 0.5828125,
+        "mean": 0.5079844809598331
+      },
+      "modified": {
+        "rouge1": 0.6109375,
+        "rouge2": 0.3302034428794992,
+        "rougeLsum": 0.5828125,
+        "mean": 0.5079844809598331
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C08",
+      "dataset": "govreport",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.6496350364963503,
+        "rouge2": 0.2631578947368421,
+        "rougeLsum": 0.6145985401459854,
+        "mean": 0.5091304904597259
+      },
+      "modified": {
+        "rouge1": 0.6496350364963503,
+        "rouge2": 0.2631578947368421,
+        "rougeLsum": 0.6145985401459854,
+        "mean": 0.5091304904597259
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C09",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.602952602952603,
+        "rouge2": 0.22101167315175096,
+        "rougeLsum": 0.5672105672105672,
+        "mean": 0.46372494777164036
+      },
+      "modified": {
+        "rouge1": 0.5648414985590778,
+        "rouge2": 0.22329162656400386,
+        "rougeLsum": 0.5283381364073008,
+        "mean": 0.43882375384346084
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.038111104393525164,
+        "rouge2": -0.0022799534122528997,
+        "rougeLsum": 0.03887243080326641,
+        "mean": 0.02490119392817952
+      }
+    },
+    {
+      "id": "govreport-C10",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.5839080459770115,
+        "rouge2": 0.17498081350729086,
+        "rougeLsum": 0.563984674329502,
+        "mean": 0.4409578446046014
+      },
+      "modified": {
+        "rouge1": 0.5857033051498847,
+        "rouge2": 0.17551963048498845,
+        "rougeLsum": 0.5657186779400462,
+        "mean": 0.4423138711916398
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.0017952591728731537,
+        "rouge2": -0.0005388169776975871,
+        "rougeLsum": -0.0017340036105442103,
+        "mean": -0.0013560265870383725
+      }
+    },
+    {
+      "id": "govreport-C11",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.601317957166392,
+        "rouge2": 0.2623762376237624,
+        "rougeLsum": 0.584843492586491,
+        "mean": 0.48284589579221515
+      },
+      "modified": {
+        "rouge1": 0.5954692556634303,
+        "rouge2": 0.2576985413290114,
+        "rougeLsum": 0.5776699029126214,
+        "mean": 0.4769458999683544
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.005848701502961684,
+        "rouge2": 0.00467769629475101,
+        "rougeLsum": 0.007173589673869607,
+        "mean": 0.005899995823860749
+      }
+    },
+    {
+      "id": "govreport-C12",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.5503009458297506,
+        "rouge2": 0.26356589147286824,
+        "rougeLsum": 0.5296646603611349,
+        "mean": 0.4478438325545846
+      },
+      "modified": {
+        "rouge1": 0.5503009458297506,
+        "rouge2": 0.26356589147286824,
+        "rougeLsum": 0.5296646603611349,
+        "mean": 0.4478438325545846
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "govreport-C13",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.6173010380622838,
+        "rouge2": 0.2716562716562716,
+        "rougeLsum": 0.57439446366782,
+        "mean": 0.4877839244621251
+      },
+      "modified": {
+        "rouge1": 0.5734265734265734,
+        "rouge2": 0.2723735408560311,
+        "rougeLsum": 0.5361305361305362,
+        "mean": 0.4606435501377136
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.04387446463571032,
+        "rouge2": -0.0007172691997595071,
+        "rougeLsum": 0.038263927537283804,
+        "mean": 0.02714037432441152
+      }
+    },
+    {
+      "id": "govreport-C14",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.4017278617710583,
+        "rouge2": 0.19480519480519481,
+        "rougeLsum": 0.3520518358531317,
+        "mean": 0.31619496414312825
+      },
+      "modified": {
+        "rouge1": 0.41059602649006616,
+        "rouge2": 0.19911504424778764,
+        "rougeLsum": 0.3598233995584989,
+        "mean": 0.3231781567654509
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.008868164719007865,
+        "rouge2": -0.004309849442592828,
+        "rougeLsum": -0.00777156370536719,
+        "mean": -0.006983192622322665
+      }
+    },
+    {
+      "id": "govreport-C15",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.622746185852982,
+        "rouge2": 0.2208333333333333,
+        "rougeLsum": 0.6019417475728156,
+        "mean": 0.48184042225304363
+      },
+      "modified": {
+        "rouge1": 0.6205059920106524,
+        "rouge2": 0.21733333333333332,
+        "rougeLsum": 0.5992010652463382,
+        "mean": 0.479013463530108
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.002240193842329652,
+        "rouge2": 0.0034999999999999754,
+        "rougeLsum": 0.002740682326477395,
+        "mean": 0.0028269587229356463
+      }
+    },
+    {
+      "id": "govreport-C16",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.6092404072043853,
+        "rouge2": 0.2525490196078431,
+        "rougeLsum": 0.5669537979639782,
+        "mean": 0.47624774159206884
+      },
+      "modified": {
+        "rouge1": 0.6057233704292526,
+        "rouge2": 0.25,
+        "rougeLsum": 0.5612082670906201,
+        "mean": 0.4723105458399576
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.003517036775132709,
+        "rouge2": 0.002549019607843095,
+        "rougeLsum": 0.005745530873358051,
+        "mean": 0.003937195752111267
+      }
+    },
+    {
+      "id": "govreport-C17",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.576068376068376,
+        "rouge2": 0.3458904109589041,
+        "rougeLsum": 0.558974358974359,
+        "mean": 0.4936443820005464
+      },
+      "modified": {
+        "rouge1": 0.5983680870353582,
+        "rouge2": 0.3596730245231608,
+        "rougeLsum": 0.5802357207615594,
+        "mean": 0.5127589441066928
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.022299710966982134,
+        "rouge2": -0.013782613564256696,
+        "rougeLsum": -0.021261361787200395,
+        "mean": -0.01911456210614637
+      }
+    },
+    {
+      "id": "govreport-C18",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.6489104116222759,
+        "rouge2": 0.26354082457558614,
+        "rougeLsum": 0.5875706214689267,
+        "mean": 0.5000072858889296
+      },
+      "modified": {
+        "rouge1": 0.6403292181069958,
+        "rouge2": 0.2572135201978566,
+        "rougeLsum": 0.5761316872427984,
+        "mean": 0.4912248085158836
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.008581193515280083,
+        "rouge2": 0.006327304377729548,
+        "rougeLsum": 0.011438934226128294,
+        "mean": 0.008782477373045994
+      }
+    },
+    {
+      "id": "govreport-C19",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.6279411764705882,
+        "rouge2": 0.26509572901325484,
+        "rougeLsum": 0.5985294117647059,
+        "mean": 0.497188772416183
+      },
+      "modified": {
+        "rouge1": 0.6300784034212402,
+        "rouge2": 0.26552462526766596,
+        "rougeLsum": 0.5972915181753387,
+        "mean": 0.49763151562141494
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.0021372269506519936,
+        "rouge2": -0.00042889625441111523,
+        "rougeLsum": 0.0012378935893672116,
+        "mean": -0.00044274320523196575
+      }
+    },
+    {
+      "id": "govreport-C20",
+      "dataset": "govreport",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.6203365032918802,
+        "rouge2": 0.25641025641025644,
+        "rougeLsum": 0.5852231163130944,
+        "mean": 0.487323292005077
+      },
+      "modified": {
+        "rouge1": 0.6203365032918802,
+        "rouge2": 0.25641025641025644,
+        "rougeLsum": 0.5852231163130944,
+        "mean": 0.487323292005077
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C01",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.43144424131627057,
+        "rouge2": 0.10642201834862385,
+        "rougeLsum": 0.3912248628884826,
+        "mean": 0.3096970408511257
+      },
+      "modified": {
+        "rouge1": 0.43144424131627057,
+        "rouge2": 0.10642201834862385,
+        "rougeLsum": 0.3912248628884826,
+        "mean": 0.3096970408511257
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C02",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.5636363636363636,
+        "rouge2": 0.24817518248175185,
+        "rougeLsum": 0.5272727272727272,
+        "mean": 0.4463614244636142
+      },
+      "modified": {
+        "rouge1": 0.5636363636363636,
+        "rouge2": 0.24817518248175185,
+        "rougeLsum": 0.5272727272727272,
+        "mean": 0.4463614244636142
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C03",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.38576779026217234,
+        "rouge2": 0.05639097744360901,
+        "rougeLsum": 0.35580524344569286,
+        "mean": 0.2659880037171581
+      },
+      "modified": {
+        "rouge1": 0.38576779026217234,
+        "rouge2": 0.05639097744360901,
+        "rougeLsum": 0.35580524344569286,
+        "mean": 0.2659880037171581
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C04",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.39804241435562804,
+        "rouge2": 0.14729950900163666,
+        "rougeLsum": 0.3621533442088091,
+        "mean": 0.30249842252202463
+      },
+      "modified": {
+        "rouge1": 0.39804241435562804,
+        "rouge2": 0.14729950900163666,
+        "rougeLsum": 0.3621533442088091,
+        "mean": 0.30249842252202463
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C05",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.4815618221258135,
+        "rouge2": 0.13507625272331153,
+        "rougeLsum": 0.4251626898047722,
+        "mean": 0.34726692155129907
+      },
+      "modified": {
+        "rouge1": 0.4815618221258135,
+        "rouge2": 0.13507625272331153,
+        "rougeLsum": 0.4251626898047722,
+        "mean": 0.34726692155129907
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C06",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.43440860215053767,
+        "rouge2": 0.0734341252699784,
+        "rougeLsum": 0.4043010752688172,
+        "mean": 0.30404793422977777
+      },
+      "modified": {
+        "rouge1": 0.43440860215053767,
+        "rouge2": 0.0734341252699784,
+        "rougeLsum": 0.4043010752688172,
+        "mean": 0.30404793422977777
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C07",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.3378016085790885,
+        "rouge2": 0.11859838274932616,
+        "rougeLsum": 0.32171581769436997,
+        "mean": 0.2593719363409282
+      },
+      "modified": {
+        "rouge1": 0.3378016085790885,
+        "rouge2": 0.11859838274932616,
+        "rougeLsum": 0.32171581769436997,
+        "mean": 0.2593719363409282
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C08",
+      "dataset": "multinews",
+      "kind": "identity",
+      "dimension": "all_four",
+      "original": {
+        "rouge1": 0.3411978221415608,
+        "rouge2": 0.03642987249544626,
+        "rougeLsum": 0.279491833030853,
+        "mean": 0.21903984255595335
+      },
+      "modified": {
+        "rouge1": 0.3411978221415608,
+        "rouge2": 0.03642987249544626,
+        "rougeLsum": 0.279491833030853,
+        "mean": 0.21903984255595335
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C09",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.3076923076923077,
+        "rouge2": 0.06933333333333333,
+        "rougeLsum": 0.2440318302387268,
+        "mean": 0.2070191570881226
+      },
+      "modified": {
+        "rouge1": 0.319327731092437,
+        "rouge2": 0.07323943661971831,
+        "rougeLsum": 0.25770308123249297,
+        "mean": 0.2167567496482161
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.011635423400129297,
+        "rouge2": -0.0039061032863849793,
+        "rougeLsum": -0.013671250993766176,
+        "mean": -0.009737592560093489
+      }
+    },
+    {
+      "id": "multinews-C10",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.2920110192837465,
+        "rouge2": 0.11634349030470914,
+        "rougeLsum": 0.27548209366391185,
+        "mean": 0.22794553441745583
+      },
+      "modified": {
+        "rouge1": 0.2988505747126437,
+        "rouge2": 0.12138728323699421,
+        "rougeLsum": 0.2816091954022989,
+        "mean": 0.23394901778397895
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.006839555428897193,
+        "rouge2": -0.005043792932285074,
+        "rougeLsum": -0.006127101738387042,
+        "mean": -0.006003483366523121
+      }
+    },
+    {
+      "id": "multinews-C11",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.485981308411215,
+        "rouge2": 0.15384615384615383,
+        "rougeLsum": 0.44112149532710276,
+        "mean": 0.3603163191948239
+      },
+      "modified": {
+        "rouge1": 0.48101265822784806,
+        "rouge2": 0.14882032667876585,
+        "rougeLsum": 0.43761301989150087,
+        "mean": 0.3558153349327049
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.004968650183366952,
+        "rouge2": 0.005025827167387975,
+        "rougeLsum": 0.003508475435601899,
+        "mean": 0.004500984262118979
+      }
+    },
+    {
+      "id": "multinews-C12",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.43636363636363634,
+        "rouge2": 0.11359026369168358,
+        "rougeLsum": 0.37979797979797975,
+        "mean": 0.30991729328443324
+      },
+      "modified": {
+        "rouge1": 0.43636363636363634,
+        "rouge2": 0.11359026369168358,
+        "rougeLsum": 0.37979797979797975,
+        "mean": 0.30991729328443324
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C13",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.4835164835164835,
+        "rouge2": 0.1580882352941176,
+        "rougeLsum": 0.46153846153846156,
+        "mean": 0.3677143934496876
+      },
+      "modified": {
+        "rouge1": 0.43673469387755104,
+        "rouge2": 0.12295081967213113,
+        "rougeLsum": 0.4163265306122449,
+        "mean": 0.3253373480539757
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.04678178963893248,
+        "rouge2": 0.03513741562198648,
+        "rougeLsum": 0.04521193092621667,
+        "mean": 0.04237704539571191
+      }
+    },
+    {
+      "id": "multinews-C14",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.3972602739726027,
+        "rouge2": 0.09655172413793105,
+        "rougeLsum": 0.32876712328767127,
+        "mean": 0.27419304046606835
+      },
+      "modified": {
+        "rouge1": 0.397212543554007,
+        "rouge2": 0.09122807017543859,
+        "rougeLsum": 0.32055749128919864,
+        "mean": 0.2696660350062147
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 4.7730418595737234e-05,
+        "rouge2": 0.005323653962492458,
+        "rougeLsum": 0.008209631998472633,
+        "mean": 0.004527005459853628
+      }
+    },
+    {
+      "id": "multinews-C15",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.4964028776978417,
+        "rouge2": 0.12996389891696752,
+        "rougeLsum": 0.43525179856115104,
+        "mean": 0.35387285839198673
+      },
+      "modified": {
+        "rouge1": 0.48932676518883417,
+        "rouge2": 0.128500823723229,
+        "rougeLsum": 0.4236453201970444,
+        "mean": 0.34715763636970254
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.007076112509007526,
+        "rouge2": 0.0014630751937385333,
+        "rougeLsum": 0.011606478364106665,
+        "mean": 0.006715222022284195
+      }
+    },
+    {
+      "id": "multinews-C16",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.4604966139954853,
+        "rouge2": 0.14512471655328799,
+        "rougeLsum": 0.3972911963882619,
+        "mean": 0.3343041756456784
+      },
+      "modified": {
+        "rouge1": 0.4604966139954853,
+        "rouge2": 0.14512471655328799,
+        "rougeLsum": 0.3972911963882619,
+        "mean": 0.3343041756456784
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    },
+    {
+      "id": "multinews-C17",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "semantic_coverage",
+      "original": {
+        "rouge1": 0.36363636363636365,
+        "rouge2": 0.09139784946236558,
+        "rougeLsum": 0.304812834224599,
+        "mean": 0.2532823491077761
+      },
+      "modified": {
+        "rouge1": 0.3612903225806452,
+        "rouge2": 0.07792207792207792,
+        "rougeLsum": 0.29677419354838713,
+        "mean": 0.2453288646837034
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.002346041055718451,
+        "rouge2": 0.01347577154028766,
+        "rougeLsum": 0.00803864067621185,
+        "mean": 0.007953484424072677
+      }
+    },
+    {
+      "id": "multinews-C18",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "factual_completeness",
+      "original": {
+        "rouge1": 0.4309133489461358,
+        "rouge2": 0.1223529411764706,
+        "rougeLsum": 0.40749414519906324,
+        "mean": 0.32025347844055657
+      },
+      "modified": {
+        "rouge1": 0.4265402843601896,
+        "rouge2": 0.11904761904761904,
+        "rougeLsum": 0.4028436018957346,
+        "mean": 0.31614383510118105
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.004373064585946218,
+        "rouge2": 0.003305322128851554,
+        "rougeLsum": 0.004650543303328647,
+        "mean": 0.004109643339375524
+      }
+    },
+    {
+      "id": "multinews-C19",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "redundancy",
+      "original": {
+        "rouge1": 0.4476987447698745,
+        "rouge2": 0.08403361344537816,
+        "rougeLsum": 0.401673640167364,
+        "mean": 0.3111353327942056
+      },
+      "modified": {
+        "rouge1": 0.45109780439121755,
+        "rouge2": 0.08016032064128256,
+        "rougeLsum": 0.40319361277445104,
+        "mean": 0.31148391260231706
+      },
+      "delta_original_minus_modified": {
+        "rouge1": -0.00339905962134307,
+        "rouge2": 0.003873292804095596,
+        "rougeLsum": -0.0015199726070870279,
+        "mean": -0.00034857980811148215
+      }
+    },
+    {
+      "id": "multinews-C20",
+      "dataset": "multinews",
+      "kind": "corruption",
+      "dimension": "coherence",
+      "original": {
+        "rouge1": 0.45161290322580655,
+        "rouge2": 0.23783783783783785,
+        "rougeLsum": 0.4301075268817205,
+        "mean": 0.37318608931512165
+      },
+      "modified": {
+        "rouge1": 0.45161290322580655,
+        "rouge2": 0.23783783783783785,
+        "rougeLsum": 0.4301075268817205,
+        "mean": 0.37318608931512165
+      },
+      "delta_original_minus_modified": {
+        "rouge1": 0.0,
+        "rouge2": 0.0,
+        "rougeLsum": 0.0,
+        "mean": 0.0
+      }
+    }
+  ]
+}

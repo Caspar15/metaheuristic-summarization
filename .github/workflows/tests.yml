@@ -49,3 +49,7 @@ jobs:
           python -m scripts.audit.verify_submission_snapshot
           python -m scripts.audit.verify_govreport_freeze_package
           python -m scripts.audit.verify_provenance --root runs_v2
+
+      - name: Verify revision evidence checksums
+        working-directory: submission/revisions/v1.1.0
+        run: sha256sum -c SHA256SUMS.txt
