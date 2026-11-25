@@ -1,0 +1,660 @@
+{
+  "scope": "Primary preference endpoints, descriptive; recorded start deviations apply.",
+  "completed_at_utc": "2026-11-22T07:50:58.487034+00:00",
+  "estimator_sha256": "32af979941811ca6180ed6a8ed28bf3d775468762c2a1fca7b4e5ae2d3463997",
+  "judges": {
+    "J2": {
+      "completed": 920,
+      "valid": 832,
+      "attempts": 1138,
+      "dispatches": 1138,
+      "subscription_checked": 1138
+    },
+    "J1": {
+      "completed": 920,
+      "valid": 810,
+      "attempts": 1318,
+      "dispatches": 1318,
+      "subscription_checked": 1318
+    }
+  },
+  "phases": {
+    "stability": {
+      "completed": 160,
+      "valid": 149,
+      "attempts": 199,
+      "dispatches": 199,
+      "subscription_checked": 199
+    },
+    "primary": {
+      "completed": 1600,
+      "valid": 1420,
+      "attempts": 2158,
+      "dispatches": 2158,
+      "subscription_checked": 2158
+    },
+    "source-position": {
+      "completed": 80,
+      "valid": 73,
+      "attempts": 99,
+      "dispatches": 99,
+      "subscription_checked": 99
+    }
+  },
+  "datasets": {
+    "govreport": {
+      "resampling_unit": "within-stratum document",
+      "groups": 100,
+      "replicates": 100000,
+      "seed": 20261110,
+      "empty_stratum_redraws": 0,
+      "empty_stratum_fraction": 0.0,
+      "resampling_warning": false,
+      "endpoints": [
+        {
+          "estimate": 0.4369541472573333,
+          "difference_from_half": -0.06304585274266672,
+          "missing_documents": 21,
+          "denominator": 100,
+          "missing_bounds": [
+            0.3475539568345324,
+            0.557502569373073
+          ],
+          "pointwise_95": [
+            0.3773166280491922,
+            0.49602387951196114
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.2900616649537513,
+            0.405087358684481
+          ],
+          "missing_as_one_95": [
+            0.4924974306269271,
+            0.6224460431654676
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "semantic_coverage",
+          "paired_order": {
+            "paired": 79,
+            "missing": 21,
+            "true_reversals": 50,
+            "tie_transitions": 5,
+            "double_ties": 1
+          },
+          "document_wins": 9,
+          "document_even": 51,
+          "document_losses": 19,
+          "control_failed": true
+        },
+        {
+          "estimate": 0.48656751778540064,
+          "difference_from_half": -0.013432482214599362,
+          "missing_documents": 21,
+          "denominator": 100,
+          "missing_bounds": [
+            0.38506680369989726,
+            0.5950154162384379
+          ],
+          "pointwise_95": [
+            0.4351168631421394,
+            0.5378865597497992
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.32998972250770814,
+            0.4401644398766701
+          ],
+          "missing_as_one_95": [
+            0.5374717368961973,
+            0.6525282631038027
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "factual_completeness",
+          "paired_order": {
+            "paired": 79,
+            "missing": 21,
+            "true_reversals": 55,
+            "tie_transitions": 8,
+            "double_ties": 0
+          },
+          "document_wins": 11,
+          "document_even": 55,
+          "document_losses": 13,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.6542609967039679,
+          "difference_from_half": 0.15426099670396787,
+          "missing_documents": 19,
+          "denominator": 100,
+          "missing_bounds": [
+            0.5325179856115108,
+            0.7224871531346352
+          ],
+          "pointwise_95": [
+            0.5980908641007278,
+            0.7106232435010909
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.46747173689619737,
+            0.5975334018499486
+          ],
+          "missing_as_one_95": [
+            0.67,
+            0.7749126413155192
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "redundancy",
+          "paired_order": {
+            "paired": 81,
+            "missing": 19,
+            "true_reversals": 48,
+            "tie_transitions": 3,
+            "double_ties": 1
+          },
+          "document_wins": 29,
+          "document_even": 49,
+          "document_losses": 3,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.6586364448813621,
+          "difference_from_half": 0.15863644488136208,
+          "missing_documents": 19,
+          "denominator": 100,
+          "missing_bounds": [
+            0.5350668036998972,
+            0.7250359712230215
+          ],
+          "pointwise_95": [
+            0.5785483360105496,
+            0.737293301117757
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.4550462487153135,
+            0.615087358684481
+          ],
+          "missing_as_one_95": [
+            0.6550256937307297,
+            0.7949845837615622
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "coherence",
+          "paired_order": {
+            "paired": 81,
+            "missing": 19,
+            "true_reversals": 29,
+            "tie_transitions": 0,
+            "double_ties": 0
+          },
+          "document_wins": 39,
+          "document_even": 29,
+          "document_losses": 13,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.5488038140915839,
+          "difference_from_half": 0.04880381409158385,
+          "missing_documents": 26,
+          "denominator": 100,
+          "missing_bounds": [
+            0.4026310380267215,
+            0.6626515930113053
+          ],
+          "pointwise_95": [
+            0.4473580200168946,
+            0.6500555365686943
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.31510791366906477,
+            0.4926618705035971
+          ],
+          "missing_as_one_95": [
+            0.5776361767728674,
+            0.7451387461459403
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "semantic_coverage",
+          "paired_order": {
+            "paired": 74,
+            "missing": 26,
+            "true_reversals": 8,
+            "tie_transitions": 3,
+            "double_ties": 0
+          },
+          "document_wins": 36,
+          "document_even": 8,
+          "document_losses": 30,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.6834732214228616,
+          "difference_from_half": 0.1834732214228616,
+          "missing_documents": 26,
+          "denominator": 100,
+          "missing_bounds": [
+            0.502589928057554,
+            0.7626104830421377
+          ],
+          "pointwise_95": [
+            0.5909368323010764,
+            0.7723583485520927
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.41262076053442964,
+            0.5926002055498458
+          ],
+          "missing_as_one_95": [
+            0.6876670092497431,
+            0.8326207605344296
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "factual_completeness",
+          "paired_order": {
+            "paired": 74,
+            "missing": 26,
+            "true_reversals": 13,
+            "tie_transitions": 1,
+            "double_ties": 0
+          },
+          "document_wins": 44,
+          "document_even": 13,
+          "document_losses": 17,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.7319302418837699,
+          "difference_from_half": 0.23193024188376987,
+          "missing_documents": 11,
+          "denominator": 100,
+          "missing_bounds": [
+            0.6499691675231244,
+            0.7599383350462487
+          ],
+          "pointwise_95": [
+            0.6566969164585247,
+            0.8036177873362357
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.5699280575539568,
+            0.7276261562178827
+          ],
+          "missing_as_one_95": [
+            0.6900000000000001,
+            0.8249948612538541
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "redundancy",
+          "paired_order": {
+            "paired": 89,
+            "missing": 11,
+            "true_reversals": 2,
+            "tie_transitions": 12,
+            "double_ties": 13
+          },
+          "document_wins": 58,
+          "document_even": 15,
+          "document_losses": 16,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.6832566535301242,
+          "difference_from_half": 0.18325665353012421,
+          "missing_documents": 11,
+          "denominator": 100,
+          "missing_bounds": [
+            0.6074922918807811,
+            0.7174614594039055
+          ],
+          "pointwise_95": [
+            0.600608467912288,
+            0.7632682074050112
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.5247877697841726,
+            0.6900205549845837
+          ],
+          "missing_as_one_95": [
+            0.6401127954779035,
+            0.79
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "coherence",
+          "paired_order": {
+            "paired": 89,
+            "missing": 11,
+            "true_reversals": 11,
+            "tie_transitions": 15,
+            "double_ties": 0
+          },
+          "document_wins": 57,
+          "document_even": 11,
+          "document_losses": 21,
+          "control_failed": false
+        }
+      ]
+    },
+    "multinews": {
+      "resampling_unit": "source cluster",
+      "groups": 98,
+      "replicates": 100000,
+      "seed": 20261110,
+      "empty_stratum_redraws": 0,
+      "empty_stratum_fraction": 0.0,
+      "resampling_warning": false,
+      "endpoints": [
+        {
+          "estimate": 0.48814399811775727,
+          "difference_from_half": -0.011856001882242728,
+          "missing_documents": 16,
+          "denominator": 100,
+          "missing_bounds": [
+            0.41001067425724963,
+            0.5700035580857499
+          ],
+          "pointwise_95": [
+            0.40573742320707934,
+            0.5709464701121908
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.33556390767227895,
+            0.48511698089364425
+          ],
+          "missing_as_one_95": [
+            0.48951152790901237,
+            0.6491890497458412
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "semantic_coverage",
+          "paired_order": {
+            "paired": 84,
+            "missing": 16,
+            "true_reversals": 27,
+            "tie_transitions": 8,
+            "double_ties": 3
+          },
+          "document_wins": 26,
+          "document_even": 30,
+          "document_losses": 28,
+          "control_failed": true
+        },
+        {
+          "estimate": 0.44982901742152764,
+          "difference_from_half": -0.050170982578472356,
+          "missing_documents": 16,
+          "denominator": 100,
+          "missing_bounds": [
+            0.3775075609322185,
+            0.5375004447607188
+          ],
+          "pointwise_95": [
+            0.366561632674302,
+            0.5336413043046504
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.3017845519097799,
+            0.4544175352203704
+          ],
+          "missing_as_one_95": [
+            0.4569521042123782,
+            0.6171153113813449
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "factual_completeness",
+          "paired_order": {
+            "paired": 84,
+            "missing": 16,
+            "true_reversals": 26,
+            "tie_transitions": 5,
+            "double_ties": 2
+          },
+          "document_wins": 23,
+          "document_even": 28,
+          "document_losses": 33,
+          "control_failed": true
+        },
+        {
+          "estimate": 0.36042239332428694,
+          "difference_from_half": -0.13957760667571306,
+          "missing_documents": 29,
+          "denominator": 100,
+          "missing_bounds": [
+            0.2575182351894681,
+            0.5475022238035937
+          ],
+          "pointwise_95": [
+            0.2984528145287105,
+            0.4237967302075504
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.20328309254040672,
+            0.3135252734463841
+          ],
+          "missing_as_one_95": [
+            0.47483564759727814,
+            0.6217475004285127
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "redundancy",
+          "paired_order": {
+            "paired": 71,
+            "missing": 29,
+            "true_reversals": 37,
+            "tie_transitions": 3,
+            "double_ties": 2
+          },
+          "document_wins": 6,
+          "document_even": 39,
+          "document_losses": 26,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.17405536311660405,
+          "difference_from_half": -0.3259446368833959,
+          "missing_documents": 29,
+          "denominator": 100,
+          "missing_bounds": [
+            0.13003024372887384,
+            0.4200142323429995
+          ],
+          "pointwise_95": [
+            0.10348023205594147,
+            0.25049100171409366
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.07606083099706153,
+            0.1881359141445113
+          ],
+          "missing_as_one_95": [
+            0.32899603021898927,
+            0.5127952097310621
+          ],
+          "missingness_warning": true,
+          "judge": "J1",
+          "dimension": "coherence",
+          "paired_order": {
+            "paired": 71,
+            "missing": 29,
+            "true_reversals": 8,
+            "tie_transitions": 0,
+            "double_ties": 2
+          },
+          "document_wins": 8,
+          "document_even": 10,
+          "document_losses": 53,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.5568223059630282,
+          "difference_from_half": 0.056822305963028175,
+          "missing_documents": 3,
+          "denominator": 100,
+          "missing_bounds": [
+            0.5350080056929372,
+            0.5650026685643124
+          ],
+          "pointwise_95": [
+            0.4668989057281843,
+            0.6461951306952965
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.44449398335541535,
+            0.6248329633439819
+          ],
+          "missing_as_one_95": [
+            0.4776400335962596,
+            0.6522270480479803
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "semantic_coverage",
+          "paired_order": {
+            "paired": 97,
+            "missing": 3,
+            "true_reversals": 10,
+            "tie_transitions": 0,
+            "double_ties": 3
+          },
+          "document_wins": 47,
+          "document_even": 13,
+          "document_losses": 37,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.296598631754298,
+          "difference_from_half": -0.20340136824570199,
+          "missing_documents": 3,
+          "denominator": 100,
+          "missing_bounds": [
+            0.2850097847358122,
+            0.3150044476071874
+          ],
+          "pointwise_95": [
+            0.21103476798804588,
+            0.38513518273326697
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.20235136191720643,
+            0.3709292395298007
+          ],
+          "missing_as_one_95": [
+            0.2304831025868226,
+            0.40197435813262616
+          ],
+          "missingness_warning": true,
+          "judge": "J2",
+          "dimension": "factual_completeness",
+          "paired_order": {
+            "paired": 97,
+            "missing": 3,
+            "true_reversals": 7,
+            "tie_transitions": 0,
+            "double_ties": 2
+          },
+          "document_wins": 24,
+          "document_even": 9,
+          "document_losses": 64,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.5216770444167704,
+          "difference_from_half": 0.02167704441677043,
+          "missing_documents": 1,
+          "denominator": 100,
+          "missing_bounds": [
+            0.5175111190179683,
+            0.5275093399750934
+          ],
+          "pointwise_95": [
+            0.45104358802932,
+            0.5932521602724341
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.44712541545670104,
+            0.5886902139489797
+          ],
+          "missing_as_one_95": [
+            0.45689543670318894,
+            0.5989764289173536
+          ],
+          "missingness_warning": false,
+          "judge": "J2",
+          "dimension": "redundancy",
+          "paired_order": {
+            "paired": 99,
+            "missing": 1,
+            "true_reversals": 4,
+            "tie_transitions": 13,
+            "double_ties": 32
+          },
+          "document_wins": 32,
+          "document_even": 36,
+          "document_losses": 31,
+          "control_failed": false
+        },
+        {
+          "estimate": 0.06262505188875052,
+          "difference_from_half": -0.4373749481112495,
+          "missing_documents": 1,
+          "denominator": 100,
+          "missing_bounds": [
+            0.06252090375378047,
+            0.07251912471090555
+          ],
+          "pointwise_95": [
+            0.02737888924994392,
+            0.10399974703786492
+          ],
+          "complete_case_undefined_draws": 0,
+          "missing_as_zero_95": [
+            0.027324112418373896,
+            0.10386046693493457
+          ],
+          "missing_as_one_95": [
+            0.032995309009863805,
+            0.11849576326537722
+          ],
+          "missingness_warning": false,
+          "judge": "J2",
+          "dimension": "coherence",
+          "paired_order": {
+            "paired": 99,
+            "missing": 1,
+            "true_reversals": 4,
+            "tie_transitions": 1,
+            "double_ties": 2
+          },
+          "document_wins": 3,
+          "document_even": 6,
+          "document_losses": 90,
+          "control_failed": false
+        }
+      ]
+    }
+  }
+}

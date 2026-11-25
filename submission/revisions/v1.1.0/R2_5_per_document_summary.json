@@ -1,0 +1,148 @@
+{
+  "definition": {
+    "difference": "PAMR-ES minus comparator, per-document Mean ROUGE from official Perl ROUGE-1.5.5 F1 components",
+    "tie": "identical sum of the three components at the stored five-decimal precision",
+    "length_groups": "quartiles of source length in whitespace-delimited words over the dataset's test documents; boundaries assigned by rank",
+    "status": "retrospective descriptive analysis requested by Reviewer 2; no significance tests"
+  },
+  "comparisons": [
+    {
+      "dataset": "GovReport",
+      "comparator": "SBERT+MMR (lambda=0.9)",
+      "overall": {
+        "N": 973,
+        "wins": 510,
+        "ties": 1,
+        "losses": 462,
+        "win_share": 0.5241521068859198,
+        "mean_difference": 0.003700339157245632,
+        "median_difference": 0.00147
+      },
+      "abs_gap_to_reported_mean_difference": 1.3010426069826053e-18,
+      "by_source_length_quartile": [
+        {
+          "quartile": 1,
+          "N": 243,
+          "wins": 122,
+          "ties": 1,
+          "losses": 120,
+          "win_share": 0.5020576131687243,
+          "mean_difference": 0.000983758573388203,
+          "median_difference": 0.00020333333333333333,
+          "source_words_min": 396,
+          "source_words_max": 4280
+        },
+        {
+          "quartile": 2,
+          "N": 243,
+          "wins": 131,
+          "ties": 0,
+          "losses": 112,
+          "win_share": 0.5390946502057613,
+          "mean_difference": 0.00431360768175583,
+          "median_difference": 0.002523333333333333,
+          "source_words_min": 4299,
+          "source_words_max": 6485
+        },
+        {
+          "quartile": 3,
+          "N": 243,
+          "wins": 130,
+          "ties": 0,
+          "losses": 113,
+          "win_share": 0.5349794238683128,
+          "mean_difference": 0.005180864197530864,
+          "median_difference": 0.0022433333333333333,
+          "source_words_min": 6488,
+          "source_words_max": 9470
+        },
+        {
+          "quartile": 4,
+          "N": 244,
+          "wins": 127,
+          "ties": 0,
+          "losses": 117,
+          "win_share": 0.5204918032786885,
+          "mean_difference": 0.004320573770491803,
+          "median_difference": 0.0027416666666666666,
+          "source_words_min": 9476,
+          "source_words_max": 31371
+        }
+      ],
+      "inputs_sha256": {
+        "proposed": "52b2e0a1b0689496c31b8d29600b7e29db4fc674c380ba5f3f25bc05c5036d32",
+        "comparator": "043d4b274da0202236b80b2b89d59842f732738e46a6167f7ddc10d59a908598",
+        "source": "3ff10e66ec902b20f0aee0ca1a36a66a2827d24d353473f54c9f7a8df7026dfc"
+      }
+    },
+    {
+      "dataset": "Multi-News",
+      "comparator": "PacSum-TFIDF",
+      "overall": {
+        "N": 5621,
+        "wins": 2802,
+        "ties": 158,
+        "losses": 2661,
+        "win_share": 0.4984878135563067,
+        "mean_difference": 9.084919646563479e-05,
+        "median_difference": 0.0
+      },
+      "abs_gap_to_reported_mean_difference": 1.9646563478999905e-10,
+      "by_source_length_quartile": [
+        {
+          "quartile": 1,
+          "N": 1405,
+          "wins": 633,
+          "ties": 156,
+          "losses": 616,
+          "win_share": 0.4505338078291815,
+          "mean_difference": 0.001311520759193357,
+          "median_difference": 0.0,
+          "source_words_min": 33,
+          "source_words_max": 797
+        },
+        {
+          "quartile": 2,
+          "N": 1405,
+          "wins": 709,
+          "ties": 2,
+          "losses": 694,
+          "win_share": 0.504626334519573,
+          "mean_difference": -0.0019049181494661923,
+          "median_difference": 0.00048666666666666666,
+          "source_words_min": 797,
+          "source_words_max": 1288
+        },
+        {
+          "quartile": 3,
+          "N": 1405,
+          "wins": 689,
+          "ties": 0,
+          "losses": 716,
+          "win_share": 0.4903914590747331,
+          "mean_difference": -0.0030946334519572957,
+          "median_difference": -0.0013566666666666666,
+          "source_words_min": 1288,
+          "source_words_max": 2055
+        },
+        {
+          "quartile": 4,
+          "N": 1406,
+          "wins": 771,
+          "ties": 0,
+          "losses": 635,
+          "win_share": 0.5483641536273115,
+          "mean_difference": 0.0040486107159791365,
+          "median_difference": 0.0065383333333333335,
+          "source_words_min": 2056,
+          "source_words_max": 145137
+        }
+      ],
+      "inputs_sha256": {
+        "proposed": "18fc3f900ada294fe7dad425a1e68badbb536fb44c0a23b8ec45707aced4f1f4",
+        "comparator": "b3accda3c733d4531dfd97c0f2668d5c32dbb1b8869344460948daf9facc3975",
+        "source": "b1efdf91c71438d5ce4513e490e5e9a0e8737cbc7eba79e727cfe0793824e2ac"
+      }
+    }
+  ]
+}

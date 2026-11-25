@@ -1,0 +1,192 @@
+{
+  "scope": "Retrospective description of archived outputs. No new predictions or tests.",
+  "govreport": {
+    "target": 500,
+    "ceiling": 650,
+    "systems": {
+      "Proposed": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": true,
+        "source_adjustments": 1,
+        "below_applied_floor": 0
+      },
+      "Lead": {
+        "observations": 973,
+        "below_target": 2,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "Random (10 seeds)": {
+        "observations": 9730,
+        "below_target": 10,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "TextRank": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "LexRank": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "PacSum-TFIDF": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "PacSum-SBERT": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "SBERT centroid": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "SBERT+MMR": {
+        "observations": 973,
+        "below_target": 1,
+        "floor_applied": true,
+        "source_adjustments": 1,
+        "below_applied_floor": 0
+      }
+    },
+    "prediction_sha256": {
+      "proposed": "8399d3e4dfbbf8c4f0309d6a51cdd90015981e02f7cd4210ed7634b56ea35863",
+      "lead": "a215f434dab34114123ee48c3537adaa53b144c7b3483ebffaee52f900506c77",
+      "random_seed_101": "8c3c0037eac9bde3b1e651191b4d839797843734632b529c5c22607d914c23fd",
+      "random_seed_1337": "b0959eb402685a2c8c8bccf7de26b195b85dd3d463bda3a494844a1651af2a55",
+      "random_seed_17": "c5d7723a983a424c05da42060924a2abc28980b26056d726024a8961fdb8694d",
+      "random_seed_2024": "33e06cf751273b0853320299a5e2bf56e9fd34eaff758ce59282c6c4430c34ae",
+      "random_seed_2026": "367ffd9add25cb1fbbf67c9f4df9cab5fb6c0d456f0797abac5954b8f037d57f",
+      "random_seed_20260810": "1a9d1183f1f94fc15be714cb30ad4e47ebc146204a06b7d9bb61bb8d3f85c824",
+      "random_seed_23": "52191bd5aaf150333966548b95831a4b92edfc55949515ac16067599df6994e0",
+      "random_seed_3407": "28d81f9d3583cb3b0bf33999140e3a9b0b1e2d4ebaaa36305f69793beb5df8bf",
+      "random_seed_42": "3f1309a6b1347a6c4cbe44562712e7f8eb4e7da482c0323a6f630c6b0b8d7a3b",
+      "random_seed_7": "f28dc266ffdc5d3e2f67b87617ab69d1315a11ffc536c80784a303f71dc96241",
+      "textrank": "708faa6e300d840470e63fc6894ae19afb9339b0b67c1c0903d14e0c32b3d9a1",
+      "lexrank": "dd34802f2abf75376ab317322559db7f123337411e0197d5412c8914ebbcb3b2",
+      "pacsum_tfidf_P07": "64a2ca481170cb013e4efbfafbf6584ee264774452fe7db6269edba8805de67c",
+      "pacsum_sbert_beta_0.5": "25af325ea28c61bcf87d8345b7a4180d085dd6cae17613072ebe367590c1e743",
+      "sbert_centroid": "b8c28a64ff94e1f8c40971a532129ee95ef96d8834d327c5903d8f43e41cedfd",
+      "sbert_mmr_lambda_0.9": "6f73ee3126103e26d91dd172d780b01e61306321cc79698ae286c1907818ccf4"
+    }
+  },
+  "multinews": {
+    "target": 200,
+    "ceiling": 250,
+    "systems": {
+      "Proposed": {
+        "observations": 5621,
+        "below_target": 91,
+        "floor_applied": true,
+        "source_adjustments": 79,
+        "below_applied_floor": 12
+      },
+      "Lead": {
+        "observations": 5621,
+        "below_target": 229,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "Random (10 seeds)": {
+        "observations": 56210,
+        "below_target": 831,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "TextRank": {
+        "observations": 5621,
+        "below_target": 80,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "LexRank": {
+        "observations": 5621,
+        "below_target": 87,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "PacSum-TFIDF": {
+        "observations": 5621,
+        "below_target": 88,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "PacSum-SBERT": {
+        "observations": 5621,
+        "below_target": 85,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "SBERT centroid": {
+        "observations": 5621,
+        "below_target": 85,
+        "floor_applied": false,
+        "source_adjustments": null,
+        "below_applied_floor": null
+      },
+      "SBERT+MMR": {
+        "observations": 5621,
+        "below_target": 86,
+        "floor_applied": true,
+        "source_adjustments": 79,
+        "below_applied_floor": 7
+      }
+    },
+    "prediction_sha256": {
+      "proposed": "42b2cacdd06f84ebc5a1651a1228fbb2561c41d28e8e50541e3a80750b0ae20a",
+      "lead": "6c7040c2bf5ebde5b8953020dc43b79acc9413412a2dfbbf619f027667808b76",
+      "random_seed_101": "4229c06111409e67e349c6930eadfb6a83081e5952190293b51b5af6636f5f01",
+      "random_seed_1337": "da9cb8d64066fe30755e7a2528b93b0e3f42d31fa736b3d13f135a062ff53f82",
+      "random_seed_17": "b393476f71774e8f05b8e47408b3e2c2ed4f6c65c55ba714d1212149fac7d22c",
+      "random_seed_2024": "ae701b7bdbe114136dde54acd2b9dc073ac354a89e2b79e1538de506cbc79e2c",
+      "random_seed_2026": "06208d8cd0dc14e9633f09af28a566f8ae40a03c50230ae245442e4be48c8732",
+      "random_seed_20260810": "887621b9fdbbc00f524c3ce75868723de9130fd5c810afb38f150c4da83366df",
+      "random_seed_23": "01ab31f44fceec9dcf5b85ce853aad519823567571e0638406c9a8f8c38727b2",
+      "random_seed_3407": "5795055162309632f53e93272d2a599069e11b8f12d94b1b43c4738e3bb518a9",
+      "random_seed_42": "f80fa4b2dc367637f6bf321417d02a2079cd6dc6d8602a1e6d340020d0598eb9",
+      "random_seed_7": "8a401a6fa16bd8287787223bdd9597566c96cd0d68e15734917fb9a97b7fcc50",
+      "textrank": "fa2528b4d44b9547773d34cd8f1a3c21661f399e1ead62e6f9ff964e95437768",
+      "lexrank": "e318028000979b20fb47715e6f0cc46ca149f21e95637d14ac3e3925d09bd64d",
+      "pacsum_tfidf_P08": "3cccc556a3c6b25302a7de1a3022ff7541bf0ccab54868362b7f28a7dcc0a583",
+      "pacsum_sbert_P03": "186ddb60600f4ae9794455e356444d1ab48eeaaace982d647c778624640b3008",
+      "sbert_centroid": "35b1787336ee8dc1b0e85c775dceb35acc70960f60b4d3a8d69ddeb3469cd316",
+      "sbert_mmr_lambda_0.7": "b60133e899596ed717d1ff36905b9c542106d51c686b9165e90f3114e787ecfd",
+      "proposed/official_scores": "18fc3f900ada294fe7dad425a1e68badbb536fb44c0a23b8ec45707aced4f1f4",
+      "pacsum_tfidf_P08/official_scores": "b3accda3c733d4531dfd97c0f2668d5c32dbb1b8869344460948daf9facc3975"
+    },
+    "both_within_requested_range": {
+      "n": 5527,
+      "paired_differences": {
+        "rouge1": 0.002372341233942465,
+        "rouge2": -0.0069093721729690605,
+        "rougeL": 0.004680774380314818
+      },
+      "mean_difference": 4.7914480429407515e-05
+    }
+  }
+}

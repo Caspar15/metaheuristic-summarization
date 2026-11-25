@@ -28,6 +28,11 @@ results support a GovReport-scoped Mean ROUGE advantage; the Multi-News overall
 comparison with PacSum-TFIDF is not significant. See the source analyses for
 paired inference and the research hub for component evidence.
 
+The [November revision evidence](submission/revisions/v1.1.0/README.md) includes the
+output-length checks, paired-score summaries and model-judge results. The
+[v1.1.0 release](https://github.com/Caspar15/metaheuristic-summarization/releases/tag/v1.1.0-ieee-access)
+provides the revised supplement and a downloadable copy of the numerical evidence.
+
 **2026-09-09 status:** the English IEEE Access manuscript and matching LaTeX
 source package are complete in the separate manuscript workspace. Repository
 verification and documentation are covered by the

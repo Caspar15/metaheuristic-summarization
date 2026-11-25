@@ -1,0 +1,280 @@
+{
+  "unit": "one document, judge, property and summary order",
+  "manifest_sha256": "78fd615d8b9627a046b934117af4df9ff22284a8137c417e9513d55b12a433d3",
+  "requests": {
+    "stability": {
+      "scheduled": 160,
+      "valid": 149
+    },
+    "source-position": {
+      "scheduled": 80,
+      "valid": 73
+    }
+  },
+  "groups": [
+    {
+      "phase": "source-position",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 2,
+      "same": 18,
+      "tie_transition": 0,
+      "opposite_winner": 0
+    },
+    {
+      "phase": "source-position",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 2,
+      "same": 17,
+      "tie_transition": 0,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "source-position",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 2,
+      "same": 16,
+      "tie_transition": 1,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "source-position",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 2,
+      "same": 18,
+      "tie_transition": 0,
+      "opposite_winner": 0
+    },
+    {
+      "phase": "source-position",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 1,
+      "same": 17,
+      "tie_transition": 0,
+      "opposite_winner": 2
+    },
+    {
+      "phase": "source-position",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 1,
+      "same": 15,
+      "tie_transition": 3,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "source-position",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 16,
+      "tie_transition": 0,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "source-position",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 16,
+      "tie_transition": 0,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "coherence",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 13,
+      "tie_transition": 0,
+      "opposite_winner": 4
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 14,
+      "tie_transition": 2,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "redundancy",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 11,
+      "tie_transition": 1,
+      "opposite_winner": 5
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J1",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 3,
+      "same": 15,
+      "tie_transition": 1,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "coherence",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 19,
+      "tie_transition": 0,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 4,
+      "same": 11,
+      "tie_transition": 0,
+      "opposite_winner": 5
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "redundancy",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 13,
+      "tie_transition": 4,
+      "opposite_winner": 3
+    },
+    {
+      "phase": "stability",
+      "dataset": "govreport",
+      "judge": "J2",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 4,
+      "same": 13,
+      "tie_transition": 0,
+      "opposite_winner": 3
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "coherence",
+      "scheduled": 20,
+      "unavailable": 4,
+      "same": 14,
+      "tie_transition": 0,
+      "opposite_winner": 2
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 18,
+      "tie_transition": 1,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "redundancy",
+      "scheduled": 20,
+      "unavailable": 4,
+      "same": 15,
+      "tie_transition": 0,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J1",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 18,
+      "tie_transition": 0,
+      "opposite_winner": 2
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "coherence",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 17,
+      "tie_transition": 2,
+      "opposite_winner": 1
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "factual_completeness",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 20,
+      "tie_transition": 0,
+      "opposite_winner": 0
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "redundancy",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 16,
+      "tie_transition": 4,
+      "opposite_winner": 0
+    },
+    {
+      "phase": "stability",
+      "dataset": "multinews",
+      "judge": "J2",
+      "property": "semantic_coverage",
+      "scheduled": 20,
+      "unavailable": 0,
+      "same": 17,
+      "tie_transition": 0,
+      "opposite_winner": 3
+    }
+  ]
+}
